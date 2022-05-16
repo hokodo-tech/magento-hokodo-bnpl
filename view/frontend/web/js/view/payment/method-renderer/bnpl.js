@@ -105,7 +105,7 @@ define([
             setCouponCodeAction.registerSuccessCallback(this.updateDataAfterCouponCode.bind(this));
             cancelCouponAction.registerSuccessCallback(this.updateDataAfterCouponCode.bind(this));
 
-            if (paymentConfig.isDefault && !this.selectedPaymentMethod()) {
+            if (paymentConfig.isDefault && !this.methodSelected()) {
                 this.selectPaymentMethod();
             }
 
@@ -339,5 +339,9 @@ define([
             return this.isRegisteredCompany() && !_.isEmpty(this.selectedPlan()) && this.selectedPlan().payment_url;
         },
 
+        methodSelected: function() {
+            if (this.selectedPaymentMethod === undefined) return false;
+            return this.selectedPaymentMethod();
+        }
     });
 });
