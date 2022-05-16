@@ -1,0 +1,230 @@
+stages:
+  - lint
+  - test
+  - deploy
+
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# ======= UTILITIES =======
+.ssh-client:
+  image: alpine:latest
+  before_script:
+    - apk add openssh openssl && mkdir ~/.ssh/
+    - echo "$SSH_PRIVATE_KEY" | openssl base64 -A -d > ~/.ssh/id_rsa && chmod 0400 ~/.ssh/id_rsa
+    - echo -e "Host $SSH_HOST\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+
+# ======= LINTERS [PHP] =======
+php:lint:
+  stage: lint
+  image: composer:latest
+  script:
+    - mkdir src && ls -A | grep -v src | xargs mv -t src
+    - git clone https://github.com/magento/magento-coding-standard.git && cd magento-coding-standard
+    - composer install --ignore-platform-reqs
+    - vendor/bin/phpcs -s -p --colors --extensions=php --standard=Magento2 ../src/
+    - composer require friendsofphp/php-cs-fixer
+    - vendor/bin/php-cs-fixer fix --config=../src/.php-cs-fixer.dist.php --dry-run --diff ../src/
+
+php:compat:
+  stage: lint
+  image: registry.gitlab.com/pipeline-components/php-codesniffer:latest
+  parallel:
+    matrix:
+      - PHP_VERSION: ["7.3", "7.4"]
+  script:
+    - phpcs -s -p --colors --extensions=php --standard=PHPCompatibility --runtime-set testVersion $PHP_VERSION .
+
+# ======= UNIT TESTS [PHP] =======
+test:unit:
+  stage: test
+  needs:
+    - php:lint
+    - php:compat
+  image: php:7.4-cli-alpine
+  variables:
+    XDEBUG_MODE: coverage
+  before_script:
+    - apk add --update --virtual build-dependencies build-base gcc wget autoconf
+    - apk add --no-cache zlib-dev libpng-dev libjpeg-turbo-dev freetype-dev icu-dev oniguruma-dev libxml2-dev libxslt-dev libzip-dev
+    - docker-php-ext-configure gd --with-freetype --with-jpeg
+    - docker-php-ext-install bcmath gd intl mbstring opcache pdo_mysql xsl zip
+    - pecl install xdebug && docker-php-ext-enable xdebug
+    - apk del build-dependencies && rm -rf /var/cache/apk/*
+    - curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php && php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    - composer global config http-basic.repo.magento.com "$MAGENTO_REPOSITORY_USER" "$MAGENTO_REPOSITORY_PASSWORD"
+    - composer install
+  script:
+    - vendor/bin/phpunit --coverage-text --colors=never ./Test/
+
+# ======= REVIEW INSTANCES =======
+.review:
+  extends: .ssh-client
+  stage: test
+  variables:
+    REVIEW_INSTANCE: magento_$CI_MERGE_REQUEST_IID
+    SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY_DEV
+    SSH_HOST:        $SSH_HOST_DEV
+    SSH_PATH:        /var/www/$REVIEW_INSTANCE
+  environment:
+    name: review/$CI_MERGE_REQUEST_IID
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+  resource_group: review
+
+review:create:
+  extends: .review
+  needs:
+    - test:unit
+  variables:
+    PHP_VERSION: "7.4"
+    MAGENTO_VERSION: "2.4.3"
+    PHP_CLI: php$PHP_VERSION
+  environment:
+    url: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
+    on_stop: review:detach
+  script:
+    - ssh "magento@$SSH_HOST"
+      "[ ! -f '$SSH_PATH/app/etc/config.php' ] && {
+        rm -rf $SSH_PATH && mkdir $SSH_PATH &&
+        $PHP_CLI /usr/bin/composer global config http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
+        $PHP_CLI /usr/bin/composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=$MAGENTO_VERSION $SSH_PATH &&
+        mysql -umagento -pmagento -e 'DROP DATABASE IF EXISTS $REVIEW_INSTANCE; CREATE DATABASE $REVIEW_INSTANCE' &&
+        mkdir -p $SSH_PATH/app/code/Hokodo/BNPL/ ;
+      } || echo 'Magento project exists in $SSH_PATH, skipping prerequisites.'"
+    - scp -r * "magento@$SSH_HOST:$SSH_PATH/app/code/Hokodo/BNPL/"
+    - ssh "magento@$SSH_HOST"
+      "cd $SSH_PATH;
+      [ ! -f '$SSH_PATH/app/etc/config.php' ] && {
+        $PHP_CLI bin/magento setup:install --no-interaction
+          --use-rewrites=1
+          --base-url='$CI_ENVIRONMENT_URL'
+          --backend-frontname=admin
+          --language=en_GB
+          --currency=GBP
+          --timezone=Europe/London
+          --db-name=$REVIEW_INSTANCE
+          --db-user=magento
+          --db-password=magento
+          --admin-firstname='Hokodo'
+          --admin-lastname='BNPL'
+          --admin-email='tech@hokodo.co'
+          --admin-user='$MAGENTO_ADMIN_USER'
+          --admin-password='$MAGENTO_ADMIN_PASSWORD' &&
+        $PHP_CLI bin/magento deploy:mode:set developer &&
+        $PHP_CLI bin/magento config:set --lock-env catalog/search/elasticsearch7_index_prefix '${REVIEW_INSTANCE}_' &&
+        $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/active 1 &&
+        $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/environment dev &&
+        $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/dev_api_key '$HOKODO_API_KEY_DEV' &&
+        $PHP_CLI bin/magento module:disable Magento_TwoFactorAuth ;
+        echo '{}' > ./auth.json &&
+        $PHP_CLI /usr/bin/composer config --file=./auth.json http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
+        $PHP_CLI bin/magento sampledata:deploy ;
+      } || echo 'Magento project was installed with sample data, skipping configuration.'"
+    # Magento commands: setup:upgrade => setup:di:compile => cache:flush
+    - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up && $PHP_CLI bin/magento se:d:c && $PHP_CLI bin/magento c:f"
+
+review:detach:
+  extends: .review
+  needs:
+    - review:create
+  variables:
+    GIT_STRATEGY: none  # no git checkout!
+  environment:
+    action: stop
+  when: manual
+  script:
+    - ssh "magento@$SSH_HOST"
+      "rm -rf $SSH_PATH &&
+      mysql -umagento -pmagento -e 'DROP DATABASE IF EXISTS $REVIEW_INSTANCE' &&
+      curl -XDELETE 'http://localhost:9200/${REVIEW_INSTANCE}_*'"
+
+review:create [2.3.7]:
+  extends: review:create
+  variables:
+    MAGENTO_VERSION: "2.3.7"
+    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m237
+  environment:
+    name: review/$CI_MERGE_REQUEST_IID-m237
+    url: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
+    on_stop: review:detach [2.3.7]
+  resource_group: review-2.3.7
+
+review:detach [2.3.7]:
+  extends: review:detach
+  needs:
+    - review:create [2.3.7]
+  variables:
+    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m237
+  environment:
+    name: review/$CI_MERGE_REQUEST_IID-m237
+  resource_group: review-2.3.7
+
+# ======= E2E TESTS =======
+test:e2e:
+  stage: test
+  needs:
+    - review:create
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+  image:
+    name: cypress/included:9.5.4
+    entrypoint: [""]
+  variables:
+    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
+  script:
+    - CYPRESS_BASE_URL=$BASE_URL cypress run --browser chrome --project ./tests/ --config-file ../cypress.json --env MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER,MAGENTO_ADMIN_PASSWORD=$MAGENTO_ADMIN_PASSWORD
+  artifacts:
+    paths:
+      - /builds/hokodo/engineering/plugins/magento-hokodo-bnpl/tests/cypress/screenshots/
+      - /builds/hokodo/engineering/plugins/magento-hokodo-bnpl/tests/cypress/videos/
+    expose_as: screencasts
+    expire_in: 1 week
+    when: on_failure
+
+test:e2e [2.3.7]:
+  extends: test:e2e
+  needs:
+    - review:create [2.3.7]
+  variables:
+    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
+
+# ======= DEPLOYMENT =======
+.deploy:
+  extends: .ssh-client
+  stage: deploy
+  needs:
+    - test:unit
+  script:
+    - ssh "magento@$SSH_HOST" "cd $SSH_PATH/app/code/ && rm -rf * && mkdir -p Hokodo/BNPL/"
+    - scp -r * "magento@$SSH_HOST:$SSH_PATH/app/code/Hokodo/BNPL/"
+    - ssh "magento@$SSH_HOST"
+      "cd $SSH_PATH &&
+      bin/magento config:set --lock-env payment/hokodo_bnpl/active 1 &&
+      bin/magento config:set --lock-env payment/hokodo_bnpl/environment '$HOKODO_ENV' &&
+      bin/magento config:set --lock-env payment/hokodo_bnpl/${HOKODO_ENV}_api_key '$HOKODO_API_KEY_SANDBOX'"
+    # Magento commands: setup:upgrade => setup:di:compile => setup:static-content:deploy => cache:flush
+    - ssh "magento@$SSH_HOST" "cd $SSH_PATH && bin/magento se:up && bin/magento se:d:c && bin/magento se:s:d && bin/magento c:f"
+
+.deploy-dev:
+  extends: .deploy
+  variables:
+    SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY_DEV
+    SSH_HOST:        $SSH_HOST_DEV
+    SSH_PATH:        ~/public_html
+    HOKODO_ENV:      sandbox
+    HOKODO_API_KEY:  $HOKODO_API_KEY_SANDBOX
+  resource_group: deploy-dev
+
+deploy:dev:
+  extends: .deploy-dev
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+deploy:dev:manual:
+  extends: .deploy-dev
+  rules:
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+  when: manual

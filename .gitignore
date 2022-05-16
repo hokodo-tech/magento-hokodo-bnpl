@@ -1,0 +1,15 @@
+*~
+*.swp
+*.out
+*.tmp
+*.lock
+*.patch
+*.DS_Store
+
+composer.phar
+
+.phpunit.cache
+.php-cs-fixer.cache
+
+build/
+vendor/

@@ -1,0 +1,62 @@
+{
+    "name": "hokodo/magento-bnpl",
+    "description": "Hokodo BNPL module for Magento2",
+    "version": "1.1.38",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "readme": "./README.md",
+    "keywords": [
+        "magento",
+        "magento2",
+        "magento2-module"
+    ],
+    "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    ],
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "~103.0.0|~103.0.1",
+        "magento/module-backend": "~102.0.0|~102.0.1",
+        "magento/module-customer": "~103.0.0|~103.0.1",
+        "magento/module-store": "~101.1.0|~101.1.1",
+        "magento/module-ui": "~101.2.0|~101.2.1"
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "@stable",
+        "friendsofphp/php-cs-fixer": "@stable",
+        "magento/magento-coding-standard": "@stable",
+        "phpunit/phpunit": ">=9.5.20 <10.0"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "magento/composer-dependency-version-audit-plugin": true
+        }
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Hokodo\\BNPL\\": ""
+        }
+    },
+    "scripts": {
+        "cs-check": "vendor/bin/phpcs --standard=Magento2 --extensions=php --ignore=vendor/*,.git/*,dev .",
+        "cs-fix": "vendor/bin/phpcbf --standard=Magento2 --ignore=vendor/*,.git/*,dev . ; vendor/bin/php-cs-fixer fix .",
+        "lint": [
+            "@cs-check",
+            "vendor/bin/php-cs-fixer fix --dry-run --diff ."
+        ],
+        "test": "vendor/bin/phpunit ./Test/",
+        "coverage": "vendor/bin/phpunit  --coverage-text ./Test/"
+    }
+}

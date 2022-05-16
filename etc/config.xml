@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <hokodo_bnpl>
+                <model>HokodoBnplFacade</model>
+                <title>B2B Buy now, pay later - Interest-free</title>
+                <payment_action>authorize</payment_action>
+                <active>0</active>
+                <can_order>0</can_order>
+                <can_authorize>1</can_authorize>
+                <can_capture>1</can_capture>
+                <can_capture_partial>0</can_capture_partial>
+                <can_capture_once>0</can_capture_once>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_void>1</can_void>
+                <can_use_internal>0</can_use_internal>
+                <can_use_checkout>1</can_use_checkout>
+                <can_edit>0</can_edit>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
+                <can_review_payment>0</can_review_payment>
+                <is_gateway>1</is_gateway>
+                <is_offline>0</is_offline>
+                <can_initialize>0</can_initialize>
+                <can_authorize_vault>0</can_authorize_vault>
+                <can_capture_vault>0</can_capture_vault>
+                <can_cancel>1</can_cancel>
+                <can_accept_payment>0</can_accept_payment>
+                <can_deny_payment>0</can_deny_payment>
+                <order_status>pending_payment</order_status>
+                <environment>production</environment>
+                <dev_api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <allowspecific>1</allowspecific>
+                <specificcountry><![CDATA[GB]]></specificcountry>
+                <sort_order>100</sort_order>
+                <display_only_allowed_countries>1</display_only_allowed_countries>
+                <dev_uri>https://api-dev.hokodo.co/v1/</dev_uri>
+                <sandbox_uri>https://api-sandbox.hokodo.co/v1/</sandbox_uri>
+                <uri>https://api.hokodo.co/v1/</uri>
+                <debug>1</debug>
+                <paymentInfoKeys>hokodo_user_id,hokodo_organisation_id,hokodo_order_id,hokodo_payment_offer_id,hokodo_deferred_payment_id</paymentInfoKeys>
+                <replace_place_order_hooks>0</replace_place_order_hooks>
+            </hokodo_bnpl>
+        </payment>
+    </default>
+</config>

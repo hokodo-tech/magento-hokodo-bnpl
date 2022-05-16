@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::system">
+                    <resource id="Hokodo_BNPL::hokodo" title="Hokodo Payment logs" sortOrder="100" >
+                        <resource id="Hokodo_BNPL::view" title="View" sortOrder="50" />
+                        <resource id="Hokodo_BNPL::delete" title="Delete" sortOrder="100" />
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

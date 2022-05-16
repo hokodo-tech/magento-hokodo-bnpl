@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+-->
+<mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/error_mapping.xsd">
+    <message_list>
+        <message code="customer_invoice_address_postcode_0" translate="true">The field Billing Address Postal Code is required.</message>
+        <message code="customer_delivery_address_postcode_0" translate="true">The field Shipping Address Postal Code is required.</message>
+        <message code="Invalid token header. No API key provided." translate="true">Invalid token header. No API key provided.</message>
+        <message code="Invalid token." translate="true">Invalid token.</message>
+    </message_list>
+</mapping>

@@ -1,0 +1,656 @@
+/**
+ * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+
+@import 'compatibility/amasty-checkout/_modern.less';
+
+@color-white: #fff;
+@color-grey: #ccc;
+@color-dark-grey: #777;
+@color-light-grey: #eee;
+@button-background-color: #006bb7;
+@button-border-color: #006bb4;
+
+@house-icon: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.75 23.8208H1.75C0.785 23.8208 0 23.0358 0 22.0708V1.75177C0 1.23577 0.226 0.749767 0.619 0.415767C1.012 0.0827666 1.528 -0.0622332 2.037 0.0247668L13.026 1.68977C13.885 1.83277 14.5 2.55877 14.5 3.41777V23.0708C14.5 23.4848 14.164 23.8208 13.75 23.8208ZM1.751 1.50177C1.67 1.50177 1.616 1.53677 1.589 1.55977C1.556 1.58877 1.5 1.65077 1.5 1.75177V22.0708C1.5 22.2088 1.612 22.3208 1.75 22.3208H13V3.41777C13 3.29477 12.912 3.19077 12.791 3.17077L1.802 1.50677C1.784 1.50377 1.767 1.50177 1.751 1.50177Z' fill='black'/%3E%3Cpath d='M22.25 23.8208L13.75 23.8208C13.336 23.8208 13 23.4848 13 23.0708V9.57077C13 9.34477 13.102 9.13077 13.277 8.98877C13.452 8.84577 13.681 8.78977 13.903 8.83677L22.62 10.6628C23.436 10.8438 24 11.5458 24 12.3728V22.0708C24 23.0358 23.215 23.8208 22.25 23.8208ZM14.5 22.3208H22.25C22.388 22.3208 22.5 22.2088 22.5 22.0708V12.3728C22.5 12.2548 22.42 12.1548 22.305 12.1288L14.5 10.4938V22.3208Z' fill='black'/%3E%3Cpath d='M9.75 23.5708H5.25C4.836 23.5708 4.5 23.2348 4.5 22.8208V18.5708C4.5 17.6058 5.285 16.8208 6.25 16.8208H8.75C9.715 16.8208 10.5 17.6058 10.5 18.5708V22.8208C10.5 23.2348 10.164 23.5708 9.75 23.5708ZM6 22.0708H9V18.5708C9 18.4328 8.888 18.3208 8.75 18.3208H6.25C6.112 18.3208 6 18.4328 6 18.5708V22.0708Z' fill='black'/%3E%3Cpath d='M3.5 4.32077H6.5V5.82077H3.5V4.32077Z' fill='black'/%3E%3Cpath d='M8.5 4.32077H11.5V5.82077H8.5V4.32077Z' fill='black'/%3E%3Cpath d='M3.5 7.32077H6.5V8.82077H3.5V7.32077Z' fill='black'/%3E%3Cpath d='M8.5 7.32077H11.5V8.82077H8.5V7.32077Z' fill='black'/%3E%3Cpath d='M3.5 10.3208H6.5V11.8208H3.5V10.3208Z' fill='black'/%3E%3Cpath d='M8.5 10.3208H11.5V11.8208H8.5V10.3208Z' fill='black'/%3E%3Cpath d='M3.5 13.3208H6.5V14.8208H3.5V13.3208Z' fill='black'/%3E%3Cpath d='M8.5 13.3208H11.5V14.8208H8.5V13.3208Z' fill='black'/%3E%3Cpath d='M17 13.3208H20V14.8208H17V13.3208Z' fill='black'/%3E%3Cpath d='M17 16.3208H20V17.8208H17V16.3208Z' fill='black'/%3E%3Cpath d='M17 19.3208H20V20.8208H17V19.3208Z' fill='black'/%3E%3C/svg%3E");
+@user-icon: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M24 12C24 5.38307 18.6169 0 12 0C5.38307 0 0 5.38307 0 12C0 18.5613 5.33507 24 12 24C18.6356 24 24 18.5947 24 12ZM12 22.7368C10.0098 22.7368 8.08118 22.1912 6.39613 21.1549C6.85086 18.431 9.19579 16.4211 12 16.4211C14.8042 16.4211 17.1491 18.431 17.6039 21.1549C15.9188 22.1912 13.9897 22.7368 12 22.7368ZM7.57895 10.7368C7.57895 8.29895 9.56211 6.31579 12 6.31579C14.4379 6.31579 16.4211 8.29895 16.4211 10.7368C16.4211 13.1747 14.4379 15.1579 12 15.1579C9.56211 15.1579 7.57895 13.1747 7.57895 10.7368ZM18.7266 20.3626C18.1849 18.2663 16.6944 16.557 14.736 15.7182C16.4923 14.7501 17.6847 12.8802 17.6847 10.7368C17.6847 7.60269 15.1347 5.05263 12.0005 5.05263C8.86636 5.05263 6.31629 7.60269 6.31629 10.7368C6.31629 12.8802 7.50872 14.7496 9.26501 15.7182C7.30611 16.5575 5.81608 18.2658 5.27444 20.3626C2.74712 18.3294 1.26366 15.2696 1.26366 12C1.26366 6.07983 6.08034 1.26316 12.0005 1.26316C17.9207 1.26316 22.7373 6.07983 22.7373 12C22.7373 15.2701 21.2544 18.3294 18.7266 20.3626Z' fill='black'/%3E%3C/svg%3E%0A");
+@logo-icon: url("data:image/svg+xml,%3Csvg width='108' height='28' viewBox='0 0 108 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.2097 3.5V10.64C12.2097 11.7687 11.2787 12.6866 10.1342 12.6866H4.74075C3.59625 12.6866 2.66525 11.7679 2.66525 10.6391V3.5H0V10.64C0 11.9586 0.56 13.1495 1.45337 14C0.995269 14.4317 0.630087 14.9524 0.380184 15.5301C0.13028 16.1079 0.000912714 16.7305 0 17.36L0 24.5H2.66525V17.36C2.66525 16.2312 3.59625 15.3142 4.74075 15.3142H10.1334C11.2787 15.3142 12.2097 16.2321 12.2097 17.3609V24.5H14.875V17.36C14.875 16.0422 14.315 14.8514 13.4216 14C13.8796 13.5682 14.2448 13.0475 14.4947 12.4698C14.7446 11.8921 14.874 11.2695 14.875 10.64V3.5H12.2097ZM29.3834 2.625H23.9925C21.3762 2.625 19.25 4.69 19.25 7.22925V19.8957C19.25 22.435 21.3762 24.5 23.9916 24.5H29.3834C31.9987 24.5 34.125 22.435 34.125 19.8957V7.22925C34.125 4.69 31.9987 2.625 29.3834 2.625ZM31.4597 19.8957C31.4597 21.007 30.5279 21.9117 29.3834 21.9117H23.9925C22.848 21.9117 21.9161 21.0079 21.9161 19.8957V7.22925C21.9161 6.118 22.848 5.21325 23.9925 5.21325H29.3842C30.5287 5.21325 31.4606 6.118 31.4606 7.22925V19.8957H31.4597ZM66.1342 2.625H60.7407C58.1271 2.625 56 4.69 56 7.22925V19.8957C56 22.435 58.1262 24.5 60.7407 24.5H66.1342C68.7479 24.5 70.875 22.435 70.875 19.8957V7.22925C70.875 4.69 68.7487 2.625 66.1342 2.625ZM68.2089 19.8957C68.2089 21.007 67.2787 21.9117 66.1342 21.9117H60.7407C59.5962 21.9117 58.6661 21.0079 58.6661 19.8957V7.22925C58.6661 6.118 59.5962 5.21325 60.7407 5.21325H66.1342C67.2787 5.21325 68.2089 6.118 68.2089 7.22925V19.8957ZM102.883 2.625H97.4916C94.8762 2.625 92.75 4.69 92.75 7.22925V19.8957C92.75 22.435 94.8762 24.5 97.4916 24.5H102.883C105.498 24.5 107.625 22.435 107.625 19.8957V7.22925C107.625 4.69 105.498 2.625 102.882 2.625H102.883ZM104.96 19.8957C104.96 21.007 104.028 21.9117 102.883 21.9117H97.4916C96.3471 21.9117 95.4152 21.0079 95.4152 19.8957V7.22925C95.4152 6.118 96.3471 5.21325 97.4916 5.21325H102.883C104.028 5.21325 104.96 6.118 104.96 7.22925V19.8957ZM84.5075 2.625H74.375V24.5H84.5084C87.1237 24.5 89.25 22.435 89.25 19.8957V7.22925C89.25 4.69 87.1237 2.625 84.5084 2.625H84.5075ZM86.583 19.8957C86.583 21.007 85.6529 21.9117 84.5075 21.9117H77.0402V5.21325H84.5075C85.6529 5.21325 86.583 6.118 86.583 7.22925V19.8957ZM44.2785 14.1907V14.1881H43.0789C41.9737 14.1881 41.0742 13.2702 41.0742 12.1415V3.5H38.5V24.5H41.0742V16.3371C41.6957 16.6507 42.3819 16.8146 43.078 16.8157H44.0379C44.5839 16.8157 45.0284 16.8297 45.4099 16.8822C46.7862 17.0712 47.3296 17.7747 48.7349 20.2282C48.916 20.5432 49.1111 20.888 49.3237 21.2634C49.9287 22.3396 50.5459 23.409 51.1752 24.4711L52.2751 23.7895L53.375 23.107C52.6522 21.8916 52.0677 20.86 51.5524 19.9482C49.2249 15.8384 48.3236 14.252 44.2794 14.1907H44.2785Z' fill='black'/%3E%3Cpath d='M0 27.125H14.875V28H0V27.125ZM38.5 0H53.375V0.875H38.5V0Z' fill='%23C98A29'/%3E%3Cpath d='M52.5001 5.271L49.8576 4.375L46.3751 13.0375C47.4513 13.195 48.2764 13.5074 48.9904 14L52.5001 5.271Z' fill='black'/%3E%3C/svg%3E%0A");
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+
+    .hokodo-gateway {
+        > .payment-method-title {
+            > label {
+                display: inline;
+                > span.hokodo-logo {
+                    display: inline-block;
+                    background: url(../img/hokodo.svg) no-repeat center transparent;
+                    width: 80px;
+                    height: auto;
+                    margin-right: 5px;
+                    > span {
+                        margin-left:2px;
+                    }
+                }
+            }
+        }
+        .payment-method-content {
+            padding: 0 0 20px 0;
+        }
+    }
+
+    .hokodo-content-wrapper {
+        border: none;
+        display: inline-block;
+
+        .hokodo-title {
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 5px 5px 0 0;
+            &_logo {
+                display: block;
+                margin-right: 15px;
+                &:after {
+                    content: @logo-icon;
+                }
+            }
+            &_text {
+                font-size: 14px;
+                color: #333;
+                a {
+                    color: #C98A29;
+                    text-decoration: underline;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+
+        .hokodo-label {
+            margin-top: 20px;
+            margin-bottom: 8px;
+            margin-left: 0;
+            font-weight: 800;
+        }
+
+        .hokodo-company-type>div {
+            flex: 1;
+        }
+
+        .hokodo-company-type, .company-information {
+            display: flex;
+            gap: 10px;
+            flex-flow: row wrap;
+            align-items: center;
+            justify-content: space-between;
+            align-items: stretch;
+            padding: 0;
+        }
+
+        .hokodo-company-type {
+            input[type="radio"] {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -1;
+                opacity: 0;
+
+                &:focus,
+                &:active {
+                    border: none;
+                    outline: 0;
+                    box-shadow: none;
+                }
+
+                &:focus+label,
+                &:focus+label {
+                    outline-width: 2px;
+                    outline-style: solid;
+                    outline-color: Highlight;
+                }
+            }
+
+            label {
+                outline: 0;
+                transition: box-shadow 250ms;
+            }
+        }
+
+        .registered-company, .sole-trader {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            width: auto;
+            min-width: 250px;
+            border: 1px solid #bbb;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            padding-left: 40px;
+            position: relative;
+            box-sizing: border-box;
+
+            span {
+                display: flex;
+                flex: 1 1 0%;
+                white-space: nowrap;
+            }
+
+            &:after {
+                display: block;
+                position: absolute;
+                top: 8px;
+                left: 8px;
+            }
+
+            &.selected {
+                background-color: #F5E8D7;
+                border-color: #C98A29;
+            }
+
+            &.disabled {
+                opacity: 0.5;
+                background: #ffffff;
+                border: 1px solid #c2c2c2;
+                cursor: default;
+                pointer-events: none;
+            }
+        }
+
+        .registered-company {
+            &:after {
+                content: @house-icon;
+            }
+        }
+
+        .sole-trader {
+            &:after {
+                content: @user-icon;
+            }
+        }
+
+        .company-information-country,
+        .admin__action-multiselect-wrap {
+            display: flex;
+        }
+
+        .company-information-country {
+            margin-right: 0;
+            flex: 1 1 200px;
+        }
+
+        .admin__action-multiselect-wrap {
+            width: 100%;
+            gap: 10px;
+            flex: 2 400px;
+            display: grid;
+            grid-template-columns: 1fr max-content;
+            align-items: stretch;
+            &.disabled {
+                opacity: 0.5;
+                background: #ffffff;
+                border: 1px solid #c2c2c2;
+                cursor: default;
+                pointer-events: none;
+            }
+
+            .admin__action-multiselect {
+                overflow: hidden;
+                .admin__action-multiselect-text-value {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            .input-action {
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                padding: 0 5px;
+                cursor: pointer;
+
+                .clear-icon {
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' viewBox='0 0 20 20' fill='%23696969'%3E%3Cpath fill-rule='evenodd' d='M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
+                    height: 20px;
+                    width: 20px;
+                }
+            }
+        }
+
+        .company-information-wrapper {
+            > select {
+                border:1px solid #bbb;
+                &:disabled {
+                    border-radius: 5px;
+                    color: #171717;
+                    background: #eee;
+                    opacity: 1;
+                }
+            }
+
+            > select, >input {
+                display:inline-block;
+                margin-left:20px;
+                width:42%;
+                padding:5px;
+                border:1px solid #bbb;
+            }
+
+            > .company-information {
+                select, input {
+                    padding: 10px;
+                    height: auto;
+                }
+
+                select:focus,
+                input:focus,
+                button:focus {
+                    outline-width: 2px;
+                    outline-style: solid;
+                    outline-color: Highlight;
+                }
+
+                button {
+                    border-radius: 5px;
+                }
+
+                > .company-information-country {
+                    > select {
+                        border-radius: 5px;
+                        width: 100%;
+                    }
+                }
+
+                > .admin__action-multiselect-wrap {
+
+                    .action-select-container {
+                        position: relative;
+                        overflow: hidden;
+                    }
+
+                    &._active {
+                        .action-select-container {
+                            overflow: visible;
+                        }
+
+                        input {
+                            border-radius: 5px;
+                            width: 100%;
+                            border: 1px solid #bbb;
+                            min-height: 100%;
+                            margin: 0;
+                        }
+                    }
+
+                    &._results input {
+                        border-radius: 5px 5px 0 0;
+                    }
+
+                    .admin__action-multiselect {
+                        cursor: pointer;
+                        white-space: normal;
+                        display: flex;
+                        position: relative;
+                        border: none;
+                        width: 100%;
+                        border-radius: 5px;
+                        box-sizing: border-box;
+
+                        &._active {
+                            display: none;
+                        }
+
+                        .control {
+                            width: 100%;
+                        }
+
+                        .admin__action-multiselect-text {
+                            display: flex;
+                            align-items: center;
+                            height: auto;
+                            padding: 10px 30px 10px 10px;
+                            width: 100%;
+                            border: 1px solid #bbb;
+                            border-radius: 5px;
+                        }
+                    }
+                    .action-menu {
+                        width: 100%;
+                        display: none;
+                        position: relative;
+
+                        &._active {
+                            display: flex;
+                        }
+
+                        .admin__action-multiselect-search-wrap {
+                            width: 100%;
+                            .search-autocomplete-results {
+                                overflow: hidden;
+                                position: absolute;
+                                top: auto;
+                                z-index: 10;
+                                width: 100%;
+                                // max-width: 315px;
+                                max-height: 295px;
+                                border: 1px solid #c2c2c2;
+                                margin-top: -10px;
+                                overflow-y: auto;
+                                box-sizing: border-box;
+                                &._active {
+                                    display: block;
+                                    border-radius: 0 0 5px 5px;
+                                }
+
+                                ul {
+                                    &:not(:empty) {
+                                        border: none;
+                                        background: white;
+                                    }
+                                    li {
+                                        border-top: 1px solid #e5e5e5;
+                                        cursor: pointer;
+                                        padding: 0;
+                                        margin: 0;
+
+                                        &:hover {
+                                            background: white;
+                                        }
+
+                                        div {
+                                            &._selected {
+                                                background: #fcf9f4;
+                                                font-weight: 600;
+                                            }
+                                            &._hover {
+                                                background: #faf3ea;
+                                            }
+                                        }
+
+                                        .action-menu-item {
+                                            padding: 0;
+                                            padding: 5px 40px 5px 10px;
+
+                                            .company-details .company-info {
+                                                color: #696969;
+                                            }
+                                        }
+                                    }
+                                    li:first-child {
+                                        border-top: none;
+                                    }
+                                    li:hover, li.selected {
+                                        background: #FAF3EA;
+                                    }
+                                }
+                            }
+
+                        }
+
+                        .admin__data-grid-loading-mask {
+                            background: rgba(255, 255, 255, .5);
+                            display: flex;
+                            justify-content: center;
+                            flex-direction: column;
+                            align-items: center;
+                            position: absolute;
+                            top: 0;
+                            bottom: 0;
+                            right: 0;
+                            left: 0;
+                            width: 100%;
+                            z-index: 4;
+
+                            .spinner {
+                                background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
+                                display: inline-block;
+                                font-size: 36px;
+                                height: 100%;
+                                position: absolute;
+                                top: auto;
+                                left: auto;
+                                right: 0;
+                                width: 36px;
+                                margin: 0 5px;
+
+                                .ie9 & {
+                                    background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
+                                    display: inline-block;
+                                    bottom: 0;
+                                    height: 149px;
+                                    left: 0;
+                                    margin: auto;
+                                    position: static;
+                                    right: 0;
+                                    top: 0;
+                                    width: 218px;
+                                }
+                            }
+
+
+                        }
+
+                    }
+
+                    .admin__action-multiselect-empty-area {
+                        position: absolute;
+                        width: 100%;
+                        border: 1px solid #c2c2c2;
+                        background-color: white;
+                        margin-top: -1px;
+                        padding: 5px;
+                        box-sizing: border-box;
+                        border-radius: 0 0 5px 5px;
+                    }
+                }
+            }
+
+            .company-select {
+                background-color: white;
+            }
+        }
+
+        .hokodo-messages-wrapper {
+            padding: 5px 0;
+        }
+
+        .payment-plan-list {
+            margin-bottom: 20px;
+
+            > h4 {
+                margin-top: 10px;
+                margin-bottom: 8px;
+                margin-left: 0;
+                font-weight: 800;
+            }
+            > .payment-plan {
+                margin:0 0 -1px;
+                padding: 0;
+                border: none;
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+
+                &:first-of-type label {
+                    border-top-left-radius: 5px;
+                    border-top-right-radius: 5px;
+                }
+                &:last-child label {
+                    border-bottom-left-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                }
+
+                > label {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    cursor: pointer;
+                    margin: 0;
+                }
+
+                &._active {
+                    label {
+                        background-color: #F5E8D7;
+                        border-color: #C98A29;
+                    }
+                    & + .payment-plan label {
+                        border-top-color: #C98A29;
+                    }
+                    input[type="radio"]+label {
+                        border-color: #c98a29;
+                    }
+                }
+
+                input[type="radio"] {
+                    position: absolute;
+                    opacity: 0;
+
+                    & + label {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                        cursor: pointer;
+                        margin: 0;
+                        padding: 10px;
+                        border: 1px solid #bbb;
+                    }
+
+                    & + label:before {
+                        content: '';
+                        margin-right: 10px;
+                        display: inline-block;
+                        vertical-align: text-top;
+                        width: 18px;
+                        height: 18px;
+                        background: #fff;
+                        border-radius: 50%;
+                        border: 1px solid #bbb;
+                        box-sizing: content-box;
+                    }
+
+                    &:hover + label:before {
+                        background: white;
+                    }
+
+                    &:checked + label:before {
+                        background: white;
+                        border-color: #c98a29;
+                    }
+
+                    &:disabled + label {
+                        color: #b8b8b8;
+                        cursor: auto;
+                    }
+
+                    &:disabled + label:before {
+                        box-shadow: none;
+                        background: #ddd;
+                    }
+
+                    &:checked + label:after {
+                        content: '';
+                        position: absolute;
+                        left: 15px;
+                        top: auto;
+                        background: #c98a29;
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 50%;
+                    }
+                }
+            }
+        }
+
+        .trader-notice {
+            border: none;
+            background-color: #fae5e5;
+            margin: 20px 0;
+            padding: 10px;
+            color: #ce211e;
+            font-weight: normal;
+            font-style: inherit;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        .checkout-agreements-block {
+            padding-left: 20px;
+        }
+
+        .actions-toolbar {
+            margin: 10px 0;
+            padding: 0;
+        }
+
+        .hokodo-prefooter {
+            margin: 20px 20px 0;
+            list-style-type: disc;
+            padding: 15px;
+            background: #F7F7F7;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            li {
+                margin-left: 15px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        .hokodo-footer {
+            color: #333;
+            font-size: .8em;
+            margin: 40px 0 20px 0;
+            opacity: 1;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .company-information-address {
+            display: flex;
+            margin: 10px 20px;
+        }
+
+        .checkout-agreements-block {
+            padding-left: 0;
+        }
+
+        .payment-plan-description {
+            background: #F7F7F7;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            padding: 16px;
+            margin-bottom: 20px;
+
+            ul {
+                list-style-position: initial;
+                margin-left: 16px;
+                padding-left: 0;
+                list-style-type: disc;
+
+                li {
+                    margin: 0;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,132 @@
+<!--
+/**
+ * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+-->
+<div class="admin__action-multiselect-wrap action-select-wrap" tabindex="0" data-bind="
+    attr: {
+        id: uid
+    },
+    css: {
+        _active: listVisible,
+        _results: searchRequested() && !loading(),
+        'admin__action-multiselect-tree': isTree(),
+        'disabled': disabled
+    },
+    event: {
+        focusin: onFocusIn,
+        focusout: onFocusOut,
+        keydown: keydownSwitcher
+    },
+    outerClick: outerClick.bind($data)
+">
+    <div class="action-select-container">
+        <!-- ko ifnot: chipsEnabled -->
+        <div class="action-select admin__action-multiselect" data-role="advanced-select" data-bind="
+                css: {_active: listVisible},
+                click: function(data, event) {
+                    toggleListVisible(data, event)
+                }
+        ">
+
+            <div class="admin__action-multiselect-text" data-role="selected-option" ifnot="validationLoading" data-bind="
+                css: {warning: warn().length}
+            ">
+                <div class="admin__action-multiselect-text-value" data-bind="text: setCaption()"></div>
+            </div>
+
+            <button if="isRemoveSelectedIcon && hasData() || !validationLoading" class="action-close" type="button"
+                data-action="remove-selected-item" tabindex="-1" click="clear">
+                <span class="action-close-text" translate="'Close'"></span>
+            </button>
+            <div data-role="spinner" class="admin__data-grid-loading-mask" visible="validationLoading"
+                if="validationLoading">
+                <div class="spinner">
+                    <span repeat="8" />
+                </div>
+            </div>
+
+        </div>
+        <!-- /ko -->
+        <!-- ko if: chipsEnabled -->
+        <div class="action-select admin__action-multiselect" data-role="advanced-select" data-bind="
+                css: {_active: listVisible},
+                click: function(data, event) {
+                    toggleListVisible(data, event)
+                }
+        ">
+
+            <div class="admin__action-multiselect-text" data-bind="
+                        visible: !hasData(),
+                        i18n: selectedPlaceholders.defaultPlaceholder
+                ">
+            </div>
+            <!-- ko foreach: { data: getSelected(), as: 'option'}  -->
+            <span class="admin__action-multiselect-crumb">
+                <span data-bind="text: label">
+                </span>
+                <button class="action-close" type="button" data-action="remove-selected-item" tabindex="-1" data-bind="click: $parent.removeSelected.bind($parent, value)
+                    ">
+                    <span class="action-close-text" translate="'Close'"></span>
+                </button>
+            </span>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <div class="action-menu" css="{ _active: listVisible}">
+            <div data-role="spinner" class="admin__data-grid-loading-mask" visible="loading" if="loading">
+                <div class="spinner">
+                    <span repeat="8" />
+                </div>
+            </div>
+
+            <div class="admin__action-multiselect-search-wrap">
+                <!-- ko if: filterOptions -->
+                <input class="admin__control-text admin__action-multiselect-search" autocomplete="off" spellcheck="false" data-role="advanced-select-text"
+                    type="text" data-bind="
+                        event: {
+                            keydown: filterOptionsKeydown
+                        },
+                        attr: {
+                            id: uid+2,
+                            placeholder: filterPlaceholder
+                        },
+                        valueUpdate: 'input',
+                        value: filterInputValue,
+                        hasFocus: filterOptionsFocus
+                    ">
+
+                <div class="search-autocomplete-results" visible="options().length">
+                    <ul class="admin__action-multiselect-menu-inner _root" data-bind="
+                                event: {
+                                    scroll: function(data, event){onScrollDown(data, event)}
+                                }
+                            ">
+                        <!-- ko foreach: { data: options, as: 'option'}  -->
+                        <!-- ko with: $parent -->
+                        <!-- ko template: {name: optionTmpl, data: option} -->
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        <!-- /ko -->
+                    </ul>
+                </div>
+                <div if="options().length === 0 && searchRequested() && !loading()" class="admin__action-multiselect-empty-area">
+                    <div data-bind="html: emptyOptionsHtml" />
+                </div>
+                <!-- /ko -->
+
+            </div>
+
+        </div>
+        <!-- ko ifnot: loading -->
+        <div class="input-action" data-bind="
+            visible: !!value().company_api_id || filterInputValue().trim().length > 0,
+            click: clear
+        ">
+            <div class="clear-icon"></div>
+        </div>
+        <!-- /ko -->
+    </div>
+    <button type="button" data-bind="click: search, enable: !loading() && filterInputValue().trim().length, i18n: 'Search'"></button>
+</div>

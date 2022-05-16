@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="hokodo_payment_logs" resource="default" engine="innodb" comment="Hokodo Payment Logs">
+        <column xsi:type="int" name="payment_log_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Payment log Id"/>
+        <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" comment="Quote ID"/>
+        <column xsi:type="text" name="payment_log_content" nullable="true" comment="Payment log content"/>
+        <column xsi:type="varchar" name="action_title" nullable="false" length="255" default="" comment="Action title"/>
+        <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="true" identity="false" comment="Log Status"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Log Creation Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="payment_log_id"/>
+        </constraint>
+        <index referenceId="HOKODO_BNPL_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+        <index referenceId="HOKODO_BNPL_ACTION_TITLE" indexType="btree">
+            <column name="action_title"/>
+        </index>
+    </table>
+    <table name="hokodo_organisation" resource="default" engine="innodb" comment="Hokodo Organisation Table">
+        <column xsi:type="int" name="organisation_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Organisation Id"/>
+        <column xsi:type="varchar" name="api_id" nullable="true" length="255" comment="Organisation Api Id"/>
+        <column xsi:type="varchar" name="country" nullable="false" length="255" comment="Organisation Country"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Organisation Name"/>
+        <column xsi:type="text" name="address" nullable="false" comment="Organisation Address"/>
+        <column xsi:type="varchar" name="city" nullable="false" length="255" comment="Organisation City"/>
+        <column xsi:type="varchar" name="postcode" nullable="false" length="255" comment="Organisation Postcode"/>
+        <column xsi:type="varchar" name="email" nullable="false" length="255" comment="Organisation Email"/>
+        <column xsi:type="varchar" name="phone" nullable="false" length="255" comment="Organisation Phone"/>
+        <column xsi:type="varchar" name="company_api_id" nullable="false" length="255" comment="Hokodo Company Api Id"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Log Creation Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="organisation_id"/>
+        </constraint>
+        <index referenceId="HOKODO_BNPL_ORGANISATION_API_ID" indexType="btree">
+            <column name="api_id"/>
+        </index>
+    </table>
+    <table name="hokodo_payment_quote" resource="default" engine="innodb" comment="Hokodo Organisation Table">
+        <column xsi:type="int" name="payment_quote_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Payment Id"/>
+        <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" comment="Quote ID"/>
+        <column xsi:type="varchar" name="user_id" nullable="true" length="255" comment="User Api Id"/>
+        <column xsi:type="varchar" name="organisation_id" nullable="true" length="255" comment="Organisation Api Id"/>
+        <column xsi:type="varchar" name="order_id" nullable="true" length="255" comment="Order Api Id"/>
+        <column xsi:type="varchar" name="offer_id" nullable="true" length="255" comment="Payment Offer Api Id"/>
+        <column xsi:type="varchar" name="deferred_payment_id" nullable="false" length="255" comment="Deferred Payment Api Id"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="payment_quote_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="HOKODO_PAYMENT_QUOTE_QUOTE_ID_MAGENTO_QUOTE_ENTITY_ID"
+                    table="hokodo_payment_quote" column="quote_id" referenceTable="quote" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <index referenceId="HOKODO_BNPL_QUOTE_ID" indexType="btree">
+            <column name="quote_id"/>
+        </index>
+    </table>
+    <table name="sales_order" resource="default" engine="innodb">
+        <column xsi:type="varchar" name="deferred_payment_id" length="255" nullable="false" comment="Deferred Payment Id"/>
+        <column xsi:type="varchar" name="order_api_id" length="255" nullable="false" comment="Order API Id"/>
+        <column xsi:type="varchar" name="hokodo_id" length="255" nullable="false" comment="Hokodo Id"/>
+    </table>
+    <table name="quote" resource="default" engine="innodb">
+        <column xsi:type="varchar" name="payment_offer_id" length="255" nullable="false" comment="Payment Offer Id"/>
+        <column xsi:type="varchar" name="order_api_id" length="255" nullable="false" comment="Order API Id"/>
+        <column xsi:type="varchar" name="hokodo_id" length="255" nullable="false" comment="Hokodo Id"/>
+    </table>
+</schema>

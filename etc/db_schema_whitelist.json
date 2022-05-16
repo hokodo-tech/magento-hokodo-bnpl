@@ -1,0 +1,72 @@
+{
+    "hokodo_payment_logs": {
+        "column": {
+            "payment_log_id": true,
+            "quote_id": true,
+            "payment_log_content": true,
+            "action_title": true,
+            "status": true,
+            "created_at": true
+        },
+        "index": {
+            "HOKODO_PAYMENT_LOGS_STATUS": true,
+            "HOKODO_PAYMENT_LOGS_ACTION_TITLE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "hokodo_organisation": {
+        "column": {
+            "organisation_id": true,
+            "api_id": true,
+            "country": true,
+            "name": true,
+            "address": true,
+            "city": true,
+            "postcode": true,
+            "email": true,
+            "phone": true,
+            "company_api_id": true,
+            "created_at": true
+        },
+        "index": {
+            "HOKODO_ORGANISATION_API_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "hokodo_payment_quote": {
+        "column": {
+            "payment_quote_id": true,
+            "quote_id": true,
+            "user_id": true,
+            "organisation_id": true,
+            "order_id": true,
+            "offer_id": true,
+            "deferred_payment_id": true
+        },
+        "index": {
+            "HOKODO_PAYMENT_QUOTE_QUOTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "HOKODO_PAYMENT_QUOTE_QUOTE_ID_QUOTE_ENTITY_ID": true
+        }
+    },
+    "sales_order": {
+        "column": {
+            "deferred_payment_id": true,
+            "order_api_id": true,
+            "hokodo_id": true
+        }
+    },
+    "quote": {
+        "column": {
+            "payment_offer_id": true,
+            "order_api_id": true,
+            "hokodo_id": true
+        }
+    }
+}

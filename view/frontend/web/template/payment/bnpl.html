@@ -1,0 +1,143 @@
+<!--
+/**
+ * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+ F5EAD7
+-->
+<div class="payment-method hokodo-gateway" data-bind="css: {'_active': (getCode() == isChecked())}">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="
+                    attr: {
+                        id: getCode()
+                    },
+                    value: getCode(),
+                    checked: isChecked,
+                    click: selectPaymentMethod,
+                    visible: isRadioButtonVisible()
+               "/>
+        <label class="label" data-bind="attr: {'for': getCode()}">
+            <span class="hokodo-logo">&nbsp;</span>
+            <span data-bind="text: getTitle()"></span>
+            <a class="action action-help"
+                href="https://www.hokodo.co/"
+                data-bind="i18n: 'Learn more'"
+                target="_blank" />
+        </label>
+    </div>
+    <div class="payment-method-content hokodo-content-wrapper">
+
+        <div class="hokodo-company-type-wrapper">
+            <h4 class="hokodo-label" data-bind="i18n: 'Company Type'"></h4>
+
+            <div class="hokodo-company-type">
+                <div>
+                    <input type="radio" data-bind="
+                        attr: {
+                            id: 'registeredCompany',
+                            name: 'companyType',
+                        },
+                        click: selectRegisteredCompany,
+                        css: {
+                            'selected': isRegisteredCompany(),
+                        },
+                    " />
+                    <label for="registeredCompany" class="registered-company" data-bind="
+                        css: {
+                            'selected': isRegisteredCompany()
+                        },
+                        i18n: 'Registered Company'
+                    "></label>
+                </div>
+                <div>
+                    <input type="radio" data-bind="
+                        attr: {
+                            id: 'soleTrader',
+                            name: 'companyType',
+                        },
+                        click: selectSoleTrader,
+                        css: {
+                            'selected': isSoleTrader(),
+                            'disabled': disabledSelection()
+                        }
+                    " />
+                    <label for="soleTrader" class="sole-trader"  data-bind="
+                        css: {
+                            'selected': isSoleTrader(),
+                            'disabled': disabledSelection()
+                        },
+                        i18n: 'Sole Trader'
+                    "></label>
+                </div>
+            </div>
+        </div>
+        <div class="company-information-wrapper" data-bind="visible: isRegisteredCompany">
+            <h4 class="hokodo-label" data-bind="i18n: 'Company Information'"></h4>
+            <div class="company-information">
+                <div class="company-information-country">
+                    <!-- ko foreach: $parent.getRegion('company-information-country') -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                    <!--/ko-->
+                </div>
+                <!-- ko foreach: $parent.getRegion('company-information-company') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <!--/ko-->
+            </div>
+        </div>
+        <div class="trader-notice" data-bind="visible: isSoleTrader">
+            <p data-bind="i18n: 'Apologies, at this time Hokodo payment plans are only available to registered companies. Please choose an alternative payment method to continue.'"></p>
+        </div>
+        <div class="hokodo-messages-wrapper">
+            <!-- ko foreach: getRegion('messages') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="payment-plan-list" data-bind="visible: isRegisteredCompany() && planList().length > 0">
+            <h4 translate="'Payment Plan'"></h4>
+            <!-- ko foreach: { data: planList, as: 'plan'} -->
+            <div class="payment-plan" data-bind="css: {'_active': (plan.id == $parent.isPlanSelected())}">
+                <input type="radio" data-bind="
+                        attr: {
+                            id: id,
+                            name: 'plan',
+                        },
+                        checked: $parent.isPlanSelected(),
+                        value: plan.id,
+                        click: $parent.selectPlan.bind($parent, plan)
+                        " />
+                <label style="width: 100%" data-bind="attr: {for: id }" translate="name"></label>
+            </div>
+            <!--/ko-->
+        </div>
+        <div class="payment-plan-description" data-bind="visible: isRegisteredCompany() && planList().length > 0 && isPlanSelected()">
+            <ul>
+                <li data-bind="text: getPaymentMessage()"></li>
+                <li data-bind="i18n: 'No account needed. Free of charge, always.'"></li>
+            </ul>
+        </div>
+        <div class="checkout-agreements-block" data-bind="visible: isRegisteredCompany() && planList().length > 0">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="actions-toolbar" data-bind="visible: isRegisteredCompany() && planList().length > 0">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="
+                        click: placeOrder,
+                        attr: {title: $t('Place Order')},
+                        css: {disabled: !isPlaceOrderActionAllowed()},
+                        enable: (getCode() == isChecked() && isPlanSelected()),
+                        "
+                        disabled>
+                    <span data-bind="i18n: 'Place Order'"></span>
+                </button>
+            </div>
+        </div>
+        <p class="hokodo-footer" data-bind="i18n: 'Hokodo Services is authorised by the Financial Conduct Authority as Appointed Representative of Innovation Risk Ltd.'"></p>
+    </div>
+</div>

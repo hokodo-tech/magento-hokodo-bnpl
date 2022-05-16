@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="customer">
+            <module name="Hokodo_BNPL" />
+        </route>
+        <route id="hokodo" frontName="hokodo">
+            <module name="Hokodo_BNPL" />
+        </route>
+        <route id="deletelogmass" frontName="deletelogmass">
+            <module name="Hokodo_BNPL" />
+        </route>
+    </router>
+</config>

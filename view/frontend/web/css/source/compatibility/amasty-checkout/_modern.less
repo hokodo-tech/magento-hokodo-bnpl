@@ -1,0 +1,94 @@
+//
+//  Amasty One Step Checkout Modern Design
+//  ___________________________________________
+
+//
+//  Common
+//  -------------------------------------------
+& when (@media-common = true) {
+
+    // Payment methods section
+    .amcheckout-step-container .checkout-payment-method .amcheckout-payment-methods {
+
+        .payment-method-title .label {
+            display: block;
+        }
+
+        .payment-method.hokodo-gateway._active .payment-method-content {
+            padding: 0 20px 0 20px;
+
+            .hokodo-content-wrapper {
+                border: none;
+                font-size: 1.4rem;
+
+                .hokodo-title {
+                    margin: 0;
+                    font-size: 1.6rem;
+                }
+
+                .hokodo-label {
+                    margin-left: 0;
+                }
+
+                .hokodo-company-type, .company-information {
+                    padding: 0;
+                }
+
+                .company-information {
+                    display: block;
+                }
+
+                .company-information-country, .admin__action-multiselect-wrap {
+                    display: block;
+                    width: 100%;
+                    margin-bottom: 10px;
+                }
+
+                .company-information-wrapper {
+                    > .company-information {
+                        > .admin__action-multiselect-wrap {
+                            .action-menu {
+                                .admin__action-multiselect-search-wrap {
+                                    .search-autocomplete-results {
+                                        max-width: initial;
+                                    }
+
+
+                                }
+
+                                .admin__data-grid-loading-mask {
+                                    justify-content: unset;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .registered-company, .sole-trader {
+                    font-size: 1.4rem;
+                }
+
+                .payment-plan-list {
+                    > h4 {
+                        margin-left: 0px;
+                    }
+
+                    > .payment-plan {
+                        margin-left: 0px;
+                        max-width: initial;
+                    }
+                }
+
+                .trader-notice {
+                    font-size: 1.4rem;
+                }
+
+                .place-order {
+                    .description {
+                        margin: 10px 0px;
+                    }
+                }
+            }
+        }
+    }
+}
