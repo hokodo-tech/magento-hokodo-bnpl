@@ -1,7 +1,7 @@
 {
     "name": "hokodo/magento-bnpl",
     "description": "Hokodo BNPL module for Magento2",
-    "version": "1.1.38",
+    "version": "1.2.0",
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
@@ -21,7 +21,7 @@
         }
     ],
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0",
         "magento/framework": "~103.0.0|~103.0.1",
         "magento/module-backend": "~102.0.0|~102.0.1",
         "magento/module-customer": "~103.0.0|~103.0.1",
