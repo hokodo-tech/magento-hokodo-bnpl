@@ -1,5 +1,8 @@
-1.1.38 / April 2022
+1.2.0 / April 2022
 ==================
+* Version 1.2.0
+Module made public, minor version bumped up
+
 * Version 1.1.38
 Documentation endpoint added
 
