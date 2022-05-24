@@ -8,6 +8,7 @@ namespace Hokodo\BNPL\Gateway\Response;
 
 use Hokodo\BNPL\Gateway\DeferredPaymentOrderSubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Class Hokodo\BNPL\Gateway\Response\DeferredPaymentCaptureHandler.
@@ -36,7 +37,7 @@ class DeferredPaymentCaptureHandler implements HandlerInterface
     {
         if (isset($response['status'])) {
             /**
-             * @var \Magento\Payment\Model\InfoInterface $payment
+             * @var OrderPaymentInterface $payment
              */
             $payment = $this->subjectReader->readPayment($handlingSubject);
 
@@ -44,10 +45,9 @@ class DeferredPaymentCaptureHandler implements HandlerInterface
             $payment->setIsTransactionClosed(false);
 
             switch ($response['status']) {
-                case 'accepted':
                 case 'pending_review':
                 case 'customer_action_required':
-                    /* @var $payment Payment */
+                    /* @var $payment OrderPaymentInterface */
                     $payment->setIsTransactionPending(true);
                     $payment->setIsFraudDetected(false);
                     break;
