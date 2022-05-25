@@ -23,8 +23,8 @@ class DeferredPaymentAuthorizationBuilder extends \Hokodo\BNPL\Gateway\Request\A
     /**
      * DeferredPaymentAuthorizationBuilder constructor.
      *
-     * @param Config $config
-     * @param OrderRepositoryInterface $orderRepository
+     * @param Config                       $config
+     * @param OrderRepositoryInterface     $orderRepository
      * @param SearchCriteriaBuilderFactory $criteriaBuilderFactory
      */
     public function __construct(
@@ -52,7 +52,7 @@ class DeferredPaymentAuthorizationBuilder extends \Hokodo\BNPL\Gateway\Request\A
     {
         $storeId = null;
         if (isset($buildSubject['payment'])) {
-            $storeId = (int)$buildSubject['payment']->getOrder()->getStoreId();
+            $storeId = (int) $buildSubject['payment']->getOrder()->getStoreId();
         }
         return [
             'header' => [

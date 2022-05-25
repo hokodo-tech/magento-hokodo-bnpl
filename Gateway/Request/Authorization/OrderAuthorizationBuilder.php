@@ -23,8 +23,8 @@ class OrderAuthorizationBuilder extends \Hokodo\BNPL\Gateway\Request\Authorizati
     /**
      * OrderAuthorizationBuilder constructor.
      *
-     * @param Config $config
-     * @param OrderRepositoryInterface $orderRepository
+     * @param Config                       $config
+     * @param OrderRepositoryInterface     $orderRepository
      * @param SearchCriteriaBuilderFactory $criteriaBuilderFactory
      */
     public function __construct(
@@ -57,7 +57,7 @@ class OrderAuthorizationBuilder extends \Hokodo\BNPL\Gateway\Request\Authorizati
             $result = $this->orderRepository->getList($searchCriteriaBuilder->create());
             if ($result->getTotalCount() > 0) {
                 foreach ($result->getItems() as $order) {
-                    $storeId = (int)$order->getStoreId();
+                    $storeId = (int) $order->getStoreId();
                 }
             }
         }
