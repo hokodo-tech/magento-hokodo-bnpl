@@ -50,7 +50,8 @@ class AuthorizationBuilder implements BuilderInterface
     /**
      * Returns authorization key.
      *
-     * @param null|int $storeId
+     * @param int|null $storeId
+     *
      * @return string
      *
      * @throws LocalizedException

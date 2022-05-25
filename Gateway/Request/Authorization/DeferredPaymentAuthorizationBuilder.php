@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Hokodo\BNPL\Gateway\Request\Authorization;
@@ -39,17 +40,19 @@ class DeferredPaymentAuthorizationBuilder extends \Hokodo\BNPL\Gateway\Request\A
     }
 
     /**
-     * Builds Authorization header
+     * Builds Authorization header.
      *
      * @param array $buildSubject
+     *
      * @return array[]
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function build(array $buildSubject): array
     {
         $storeId = null;
         if (isset($buildSubject['payment'])) {
-            $storeId = (int) $buildSubject['payment']->getOrder()->getStoreId();
+            $storeId = (int)$buildSubject['payment']->getOrder()->getStoreId();
         }
         return [
             'header' => [
