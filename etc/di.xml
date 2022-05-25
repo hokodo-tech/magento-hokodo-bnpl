@@ -796,7 +796,7 @@
     <virtualType name="Hokodo\BNPL\Gateway\Request\OrderView\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\Authorization\OrderAuthorizationBuilder</item>
                 <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\OrderViewEndpointBuilder</item>
                 <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\GetMethodBuilder</item>
             </argument>
@@ -807,7 +807,7 @@
     <virtualType name="Hokodo\BNPL\Gateway\Request\OrderFulfill\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\Authorization\OrderAuthorizationBuilder</item>
                 <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostSaleOrderFulfillEndpoint</item>
                 <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\PutMethodBuilder</item>
                 <item name="order_body" xsi:type="string">Hokodo\BNPL\Gateway\Request\OrderItemsBuilder</item>
@@ -831,7 +831,7 @@
     <virtualType name="Hokodo\BNPL\Gateway\Request\OrderReturn\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\Authorization\OrderAuthorizationBuilder</item>
                 <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostSaleOrderReturnEndpoint</item>
                 <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\PutMethodBuilder</item>
                 <item name="order_body" xsi:type="string">Hokodo\BNPL\Gateway\Request\AllOrderItemsBuilder</item>
@@ -866,7 +866,7 @@
     <virtualType name="Hokodo\BNPL\Gateway\Request\OrderDelete\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\Authorization\OrderAuthorizationBuilder</item>
                 <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\OrderViewEndpointBuilder</item>
                 <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\DeleteMethodBuilder</item>
             </argument>
@@ -903,7 +903,7 @@
     <virtualType name="Hokodo\BNPL\Gateway\Request\CreateOrderDocuments\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\Authorization\DocumentAuthorizationBuilder</item>
                 <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\CreateOrderDocumentsEndpoint</item>
                 <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostMethodBuilder</item>
                 <item name="documents_body" xsi:type="string">Hokodo\BNPL\Gateway\Request\CreateOrderDocumentsBuilder</item>
@@ -1008,7 +1008,7 @@
     <virtualType name="Hokodo\BNPL\Gateway\Request\DeferredPaymentAuthorize\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\Authorization\DeferredPaymentAuthorizationBuilder</item>
                 <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\DeferredPaymentAuthorizeEndpoint</item>
                 <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\GetMethodBuilder</item>
             </argument>
