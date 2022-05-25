@@ -19,6 +19,13 @@ class DeferredPaymentAuthorizationBuilder extends \Hokodo\BNPL\Gateway\Request\A
      */
     private $criteriaBuilderFactory;
 
+    /**
+     * DeferredPaymentAuthorizationBuilder constructor.
+     *
+     * @param Config $config
+     * @param OrderRepositoryInterface $orderRepository
+     * @param SearchCriteriaBuilderFactory $criteriaBuilderFactory
+     */
     public function __construct(
         Config $config,
         OrderRepositoryInterface $orderRepository,
@@ -32,6 +39,8 @@ class DeferredPaymentAuthorizationBuilder extends \Hokodo\BNPL\Gateway\Request\A
     }
 
     /**
+     * Builds Authorization header
+     *
      * @param array $buildSubject
      * @return array[]
      * @throws \Magento\Framework\Exception\LocalizedException

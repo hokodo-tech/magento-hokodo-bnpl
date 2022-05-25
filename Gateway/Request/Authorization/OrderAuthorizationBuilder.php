@@ -19,6 +19,13 @@ class OrderAuthorizationBuilder extends \Hokodo\BNPL\Gateway\Request\Authorizati
      */
     private $criteriaBuilderFactory;
 
+    /**
+     * OrderAuthorizationBuilder constructor.
+     *
+     * @param Config $config
+     * @param OrderRepositoryInterface $orderRepository
+     * @param SearchCriteriaBuilderFactory $criteriaBuilderFactory
+     */
     public function __construct(
         Config $config,
         OrderRepositoryInterface $orderRepository,
@@ -32,6 +39,8 @@ class OrderAuthorizationBuilder extends \Hokodo\BNPL\Gateway\Request\Authorizati
     }
 
     /**
+     * Builds Authorization header
+     *
      * @param array $buildSubject
      * @return array[]
      * @throws \Magento\Framework\Exception\LocalizedException
