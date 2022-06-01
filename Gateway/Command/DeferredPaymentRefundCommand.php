@@ -82,7 +82,6 @@ class DeferredPaymentRefundCommand implements CommandInterface
         try {
             if (isset($commandSubject['payment'])) {
                 $paymentDO = $commandSubject['payment'];
-                $paymentDO->getApiOrder();
                 /**
                  * @var OrderPaymentInterface $paymentInfo
                  */
@@ -103,7 +102,6 @@ class DeferredPaymentRefundCommand implements CommandInterface
             /*
              * @var OrderPaymentInterface $paymentInfo
              */
-            $paymentDO->getApiOrder();
             $paymentInfo = $paymentDO->getPayment();
 
             ContextHelper::assertOrderPayment($paymentInfo);

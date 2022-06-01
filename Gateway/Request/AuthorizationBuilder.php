@@ -50,19 +50,21 @@ class AuthorizationBuilder implements BuilderInterface
     /**
      * Returns authorization key.
      *
+     * @param int|null $storeId
+     *
      * @return string
      *
      * @throws LocalizedException
      */
-    private function getAuthorizationKey(): string
+    protected function getAuthorizationKey($storeId = null): string
     {
-        switch ($this->config->getEnvironment()) {
+        switch ($this->config->getEnvironment($storeId)) {
             case Config::ENV_DEV:
-                return $this->config->getDevApiKey();
+                return $this->config->getDevApiKey($storeId);
             case Config::ENV_SANDBOX:
-                return $this->config->getSandboxApiKey();
+                return $this->config->getSandboxApiKey($storeId);
             case Config::ENV_PRODUCTION:
-                return $this->config->getApiKey();
+                return $this->config->getApiKey($storeId);
             default:
                 throw new LocalizedException(__('Invalid environment'));
         }
