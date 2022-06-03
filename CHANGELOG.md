@@ -1,5 +1,10 @@
 1.2.0 / April 2022
 ==================
+* Version 1.2.1
+Resolved multistore set-up for admin
+Fix issue when sometimes payment method was visible permanently on checkout
+Change status update for Payment in admin
+
 * Version 1.2.0
 Module made public, minor version bumped up
 
