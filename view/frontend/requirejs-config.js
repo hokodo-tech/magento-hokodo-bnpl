@@ -10,6 +10,15 @@ config = {
         mixins: {
             'Amasty_Checkout/js/view/place-button': {
                 'Hokodo_BNPL/js/mixin/amasty/checkout/view/place-button': amasty_mixin_enabled
+            },
+            'Hokodo_BNPL/js/view/payment/method-renderer/bnpl': {
+                'Hokodo_BNPL/js/segment/method-renderer': true
+            },
+            'Hokodo_BNPL/js/view/company-information/ui-select': {
+                'Hokodo_BNPL/js/segment/ui-select': true
+            },
+            'Hokodo_BNPL/js/model/hokodo-data-service': {
+                'Hokodo_BNPL/js/segment/hokodo-data-service': true
             }
         },
     },

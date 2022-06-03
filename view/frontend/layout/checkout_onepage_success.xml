@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="root">
+            <block name="hokodo_segment_js" class="Magento\Framework\View\Element\Template" template="Hokodo_BNPL::segment-js.phtml" before="page.wrapper">
+                <arguments>
+                    <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\Checkout\SegmentJs</argument>
+                </arguments>
+            </block>
+            <block name="hokodo_segment_event_onepage_success" class="Magento\Framework\View\Element\Template" template="Hokodo_BNPL::segment-onepage-success.phtml">
+                <arguments>
+                    <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\Checkout\OnepageSuccess</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
