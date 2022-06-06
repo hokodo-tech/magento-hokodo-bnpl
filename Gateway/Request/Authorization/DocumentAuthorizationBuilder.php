@@ -51,7 +51,7 @@ class DocumentAuthorizationBuilder extends \Hokodo\BNPL\Gateway\Request\Authoriz
     public function build(array $buildSubject): array
     {
         $storeId = null;
-        if (isset($buildSubject['order_id'])) {
+        if (isset($buildSubject['order_id']) && $buildSubject['order_id']) {
             $searchCriteriaBuilder = $this->criteriaBuilderFactory->create();
             $searchCriteriaBuilder->addFilter('order_api_id', $buildSubject['order_id']);
             $result = $this->orderRepository->getList($searchCriteriaBuilder->create());

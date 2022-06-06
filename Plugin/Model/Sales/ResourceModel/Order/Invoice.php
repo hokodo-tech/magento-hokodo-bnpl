@@ -62,19 +62,21 @@ class Invoice
         if (!empty($invoice->getId())) {
             /* @var InvoiceInterface $invoice */
             $order = $invoice->getOrder();
-            $incrementId = $invoice->getIncrementId();
-            $this->orderDocumentManagement->setDocuments($order, 'invoice');
-            if ($order->getState() === Order::STATE_PAYMENT_REVIEW) {
-                $order->setState(Order::STATE_PROCESSING);
-                $order->save();
-                $log['updated_order_status'] = 'Created invoice IncrementId: ' .
-                    $incrementId . '. Updated order status to: ' . Order::STATE_PROCESSING;
-                $data = [
-                    'payment_log_content' => $log,
-                    'action_title' => 'After save invoice plugin',
-                    'status' => 1,
-                ];
-                $this->paymentLogger->execute($data);
+            if ($order->getPayment()->getMethod() === 'hokodo_bnpl') {
+                $incrementId = $invoice->getIncrementId();
+                $this->orderDocumentManagement->setDocuments($order, 'invoice');
+                if ($order->getState() === Order::STATE_PAYMENT_REVIEW) {
+                    $order->setState(Order::STATE_PROCESSING);
+                    $order->save();
+                    $log['updated_order_status'] = 'Created invoice IncrementId: ' .
+                        $incrementId . '. Updated order status to: ' . Order::STATE_PROCESSING;
+                    $data = [
+                        'payment_log_content' => $log,
+                        'action_title' => 'After save invoice plugin',
+                        'status' => 1,
+                    ];
+                    $this->paymentLogger->execute($data);
+                }
             }
         }
 
