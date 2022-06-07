@@ -264,9 +264,11 @@ define([
         success: function (response) {
             var existingOptions = [];
             _.each(response, function (opt) {
-                existingOptions.push(opt);
+                if (opt.country !== '') {
+                    existingOptions.push(opt);
+                }
             });
-            this.total = response.length;
+            this.total = existingOptions.length;
             this.cacheOptions.plain = [];
             this.options(existingOptions);
         },
