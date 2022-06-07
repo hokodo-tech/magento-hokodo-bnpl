@@ -62,8 +62,10 @@ class Shipment
             /** @var ShipmentInterface $shipment */
             $order = $shipment->getOrder();
 
-            $this->postSaleProcessor->fulfill($shipment);
-            $this->orderDocumentManagement->setDocuments($order, 'shipping');
+            if ($order->getPayment()->getMethod() === 'hokodo_bnpl') {
+                $this->postSaleProcessor->fulfill($shipment);
+                $this->orderDocumentManagement->setDocuments($order, 'shipping');
+            }
         }
 
         return $result;
