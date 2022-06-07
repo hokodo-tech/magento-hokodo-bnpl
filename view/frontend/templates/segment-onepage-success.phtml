@@ -8,6 +8,9 @@ $viewModel = $block->getData('viewModel');
 ?>
 <script>
     require(['Hokodo_BNPL/js/segment/core'], function(segment) {
-        segment.trackOrderPlaced('<?= $viewModel->getSelectedPaymentMethodCode() ?>');
+        segment.trackOrderPlaced(
+            '<?= $viewModel->getSelectedPaymentMethodCode() ?>',
+            '<?= $viewModel->getOrder()->getIncrementId() ?>'
+        );
     })
 </script>
