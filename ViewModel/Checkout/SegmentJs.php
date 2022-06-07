@@ -11,11 +11,13 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class SegmentJs implements ArgumentInterface
 {
-    public const HOKODO_PAYMENT_ENV = 'payment/hokodo_bnpl/environment';
+    private const HOKODO_PAYMENT_ENV = 'payment/hokodo_bnpl/environment';
 
-    private const SEGMENT_SANDBOX_KEY = '1sTpGIGYD3zs1NnZ7VrP6AwqCsSnD8EA';
+    private const SEGMENT_ENABLED = 'payment/hokodo_bnpl/segment/active';
 
-    private const SEGMENT_PRODUCTION_KEY = 'Ym0AF6w9WMfLO4FP1SUek96XSHw4fr99';
+    private const SEGMENT_SANDBOX_KEY_PATH = 'payment/hokodo_bnpl/segment/sandbox_key';
+
+    private const SEGMENT_PROD_KEY_PATH = 'payment/hokodo_bnpl/segment/key';
 
     /**
      * @var ScopeConfigInterface
@@ -50,18 +52,32 @@ class SegmentJs implements ArgumentInterface
      */
     public function getKey()
     {
+        $storeId = $this->storeManager->getStore()->getId();
         switch ($this->config->getValue(
             self::HOKODO_PAYMENT_ENV,
             ScopeInterface::SCOPE_STORE,
-            $this->storeManager->getStore()->getId()
+            $storeId
         )) {
             case 'dev':
             case 'sandbox':
-                return self::SEGMENT_SANDBOX_KEY;
+                return $this->config->getValue(self::SEGMENT_SANDBOX_KEY_PATH, ScopeInterface::SCOPE_STORE, $storeId);
             case 'production':
-                return self::SEGMENT_PRODUCTION_KEY;
+                return $this->config->getValue(self::SEGMENT_PROD_KEY_PATH, ScopeInterface::SCOPE_STORE, $storeId);
             default:
                 return null;
         }
+    }
+
+    /**
+     * Check is Analytics is enabled in config.
+     *
+     * @return mixed
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function isAnalyticsEnabled()
+    {
+        $storeId = $this->storeManager->getStore()->getId();
+        return $this->config->getValue(self::SEGMENT_ENABLED, ScopeInterface::SCOPE_STORE, $storeId);
     }
 }

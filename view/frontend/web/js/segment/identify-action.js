@@ -26,11 +26,11 @@ define([
                             }
                         }
                     )
-                    self.segment.identify(
+                    self.segment.identify();
+                    segment.trackLanding(
                         self.priceUtils.formatPrice(self.quote.getCalculatedTotal(), self.quote.getPriceFormat()),
                         position
                     );
-                    segment.trackLanding();
                     this.fired = true;
                 }
             })
