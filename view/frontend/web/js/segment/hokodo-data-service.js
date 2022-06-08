@@ -12,18 +12,15 @@ define([
         DataService.onPaymentOfferDone = wrapper.wrapSuper(
             DataService.onPaymentOfferDone,
             function (deferred, payment, response) {
-                if (!response.id) {
-                    segment.trackEligibility({
-                        Eligible: false
-                    })
-                } else {
-                    segment.trackEligibility({
-                        Eligible: true,
-                        PaymentPlan: response.offered_payment_plans.map((plan) => {
-                            return plan.name
-                        })
+                let plans = [];
+                if (response.id) {
+                    response.offered_payment_plans.forEach((plan) => {
+                        if (plan.status !== 'declined') {
+                            plans.push(plan.name);
+                        }
                     })
                 }
+                segment.trackEligibility(plans)
                 this._super(deferred, payment, response);
         });
 
