@@ -63,7 +63,14 @@ define([
             )
         },
 
-        trackEligibility(data) {
+        trackEligibility(plans) {
+            let data = {
+                Eligible: false
+            }
+            if (plans.length > 0) {
+                data.Eligible = true;
+                data.PaymentPlan = plans;
+            }
             this.track(
                 'Eligibility Check',
                 data
