@@ -1,5 +1,10 @@
-1.2.0 / April 2022
+1.2.2 / June 2022
 ==================
+* Version 1.2.2
+Fixed issues with search doesn't work sometimes
+Fixed Order update in Admin when using multistore
+Added Segment tracking
+
 * Version 1.2.1
 Resolved multistore set-up for admin
 Fix issue when sometimes payment method was visible permanently on checkout
