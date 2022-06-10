@@ -1,10 +1,15 @@
-1.2.0 / April 2022
+1.2.2 / June 2022
 ==================
+* Version 1.2.2
+  Refunds handled
+
 * Version 1.2.1
 Resolved multistore set-up for admin
 Fix issue when sometimes payment method was visible permanently on checkout
 Change status update for Payment in admin
 
+1.2.0 / May 2022
+==================
 * Version 1.2.0
 Module made public, minor version bumped up
 
@@ -17,6 +22,8 @@ Store scope added to configuration
 * Version 1.1.36
 Order status after issuing an invoice
 
+1.1.35 / April 2022
+==================
 * Version 1.1.35
 Tax calculation and discounts changes
 

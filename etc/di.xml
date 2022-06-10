@@ -1070,6 +1070,10 @@
         <plugin name="hokodo_sales_resource_invoice" type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice"/>
     </type>
 
+    <type name="Magento\Sales\Model\ResourceModel\Order\Creditmemo">
+        <plugin name="hokodo_sales_resource_creditmemo" type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Creditmemo"/>
+    </type>
+
     <type name="Magento\Sales\Model\ResourceModel\Order">
         <plugin name="hokodo_sales_order" type="Hokodo\BNPL\Plugin\OrderSaveCreateInvoicePlugin"/>
     </type>

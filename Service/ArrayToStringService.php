@@ -23,7 +23,11 @@ class ArrayToStringService
                 $item = [];
                 foreach ($vitem as $i => $j) {
                     if (trim($i) != '') {
-                        $item[] = $i . ' : ' . implode(', ', $j);
+                        if (is_array($j)) {
+                            $item[] = $i . ' : ' . implode(', ', $j);
+                        } else {
+                            $item[] = $i . ' : ' . $j;
+                        }
                     }
                 }
                 if (trim(implode(', ', $item)) != '') {

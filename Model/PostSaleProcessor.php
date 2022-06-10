@@ -109,35 +109,29 @@ class PostSaleProcessor
             $apiOrder = $this->getApiOrder($order->getOrderApiId());
             if ($apiOrder->getId()) {
                 $orderItems = [];
-                $addNonProductItemFlag = true;
                 foreach ($apiOrder->getProductItems() as $apiOrderItem) {
                     if ($apiOrderItem->getFulfilledQuantity() != $apiOrderItem->getQuantity()) {
                         $shipItem = $this->getShipItem($shipment->getAllItems(), $apiOrderItem->getItemId());
                         if ($shipItem) {
                             $orderItems[] = $this->createRequestItem($shipItem);
-                        } else {
-                            $addNonProductItemFlag = false;
                         }
                     }
                 }
                 $log['count_order_items'] = count($orderItems);
-                if ($addNonProductItemFlag) {
+                if (count($apiOrder->getShippingItems())) {
                     /*
                      * @var \Hokodo\BNPL\Api\Data\OrderItemInterface $apiItem
                      */
                     $log['count_order_items_01'] = 'O1 = ' . count($orderItems);
                     foreach ($apiOrder->getShippingItems() as $apiItem) {
-                        if ($apiItem->getFulfilledQuantity() != $apiItem->getQuantity()) {
+                        if (($apiItem->getCancelledQuantity() < $apiItem->getQuantity()
+                            && $apiItem->getReturnedQuantity() == 0)
+                            && ($apiItem->getFulfilledQuantity() != $apiItem->getQuantity())
+                        ) {
                             /**
                              * @var OrderItemInterface $orderItem
                              */
-                            $orderItem = $this->orderItemFactory->create();
-
-                            $orderItem->setItemId($apiItem->getItemId());
-                            $orderItem->setQuantity($apiItem->getQuantity());
-                            $log['setTotalAmount'] = 'setTotalAmount = ' . $apiItem->getTotalAmount();
-                            $orderItem->setTotalAmount($apiItem->getTotalAmount());
-                            $orderItem->setTaxAmount($apiItem->getTaxAmount());
+                            $orderItem = $this->createShippingItem($apiItem);
                             $orderItems[] = $orderItem;
                         }
                     }
@@ -158,7 +152,6 @@ class PostSaleProcessor
 
                     $orderInformation->setId($order->getOrderApiId());
                     $orderInformation->setItems($orderItems);
-
                     $resultOrderInformation = $this->requestFulfill($orderInformation, $shipment);
                     if ($resultOrderInformation->getId()) {
                         foreach ($shipment->getAllItems() as $shipItem) {
@@ -256,8 +249,45 @@ class PostSaleProcessor
         } else {
             $totalAmount = $shipmentItemTotalInclTax - $discountAmount;
         }
+        $taxAmount = ($salesOrderItem->getTaxAmount() * $shipItem->getQty())
+        / $salesOrderItem->getQtyOrdered();
         $orderItem->setTotalAmount((int) round($totalAmount * 100));
-        $orderItem->setTaxAmount((int) round($salesOrderItem->getTaxAmount() * 100));
+        $orderItem->setTaxAmount((int) round($taxAmount * 100));
+
+        return $orderItem;
+    }
+
+    /**
+     * Create request for shipping items.
+     *
+     * @param \Hokodo\BNPL\Api\Data\OrderItemInterface $apiItem
+     *
+     * @return \Hokodo\BNPL\Api\Data\OrderItemInterface
+     */
+    private function createShippingItem(OrderItemInterface $apiItem)
+    {
+        /**
+         * @var OrderItemInterface $orderItem
+         */
+        $orderItem = $this->orderItemFactory->create();
+
+        $shippingQty = $apiItem->getQuantity();
+        $totalAmount = $apiItem->getTotalAmount();
+        $taxAmount = $apiItem->getTaxAmount();
+        $cancelledQty = $apiItem->getCancelledQuantity();
+        $totalAmount = $apiItem->getTotalAmount();
+        if ($cancelledQty > 0) {
+            $cancelledInfo = $apiItem->getCancelledInfo();
+            foreach ($cancelledInfo as $cancelled) {
+                $shippingQty -= $cancelled->getQuantity();
+                $totalAmount -= $cancelled->getTotalAmount();
+                $taxAmount -= $cancelled->getTaxAmount();
+            }
+        }
+        $orderItem->setItemId($apiItem->getItemId());
+        $orderItem->setQuantity($shippingQty);
+        $orderItem->setTotalAmount($totalAmount);
+        $orderItem->setTaxAmount($taxAmount);
 
         return $orderItem;
     }
@@ -283,7 +313,7 @@ class PostSaleProcessor
                 'status' => 0,
             ];
             $this->paymentLogger->execute($data);
-            throw new LocalizedException(__('Unable to create shipping right now. Please try again later'));
+            throw new LocalizedException(__('Unable to create shipping right now. Please try again later.'));
         }
     }
 

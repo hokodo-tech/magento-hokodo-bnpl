@@ -18,6 +18,7 @@ use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Item;
 
 /**
  * Class Hokodo\BNPL\Gateway\Command\DeferredPaymentRefundCommand.
@@ -82,13 +83,17 @@ class DeferredPaymentRefundCommand implements CommandInterface
         try {
             if (isset($commandSubject['payment'])) {
                 $paymentDO = $commandSubject['payment'];
-                /**
-                 * @var OrderPaymentInterface $paymentInfo
-                 */
+                /* @var OrderPaymentInterface $paymentInfo */
                 $paymentInfo = $paymentDO->getPayment();
 
                 ContextHelper::assertOrderPayment($paymentInfo);
-
+                $data = [
+                    'payment_log_content' => 'Refund order id: ' . $paymentInfo->getOrder()->getIncrementId(),
+                    'action_title' => 'DeferredPaymentRefundCommand',
+                    'status' => 1,
+                    'quote_id' => $paymentInfo->getOrder()->getQuoteId(),
+                ];
+                $this->logger->execute($data);
                 if ($paymentInfo->getOrder()->getOrderApiId()) {
                     $this->executeRefundCommand($paymentInfo);
                 }
@@ -99,11 +104,8 @@ class DeferredPaymentRefundCommand implements CommandInterface
                 'action_title' => 'DeferredPaymentRefundCommand',
                 'status' => 0,
             ];
-            /*
-             * @var OrderPaymentInterface $paymentInfo
-             */
+            /* @var OrderPaymentInterface $paymentInfo */
             $paymentInfo = $paymentDO->getPayment();
-
             ContextHelper::assertOrderPayment($paymentInfo);
 
             if ($paymentInfo->getOrder()->getQuoteId()) {
@@ -125,82 +127,50 @@ class DeferredPaymentRefundCommand implements CommandInterface
     {
         $apiOrder = $this->getApiOrder($paymentInfo->getOrder()->getOrderApiId());
         if ($apiOrder->getId()) {
-
-            /**
-             * @var Creditmemo $creditmemo
-             */
+            /* @var Creditmemo $creditmemo */
             $creditmemo = $paymentInfo->getCreditmemo();
-
             $orderItems = [];
-            $grandTotal = 0;
+            $refundShipping = (int) ($creditmemo->getShippingAmount() * 100);
             foreach ($apiOrder->getProductItems() as $apiOrderItem) {
                 if ($apiOrderItem->getReturnedQuantity() != $apiOrderItem->getQuantity()) {
                     $returnItem = $this->getReturnedItem($creditmemo->getAllItems(), $apiOrderItem->getItemId());
-                    if ($returnItem && $returnItem->getPrice()) {
+                    if ($returnItem && $returnItem->getPrice()
+                        && ($apiOrderItem->getFulfilledQuantity() - $apiOrderItem->getReturnedQuantity()) > 0
+                    ) {
                         $requestItem = $this->createRequestItem($returnItem);
                         $orderItems[] = $requestItem;
-                        $grandTotal += $requestItem->getTotalAmount() / 100 + $requestItem->getTaxAmount() / 100;
                     }
                 }
             }
-
             foreach ($apiOrder->getShippingItems() as $apiItem) {
-                if ($apiItem->getReturnedQuantity() != $apiItem->getQuantity()
-                    && $creditmemo->getShippingAmount() == ($apiItem->getTotalAmount() / 100)) {
-                    /**
-                     * @var OrderItemInterface $orderItem
-                     */
-                    $orderItem = $this->orderItemFactory->create();
-
-                    $orderItem->setItemId($apiItem->getItemId());
-                    $orderItem->setQuantity($apiItem->getQuantity());
-
-                    $orderItem->setTotalAmount($apiItem->getTotalAmount());
-                    $orderItem->setTaxAmount($apiItem->getTaxAmount());
-                    $orderItems[] = $orderItem;
-                    $grandTotal += $orderItem->getTotalAmount() / 100 + $orderItem->getTaxAmount() / 100;
+                if ($apiItem->getReturnedQuantity() != $apiItem->getQuantity()) {
+                    if ($apiItem->getFulfilledQuantity() > 0
+                        && ($apiItem->getFulfilledQuantity() - $apiItem->getReturnedQuantity()) > 0
+                    ) {
+                        $orderItem = $this->orderItemFactory->create();
+                        $orderItem->setItemId($apiItem->getItemId());
+                        if ($refundShipping == $apiItem->getTotalAmount()) {
+                            $orderItem->setQuantity($apiItem->getQuantity());
+                            $orderItem->setTotalAmount($apiItem->getTotalAmount());
+                            $orderItem->setTaxAmount($apiItem->getTaxAmount());
+                        } else {
+                            $deduceAmountPercent = ($refundShipping * 100) / $apiItem->getTotalAmount();
+                            $returnQuantity = round(($apiItem->getQuantity() * $deduceAmountPercent) / 100, 3);
+                            $orderItem->setQuantity($returnQuantity);
+                            $orderItem->setTotalAmount($refundShipping);
+                            $orderItem->setTaxAmount(0);
+                        }
+                        $orderItems[] = $orderItem;
+                    }
                 }
             }
-
             if (count($orderItems)) {
-
-                /**
-                 * @var OrderInformationInterface $returnOrderInformation
-                 */
                 $returnOrderInformation = $this->orderInformationFactory->create();
-
                 $returnOrderInformation->setId($paymentInfo->getOrder()->getOrderApiId());
                 $returnOrderInformation->setItems($orderItems);
-
-                $this->orderPostSaleService->return($returnOrderInformation);
-            }
-
-            if (($creditmemo->getGrandTotal() - $grandTotal) != 0) {
-                /**
-                 * @var OrderInformationInterface $discountOrderInformation
-                 */
-                $discountOrderInformation = $this->orderInformationFactory->create();
-
-                $discountOrderInformation->setId($paymentInfo->getOrder()->getOrderApiId());
-
-                /**
-                 * @var OrderItemInterface $orderItem
-                 */
-                $orderItem = $this->orderItemFactory->create();
-
-                $orderItem->setItemId($paymentInfo->getOrder()->getQuoteId() . '-discount');
-                $orderItem->setQuantity(1);
-                $unitPrice = (0 - (int) ($creditmemo->getGrandTotal() - $grandTotal) * 100);
-                $orderItem->setUnitPrice($unitPrice);
-
-                $orderItem->setTotalAmount($unitPrice);
-                $orderItem->setTaxAmount(0);
-
-                $discountOrderItems = [$orderItem];
-
-                $discountOrderInformation->setItems($discountOrderItems);
-
-                $this->orderPostSaleService->discount($discountOrderInformation);
+                if ($returnOrderInformation->getItems()) {
+                    $this->orderPostSaleService->return($returnOrderInformation);
+                }
             }
         }
 
@@ -210,17 +180,15 @@ class DeferredPaymentRefundCommand implements CommandInterface
     /**
      * A function that get returned item.
      *
-     * @param \Magento\Sales\Model\Order\Creditmemo\Item[] $items
-     * @param string                                       $itemId
+     * @param Item[] $items
+     * @param string $itemId
      *
-     * @return \Magento\Sales\Model\Order\Creditmemo\Item
+     * @return Item
      */
     private function getReturnedItem(array $items, $itemId)
     {
         foreach ($items as $item) {
-            /**
-             * @var \Magento\Sales\Model\Order\Item $orderItem
-             */
+            /* @var \Magento\Sales\Model\Order\Item $orderItem */
             $orderItem = $item->getOrderItem();
             if ($orderItem->getQuoteItemId() == $itemId) {
                 return $item;
@@ -232,28 +200,19 @@ class DeferredPaymentRefundCommand implements CommandInterface
     /**
      * A function that creates request item.
      *
-     * @param \Magento\Sales\Model\Order\Creditmemo\Item $returnItem
+     * @param Item $returnItem
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderItemInterface
+     * @return OrderItemInterface
      */
-    private function createRequestItem(Creditmemo\Item $returnItem)
+    private function createRequestItem(Item $returnItem)
     {
-        /**
-         * @var \Hokodo\BNPL\Api\Data\OrderItemInterface $orderItem
-         */
         $orderItem = $this->orderItemFactory->create();
-
-        /**
-         * @var \Magento\Sales\Model\Order\Item $salesOrderItem
-         */
+        /* @var \Magento\Sales\Model\Order\Item $salesOrderItem */
         $salesOrderItem = $returnItem->getOrderItem();
-
         $orderItem->setItemId($salesOrderItem->getQuoteItemId());
         $orderItem->setQuantity($returnItem->getQty());
-
-        $totalAmount = $returnItem->getRowTotal() - $returnItem->getDiscountAmount();
         $taxAmount = $returnItem->getTaxAmount();
-
+        $totalAmount = ($returnItem->getRowTotal() + $taxAmount) - $returnItem->getDiscountAmount();
         $orderItem->setTotalAmount((int) ($totalAmount * 100));
         $orderItem->setTaxAmount((int) ($taxAmount * 100));
 
@@ -265,7 +224,7 @@ class DeferredPaymentRefundCommand implements CommandInterface
      *
      * @param string $orderApiId
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderInformationInterface
+     * @return OrderInformationInterface
      */
     private function getApiOrder($orderApiId)
     {
