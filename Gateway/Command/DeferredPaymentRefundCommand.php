@@ -132,11 +132,11 @@ class DeferredPaymentRefundCommand implements CommandInterface
             $orderItems = [];
             $refundShipping = (int) ($creditmemo->getShippingAmount() * 100);
             foreach ($apiOrder->getProductItems() as $apiOrderItem) {
-                if ($apiOrderItem->getReturnedQuantity() != $apiOrderItem->getQuantity()) {
+                if ($apiOrderItem->getFulfilledQuantity() > 0
+                    && $apiOrderItem->getReturnedQuantity() == 0
+                ) {
                     $returnItem = $this->getReturnedItem($creditmemo->getAllItems(), $apiOrderItem->getItemId());
-                    if ($returnItem && $returnItem->getPrice()
-                        && ($apiOrderItem->getFulfilledQuantity() - $apiOrderItem->getReturnedQuantity()) > 0
-                    ) {
+                    if ($returnItem && $returnItem->getPrice()) {
                         $requestItem = $this->createRequestItem($returnItem);
                         $orderItems[] = $requestItem;
                     }
@@ -145,7 +145,7 @@ class DeferredPaymentRefundCommand implements CommandInterface
             foreach ($apiOrder->getShippingItems() as $apiItem) {
                 if ($apiItem->getReturnedQuantity() != $apiItem->getQuantity()) {
                     if ($apiItem->getFulfilledQuantity() > 0
-                        && ($apiItem->getFulfilledQuantity() - $apiItem->getReturnedQuantity()) > 0
+                        && $apiItem->getReturnedQuantity() == 0
                     ) {
                         $orderItem = $this->orderItemFactory->create();
                         $orderItem->setItemId($apiItem->getItemId());
