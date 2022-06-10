@@ -1,5 +1,7 @@
-1.2.2 / June 2022
+1.2.21 / June 2022
 ==================
+* Version 1.2.21
+Fix for segment integration
 * Version 1.2.2
 Fixed issues with search doesn't work sometimes
 Fixed Order update in Admin when using multistore
