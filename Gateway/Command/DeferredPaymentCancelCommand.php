@@ -211,7 +211,7 @@ class DeferredPaymentCancelCommand implements CommandInterface
      * A function that get cancelled item.
      *
      * @param Item[] $items
-     * @param string                                       $itemId
+     * @param string $itemId
      *
      * @return Item
      */
