@@ -35,7 +35,7 @@ class Invoice
      */
     public function __construct(
         PaymentLogger $paymentLogger,
-        OrderDocumentsManagementInterface $orderDocumentManagement,
+        OrderDocumentsManagementInterface $orderDocumentManagement
     ) {
         $this->paymentLogger = $paymentLogger;
         $this->orderDocumentManagement = $orderDocumentManagement;
