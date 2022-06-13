@@ -1,5 +1,8 @@
-1.2.2 / June 2022
+1.2.3 / June 2022
 ==================
+* Version 1.2.3
+  Multiple shipments admin panel fix
+
 * Version 1.2.2
   Refunds handled
 
