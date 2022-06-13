@@ -102,7 +102,7 @@
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    border-radius: 5px 5px 0 0;
+    border-radius: 4px 4px 0 0;
 }
 
 .hokodo-content-wrapper .hokodo-title_logo {
@@ -132,33 +132,7 @@
     margin-top: 20px;
     margin-bottom: 8px;
     margin-left: 0;
-    font-weight: 800;
-}
-
-.hokodo-content-wrapper .hokodo-company-type>div {
-    flex: 1;
-    position: relative;
-}
-
-.hokodo-content-wrapper .hokodo-company-type input[type="radio"] {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    opacity: 0;
-}
-
-.hokodo-content-wrapper .hokodo-company-type label {
-    outline: 0;
-    transition: box-shadow 250ms;
-    background: white;
-}
-
-.hokodo-content-wrapper .hokodo-company-type input[type="radio"]:focus,
-.hokodo-content-wrapper .hokodo-company-type input[type="radio"]:active {
-    border: none;
-    outline: 0;
-    box-shadow: none;
+    font-weight: 600;
 }
 
 .hokodo-content-wrapper .hokodo-company-type input[type="radio"]:focus+label,
@@ -184,46 +158,10 @@
     padding: 0;
 }
 
-.hokodo-content-wrapper .registered-company,
-.hokodo-content-wrapper .sole-trader {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    flex: 1;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    width: auto;
-    min-width: 250px;
-    border: 1px solid #bbb;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    padding-left: 40px;
-    position: relative;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.hokodo-content-wrapper .registered-company span,
-.hokodo-content-wrapper .sole-trader span {
-    display: flex;
-    flex: 1 1 0%;
-    white-space: nowrap;
-}
-
-.hokodo-content-wrapper .registered-company:after,
-.hokodo-content-wrapper .sole-trader:after {
-    display: block;
-    position: absolute;
-    top: 8px;
-    left: 8px
-}
-
 .hokodo-content-wrapper .registered-company.selected,
 .hokodo-content-wrapper .sole-trader.selected {
-    background-color: #f5e8d7;
-    border-color: #c98a29
+    background-color: #fff;
+    border-color: #ddd;
 }
 
 .hokodo-content-wrapper .registered-company.disabled,
@@ -236,11 +174,11 @@
 }
 
 .hokodo-content-wrapper .registered-company:after {
-    content: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.75 23.8208H1.75C0.785 23.8208 0 23.0358 0 22.0708V1.75177C0 1.23577 0.226 0.749767 0.619 0.415767C1.012 0.0827666 1.528 -0.0622332 2.037 0.0247668L13.026 1.68977C13.885 1.83277 14.5 2.55877 14.5 3.41777V23.0708C14.5 23.4848 14.164 23.8208 13.75 23.8208ZM1.751 1.50177C1.67 1.50177 1.616 1.53677 1.589 1.55977C1.556 1.58877 1.5 1.65077 1.5 1.75177V22.0708C1.5 22.2088 1.612 22.3208 1.75 22.3208H13V3.41777C13 3.29477 12.912 3.19077 12.791 3.17077L1.802 1.50677C1.784 1.50377 1.767 1.50177 1.751 1.50177Z' fill='black'/%3E%3Cpath d='M22.25 23.8208L13.75 23.8208C13.336 23.8208 13 23.4848 13 23.0708V9.57077C13 9.34477 13.102 9.13077 13.277 8.98877C13.452 8.84577 13.681 8.78977 13.903 8.83677L22.62 10.6628C23.436 10.8438 24 11.5458 24 12.3728V22.0708C24 23.0358 23.215 23.8208 22.25 23.8208ZM14.5 22.3208H22.25C22.388 22.3208 22.5 22.2088 22.5 22.0708V12.3728C22.5 12.2548 22.42 12.1548 22.305 12.1288L14.5 10.4938V22.3208Z' fill='black'/%3E%3Cpath d='M9.75 23.5708H5.25C4.836 23.5708 4.5 23.2348 4.5 22.8208V18.5708C4.5 17.6058 5.285 16.8208 6.25 16.8208H8.75C9.715 16.8208 10.5 17.6058 10.5 18.5708V22.8208C10.5 23.2348 10.164 23.5708 9.75 23.5708ZM6 22.0708H9V18.5708C9 18.4328 8.888 18.3208 8.75 18.3208H6.25C6.112 18.3208 6 18.4328 6 18.5708V22.0708Z' fill='black'/%3E%3Cpath d='M3.5 4.32077H6.5V5.82077H3.5V4.32077Z' fill='black'/%3E%3Cpath d='M8.5 4.32077H11.5V5.82077H8.5V4.32077Z' fill='black'/%3E%3Cpath d='M3.5 7.32077H6.5V8.82077H3.5V7.32077Z' fill='black'/%3E%3Cpath d='M8.5 7.32077H11.5V8.82077H8.5V7.32077Z' fill='black'/%3E%3Cpath d='M3.5 10.3208H6.5V11.8208H3.5V10.3208Z' fill='black'/%3E%3Cpath d='M8.5 10.3208H11.5V11.8208H8.5V10.3208Z' fill='black'/%3E%3Cpath d='M3.5 13.3208H6.5V14.8208H3.5V13.3208Z' fill='black'/%3E%3Cpath d='M8.5 13.3208H11.5V14.8208H8.5V13.3208Z' fill='black'/%3E%3Cpath d='M17 13.3208H20V14.8208H17V13.3208Z' fill='black'/%3E%3Cpath d='M17 16.3208H20V17.8208H17V16.3208Z' fill='black'/%3E%3Cpath d='M17 19.3208H20V20.8208H17V19.3208Z' fill='black'/%3E%3C/svg%3E")
+    content: '';
 }
 
 .hokodo-content-wrapper .sole-trader:after {
-    content: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M24 12C24 5.38307 18.6169 0 12 0C5.38307 0 0 5.38307 0 12C0 18.5613 5.33507 24 12 24C18.6356 24 24 18.5947 24 12ZM12 22.7368C10.0098 22.7368 8.08118 22.1912 6.39613 21.1549C6.85086 18.431 9.19579 16.4211 12 16.4211C14.8042 16.4211 17.1491 18.431 17.6039 21.1549C15.9188 22.1912 13.9897 22.7368 12 22.7368ZM7.57895 10.7368C7.57895 8.29895 9.56211 6.31579 12 6.31579C14.4379 6.31579 16.4211 8.29895 16.4211 10.7368C16.4211 13.1747 14.4379 15.1579 12 15.1579C9.56211 15.1579 7.57895 13.1747 7.57895 10.7368ZM18.7266 20.3626C18.1849 18.2663 16.6944 16.557 14.736 15.7182C16.4923 14.7501 17.6847 12.8802 17.6847 10.7368C17.6847 7.60269 15.1347 5.05263 12.0005 5.05263C8.86636 5.05263 6.31629 7.60269 6.31629 10.7368C6.31629 12.8802 7.50872 14.7496 9.26501 15.7182C7.30611 16.5575 5.81608 18.2658 5.27444 20.3626C2.74712 18.3294 1.26366 15.2696 1.26366 12C1.26366 6.07983 6.08034 1.26316 12.0005 1.26316C17.9207 1.26316 22.7373 6.07983 22.7373 12C22.7373 15.2701 21.2544 18.3294 18.7266 20.3626Z' fill='black'/%3E%3C/svg%3E%0A")
+    content: '';
 }
 
 .hokodo-content-wrapper .company-information-country,
@@ -279,11 +217,11 @@
     background: #fff;
     border: 1px solid #c2c2c2;
     cursor: default;
-    pointer-events: none
+    pointer-events: none;
 }
 
 .hokodo-content-wrapper .company-information-wrapper>select {
-    border: 1px solid #bbb
+    border: 1px solid #ddd;
 }
 
 .hokodo-content-wrapper .company-information-wrapper>select,
@@ -292,12 +230,12 @@
     margin-left: 20px;
     width: 42%;
     padding: 5px;
-    border: 1px solid #bbb
+    border: 1px solid #ddd;
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information select,
 .hokodo-content-wrapper .company-information-wrapper>.company-information input {
-    padding: 10px;
+    padding: 12px;
     height: auto;
 }
 
@@ -316,16 +254,29 @@
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information button {
-    border-radius: 5px;
+    appearance: none;
+    border-radius: 4px;
+    background-color: rgb(100, 205, 200);
+    color: rgb(19, 46, 52);
+    font-weight: 600;
+    border: none;
+}
+
+.hokodo-content-wrapper .company-information-wrapper>.company-information button:hover {
+    background-color: rgba(100, 205, 200, .85);
+}
+
+.hokodo-content-wrapper .company-information-wrapper>.company-information button:disabled {
+    background-color: rgba(100, 205, 200, .5);
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.company-information-country>select {
-    border-radius: 5px;
+    border-radius: 4px;
     width: 100%;
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.company-information-country>select:disabled {
-    border-radius: 5px;
+    border-radius: 4px;
     color: #333;
     background: #eee;
     opacity: 0.5;
@@ -349,7 +300,7 @@
     position: relative;
     border: none;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 4px;
     box-sizing: border-box;
 }
 
@@ -358,15 +309,15 @@
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.admin__action-multiselect-wrap._active input {
-    border-radius: 5px;
+    border-radius: 4px;
     width: 100%;
-    border: 1px solid #bbb;
+    border: 1px solid #ddd;
     min-height: 100%;
     margin: 0;
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.admin__action-multiselect-wrap._results .action-menu._active input {
-    border-radius: 5px 5px 0 0;
+    border-radius: 4px 4px 0 0;
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.admin__action-multiselect-wrap .admin__action-multiselect .control {
@@ -377,10 +328,10 @@
     display: flex;
     align-items: center;
     height: auto;
-    padding: 10px 30px 10px 10px;
+    padding: 12px 30px 12px 12px;
     width: 100%;
-    border: 1px solid #bbb;
-    border-radius: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.admin__action-multiselect-wrap .action-menu {
@@ -423,11 +374,11 @@
     z-index: 10;
     width: 100%;
     max-height: 295px;
-    border: 1px solid #c2c2c2;
+    border: 1px solid #ddd;
     margin: -1px 0 0 0;
     overflow-y: auto;
     display: block;
-    border-radius: 0 0 5px 5px;
+    border-radius: 0 0 4px 4px;
     box-sizing: border-box;
 }
 
@@ -437,7 +388,7 @@
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.admin__action-multiselect-wrap .action-menu .admin__action-multiselect-search-wrap .search-autocomplete-results ul li {
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #ddd;
     cursor: pointer;
     padding: 0;
     margin: 0;
@@ -457,12 +408,12 @@
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.admin__action-multiselect-wrap .action-menu .admin__action-multiselect-search-wrap .search-autocomplete-results ul li div._selected {
-    background: #fcf9f4;
+    background: #EDF6F4;
     font-weight: 600;
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.admin__action-multiselect-wrap .action-menu .admin__action-multiselect-search-wrap .search-autocomplete-results ul li div._hover {
-    background: #faf3ea;
+    background: #EDF6F4;
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.admin__action-multiselect-wrap .admin__action-multiselect-empty-area {
@@ -473,7 +424,7 @@
     margin-top: -1px;
     padding: 5px;
     box-sizing: border-box;
-    border-radius: 0 0 5px 5px;
+    border-radius: 0 0 4px 4px;
     z-index: 10;
 }
 
@@ -544,9 +495,10 @@
     margin-top: 10px;
     margin-bottom: 8px;
     margin-left: 0;
-    font-weight: 800;
+    font-weight: 600;
 }
 
+.hokodo-content-wrapper .hokodo-company-type,
 .hokodo-content-wrapper .payment-plan-list>.payment-plan {
     margin: 0 0 -1px;
     padding: 0;
@@ -556,93 +508,109 @@
     display: flex;
 }
 
-.hokodo-content-wrapper .payment-plan-list>.payment-plan:first-of-type label {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+.hokodo-content-wrapper .hokodo-company-type label,
+.hokodo-content-wrapper .payment-plan-list>.payment-plan label {
+    border-radius: 0;
 }
 
+.hokodo-content-wrapper .hokodo-company-type:first-of-type label,
+.hokodo-content-wrapper .payment-plan-list>.payment-plan:first-of-type label {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.hokodo-content-wrapper .hokodo-company-type:last-child label,
 .hokodo-content-wrapper .payment-plan-list>.payment-plan:last-child label {
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
 }
 
 .hokodo-content-wrapper .payment-plan-list>.payment-plan._active label {
-    background-color: #f5e8d7;
-    border-color: #c98a29;
+    background-color: #fff;
+    border-color: #ddd;
 }
 
 .hokodo-content-wrapper .payment-plan-list>.payment-plan._active+.payment-plan label {
-    border-top-color: #c98a29;
+    border-top-color: #ddd;
 }
 
+.hokodo-content-wrapper .hokodo-company-type input[type="radio"],
 .hokodo-content-wrapper .payment-plan-list>.payment-plan input[type="radio"] {
     position: absolute;
     opacity: 0
 }
 
 .hokodo-content-wrapper .payment-plan-list>.payment-plan._active input[type="radio"]+label {
-    border-color: #c98a29;
+    border-color: #ddd;
 }
 
+.hokodo-content-wrapper .hokodo-company-type input[type="radio"]+label,
 .hokodo-content-wrapper .payment-plan-list>.payment-plan input[type="radio"]+label {
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: initial;
     width: 100%;
     cursor: pointer;
     margin: 0;
-    padding: 10px;
-    border: 1px solid #bbb;
+    padding: 12px;
+    border: 1px solid #ddd;
 }
 
+.hokodo-content-wrapper .hokodo-company-type input[type="radio"]+label:before,
 .hokodo-content-wrapper .payment-plan-list>.payment-plan input[type="radio"]+label:before {
     content: '';
     margin-right: 10px;
     display: inline-block;
     vertical-align: text-top;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     background: #fff;
     border-radius: 50%;
-    border: 1px solid #bbb;
-    box-sizing: content-box;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
 }
 
+.hokodo-content-wrapper .hokodo-company-type input[type="radio"]:hover+label:before,
 .hokodo-content-wrapper .payment-plan-list>.payment-plan input[type="radio"]:hover+label:before {
     background: white;
 }
 
+.hokodo-content-wrapper .hokodo-company-type input[type="radio"]:checked+label:before,
 .hokodo-content-wrapper .payment-plan-list>.payment-plan input[type="radio"]:checked+label:before {
     background: white;
-    border-color: #c98a29;
+    border-color: #132E34;
 }
 
+.hokodo-content-wrapper .hokodo-company-type input[type="radio"]:disabled+label,
 .hokodo-content-wrapper .payment-plan-list>.payment-plan input[type="radio"]:disabled+label {
     color: #b8b8b8;
     cursor: auto
 }
 
+.hokodo-content-wrapper .hokodo-company-type input[type="radio"]:disabled+label:before,
 .hokodo-content-wrapper .payment-plan-list>.payment-plan input[type="radio"]:disabled+label:before {
     -webkit-box-shadow: none;
     box-shadow: none;
     background: #ddd
 }
 
+.hokodo-content-wrapper .hokodo-company-type input[type="radio"]:checked+label:after,
 .hokodo-content-wrapper .payment-plan-list>.payment-plan input[type="radio"]:checked+label:after {
     content: '';
     position: absolute;
     left: 15px;
     top: auto;
-    background: #c98a29;
-    width: 10px;
-    height: 10px;
+    background: #132E34;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
 }
 
 .hokodo-content-wrapper .payment-plan-description {
-    background: #F7F7F7;
-    border: 1px solid #bbb;
-    border-radius: 5px;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
     padding: 16px;
 }
 
@@ -682,7 +650,7 @@
     padding: 15px;
     background: #f7f7f7;
     border: 1px solid #bbb;
-    border-radius: 5px
+    border-radius: 4px;
 }
 
 .hokodo-content-wrapper .hokodo-prefooter li {
@@ -734,7 +702,7 @@
 }
 
 .hokodo-content-wrapper .company-information>select {
-    border: 1px solid #bbb
+    border: 1px solid #ddd;
 }
 
 .company-information>select,
@@ -743,7 +711,7 @@
     margin-left: 20px;
     width: 42%;
     padding: 5px;
-    border: 1px solid #bbb
+    border: 1px solid #ddd;
 }
 
 .company-information .company-select {
@@ -770,7 +738,7 @@
 .hokodo-content-wrapper .payment-plan>div {
     margin: 10px 0 0 20px;
     padding: 10px;
-    border: 1px solid #bbb;
+    border: 1px solid #ddd;
     display: table
 }
 

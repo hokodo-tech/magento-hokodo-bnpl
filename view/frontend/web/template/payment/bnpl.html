@@ -34,44 +34,42 @@
             <h4 class="hokodo-label" data-bind="i18n: 'Company Type'"></h4>
 
             <div class="hokodo-company-type">
-                <div>
-                    <input type="radio" data-bind="
-                        attr: {
-                            id: 'registeredCompany',
-                            name: 'companyType',
-                        },
-                        click: selectRegisteredCompany,
-                        css: {
-                            'selected': isRegisteredCompany(),
-                        },
-                    " />
-                    <label for="registeredCompany" class="registered-company" data-bind="
-                        css: {
-                            'selected': isRegisteredCompany()
-                        },
-                        i18n: 'Registered Company'
-                    "></label>
-                </div>
-                <div>
-                    <input type="radio" data-bind="
-                        attr: {
-                            id: 'soleTrader',
-                            name: 'companyType',
-                        },
-                        click: selectSoleTrader,
-                        css: {
-                            'selected': isSoleTrader(),
-                            'disabled': disabledSelection()
-                        }
-                    " />
-                    <label for="soleTrader" class="sole-trader"  data-bind="
-                        css: {
-                            'selected': isSoleTrader(),
-                            'disabled': disabledSelection()
-                        },
-                        i18n: 'Sole Trader'
-                    "></label>
-                </div>
+                <input type="radio" data-bind="
+                    attr: {
+                        id: 'registeredCompany',
+                        name: 'companyType',
+                    },
+                    click: selectRegisteredCompany,
+                    css: {
+                        'selected': isRegisteredCompany(),
+                    },
+                " />
+                <label for="registeredCompany" class="registered-company" data-bind="
+                    css: {
+                        'selected': isRegisteredCompany()
+                    },
+                    i18n: 'Registered Company'
+                "></label>
+            </div>
+            <div class="hokodo-company-type">
+                <input type="radio" data-bind="
+                    attr: {
+                        id: 'soleTrader',
+                        name: 'companyType',
+                    },
+                    click: selectSoleTrader,
+                    css: {
+                        'selected': isSoleTrader(),
+                        'disabled': disabledSelection()
+                    }
+                " />
+                <label for="soleTrader" class="sole-trader"  data-bind="
+                    css: {
+                        'selected': isSoleTrader(),
+                        'disabled': disabledSelection()
+                    },
+                    i18n: 'Sole Trader'
+                "></label>
             </div>
         </div>
         <div class="company-information-wrapper" data-bind="visible: isRegisteredCompany">
