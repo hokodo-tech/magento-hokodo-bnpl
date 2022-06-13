@@ -17,8 +17,8 @@ export class ViewOrderPage {
      * @return {ViewOrderPage} The current instance of this Page Object.
      */
     getPaymentUpdateUntilStatus(desiredStatus, attempt = 0) {
-        if (attempt === 10)
-            cy.fail(`The Order Status is not '${desiredStatus}', despite attempting to fetch a Payment Update 10 times from Hokodo`);
+        if (attempt === 59)
+            cy.fail(`The Order Status is not '${desiredStatus}', despite attempting to fetch a Payment Update from Hokodo for the last 10 minutes`);
 
         cy.get('#order_status')
             .should('not.be.empty')
@@ -29,7 +29,7 @@ export class ViewOrderPage {
                     cy.get('.page-actions-buttons')
                         .then(($buttons) => {
                             if ($buttons.find('#get_review_payment_update').length) {
-                                cy.wait(1000, {log: "Waiting for 1 second before requesting Payment Update from Hokodo"});
+                                cy.wait(10000, {log: "Waiting for 10 seconds before requesting Payment Update from Hokodo"});
                                 $buttons.find('#get_review_payment_update')[0].click()
                             } 
                             else {
