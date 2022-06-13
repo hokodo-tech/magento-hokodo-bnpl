@@ -13,9 +13,6 @@ use Hokodo\BNPL\Gateway\Command\DeferredPaymentRefundCommand;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 
-/**
- * Class Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Creditmemo.
- */
 class Creditmemo
 {
     /**
@@ -61,7 +58,7 @@ class Creditmemo
             $paymentData = null;
             /* @var \Magento\Sales\Model\Order\Creditmemo $creditmemo */
             $order = $creditmemo->getOrder();
-            if ($order->getOrderApiId()) {
+            if ($order->getOrderApiId() && $order->getPayment()->getMethod() === 'hokodo_bnpl') {
                 $paymentData['payment'] = $order;
                 if ($order->hasShipments()) {
                     $this->refundCommand->execute($paymentData);

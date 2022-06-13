@@ -32,6 +32,16 @@ class OnepageSuccess implements ArgumentInterface
      */
     public function getSelectedPaymentMethodCode()
     {
-        return $this->session->getLastRealOrder()->getPayment()->getMethod();
+        return $this->getOrder()->getPayment()->getMethod();
+    }
+
+    /**
+     * Return last real order.
+     *
+     * @return \Magento\Sales\Model\Order
+     */
+    public function getOrder()
+    {
+        return $this->session->getLastRealOrder();
     }
 }

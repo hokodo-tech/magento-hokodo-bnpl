@@ -18,6 +18,7 @@ use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Item;
 
 /**
  * Class Hokodo\BNPL\Gateway\Command\DeferredPaymentCancelCommand.
@@ -121,63 +122,55 @@ class DeferredPaymentCancelCommand implements CommandInterface
      *
      * @param OrderPaymentInterface $paymentInfo
      *
-     * @return DeferredPaymentRefundCommand
+     * @return DeferredPaymentCancelCommand
      */
     private function executeCancelCommand($paymentInfo)
     {
         $apiOrder = $this->getApiOrder($paymentInfo->getOrder()->getOrderApiId());
-        if ($apiOrder->getId()) {
-            /**
-             * @var Creditmemo $creditmemo
-             */
-            $creditmemo = $paymentInfo->getCreditmemo();
-
-            $orderItems = [];
-            $refundShipping = (int) ($creditmemo->getShippingAmount() * 100);
-            foreach ($apiOrder->getProductItems() as $apiOrderItem) {
-                if ($apiOrderItem->getCancelledQuantity() < $apiOrderItem->getQuantity()) {
-                    $cancelledItem = $this->getCancelledItem($creditmemo->getAllItems(), $apiOrderItem->getItemId());
-                    if ($cancelledItem && $cancelledItem->getPrice()) {
-                        $requestItem = $this->createRequestItem($cancelledItem);
-                        $orderItems[] = $requestItem;
-                    }
+        if (!$apiOrder->getId()) {
+            return $this;
+        }
+        /* @var Creditmemo $creditmemo */
+        $creditmemo = $paymentInfo->getCreditmemo();
+        $orderItems = [];
+        $refundShipping = (int) ($creditmemo->getShippingAmount() * 100);
+        foreach ($apiOrder->getProductItems() as $apiOrderItem) {
+            if ($apiOrderItem->getCancelledQuantity() < $apiOrderItem->getQuantity()) {
+                $cancelledItem = $this->getCancelledItem($creditmemo->getAllItems(), $apiOrderItem->getItemId());
+                if ($cancelledItem && $cancelledItem->getPrice()) {
+                    $requestItem = $this->createRequestItem($cancelledItem);
+                    $orderItems[] = $requestItem;
                 }
             }
-            if ($refundShipping > 0) {
-                foreach ($apiOrder->getShippingItems() as $apiItem) {
-                    if ($apiItem->getCancelledQuantity() < $apiItem->getQuantity()) {
-                        /**
-                         * @var OrderItemInterface $orderItem
-                         */
-                        $orderItem = $this->orderItemFactory->create();
-
-                        $orderItem->setItemId($apiItem->getItemId());
-                        if ($refundShipping == $apiItem->getTotalAmount()) {
-                            $orderItem->setQuantity($apiItem->getQuantity());
-                            $orderItem->setTotalAmount($apiItem->getTotalAmount());
-                            $orderItem->setTaxAmount($apiItem->getTaxAmount());
-                        } else {
-                            $deduceAmountPercent = ($refundShipping * 100) / $apiItem->getTotalAmount();
-                            $cancelQuantity = round(($apiItem->getQuantity() * $deduceAmountPercent) / 100, 3);
-                            $orderItem->setQuantity($cancelQuantity);
-                            $orderItem->setTotalAmount($refundShipping);
-                            $orderItem->setTaxAmount(0);
-                        }
-                        $orderItems[] = $orderItem;
+        }
+        if ($refundShipping > 0) {
+            foreach ($apiOrder->getShippingItems() as $apiItem) {
+                if ($apiItem->getCancelledQuantity() < $apiItem->getQuantity()) {
+                    $orderItem = $this->orderItemFactory->create();
+                    $orderItem->setItemId($apiItem->getItemId());
+                    if ($refundShipping == $apiItem->getTotalAmount()) {
+                        $orderItem->setQuantity($apiItem->getQuantity());
+                        $orderItem->setTotalAmount($apiItem->getTotalAmount());
+                        $orderItem->setTaxAmount($apiItem->getTaxAmount());
+                    } else {
+                        $deduceAmountPercent = ($refundShipping * 100) / $apiItem->getTotalAmount();
+                        $cancelQuantity = round(($apiItem->getQuantity() * $deduceAmountPercent) / 100, 3);
+                        $orderItem->setQuantity($cancelQuantity);
+                        $orderItem->setTotalAmount($refundShipping);
+                        $orderItem->setTaxAmount(0);
                     }
+                    $orderItems[] = $orderItem;
                 }
             }
-            if (count($orderItems)) {
-                /**
-                 * @var OrderInformationInterface $returnOrderInformation
-                 */
-                $cancelledOrderInformation = $this->orderInformationFactory->create();
+        }
+        if (count($orderItems)) {
+            /* @var OrderInformationInterface $returnOrderInformation */
+            $cancelledOrderInformation = $this->orderInformationFactory->create();
 
-                $cancelledOrderInformation->setId($paymentInfo->getOrder()->getOrderApiId());
-                $cancelledOrderInformation->setItems($orderItems);
-                if ($cancelledOrderInformation->getItems()) {
-                    $this->orderPostSaleService->cancel($cancelledOrderInformation);
-                }
+            $cancelledOrderInformation->setId($paymentInfo->getOrder()->getOrderApiId());
+            $cancelledOrderInformation->setItems($orderItems);
+            if ($cancelledOrderInformation->getItems()) {
+                $this->orderPostSaleService->cancel($cancelledOrderInformation);
             }
         }
         return $this;
@@ -186,14 +179,14 @@ class DeferredPaymentCancelCommand implements CommandInterface
     /**
      * A function that creates request item.
      *
-     * @param \Magento\Sales\Model\Order\Creditmemo\Item $cancelItem
+     * @param Item $cancelItem
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderItemInterface
+     * @return OrderItemInterface
      */
-    private function createRequestItem(Creditmemo\Item $cancelItem)
+    private function createRequestItem(Item $cancelItem)
     {
         /**
-         * @var \Hokodo\BNPL\Api\Data\OrderItemInterface $orderItem
+         * @var OrderItemInterface $orderItem
          */
         $orderItem = $this->orderItemFactory->create();
 
@@ -217,17 +210,15 @@ class DeferredPaymentCancelCommand implements CommandInterface
     /**
      * A function that get cancelled item.
      *
-     * @param \Magento\Sales\Model\Order\Creditmemo\Item[] $items
+     * @param Item[] $items
      * @param string                                       $itemId
      *
-     * @return \Magento\Sales\Model\Order\Creditmemo\Item
+     * @return Item
      */
     private function getCancelledItem(array $items, $itemId)
     {
         foreach ($items as $item) {
-            /**
-             * @var \Magento\Sales\Model\Order\Item $orderItem
-             */
+            /* @var \Magento\Sales\Model\Order\Item $orderItem */
             $orderItem = $item->getOrderItem();
             if ($orderItem->getQuoteItemId() == $itemId) {
                 return $item;

@@ -11,22 +11,22 @@ define([
         return Renderer.extend({
             selectPaymentMethod() {
                 segment.trackSelected();
-                this._super();
+                return this._super();
             },
 
             selectRegisteredCompany() {
                 segment.trackCompanyType('Limited');
-                this._super();
+                return this._super();
             },
 
             selectSoleTrader() {
                 segment.trackCompanyType('Sole Trader');
-                this._super();
+                return this._super();
             },
 
             afterPlaceOrder() {
                 segment.trackRedirection(this.selectedPlan().name);
-                this._super();
+                return this._super();
             }
         });
     }

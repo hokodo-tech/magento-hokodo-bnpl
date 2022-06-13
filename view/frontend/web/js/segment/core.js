@@ -3,14 +3,12 @@ define([
     'use strict';
 
     return {
-        identify(amount, position) {
+        identify() {
             if (this.isAnalyticsLoaded()) {
                 this.userId = analytics.user().anonymousId();
                 analytics.identify(this.userId, {
                     Merchant: window.location.host,
-                    totalAmount: amount,
-                    Impression: position !== undefined,
-                    Position: position !== undefined ? position : null
+                    LoggedIn: window.checkoutConfig.isCustomerLoggedIn
                 })
             }
         },
@@ -22,13 +20,17 @@ define([
         },
 
         isAnalyticsLoaded() {
-            return analytics.VERSION !== undefined;
+            return typeof analytics !== 'undefined' && analytics.VERSION !== undefined;
         },
 
-        trackLanding() {
+        trackLanding(amount, position) {
             this.track(
                 'Initiation',
-                {}
+                {
+                    totalAmount: amount,
+                    Impression: position !== undefined,
+                    Position: position !== undefined ? position : null
+                }
             );
             this.initialized = true;
         },
@@ -61,7 +63,14 @@ define([
             )
         },
 
-        trackEligibility(data) {
+        trackEligibility(plans) {
+            let data = {
+                Eligible: false
+            }
+            if (plans.length > 0) {
+                data.Eligible = true;
+                data.PaymentPlan = plans;
+            }
             this.track(
                 'Eligibility Check',
                 data
@@ -75,10 +84,13 @@ define([
             )
         },
 
-        trackOrderPlaced(data) {
-            this.track(
+        trackOrderPlaced(method, id) {
+            analytics.track(
                 'Order Placed',
-                {PaymentMethod: data}
+                {
+                    PaymentMethod: method,
+                    OrderId: id
+                }
             )
         }
     }

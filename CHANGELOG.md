@@ -1,10 +1,16 @@
 1.2.3 / June 2022
 ==================
 * Version 1.2.3
-  Multiple shipments admin panel fix
+Multiple shipments admin panel fix
+
+* Version 1.2.21
+Fix for segment integration
 
 * Version 1.2.2
-  Refunds handled
+Refunds handled
+Fixed issues with search doesn't work sometimes
+Fixed Order update in Admin when using multistore
+Added Segment tracking
 
 * Version 1.2.1
 Resolved multistore set-up for admin
