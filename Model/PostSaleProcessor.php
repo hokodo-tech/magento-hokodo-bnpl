@@ -124,10 +124,10 @@ class PostSaleProcessor
                      */
                     $log['count_order_items_01'] = 'O1 = ' . count($orderItems);
                     foreach ($apiOrder->getShippingItems() as $apiItem) {
-                        if (($apiItem->getCancelledQuantity() < $apiItem->getQuantity()
-                            && $apiItem->getReturnedQuantity() == 0)
-                            && ($apiItem->getFulfilledQuantity() != $apiItem->getQuantity())
-                        ) {
+                        $remainingQty = $apiItem->getFulfilledQuantity();
+                        $remainingQty += $apiItem->getCancelledQuantity();
+                        $remainingQty += $apiItem->getReturnedQuantity();
+                        if ($remainingQty < $apiItem->getQuantity()) {
                             /**
                              * @var OrderItemInterface $orderItem
                              */
