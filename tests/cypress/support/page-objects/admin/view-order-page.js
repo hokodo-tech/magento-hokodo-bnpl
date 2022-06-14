@@ -47,4 +47,9 @@ export class ViewOrderPage {
     confirmShipmentWasCreated() {
         cy.contains("The shipment has been created.").should('be.visible');
     }
+
+    verifyOrderCannotBeShipped(){
+        cy.get("#order_ship")
+            .should('not.exist')
+    }
 }
