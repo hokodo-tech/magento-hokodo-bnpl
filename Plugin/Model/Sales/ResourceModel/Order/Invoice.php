@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order;
 
 use Hokodo\BNPL\Api\OrderDocumentsManagementInterface;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Hokodo\BNPL\Gateway\Config\Config;
+use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Sales\Model\Order;
