@@ -1,9 +1,9 @@
-Cypress.Commands.add('generateNewUser', () => {
+Cypress.Commands.add('generateNewUser', (paymentPlanStatus, fraudStatus) => {
     cy.fixture("address").then(($address) => {
         return {
             address: $address,
             personalDetails: {
-                email: `test+${Date.now()}_paymentplan_offered_dp_fraud_accepted@hokodo.co`, // this email pattern will ensure the deferred payment is created without needing a manual review
+                email: `test+${Date.now()}_paymentplan_${paymentPlanStatus}_dp_fraud_${fraudStatus}@hokodo.co`, // this email pattern will ensure the deferred payment is created without needing a manual review
                 firstName: "Cypress",
                 lastName: Date.now() // ensure the Buyers's name is unique
             }            

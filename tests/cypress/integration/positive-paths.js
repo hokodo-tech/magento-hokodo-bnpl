@@ -22,7 +22,7 @@ describe("Positive Paths", () => {
                 .addToBasket();
         });
 
-        cy.generateNewUser().then((user) => {
+        cy.generateNewUser('offered', 'accepted').then((user) => {
             const shippingAddressPage = new ShippingAddressPage();
             shippingAddressPage.navigate();
             shippingAddressPage.enterUserDetails(user.personalDetails);
@@ -90,3 +90,4 @@ describe("Positive Paths", () => {
         });
     })
 })
+

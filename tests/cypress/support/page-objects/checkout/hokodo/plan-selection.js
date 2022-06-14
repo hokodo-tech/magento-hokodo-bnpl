@@ -12,6 +12,12 @@ export class PlanSelection {
         cy.get(".payment-plan-list").contains(planName).click();
     }
 
+    verifyPaymentPlanDeclined(){
+        cy.contains('Unfortunately you are not eligible for Buy Now Pay Later. Please select another payment method.');
+        cy.get(".payment-plan-list")
+            .should('not.be.visible')
+    }
+
     agreeToTermsAndConditions() {
         cy.window()
             .then((win) => {
@@ -19,6 +25,6 @@ export class PlanSelection {
                     cy.get("#agreement_hokodo_deferred_payment_1").click();
                 }
             });
-        
+       
     }
 }
