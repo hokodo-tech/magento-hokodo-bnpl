@@ -10,6 +10,7 @@ namespace Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order;
 
 use Hokodo\BNPL\Api\OrderDocumentsManagementInterface;
 use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
+use Hokodo\BNPL\Gateway\Config\Config;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Sales\Model\Order;
@@ -61,14 +62,13 @@ class Invoice
         if (!empty($invoice->getId())) {
             /* @var Order\Invoice $invoice */
             $order = $invoice->getOrder();
-            if ($order->getPayment()->getMethod() === 'hokodo_bnpl') {
+            if ($order->getPayment()->getMethod() === Config::CODE) {
                 if ($order->getState() === Order::STATE_PAYMENT_REVIEW && $order->getOrderApiId()) {
                     $order->getPayment()->update(true);
                     $order->setState(Order::STATE_PROCESSING);
                     $order->setStatus(Order::STATE_PROCESSING);
                     $order->save();
                     $incrementId = $invoice->getIncrementId();
-                    $this->orderDocumentManagement->setDocuments($order, 'invoice');
                     $log['updated_order_status'] = 'Created invoice IncrementId: ' .
                         $incrementId . '. Updated order status to: ' . Order::STATE_PROCESSING;
                     $data = [
@@ -78,6 +78,7 @@ class Invoice
                     ];
                     $this->paymentLogger->execute($data);
                 }
+                $this->orderDocumentManagement->setDocuments($order, 'invoice');
             }
         }
 
