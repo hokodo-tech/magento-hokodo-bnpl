@@ -7,9 +7,8 @@ import { ProductDetailsPage } from "../support/page-objects/product-details/prod
 import { AdminLoginPage } from "../support/page-objects/admin/login-page"
 import { ListOrdersPage } from "../support/page-objects/admin/list-orders-page"
 
-describe("Positive Paths", () => {
-    it("places and fulfills an order", function() {
-        // cy.intercept("https://*.segment.io/v*/t").as("segmentLog");
+describe("Merchant paths", () => {
+    it("can't ship an order that is pending review", function() {
 
         cy.fixture("products/hero-hoodie").then((product) => {
             new HomePage()
@@ -22,7 +21,7 @@ describe("Positive Paths", () => {
                 .addToBasket();
         });
 
-        cy.generateNewUser('offered', 'accepted').then((user) => {
+        cy.generateNewUser('offered', 'pending_review').then((user) => {
             const shippingAddressPage = new ShippingAddressPage();
             shippingAddressPage.navigate();
             shippingAddressPage.enterUserDetails(user.personalDetails);
@@ -30,38 +29,11 @@ describe("Positive Paths", () => {
             shippingAddressPage.enterAddress(user.address);
             shippingAddressPage.proceedToPaymentPage();
 
-            // cy.wait("@segmentLog").then((log) => {
-            //     expect(log.request.body).to.have.string("Initiation");
-            //     expect(log.response.statusCode).to.eq(200);
-            // });
-
             const paymentPage = new PaymentPage();
 
             paymentPage.selectHokodo()
 
-            // cy.wait("@segmentLog").then((log) => {
-            //     expect(log.request.body).to.have.string("Hokodo Selected");
-            // });
-
             paymentPage.hokodo.findCompany(user.address);
-
-            // cy.wait("@segmentLog").then((log) => {
-            //     expect(log.request.body).to.have.string("Company Type");
-            // });
-
-            // cy.wait("@segmentLog").then((log) => {
-            //     expect(log.request.body).to.have.string("Company Search");
-            // });
-
-            // cy.wait("@segmentLog").then((log) => {
-            //     expect(log.request.body).to.have.string("Company Match");
-            // });
-
-            // cy.wait("@segmentLog").then((log) => {
-            //     const request_body = JSON.parse(log.request.body);
-            //     expect(request_body.event).to.equal("Eligibility Check")
-            //     expect(request_body.properties.Eligible).to.be.true;
-            // });
 
             paymentPage.hokodo.selectPlan({planName: "Pay in 30 days"});
             paymentPage.hokodo.agreeToTermsAndConditions();
@@ -82,12 +54,59 @@ describe("Positive Paths", () => {
             new ListOrdersPage()
                  .navigate()
                  .viewOrderByCustomerName(user.personalDetails.firstName, user.personalDetails.lastName)
-                 .getPaymentUpdateUntilStatus('Processing')
-                 .navigateToShippingPage()
-                 .waitForPageToLoad()
-                 .submitShipment()
-                 .confirmShipmentWasCreated();
+                 .getPaymentUpdateUntilStatus('Payment Review')
+                 .verifyOrderCannotBeShipped();
+        }); 
+    })
+
+    it("can't ship an order that is customer action required", function() {
+
+        cy.fixture("products/hero-hoodie").then((product) => {
+            new HomePage()
+                .navigate()
+                .viewProduct(product.name);
+
+            new ProductDetailsPage()
+                .selectVarient(product.size)
+                .selectVarient(product.colour)
+                .addToBasket();
         });
+
+        cy.generateNewUser('offered', 'customer_action_required').then((user) => {
+            const shippingAddressPage = new ShippingAddressPage();
+            shippingAddressPage.navigate();
+            shippingAddressPage.enterUserDetails(user.personalDetails);
+            shippingAddressPage.selectShippingMethod("flatrate_flatrate");
+            shippingAddressPage.enterAddress(user.address);
+            shippingAddressPage.proceedToPaymentPage();
+
+            const paymentPage = new PaymentPage();
+
+            paymentPage.selectHokodo()
+
+            paymentPage.hokodo.findCompany(user.address);
+
+            paymentPage.hokodo.selectPlan({planName: "Pay in 30 days"});
+            paymentPage.hokodo.agreeToTermsAndConditions();
+            paymentPage.placeOrder();
+
+            const hokodoPaymentPage = new HokodoPaymentPage();
+            hokodoPaymentPage.payByInvoice();
+            hokodoPaymentPage.acceptTermsAndConditions();
+            hokodoPaymentPage.confirmPayment();
+
+            new ShoppingCartPage()
+                .verifyCartIsEmpty();
+
+            new AdminLoginPage()
+                .navigate()
+                .login(Cypress.env('MAGENTO_ADMIN_USER'), Cypress.env('MAGENTO_ADMIN_PASSWORD'));
+
+            new ListOrdersPage()
+                 .navigate()
+                 .viewOrderByCustomerName(user.personalDetails.firstName, user.personalDetails.lastName)
+                 .getPaymentUpdateUntilStatus('Payment Review')
+                 .verifyOrderCannotBeShipped();
+        }); 
     })
 })
-
