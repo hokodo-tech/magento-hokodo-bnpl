@@ -1,8 +1,13 @@
-1.2.21 / June 2022
+1.2.3 / June 2022
 ==================
+* Version 1.2.3
+Multiple shipments admin panel fix
+
 * Version 1.2.21
 Fix for segment integration
+
 * Version 1.2.2
+Refunds handled
 Fixed issues with search doesn't work sometimes
 Fixed Order update in Admin when using multistore
 Added Segment tracking
@@ -12,6 +17,8 @@ Resolved multistore set-up for admin
 Fix issue when sometimes payment method was visible permanently on checkout
 Change status update for Payment in admin
 
+1.2.0 / May 2022
+==================
 * Version 1.2.0
 Module made public, minor version bumped up
 
@@ -24,6 +31,8 @@ Store scope added to configuration
 * Version 1.1.36
 Order status after issuing an invoice
 
+1.1.35 / April 2022
+==================
 * Version 1.1.35
 Tax calculation and discounts changes
 

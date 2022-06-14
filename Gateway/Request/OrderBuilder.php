@@ -150,8 +150,8 @@ class OrderBuilder implements BuilderInterface
             'customer' => $this->createCustomerRequest($buildSubject),
             'status' => 'draft',
             'currency' => $quote->getQuoteCurrencyCode(),
-            'total_amount' => (int) (($quote->getGrandTotal()) * 100),
-            'tax_amount' => (int) ($quote->getShippingAddress()->getTaxAmount() * 100),
+            'total_amount' => ($quote->getGrandTotal()) * 100,
+            'tax_amount' => $quote->getShippingAddress()->getTaxAmount() * 100,
             'order_date' => $this->dateTimeFactory->create()->gmtDate('Y-m-d', time()),
             'items' => $this->createOrderItemsRequest($buildSubject),
             'metadata' => [
@@ -160,7 +160,6 @@ class OrderBuilder implements BuilderInterface
                 'PHP version: ' . phpversion(),
             ],
         ];
-
         $data = [
             'payment_log_content' => $request,
             'action_title' => 'OrderBuilder: createOrderRequest',
@@ -226,8 +225,8 @@ class OrderBuilder implements BuilderInterface
             'quantity' => $item->getQty(),
             'unit_price' => (int) round($totalAmount / $item->getQty() * 100),
             'tax_rate' => number_format($item->getTaxPercent(), 2),
-            'total_amount' => (int) ($totalAmount * 100),
-            'tax_amount' => (int) ($item->getTaxAmount() * 100),
+            'total_amount' => $totalAmount * 100,
+            'tax_amount' => $item->getTaxAmount() * 100,
         ];
     }
 
@@ -254,12 +253,12 @@ class OrderBuilder implements BuilderInterface
             'supplier_id' => '',
             'supplier_name' => '',
             'quantity' => 1,
-            'unit_price' => (int) (($shippingAddress->getShippingInclTax() -
-                    $shippingAddress->getShippingDiscountAmount() * $this->currentTax) * 100),
+            'unit_price' => ($shippingAddress->getShippingInclTax() -
+                    $shippingAddress->getShippingDiscountAmount() * $this->currentTax) * 100,
             'tax_rate' => number_format($taxRate, 2),
-            'total_amount' => (int) (($shippingAddress->getShippingInclTax() -
-                    $shippingAddress->getShippingDiscountAmount() * $this->currentTax) * 100),
-            'tax_amount' => (int) ($shippingAddress->getShippingTaxAmount() * 100),
+            'total_amount' => ($shippingAddress->getShippingInclTax() -
+                    $shippingAddress->getShippingDiscountAmount() * $this->currentTax) * 100,
+            'tax_amount' => ($shippingAddress->getShippingTaxAmount() * 100),
         ];
     }
 

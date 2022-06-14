@@ -7,6 +7,7 @@
 namespace Hokodo\BNPL\Model\Data;
 
 use Hokodo\BNPL\Api\Data\OrderInformationInterface;
+use Hokodo\BNPL\Api\Data\OrderItemInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
@@ -377,7 +378,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
     /**
      * A function that returns product items.
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderItemInterface[]
+     * @return OrderItemInterface[]
      */
     public function getProductItems()
     {
@@ -389,7 +390,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @param string $itemId
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderItemInterface|null
+     * @return OrderItemInterface|null
      */
     public function getProductItemByItemId($itemId)
     {
@@ -404,7 +405,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
     /**
      * A function that returns shipping items.
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderItemInterface[]
+     * @return OrderItemInterface[]
      */
     public function getShippingItems()
     {
@@ -414,7 +415,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
     /**
      * A function that returns discount items.
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderItemInterface[]
+     * @return OrderItemInterface[]
      */
     public function getDiscountItems()
     {
@@ -426,7 +427,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @param string $type
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderItemInterface[]
+     * @return OrderItemInterface[]
      */
     private function filterItemsByType($type)
     {
