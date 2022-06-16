@@ -10,7 +10,7 @@ export class HokodoPaymentPage {
     }
 
     useThisPaymentMethod() {
-        cy.get("[data-testid='paymentAuthorisation'] [type='submit']").click();
+        cy.contains('button', 'Continue').click();
     }
 
     acceptTermsAndConditions() {
