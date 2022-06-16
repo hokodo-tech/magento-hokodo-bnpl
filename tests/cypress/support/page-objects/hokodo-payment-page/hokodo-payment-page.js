@@ -5,12 +5,13 @@ export class HokodoPaymentPage {
     }
 
     payByInvoice() {
+        cy.wait(5000)
         this.selectPaymentMethod("invoice");
         this.useThisPaymentMethod();
     }
 
     useThisPaymentMethod() {
-        cy.get("[data-testid='paymentAuthorisation'] [type='submit']").click();
+        cy.contains('button', 'Continue').click();
     }
 
     acceptTermsAndConditions() {
