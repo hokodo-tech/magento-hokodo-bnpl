@@ -273,6 +273,7 @@
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.company-information-country>select {
     border-radius: 4px;
     width: 100%;
+    margin: 0;
 }
 
 .hokodo-content-wrapper .company-information-wrapper>.company-information>.company-information-country>select:disabled {
