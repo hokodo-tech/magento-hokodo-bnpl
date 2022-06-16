@@ -7,6 +7,7 @@
 namespace Hokodo\BNPL\Model\Data;
 
 use Hokodo\BNPL\Api\Data\ScheduledPaymentsInterface;
+use Hokodo\BNPL\Gateway\Config\Config;
 use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
@@ -47,6 +48,16 @@ class ScheduledPayments extends AbstractSimpleObject implements ScheduledPayment
     /**
      * @inheritDoc
      *
+     * @see \Hokodo\BNPL\Api\Data\ScheduledPaymentsInterface::getPaymentMethod()
+     */
+    public function getPaymentMethod()
+    {
+        return $this->_get(Config::CODE);
+    }
+
+    /**
+     * @inheritDoc
+     *
      * @see \Hokodo\BNPL\Api\Data\ScheduledPaymentsInterface::setAllowedPaymentMethods()
      */
     public function setAllowedPaymentMethods(array $allowedPaymentMethods)
@@ -72,5 +83,15 @@ class ScheduledPayments extends AbstractSimpleObject implements ScheduledPayment
     public function setDate($date)
     {
         return $this->setData(self::DATE, $date);
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @see \Hokodo\BNPL\Api\Data\ScheduledPaymentsInterface::setPaymentMethod()
+     */
+    public function setPaymentMethod($paymentMethod)
+    {
+        return $this->setData(Config::CODE, $paymentMethod);
     }
 }

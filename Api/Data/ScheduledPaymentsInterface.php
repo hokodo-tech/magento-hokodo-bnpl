@@ -48,6 +48,22 @@ interface ScheduledPaymentsInterface extends \Magento\Framework\Api\ExtensibleDa
     public function getAmount();
 
     /**
+     * A function that sets payment method.
+     *
+     * @param string $paymentMethod
+     *
+     * @return $this
+     */
+    public function setPaymentMethod($paymentMethod);
+
+    /**
+     * A function that gets payment method.
+     *
+     * @return string
+     */
+    public function getPaymentMethod();
+
+    /**
      * A function that sets allowed payment methods.
      *
      * @param \Hokodo\BNPL\Api\Data\AllowedPaymentMethodInterface[] $allowedPaymentMethods
