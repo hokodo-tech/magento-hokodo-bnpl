@@ -74,6 +74,26 @@ class ServiceUrl
     }
 
     /**
+     * Get url without store code.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function getUrlWithoutStoreCode($path)
+    {
+        $currentStore = $this->storeManager->getStore();
+        $store = $this->storeRepository->getById($currentStore->getId());
+        /* Get Current Store Code */
+        $baseUrl = $currentStore->getBaseUrl(
+            \Magento\Framework\UrlInterface::URL_TYPE_LINK
+        );
+        $baseUrl = str_replace($store->getCode() . '/', '', $baseUrl);
+        $serviceUrl = $this->service . '/' . $store->getCode() . '/' . $this->version;
+        return $baseUrl . $serviceUrl . '/' . ltrim($path, '/');
+    }
+
+    /**
      * Prepare rest suffix for url. For example rest/default/V1.
      *
      * @return string
