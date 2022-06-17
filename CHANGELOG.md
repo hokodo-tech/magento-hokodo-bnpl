@@ -1,5 +1,8 @@
-1.2.3 / June 2022
+1.2.4 / June 2022
 ==================
+* Version 1.2.4
+Webhook functionality fix for store code in urls
+
 * Version 1.2.3
 Multiple shipments admin panel fix
 
