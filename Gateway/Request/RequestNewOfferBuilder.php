@@ -10,6 +10,7 @@ use Hokodo\BNPL\Gateway\PaymentOfferSubjectReader;
 use Hokodo\BNPL\Model\ServiceUrl;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Hokodo\BNPL\Gateway\Request\RequestNewOfferBuilder.
@@ -32,20 +33,28 @@ class RequestNewOfferBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * A constructor.
      *
      * @param UrlInterface              $urlBuilder
      * @param ServiceUrl                $serviceUrl
      * @param PaymentOfferSubjectReader $subjectReader
+     * @param StoreManagerInterface     $storeManager
      */
     public function __construct(
         UrlInterface $urlBuilder,
         ServiceUrl $serviceUrl,
-        PaymentOfferSubjectReader $subjectReader
+        PaymentOfferSubjectReader $subjectReader,
+        StoreManagerInterface $storeManager
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->serviceUrl = $serviceUrl;
         $this->subjectReader = $subjectReader;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -84,6 +93,10 @@ class RequestNewOfferBuilder implements BuilderInterface
                 'merchant_terms' => '',
             ],
         ];
+
+        if ($this->storeManager->getStore()->isUseStoreInUrl()) {
+            $request['urls']['notification'] = $this->serviceUrl->getUrlWithoutStoreCode('deferredpayment/ipn');
+        }
 
         return $request;
     }
