@@ -14,6 +14,7 @@ interface ScheduledPaymentsInterface extends \Magento\Framework\Api\ExtensibleDa
     public const DATE = 'date';
     public const AMOUNT = 'amount';
     public const ALLOWED_PAYMENT_METHODS = 'allowed_payment_methods';
+    public const PAYMENT_METHOD = 'payment_method';
 
     /**
      * A function that sets date.
@@ -50,23 +51,23 @@ interface ScheduledPaymentsInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * A function that sets payment method.
      *
-     * @param string $paymentMethod
+     * @param \Hokodo\BNPL\Api\Data\PaymentMethodInterface $paymentMethod
      *
      * @return $this
      */
-    public function setPaymentMethod($paymentMethod);
+    public function setPaymentMethod(array $paymentMethod);
 
     /**
      * A function that gets payment method.
      *
-     * @return string
+     * @return \Hokodo\BNPL\Api\Data\PaymentMethodInterface
      */
     public function getPaymentMethod();
 
     /**
      * A function that sets allowed payment methods.
      *
-     * @param \Hokodo\BNPL\Api\Data\AllowedPaymentMethodInterface[] $allowedPaymentMethods
+     * @param \Hokodo\BNPL\Api\Data\PaymentMethodInterface[] $allowedPaymentMethods
      *
      * @return $this
      */
@@ -75,7 +76,7 @@ interface ScheduledPaymentsInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * A function that gets allowed payment methods.
      *
-     * @return \Hokodo\BNPL\Api\Data\AllowedPaymentMethodInterface[]
+     * @return \Hokodo\BNPL\Api\Data\PaymentMethodInterface[]
      */
     public function getAllowedPaymentMethods();
 }

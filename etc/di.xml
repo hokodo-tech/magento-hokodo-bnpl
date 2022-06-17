@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Hokodo\BNPL\Api\Data\AllowedPaymentMethodInterface" type="Hokodo\BNPL\Model\Data\AllowedPaymentMethod" />
+    <preference for="Hokodo\BNPL\Api\Data\PaymentMethodInterface" type="Hokodo\BNPL\Model\Data\PaymentMethod" />
     <preference for="Hokodo\BNPL\Api\Data\CompanyInterface" type="Hokodo\BNPL\Model\Data\Company" />
     <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentInterface" type="Hokodo\BNPL\Model\Data\DeferredPayment" />
     <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentIpnInterface" type="Hokodo\BNPL\Model\Data\DeferredPaymentIpn" />
