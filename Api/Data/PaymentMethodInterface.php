@@ -7,9 +7,9 @@
 namespace Hokodo\BNPL\Api\Data;
 
 /**
- * Interface Hokodo\BNPL\Api\Data\AllowedPaymentMethodInterface.
+ * Interface Hokodo\BNPL\Api\Data\PaymentMethodInterface.
  */
-interface AllowedPaymentMethodInterface
+interface PaymentMethodInterface
 {
     public const TYPE = 'type';
 

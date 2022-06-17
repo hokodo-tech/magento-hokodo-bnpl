@@ -6,18 +6,18 @@
 
 namespace Hokodo\BNPL\Model\Data;
 
-use Hokodo\BNPL\Api\Data\AllowedPaymentMethodInterface;
+use Hokodo\BNPL\Api\Data\PaymentMethodInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
- * Class Hokodo\BNPL\Model\Data$AllowedPaymentMethod.
+ * Class Hokodo\BNPL\Model\Data\PaymentMethod.
  */
-class AllowedPaymentMethod extends AbstractSimpleObject implements AllowedPaymentMethodInterface
+class PaymentMethod extends AbstractSimpleObject implements PaymentMethodInterface
 {
     /**
      * @inheritDoc
      *
-     * @see \Hokodo\BNPL\Api\Data\AllowedPaymentMethodInterface::getType()
+     * @see \Hokodo\BNPL\Api\Data\PaymentMethodInterface::getType()
      */
     public function getType()
     {
@@ -27,7 +27,7 @@ class AllowedPaymentMethod extends AbstractSimpleObject implements AllowedPaymen
     /**
      * @inheritDoc
      *
-     * @see \Hokodo\BNPL\Api\Data\AllowedPaymentMethodInterface::setType()
+     * @see \Hokodo\BNPL\Api\Data\PaymentMethodInterface::setType()
      */
     public function setType($type)
     {
