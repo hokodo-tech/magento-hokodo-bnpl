@@ -12,7 +12,6 @@ use Hokodo\BNPL\Gateway\OrderSubjectReader;
 use Hokodo\BNPL\Gateway\OrganisationSubjectReader;
 use Hokodo\BNPL\Gateway\UserSubjectReader;
 use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
-use InvalidArgumentException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Component\ComponentRegistrar;
@@ -204,8 +203,8 @@ class OrderBuilder implements BuilderInterface
         $this->currentTax = $item->getRowTotal() > 0 ?
             round($item->getRowTotalInclTax() / $item->getRowTotal(), 2) :
             $item->getRowTotalInclTax();
-        //Check if apply customer tax after discount
-        if ($this->isApplyCustomerTaxAfterDiscount($item->getStoreId())) {
+        //Item total calculation adjustment based on tax settings in Magento
+        if ($this->isApplyTaxAdjustmen($item->getStoreId())) {
             $totalAmount = $item->getRowTotalInclTax() - $item->getDiscountAmount() * $this->currentTax;
         } else {
             $totalAmount = $item->getRowTotalInclTax() - $item->getDiscountAmount();
@@ -322,8 +321,6 @@ class OrderBuilder implements BuilderInterface
      *
      * @param array $buildSubject
      *
-     * @throws InvalidArgumentException
-     *
      * @return CartInterface
      */
     private function readCart(array $buildSubject)
@@ -381,19 +378,24 @@ class OrderBuilder implements BuilderInterface
     }
 
     /**
-     * Apply customer tax after discount.
+     * Whether tax adjustment is necessary.
      *
      * @param int $storeId
      *
      * @return bool
      */
-    private function isApplyCustomerTaxAfterDiscount($storeId = 0)
+    private function isApplyTaxAdjustmen($storeId = 0)
     {
-        return (bool) $this->scopeConfiguration->getValue(
-            TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        return $this->scopeConfiguration->getValue(
+                TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            ) &&
+            !$this->scopeConfiguration->getValue(
+                TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
     }
 
     /**
