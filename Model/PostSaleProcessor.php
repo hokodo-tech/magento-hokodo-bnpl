@@ -243,8 +243,8 @@ class PostSaleProcessor
         $currentTax = $shipmentItemTotalInclTax / $shipmentItemTotalExclTax;
         $discountAmount = ($salesOrderItem->getDiscountAmount() * $shipItem->getQty())
         / $salesOrderItem->getQtyOrdered();
-        //Check if apply customer tax after discount
-        if ($this->isApplyCustomerTaxAfterDiscount($salesOrderItem->getStoreId())) {
+        //Item total calculation adjustment based on tax settings in Magento
+        if ($this->isApplyTaxAdjustmen($salesOrderItem->getStoreId())) {
             $totalAmount = $shipmentItemTotalInclTax - $discountAmount * $currentTax;
         } else {
             $totalAmount = $shipmentItemTotalInclTax - $discountAmount;
@@ -318,18 +318,23 @@ class PostSaleProcessor
     }
 
     /**
-     * Apply customer tax after discount.
+     * Whether tax adjustment is necessary.
      *
      * @param int $storeId
      *
      * @return bool
      */
-    private function isApplyCustomerTaxAfterDiscount($storeId = 0)
+    private function isApplyTaxAdjustmen($storeId = 0)
     {
-        return (bool) $this->scopeConfiguration->getValue(
+        return $this->scopeConfiguration->getValue(
             TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
             ScopeInterface::SCOPE_STORE,
             $storeId
-        );
+        ) &&
+            !$this->scopeConfiguration->getValue(
+                TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
     }
 }
