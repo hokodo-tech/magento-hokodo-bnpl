@@ -387,10 +387,10 @@ class OrderBuilder implements BuilderInterface
     private function isApplyTaxAdjustmen($storeId = 0)
     {
         return $this->scopeConfiguration->getValue(
-                TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
-                ScopeInterface::SCOPE_STORE,
-                $storeId
-            ) &&
+            TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        ) &&
             !$this->scopeConfiguration->getValue(
                 TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
                 ScopeInterface::SCOPE_STORE,
