@@ -22,11 +22,11 @@
     ],
     "require": {
         "php": "~7.4.0",
-        "magento/framework": "~103.0.0|~103.0.1",
-        "magento/module-backend": "~102.0.0|~102.0.1",
-        "magento/module-customer": "~103.0.0|~103.0.1",
-        "magento/module-store": "~101.1.0|~101.1.1",
-        "magento/module-ui": "~101.2.0|~101.2.1"
+        "magento/framework": "~102.0.7*|~103.0.0|~103.0.1",
+        "magento/module-backend": "~101.0.7|~102.0.0|~102.0.1",
+        "magento/module-customer": "~102.0.7|~103.0.0|~103.0.1",
+        "magento/module-store": "~101.0.7*|~101.1.0|~101.1.1",
+        "magento/module-ui": "~101.1.7|~101.2.0|~101.2.1"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "@stable",
