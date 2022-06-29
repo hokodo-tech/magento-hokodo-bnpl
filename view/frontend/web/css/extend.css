@@ -68,15 +68,20 @@
     margin: 10px 0
 }
 
+.hokodo-gateway>.payment-method-title>input {
+    vertical-align: middle;
+}
+
 .hokodo-gateway>.payment-method-title>label {
-    display: inline;
+    display: inline-flex;
+    align-items: center;
 }
 
 .hokodo-gateway>.payment-method-title>label>span.hokodo-logo {
     display: inline-block;
     background: url(../img/hokodo.svg) no-repeat center transparent;
-    width: 80px;
-    height: auto;
+    width: 71px;
+    height: 30px;
     margin-right: 5px;
 }
 
