@@ -53,7 +53,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-radius: 5px 5px 0 0;
+            border-radius: 4px 4px 0 0;
             &_logo {
                 display: block;
                 margin-right: 15px;
@@ -78,11 +78,7 @@
             margin-top: 20px;
             margin-bottom: 8px;
             margin-left: 0;
-            font-weight: 800;
-        }
-
-        .hokodo-company-type>div {
-            flex: 1;
+            font-weight: 600;
         }
 
         .hokodo-company-type, .company-information {
@@ -93,35 +89,6 @@
             justify-content: space-between;
             align-items: stretch;
             padding: 0;
-        }
-
-        .hokodo-company-type {
-            input[type="radio"] {
-                position: absolute;
-                top: 0;
-                left: 0;
-                z-index: -1;
-                opacity: 0;
-
-                &:focus,
-                &:active {
-                    border: none;
-                    outline: 0;
-                    box-shadow: none;
-                }
-
-                &:focus+label,
-                &:focus+label {
-                    outline-width: 2px;
-                    outline-style: solid;
-                    outline-color: Highlight;
-                }
-            }
-
-            label {
-                outline: 0;
-                transition: box-shadow 250ms;
-            }
         }
 
         .registered-company, .sole-trader {
@@ -137,12 +104,6 @@
             padding-left: 40px;
             position: relative;
             box-sizing: border-box;
-
-            span {
-                display: flex;
-                flex: 1 1 0%;
-                white-space: nowrap;
-            }
 
             &:after {
                 display: block;
@@ -167,13 +128,13 @@
 
         .registered-company {
             &:after {
-                content: @house-icon;
+                content: '';
             }
         }
 
         .sole-trader {
             &:after {
-                content: @user-icon;
+                content: '';
             }
         }
 
@@ -231,9 +192,9 @@
 
         .company-information-wrapper {
             > select {
-                border:1px solid #bbb;
+                border:1px solid #ddd;
                 &:disabled {
-                    border-radius: 5px;
+                    border-radius: 4px;
                     color: #171717;
                     background: #eee;
                     opacity: 1;
@@ -245,12 +206,12 @@
                 margin-left:20px;
                 width:42%;
                 padding:5px;
-                border:1px solid #bbb;
+                border:1px solid #ddd;
             }
 
             > .company-information {
                 select, input {
-                    padding: 10px;
+                    padding: 12px;
                     height: auto;
                 }
 
@@ -263,12 +224,25 @@
                 }
 
                 button {
-                    border-radius: 5px;
+                    appearance: none;
+                    border-radius: 4px;
+                    background-color: rgb(100, 205, 200);
+                    color: rgb(19, 46, 52);
+                    font-weight: 600;
+                    border: none;
+
+                    &:hover {
+                        background-color: rgba(100, 205, 200, .85);
+                    }
+
+                    &:disabled {
+                        background-color: rgba(100, 205, 200, .5);
+                    }
                 }
 
                 > .company-information-country {
                     > select {
-                        border-radius: 5px;
+                        border-radius: 4px;
                         width: 100%;
                     }
                 }
@@ -286,16 +260,16 @@
                         }
 
                         input {
-                            border-radius: 5px;
+                            border-radius: 4px;
                             width: 100%;
-                            border: 1px solid #bbb;
+                            border: 1px solid #ddd;
                             min-height: 100%;
                             margin: 0;
                         }
                     }
 
                     &._results input {
-                        border-radius: 5px 5px 0 0;
+                        border-radius: 4px 4px 0 0;
                     }
 
                     .admin__action-multiselect {
@@ -320,10 +294,10 @@
                             display: flex;
                             align-items: center;
                             height: auto;
-                            padding: 10px 30px 10px 10px;
+                            padding: 12px 30px 12px 12px;
                             width: 100%;
-                            border: 1px solid #bbb;
-                            border-radius: 5px;
+                            border: 1px solid #ddd;
+                            border-radius: 4px;
                         }
                     }
                     .action-menu {
@@ -345,13 +319,13 @@
                                 width: 100%;
                                 // max-width: 315px;
                                 max-height: 295px;
-                                border: 1px solid #c2c2c2;
+                                border: 1px solid #ddd;
                                 margin-top: -10px;
                                 overflow-y: auto;
                                 box-sizing: border-box;
                                 &._active {
                                     display: block;
-                                    border-radius: 0 0 5px 5px;
+                                    border-radius: 0 0 4px 4px;
                                 }
 
                                 ul {
@@ -360,7 +334,7 @@
                                         background: white;
                                     }
                                     li {
-                                        border-top: 1px solid #e5e5e5;
+                                        border-top: 1px solid #ddd;
                                         cursor: pointer;
                                         padding: 0;
                                         margin: 0;
@@ -371,11 +345,11 @@
 
                                         div {
                                             &._selected {
-                                                background: #fcf9f4;
+                                                background: #EDF6F4;
                                                 font-weight: 600;
                                             }
                                             &._hover {
-                                                background: #faf3ea;
+                                                background: #EDF6F4;
                                             }
                                         }
 
@@ -452,7 +426,7 @@
                         margin-top: -1px;
                         padding: 5px;
                         box-sizing: border-box;
-                        border-radius: 0 0 5px 5px;
+                        border-radius: 0 0 4px 4px;
                     }
                 }
             }
@@ -466,7 +440,8 @@
             padding: 5px 0;
         }
 
-        .payment-plan-list {
+        .payment-plan-list,
+        .hokodo-company-type {
             margin-bottom: 20px;
 
             > h4 {
@@ -484,12 +459,12 @@
                 display: flex;
 
                 &:first-of-type label {
-                    border-top-left-radius: 5px;
-                    border-top-right-radius: 5px;
+                    border-top-left-radius: 4px;
+                    border-top-right-radius: 4px;
                 }
                 &:last-child label {
-                    border-bottom-left-radius: 5px;
-                    border-bottom-right-radius: 5px;
+                    border-bottom-left-radius: 4px;
+                    border-bottom-right-radius: 4px;
                 }
 
                 > label {
@@ -498,18 +473,21 @@
                     width: 100%;
                     cursor: pointer;
                     margin: 0;
+                    border-radius: 0;
+                    padding: 12px;
+                    border: 1px solid #ddd;
                 }
 
                 &._active {
                     label {
-                        background-color: #F5E8D7;
-                        border-color: #C98A29;
+                        background-color: #fff;
+                        border-color: #ddd;
                     }
                     & + .payment-plan label {
-                        border-top-color: #C98A29;
+                        border-top-color: #ddd;
                     }
                     input[type="radio"]+label {
-                        border-color: #c98a29;
+                        border-color: #ddd;
                     }
                 }
 
@@ -524,8 +502,8 @@
                         width: 100%;
                         cursor: pointer;
                         margin: 0;
-                        padding: 10px;
-                        border: 1px solid #bbb;
+                        padding: 12px;
+                        border: 1px solid #ddd;
                     }
 
                     & + label:before {
@@ -533,12 +511,12 @@
                         margin-right: 10px;
                         display: inline-block;
                         vertical-align: text-top;
-                        width: 18px;
-                        height: 18px;
+                        width: 20px;
+                        height: 20px;
                         background: #fff;
                         border-radius: 50%;
-                        border: 1px solid #bbb;
-                        box-sizing: content-box;
+                        border: 1px solid #ddd;
+                        box-sizing: border-box;
                     }
 
                     &:hover + label:before {
@@ -547,7 +525,7 @@
 
                     &:checked + label:before {
                         background: white;
-                        border-color: #c98a29;
+                        border-color: #132E34;
                     }
 
                     &:disabled + label {
@@ -565,9 +543,9 @@
                         position: absolute;
                         left: 15px;
                         top: auto;
-                        background: #c98a29;
-                        width: 10px;
-                        height: 10px;
+                        background: #132E34;
+                        width: 14px;
+                        height: 14px;
                         border-radius: 50%;
                     }
                 }
@@ -603,7 +581,7 @@
             padding: 15px;
             background: #F7F7F7;
             border: 1px solid #bbb;
-            border-radius: 5px;
+            border-radius: 4px;
             li {
                 margin-left: 15px;
                 &:last-child {
@@ -634,11 +612,10 @@
         }
 
         .payment-plan-description {
-            background: #F7F7F7;
-            border: 1px solid #bbb;
-            border-radius: 5px;
+            background: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             padding: 16px;
-            margin-bottom: 20px;
 
             ul {
                 list-style-position: initial;
