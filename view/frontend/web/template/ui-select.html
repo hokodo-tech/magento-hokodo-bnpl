@@ -43,7 +43,7 @@
             <div data-role="spinner" class="admin__data-grid-loading-mask" visible="validationLoading"
                 if="validationLoading">
                 <div class="spinner">
-                    <span repeat="8" />
+                    <span repeat="8"></span>
                 </div>
             </div>
 
@@ -64,8 +64,7 @@
             </div>
             <!-- ko foreach: { data: getSelected(), as: 'option'}  -->
             <span class="admin__action-multiselect-crumb">
-                <span data-bind="text: label">
-                </span>
+                <span data-bind="text: label"></span>
                 <button class="action-close" type="button" data-action="remove-selected-item" tabindex="-1" data-bind="click: $parent.removeSelected.bind($parent, value)
                     ">
                     <span class="action-close-text" translate="'Close'"></span>
@@ -77,7 +76,7 @@
         <div class="action-menu" css="{ _active: listVisible}">
             <div data-role="spinner" class="admin__data-grid-loading-mask" visible="loading" if="loading">
                 <div class="spinner">
-                    <span repeat="8" />
+                    <span repeat="8"></span>
                 </div>
             </div>
 
@@ -112,7 +111,7 @@
                     </ul>
                 </div>
                 <div if="options().length === 0 && searchRequested() && !loading()" class="admin__action-multiselect-empty-area">
-                    <div data-bind="html: emptyOptionsHtml" />
+                    <div data-bind="html: emptyOptionsHtml"></div>
                 </div>
                 <!-- /ko -->
 
