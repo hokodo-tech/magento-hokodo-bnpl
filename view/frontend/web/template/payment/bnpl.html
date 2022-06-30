@@ -94,7 +94,7 @@
             <!--/ko-->
         </div>
         <div class="payment-plan-list" data-bind="visible: isRegisteredCompany() && planList().length > 0">
-            <h4 translate="i18n: 'Step 3: Select your preferred payment plan'"></h4>
+            <h4 data-bind="i18n: 'Step 3: Select your preferred payment plan'"></h4>
             <!-- ko foreach: { data: planList, as: 'plan'} -->
             <div class="payment-plan" data-bind="css: {'_active': (plan.id == $parent.isPlanSelected())}">
                 <input type="radio" data-bind="
