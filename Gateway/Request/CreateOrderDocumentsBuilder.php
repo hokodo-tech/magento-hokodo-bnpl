@@ -13,7 +13,7 @@ use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 class CreateOrderDocumentsBuilder implements BuilderInterface
@@ -44,29 +44,29 @@ class CreateOrderDocumentsBuilder implements BuilderInterface
     protected $paymentLogger;
 
     /**
-     * @var DriverInterface
+     * @var ReadFactory
      */
-    protected $driverInterface;
+    private $readFactory;
 
     /**
      * @param OrderDocumentsSubjectReader $orderDocumentsSubjectReader
      * @param ScopeConfigInterface        $scopeConfiguration
      * @param ProductMetadataInterface    $productMetadata
      * @param PaymentLogger               $paymentLogger
-     * @param DriverInterface             $driverInterface
+     * @param ReadFactory                 $readFactory
      */
     public function __construct(
         OrderDocumentsSubjectReader $orderDocumentsSubjectReader,
         ScopeConfigInterface $scopeConfiguration,
         ProductMetadataInterface $productMetadata,
         PaymentLogger $paymentLogger,
-        DriverInterface $driverInterface
+        ReadFactory $readFactory
     ) {
         $this->orderDocumentsSubjectReader = $orderDocumentsSubjectReader;
         $this->scopeConfiguration = $scopeConfiguration;
         $this->productMetadata = $productMetadata;
         $this->paymentLogger = $paymentLogger;
-        $this->driverInterface = $driverInterface;
+        $this->readFactory = $readFactory;
     }
 
     /**
@@ -93,7 +93,8 @@ class CreateOrderDocumentsBuilder implements BuilderInterface
     private function createOrderDocumentRequest(array $buildSubject)
     {
         $document = $this->readDocument($buildSubject);
-        $filePath = $this->driverInterface->getRealPath($document->getFilepath());
+        $directory = $this->readFactory->create($document->getFilePath());
+        $filePath = rtrim($directory->getAbsolutePath(), '/');
         $request = [
             [
                 'name' => OrderDocumentsInterface::DOCUMENT_FILE,

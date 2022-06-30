@@ -5,7 +5,7 @@ export class HokodoPaymentPage {
     }
 
     payByInvoice() {
-        cy.wait(5000);
+        cy.wait(10000);
         this.selectPaymentMethod("invoice");
         this.useThisPaymentMethod();
     }
