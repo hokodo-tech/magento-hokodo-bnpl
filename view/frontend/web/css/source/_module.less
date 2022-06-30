@@ -24,6 +24,7 @@
 
     .hokodo-gateway {
         > .payment-method-title {
+            position: relative;
             > label {
                 display: inline;
                 > span.hokodo-logo {
@@ -626,6 +627,32 @@
                 li {
                     margin: 0;
                 }
+            }
+        }
+    }
+
+    .hokodo-bnpl-tooltip {
+        .lib-tooltip(top);
+        position: absolute;
+        right: 10px;
+        .tooltip-content {
+            max-width: 90vw;
+            width: 600px;
+            right: -10px;
+            left: unset;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            &:before {
+                right: 19px;
+                margin-right: -6px;
+                left: unset;
+                margin-left: unset;
+            }
+            &:after {
+                right: 19px;
+                margin-right: -5px;
+                left: unset;
+                margin-left: unset;
             }
         }
     }
