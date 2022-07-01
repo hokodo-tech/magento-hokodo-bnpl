@@ -10,7 +10,7 @@
         <payment>
             <hokodo_bnpl>
                 <model>HokodoBnplFacade</model>
-                <title>B2B Buy now, pay later - Interest-free</title>
+                <title>Pay in 30 Days. No interest. No fees.</title>
                 <payment_action>authorize</payment_action>
                 <active>0</active>
                 <can_order>0</can_order>
