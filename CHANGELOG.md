@@ -1,5 +1,9 @@
-1.2.6 / June 2022
+1.3.0 / June 2022
 ==================
+* Version 1.3.0
+Modulve version bumped up
+
+
 * Version 1.2.6
 Frontend changes
 
