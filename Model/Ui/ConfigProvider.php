@@ -27,6 +27,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -115,6 +116,7 @@ class ConfigProvider implements ConfigProviderInterface
      * @param HttpContext                           $httpContext
      * @param ProductMetadataInterface              $productMetadata
      * @param StoreManagerInterface                 $storeManager
+     * @param RequestInterface                      $request
      */
     public function __construct(
         UserInterfaceFactory $userFactory,
@@ -129,7 +131,8 @@ class ConfigProvider implements ConfigProviderInterface
         DataObjectHelper $dataObjectHelper,
         HttpContext $httpContext,
         ProductMetadataInterface $productMetadata,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        RequestInterface $request
     ) {
         $this->userFactory = $userFactory;
         $this->organisationRepository = $organisationRepository;
@@ -144,6 +147,7 @@ class ConfigProvider implements ConfigProviderInterface
         $this->httpContext = $httpContext;
         $this->productMetadata = $productMetadata;
         $this->storeManager = $storeManager;
+        $this->request = $request;
     }
 
     /**
@@ -178,6 +182,9 @@ class ConfigProvider implements ConfigProviderInterface
             ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()->getCode()
         );
+        if ($this->request->getParam('payment_method') == Config::CODE) {
+            $config['isDefault'] = true;
+        }
 
         return [
             'payment' => [

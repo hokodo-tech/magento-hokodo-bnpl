@@ -58,6 +58,10 @@
                     <comment><![CDATA[Sets method on the first place on checkout and makes it selected]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="btn_product_page" translate="label comment" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Label button on product details page</label>
+                    <comment><![CDATA[Label text for button on product details page.]]></comment>
+                </field>
                 <group id="segment" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
                     <label>Segment Tracking</label>
                     <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">

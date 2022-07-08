@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Hokodo_BNPL::css/product.css"/>
+    </head>
+    <body>
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Framework\View\Element\Template" name="btn_hokodo_checkout"
+                   template="Hokodo_BNPL::product/button.phtml" after="product.info.overview">
+                <arguments>
+                    <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\ProductButton</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <move element="btn_hokodo_checkout" destination="product.info.main" after="product.info.overview"/>
+    </body>
+</page>
