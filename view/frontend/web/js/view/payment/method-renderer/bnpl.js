@@ -109,6 +109,8 @@ define([
                 this.selectPaymentMethod();
             }
 
+            this.checkCustomerDataEmailChange();
+
             return this;
         },
 
@@ -342,6 +344,11 @@ define([
         methodSelected: function() {
             if (this.selectedPaymentMethod === undefined) return false;
             return this.selectedPaymentMethod();
+        },
+
+        checkCustomerDataEmailChange: function() {
+            const checkout = customerData.get('checkout-data');
+            this.resetHokodoData(checkout().validatedEmailValue);
         }
     });
 });
