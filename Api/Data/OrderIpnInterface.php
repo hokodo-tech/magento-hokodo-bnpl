@@ -305,11 +305,11 @@ interface OrderIpnInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * A function that sets deferred payment.
      *
-     * @param \Hokodo\BNPL\Api\Data\DeferredPaymentIpnInterface $deferredPayment
+     * @param DeferredPaymentIpnInterface|null $deferredPayment
      *
      * @return $this
      */
-    public function setDeferredPayment(DeferredPaymentIpnInterface $deferredPayment);
+    public function setDeferredPayment(?DeferredPaymentIpnInterface $deferredPayment);
 
     /**
      * A function that gets deferred payment.

@@ -19,7 +19,7 @@ class DeferredPaymentIpnPayload extends AbstractSimpleObject implements Deferred
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentIpnPayloadInterface::setOrder()
      */
-    public function setOrder(\Hokodo\BNPL\Api\Data\OrderIpnInterface $order)
+    public function setOrder(array $order)
     {
         return $this->setData(self::ORDER, $order);
     }

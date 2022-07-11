@@ -6,6 +6,7 @@
 
 namespace Hokodo\BNPL\Model\Data;
 
+use Hokodo\BNPL\Api\Data\DeferredPaymentIpnInterface;
 use Hokodo\BNPL\Api\Data\OrderIpnInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
@@ -359,7 +360,7 @@ class OrderIpn extends AbstractSimpleObject implements OrderIpnInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrderIpnInterface::setDeferredPayment()
      */
-    public function setDeferredPayment(\Hokodo\BNPL\Api\Data\DeferredPaymentIpnInterface $deferredPayment)
+    public function setDeferredPayment(?DeferredPaymentIpnInterface $deferredPayment)
     {
         return $this->setData(self::DEFERRED_PAYMENT, $deferredPayment);
     }
