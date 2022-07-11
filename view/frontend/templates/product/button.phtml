@@ -1,0 +1,18 @@
+<?php
+/**
+ * @var $block \Magento\Framework\View\Element\Template
+ * @var $viewModel \Hokodo\BNPL\ViewModel\Checkout\OnepageSuccess
+ */
+
+$viewModel = $block->getData('viewModel');
+?>
+<button class="hokodo-checkout">
+    <?= $viewModel->getLabelBtn(); ?>
+	<img
+		src="<?php echo $this->getViewFileUrl('Hokodo_BNPL/img/hokodo_btn_background.svg'); ?>"
+		width="120"
+		height="20"
+		alt="Hokodo"
+	/>
+</button>
+

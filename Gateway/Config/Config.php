@@ -17,27 +17,23 @@ use Magento\Store\Model\ScopeInterface;
 class Config extends DefaultPaymentConfig
 {
     public const CODE = 'hokodo_bnpl';
-
     public const ENV_DEV = 'dev';
     public const ENV_SANDBOX = 'sandbox';
     public const ENV_PRODUCTION = 'production';
-
     public const KEY_ACTIVE = 'active';
     public const KEY_ENVIRONMENT = 'environment';
-
     public const KEY_DEV_URI = 'dev_uri';
     public const KEY_SANDBOX_URI = 'sandbox_uri';
     public const KEY_URI = 'uri';
-
     public const KEY_DEV_API_KEY = 'dev_api_key';
     public const KEY_SANDBOX_API_KEY = 'sandbox_api_key';
     public const KEY_API_KEY = 'api_key';
-
     public const KEY_ALLOW_SPECIFIC = 'allowspecific';
     public const KEY_SPECIFIC_COUNTRY = 'specificcountry';
     public const INVOICE_ON_PAYMENT = 'payment/hokodo_bnpl/create_invoice_on_payment_accepted';
     public const REPLACE_PLACE_ORDER_HOOKS = 'payment/hokodo_bnpl/replace_place_order_hooks';
     public const IS_PAYMENT_DEFAULT_PATH = 'payment/hokodo_bnpl/is_default';
+    public const KEY_BTN_PRODUCT_PAGE = 'btn_product_page';
 
     /**
      * @var StoreInterface
