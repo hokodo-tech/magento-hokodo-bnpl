@@ -12,7 +12,9 @@ use Exception;
 use Hokodo\BNPL\Api\Data\DeferredPaymentIpnPayloadInterface;
 use Hokodo\BNPL\Api\Data\OrderIpnInterface;
 use Hokodo\BNPL\Api\DeferredPaymentIpnProcessorInterface;
+use Hokodo\BNPL\Model\Data\OrderIpnFactory;
 use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
@@ -35,17 +37,33 @@ class DeferredPaymentIpnProcessor implements DeferredPaymentIpnProcessorInterfac
     private $debugData = [];
 
     /**
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
+     * @var OrderIpnFactory
+     */
+    private $orderIpnFactory;
+
+    /**
      * A construct form deferred payment ipl processor.
      *
-     * @param OrderFactory $orderFactory
-     * @param SaveLog      $paymentLogger
+     * @param OrderFactory     $orderFactory
+     * @param OrderIpnFactory  $orderIpnFactory
+     * @param DataObjectHelper $dataObjectHelper
+     * @param SaveLog          $paymentLogger
      */
     public function __construct(
         OrderFactory $orderFactory,
+        OrderIpnFactory $orderIpnFactory,
+        DataObjectHelper $dataObjectHelper,
         PaymentLogger $paymentLogger
     ) {
         $this->orderFactory = $orderFactory;
         $this->paymentLogger = $paymentLogger;
+        $this->dataObjectHelper = $dataObjectHelper;
+        $this->orderIpnFactory = $orderIpnFactory;
     }
 
     /**
@@ -56,8 +74,13 @@ class DeferredPaymentIpnProcessor implements DeferredPaymentIpnProcessorInterfac
     public function process($created, DeferredPaymentIpnPayloadInterface $data)
     {
         $result = false;
-        $this->addDebugData('ipn', $data->__toArray());
-        $ipnOrder = $data->getOrder();
+        $ipnOrder = $this->orderIpnFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $ipnOrder,
+            $data->getOrder(),
+            \Hokodo\BNPL\Api\Data\OrderIpnInterface::class
+        );
+        $this->addDebugData('ipn', $data);
         if ($ipnOrder && $ipnOrder->getDeferredPayment()) {
             $result = $this->processIpnOrder($ipnOrder);
         }

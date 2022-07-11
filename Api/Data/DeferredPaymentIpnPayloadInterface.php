@@ -16,16 +16,16 @@ interface DeferredPaymentIpnPayloadInterface
     /**
      * A function that sets order.
      *
-     * @param \Hokodo\BNPL\Api\Data\OrderIpnInterface $order
+     * @param mixed $order
      *
      * @return $this;
      */
-    public function setOrder(OrderIpnInterface $order);
+    public function setOrder(array $order);
 
     /**
      * A function that gets order.
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderIpnInterface
+     * @return mixed
      */
     public function getOrder();
 }
