@@ -7,13 +7,12 @@
 $viewModel = $block->getData('viewModel');
 ?>
 <button class="hokodo-checkout">
-	<?= $block->getLabelBtn(); ?>
+    <?= $viewModel->getLabelBtn(); ?>
 	<img
 		src="<?php echo $this->getViewFileUrl('Hokodo_BNPL/img/hokodo_btn_background.svg'); ?>"
 		width="120"
 		height="20"
 		alt="Hokodo"
 	/>
-    <?= $viewModel->getLabelBtn(); ?>
 </button>
 
