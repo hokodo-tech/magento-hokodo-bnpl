@@ -83,7 +83,6 @@ class DeferredPaymentFetchStatusHandler implements HandlerInterface
                         ];
                         $this->paymentLogger->execute($data);
                     }
-
                     break;
                 case 'pending_review':
                 case 'customer_action_required':
