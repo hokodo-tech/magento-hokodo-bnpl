@@ -13,12 +13,15 @@ use Hokodo\BNPL\Api\Data\OrderItemInterfaceFactory;
 use Hokodo\BNPL\Model\SaveLog as Logger;
 use Hokodo\BNPL\Service\OrderPostSaleService;
 use Hokodo\BNPL\Service\OrderService;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Tax\Model\Config as TaxConfig;
 
 /**
  * Class Hokodo\BNPL\Gateway\Command\DeferredPaymentRefundCommand.
@@ -51,10 +54,16 @@ class DeferredPaymentRefundCommand implements CommandInterface
     private $logger;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfiguration;
+
+    /**
      * @param OrderPostSaleService             $orderPostSaleService
      * @param OrderService                     $orderService
      * @param OrderInformationInterfaceFactory $orderInformationFactory
      * @param OrderItemInterfaceFactory        $orderItemFactory
+     * @param ScopeConfigInterface             $scopeConfiguration
      * @param Logger                           $logger
      */
     public function __construct(
@@ -62,6 +71,7 @@ class DeferredPaymentRefundCommand implements CommandInterface
         OrderService $orderService,
         OrderInformationInterfaceFactory $orderInformationFactory,
         OrderItemInterfaceFactory $orderItemFactory,
+        ScopeConfigInterface $scopeConfiguration,
         Logger $logger
     ) {
         $this->orderPostSaleService = $orderPostSaleService;
@@ -69,6 +79,7 @@ class DeferredPaymentRefundCommand implements CommandInterface
         $this->orderInformationFactory = $orderInformationFactory;
         $this->orderItemFactory = $orderItemFactory;
         $this->logger = $logger;
+        $this->scopeConfiguration = $scopeConfiguration;
     }
 
     /**
@@ -212,7 +223,15 @@ class DeferredPaymentRefundCommand implements CommandInterface
         $orderItem->setItemId($salesOrderItem->getQuoteItemId());
         $orderItem->setQuantity($returnItem->getQty());
         $taxAmount = $returnItem->getTaxAmount();
-        $totalAmount = ($returnItem->getRowTotal() + $taxAmount) - $returnItem->getDiscountAmount();
+        $currentTax = $returnItem->getRowTotal() > 0 ?
+            round($returnItem->getRowTotalInclTax() / $returnItem->getRowTotal(), 2) :
+            $returnItem->getRowTotalInclTax();
+        //Item total calculation adjustment based on tax settings in Magento
+        if ($this->isApplyTaxAdjustmen($returnItem->getStoreId())) {
+            $totalAmount = $returnItem->getRowTotalInclTax() - $returnItem->getDiscountAmount() * $currentTax;
+        } else {
+            $totalAmount = $returnItem->getRowTotalInclTax() - $returnItem->getDiscountAmount();
+        }
         $orderItem->setTotalAmount((int) ($totalAmount * 100));
         $orderItem->setTaxAmount((int) ($taxAmount * 100));
 
@@ -231,5 +250,26 @@ class DeferredPaymentRefundCommand implements CommandInterface
         $order = $this->orderInformationFactory->create();
         $order->setId($orderApiId);
         return $this->orderService->get($order);
+    }
+
+    /**
+     * Whether tax adjustment is necessary.
+     *
+     * @param int $storeId
+     *
+     * @return bool
+     */
+    private function isApplyTaxAdjustmen($storeId = 0)
+    {
+        return $this->scopeConfiguration->getValue(
+            TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        ) &&
+            !$this->scopeConfiguration->getValue(
+                TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
     }
 }
