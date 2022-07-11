@@ -25,7 +25,7 @@ php:lint:
     - git clone https://github.com/magento/magento-coding-standard.git && cd magento-coding-standard
     - composer install --ignore-platform-reqs
     - vendor/bin/phpcs -s -p --colors --extensions=php --standard=Magento2 ../src/
-    - composer require friendsofphp/php-cs-fixer
+    - composer require friendsofphp/php-cs-fixer:3.4.0
     - vendor/bin/php-cs-fixer fix --config=../src/.php-cs-fixer.dist.php --dry-run --diff ../src/
 
 php:compat:
