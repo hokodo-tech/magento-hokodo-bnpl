@@ -1,4 +1,5 @@
-import { ShipOrderPage } from "./ship-order-page";
+import { ShipOrderPage } from "../ship-order-page";
+import { InvoiceTab } from "./invoice-tab";
 
 export class ViewOrderPage {
     navigateToShippingPage() {
@@ -46,10 +47,26 @@ export class ViewOrderPage {
 
     confirmShipmentWasCreated() {
         cy.contains("The shipment has been created.").should('be.visible');
+
+        return this;
+    }
+
+    confirmRefundWasCreated() {
+        cy.contains("You created the credit memo.")
+            .should('be.visible')
     }
 
     verifyOrderCannotBeShipped(){
         cy.get("#order_ship")
             .should('not.exist')
     }
+
+    navigateToInvoicesTab() {
+        cy.get('[data-ui-id="sales-order-tabs-tab-item-order-invoices"]')
+            .click()
+
+        return new InvoiceTab();
+    }
+
 }
+

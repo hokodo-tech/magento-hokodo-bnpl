@@ -8,7 +8,7 @@ import { AdminLoginPage } from "../support/page-objects/admin/login-page"
 import { ListOrdersPage } from "../support/page-objects/admin/list-orders-page"
 
 describe("Buyer paths", () => {
-    it("places and fulfills an order", function() {
+    it("places, fulfills and returns a whole order", function() {
         // cy.intercept("https://*.segment.io/v*/t").as("segmentLog");
 
         cy.fixture("products/hero-hoodie").then((product) => {
@@ -86,7 +86,13 @@ describe("Buyer paths", () => {
                  .navigateToShippingPage()
                  .waitForPageToLoad()
                  .submitShipment()
-                 .confirmShipmentWasCreated();
+                 .confirmShipmentWasCreated()
+                 .navigateToInvoicesTab()
+                 .viewInvoice()
+                 .captureInvoice()
+                 .createCreditMemo()
+                 .submitRefund()
+                 .confirmRefundWasCreated()
         });
     })
 
