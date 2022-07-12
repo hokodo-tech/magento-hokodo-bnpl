@@ -115,10 +115,11 @@ review:create:
           --admin-user='$MAGENTO_ADMIN_USER'
           --admin-password='$MAGENTO_ADMIN_PASSWORD' &&
         $PHP_CLI bin/magento deploy:mode:set developer &&
-        $PHP_CLI bin/magento config:set --lock-env catalog/search/elasticsearch7_index_prefix '${REVIEW_INSTANCE}_' &&
-        $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/active 1 &&
-        $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/environment dev &&
-        $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/dev_api_key '$HOKODO_API_KEY_DEV' &&
+        $PHP_CLI bin/magento config:set catalog/search/elasticsearch7_index_prefix '${REVIEW_INSTANCE}_' &&
+        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/active 1 &&
+        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/environment dev &&
+        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_api_key '$HOKODO_API_KEY_DEV' &&
+        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/create_invoice_on_payment_accepted 1 &&
         $PHP_CLI bin/magento module:disable Magento_TwoFactorAuth ;
         echo '{}' > ./auth.json &&
         $PHP_CLI /usr/bin/composer config --file=./auth.json http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&

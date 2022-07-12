@@ -1,4 +1,4 @@
-import { ViewOrderPage } from "./view-order-page";
+import { ViewOrderPage } from "./view-order-page/information-tab";
 
 export class ListOrdersPage {
     navigate() {
