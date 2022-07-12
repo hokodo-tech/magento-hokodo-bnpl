@@ -1,3 +1,13 @@
+1.3.1 / July 2022
+==================
+* Version 1.3.1
+
+Change titling
+Fix issue with coupons cannot be applied
+Fix issue with customer email doesn't change
+Added Hokodo Ad banners
+Fix Webhook issue
+
 1.3.0 / June 2022
 ==================
 * Version 1.3.0
