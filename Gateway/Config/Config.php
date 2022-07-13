@@ -33,7 +33,8 @@ class Config extends DefaultPaymentConfig
     public const INVOICE_ON_PAYMENT = 'payment/hokodo_bnpl/create_invoice_on_payment_accepted';
     public const REPLACE_PLACE_ORDER_HOOKS = 'payment/hokodo_bnpl/replace_place_order_hooks';
     public const IS_PAYMENT_DEFAULT_PATH = 'payment/hokodo_bnpl/is_default';
-    public const KEY_BTN_PRODUCT_PAGE = 'btn_product_page';
+    public const KEY_BTN_PRODUCT_PAGE_LABEL = 'on_site_messaging/label';
+    public const KEY_BTN_PRODUCT_PAGE_ENABLE = 'on_site_messaging/enable';
 
     /**
      * @var StoreInterface

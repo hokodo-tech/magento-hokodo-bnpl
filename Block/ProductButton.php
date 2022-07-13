@@ -6,12 +6,13 @@
 
 declare(strict_types=1);
 
-namespace Hokodo\BNPL\ViewModel;
+namespace Hokodo\BNPL\Block;
 
 use Hokodo\BNPL\Gateway\Config\Config;
-use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 
-class ProductButton implements ArgumentInterface
+class ProductButton extends Template
 {
     /**
      * @var Config
@@ -21,12 +22,15 @@ class ProductButton implements ArgumentInterface
     /**
      * ProductButton constructor.
      *
-     * @param Config $config
+     * @param Context $context
+     * @param Config  $config
      */
     public function __construct(
+        Context $context,
         Config $config
     ) {
         $this->config = $config;
+        parent::__construct($context);
     }
 
     /**

@@ -50,12 +50,15 @@
                 <debug>1</debug>
                 <paymentInfoKeys>hokodo_user_id,hokodo_organisation_id,hokodo_order_id,hokodo_payment_offer_id,hokodo_deferred_payment_id</paymentInfoKeys>
                 <replace_place_order_hooks>0</replace_place_order_hooks>
-                <btn_product_page>Pay in 30 Days. No interest. No fees.</btn_product_page>
                 <segment>
                     <active>1</active>
                     <sandbox_key>1sTpGIGYD3zs1NnZ7VrP6AwqCsSnD8EA</sandbox_key>
                     <key>Ym0AF6w9WMfLO4FP1SUek96XSHw4fr99</key>
                 </segment>
+                <on_site_messaging>
+                    <enable>1</enable>
+                    <label>Pay in 30 Days. No interest. No fees.</label>
+                </on_site_messaging>
             </hokodo_bnpl>
         </payment>
     </default>
