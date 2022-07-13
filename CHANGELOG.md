@@ -1,7 +1,10 @@
-1.3.1 / July 2022
+1.3.2 / July 2022
 ==================
-* Version 1.3.1
+* Version 1.3.2
+Admin configuration changes
+Product details page banner changes
 
+* Version 1.3.1
 Change titling
 Fix issue with coupons cannot be applied
 Fix issue with customer email doesn't change
