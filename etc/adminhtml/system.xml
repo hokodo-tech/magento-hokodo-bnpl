@@ -58,12 +58,8 @@
                     <comment><![CDATA[Sets method on the first place on checkout and makes it selected]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="btn_product_page" translate="label comment" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Label button on product details page</label>
-                    <comment><![CDATA[Label text for button on product details page.]]></comment>
-                </field>
                 <group id="segment" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
-                    <label>Segment Tracking</label>
+                    <label>Analytics</label>
                     <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Enabled</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -73,6 +69,18 @@
                     </field>
                     <field id="key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Production Key</label>
+                    </field>
+                </group>
+                <group id="on_site_messaging" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
+                    <label>Hokodo on-site messaging</label>
+                    <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Product Description Page Enable</label>
+                        <comment><![CDATA[Display button on product page]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="label" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Product Description Page Label</label>
+                        <comment><![CDATA[Label text for button on product details page.]]></comment>
                     </field>
                 </group>
             </group>

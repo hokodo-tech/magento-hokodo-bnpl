@@ -32,10 +32,24 @@ class ProductButton implements ArgumentInterface
     /**
      * Get label for button from payment method config.
      *
-     * @return string || null
+     * @return string
      */
     public function getLabelBtn(): string
     {
-        return $this->config->getValue(Config::KEY_BTN_PRODUCT_PAGE);
+        return $this->config->getValue(Config::KEY_BTN_PRODUCT_PAGE_LABEL);
+    }
+
+    /**
+     * Get status display for button from payment method config.
+     *
+     * @return bool
+     */
+    public function isEnable(): bool
+    {
+        if ($this->config->getValue(Config::KEY_BTN_PRODUCT_PAGE_ENABLE) == '1') {
+            return true;
+        }
+
+        return false;
     }
 }

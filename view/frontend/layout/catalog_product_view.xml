@@ -7,7 +7,8 @@
     <body>
         <referenceContainer name="product.info.main">
             <block class="Magento\Framework\View\Element\Template" name="btn_hokodo_checkout"
-                   template="Hokodo_BNPL::product/button.phtml" after="product.info.overview">
+                   template="Hokodo_BNPL::product/button.phtml" after="product.info.overview"
+                   ifconfig="payment/hokodo_bnpl/active">
                 <arguments>
                     <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\ProductButton</argument>
                 </arguments>
