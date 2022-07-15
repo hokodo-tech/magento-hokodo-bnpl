@@ -89,7 +89,7 @@ describe("Buyer paths", () => {
                  .confirmShipmentWasCreated()
                  .navigateToInvoicesTab()
                  .viewInvoice()
-                 .captureInvoice()
+                 // .captureInvoice()           There is a boolean in the settings to capture invoices. Add this line back in if the setting is ON.
                  .createCreditMemo()
                  .submitRefund()
                  .confirmRefundWasCreated()
