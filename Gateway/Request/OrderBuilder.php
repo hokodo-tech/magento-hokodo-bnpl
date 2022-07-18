@@ -224,7 +224,7 @@ class OrderBuilder implements BuilderInterface
             'quantity' => $item->getQty(),
             'unit_price' => (int) round($totalAmount / $item->getQty() * 100),
             'tax_rate' => number_format($item->getTaxPercent(), 2),
-            'total_amount' => $totalAmount * 100,
+            'total_amount' => round($totalAmount * 100),
             'tax_amount' => $item->getTaxAmount() * 100,
         ];
     }
