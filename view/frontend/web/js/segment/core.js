@@ -23,13 +23,14 @@ define([
             return typeof analytics !== 'undefined' && analytics.VERSION !== undefined;
         },
 
-        trackLanding(amount, position) {
+        trackLanding(amount, currency, position) {
             this.track(
                 'Initiation',
                 {
-                    totalAmount: amount,
                     Impression: position !== undefined,
-                    Position: position !== undefined ? position : null
+                    Position: position !== undefined ? position : null,
+                    totalAmount: amount,
+                    currency: currency
                 }
             );
             this.initialized = true;
