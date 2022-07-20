@@ -28,7 +28,8 @@ define([
                     )
                     self.segment.identify();
                     segment.trackLanding(
-                        self.priceUtils.formatPrice(self.quote.getCalculatedTotal(), self.quote.getPriceFormat()),
+                        self.quote.getCalculatedTotal(),
+                        self.quote.totals().quote_currency_code,
                         position
                     );
                     this.fired = true;
