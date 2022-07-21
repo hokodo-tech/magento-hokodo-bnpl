@@ -1,0 +1,22 @@
+<?php
+/**
+ * @var $block \Magento\Framework\View\Element\Template
+ * @var $viewModel \Hokodo\BNPL\ViewModel\CartButton
+ */
+
+$viewModel = $block->getData('viewModel');
+?>
+<?php if ($viewModel->isEnable()): ?>
+    <form method="get" action="<?= $this->getUrl('checkout') ?>">
+        <input type="hidden" name="payment_method" value="<?= $viewModel->getCode() ?>">
+        <button class="action primary checkout hokodo">
+            <?= $viewModel->getLabelBtn(); ?>
+            <img
+                src="<?= $this->getViewFileUrl('Hokodo_BNPL/img/hokodo_btn_background.svg'); ?>"
+                width="80"
+                height="13"
+                alt="Hokodo"
+            />
+        </button>
+    </form>
+<?php endif ?>

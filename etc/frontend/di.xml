@@ -38,5 +38,8 @@
         <plugin name="hokodoBnplLayoutProcessor" type="Hokodo\BNPL\Plugin\Block\Checkout\LayoutProcessor"/>
     </type>
 
+    <type name="Magento\Checkout\CustomerData\Cart">
+        <plugin name="hokodoAddDataToCustomerCart" type="Hokodo\BNPL\Plugin\CustomerData\Cart"/>
+    </type>
 
 </config>

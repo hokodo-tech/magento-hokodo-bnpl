@@ -58,6 +58,8 @@
                 <on_site_messaging>
                     <enable>1</enable>
                     <label>Pay in 30 Days. No interest. No fees.</label>
+                    <enable_cart_page>1</enable_cart_page>
+                    <label_cart_page>Pay in 30 days. Interest free.</label_cart_page>
                 </on_site_messaging>
             </hokodo_bnpl>
         </payment>
