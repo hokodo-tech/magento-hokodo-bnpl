@@ -43,17 +43,31 @@
             padding: 0 0 20px 0;
         }
     }
-    .block-minicart .block-content > .actions > .primary .action.primary.hokodo,
-    .action.hokodo.primary {
+    .block-minicart .block-content > .actions > .primary .action.primary.hokodo.checkout,
+    .cart-summary .checkout-methods-items .action.hokodo.checkout.primary {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
-        gap: 0 15px;
-        background-color: #65CFCA;
-        border: 1px solid #65CFCA;
+        gap: 0 8px;
+        background-color: #64CDC8;
+        border: 1px solid #64CDC8;
         color: #132e34;
-        font-size: 14px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 22px;
+        padding: 12px;
+
+        &:hover {
+            background-color: #8BD9D6;
+            border-color: #8BD9D6;
+        }
+
+        img {
+            width: auto;
+            height: 15px;
+            margin: 2px 0;
+        }
     }
 
     .hokodo-content-wrapper {
