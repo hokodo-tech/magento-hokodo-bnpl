@@ -52,4 +52,35 @@ class ProductButton implements ArgumentInterface
 
         return false;
     }
+
+    /**
+     * Get Api Key.
+     *
+     * @return string
+     */
+    public function getApiKey(): string
+    {
+        $apiKey = null;
+        if ($this->isSandbox()) {
+            $apiKey = $this->config->getValue(Config::KEY_SANDBOX_API_KEY);
+        } else {
+            $apiKey = $this->config->getValue(Config::KEY_API_KEY);
+        }
+
+        return $apiKey;
+    }
+
+    /**
+     * Check if is sandbox.
+     *
+     * @return bool
+     */
+    public function isSandbox(): bool
+    {
+        if ($this->config->getValue(Config::KEY_ENVIRONMENT) == Config::ENV_SANDBOX) {
+            return true;
+        }
+
+        return false;
+    }
 }
