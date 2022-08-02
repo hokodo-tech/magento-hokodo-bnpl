@@ -7,7 +7,8 @@ export class ProductDetailsPage {
     }
 
     addToBasket() {
+        cy.intercept("**/checkout/cart/add/uenc/**/product/**/").as("addToCart");
         cy.get('#product-addtocart-button').click();
-        cy.get("[data-ui-id='message-success']")
+        cy.wait("@addToCart", { timeout: 30000 });
     }
 }

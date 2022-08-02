@@ -19,6 +19,9 @@ config = {
             },
             'Hokodo_BNPL/js/model/hokodo-data-service': {
                 'Hokodo_BNPL/js/segment/hokodo-data-service': true
+            },
+            'Magento_Checkout/js/view/minicart': {
+                'Hokodo_BNPL/js/view/minicart-mixin': true
             }
         },
     },

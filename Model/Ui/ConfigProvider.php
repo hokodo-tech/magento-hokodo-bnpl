@@ -103,6 +103,11 @@ class ConfigProvider implements ConfigProviderInterface
     private $storeManager;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * @param UserInterfaceFactory                  $userFactory
      * @param HokodoOrganisationRepositoryInterface $organisationRepository
      * @param PaymentQuoteRepositoryInterface       $paymentQuoteRepository
