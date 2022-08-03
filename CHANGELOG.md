@@ -1,3 +1,8 @@
+1.3.4 / August 2022
+==================
+* Version 1.3.4
+Branding improvements
+
 1.3.3 / July 2022
 ==================
 * Version 1.3.3
