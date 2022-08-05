@@ -4,13 +4,13 @@ div {
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
-        gap: 7px 15px;
+        gap: 0 15px;
         margin-bottom: 15px;
         background-color: #65CFCA;
-        padding: 10px 50px;
+        padding: 5px 50px;
         border: 1px solid #65cfca;
         color: #132e34;
-        line-height: 1.6rem;
+        line-height: 1.5;
         min-height: 46px;
         text-align: center;
         cursor: default;
@@ -20,22 +20,16 @@ div {
         font-size: 16px;
         box-sizing: border-box;
         vertical-align: middle;
-        width: 100%;
-        font-weight: 600;
+
         @media only screen and (max-width: 767px) {
-            padding: 7px 15px;
-            font-size: 14px;
-            gap: 5px 10px;
+            width: 100%;
+            padding: 5px 15px;
         }
-        &.btn {
-            cursor: pointer;
-        }
+
         img {
+            margin: 5px 0;
             height: 16px;
             width: auto;
-            @media only screen and (max-width: 767px) {
-                height: 14px;
-            }
         }
     }
 }
