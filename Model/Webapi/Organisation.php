@@ -59,9 +59,7 @@ class Organisation implements OrganisationInterface
     }
 
     /**
-     * @param CreateOrganisationRequestInterface $payload
-     *
-     * @return CreateOrganisationResponseInterface
+     * @inheirtDoc
      */
     public function create(CreateOrganisationRequestInterface $payload): CreateOrganisationResponseInterface
     {
@@ -71,7 +69,8 @@ class Organisation implements OrganisationInterface
             $gatewayRequest = $this->createOrganisationGatewayRequestFactory->create();
             $gatewayRequest
                 ->setCompanyId($payload->getCompanyId())
-                ->setUniqueId('mage-org-' . hash('md5', $this->storeManager->getStore()->getCode() . $this->storeManager->getStore()->getName() . $payload->getCompanyId()))
+                ->setUniqueId('mage-org-' . hash('md5', $this->storeManager->getStore()->getCode() .
+                        $this->storeManager->getStore()->getName() . $payload->getCompanyId()))
                 ->setRegistered(date('Y-m-d\TH:i:s\Z'));
             $organisation = $this->organisationService->createOrganisation($gatewayRequest);
             if ($dataModel = $organisation->getDataModel()) {

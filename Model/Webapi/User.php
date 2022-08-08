@@ -79,9 +79,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param CreateUserRequestInterface $payload
-     *
-     * @return CreateUserResponseInterface
+     * @inheirtDoc
      */
     public function create(CreateUserRequestInterface $payload): CreateUserResponseInterface
     {
@@ -91,6 +89,7 @@ class User implements UserInterface
         try {
             $customer = $this->customerRepository->get($payload->getEmail(), $this->storeManager->getStore()->getId());
         } catch (\Exception $e) {
+            $customer = null;
         }
         try {
             $gatewayRequest = $this->createUserGatewayRequestFactory->create();
@@ -109,6 +108,7 @@ class User implements UserInterface
             }
         } catch (\Exception $e) {
             //TODO error reporting
+            $result->setId('');
         }
         return $result;
     }
