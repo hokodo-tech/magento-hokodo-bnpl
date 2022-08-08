@@ -6,15 +6,15 @@
 
 declare(strict_types=1);
 
-namespace Hokodo\BNPL\Model\Data\Webapi;
+namespace Hokodo\BNPL\Model\Data\Gateway;
 
-use Hokodo\BNPL\Api\Data\Webapi\UserOrganisationInterface;
+use Hokodo\BNPL\Api\Data\Gateway\UserOrganisationInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
 class UserOrganisation extends AbstractSimpleObject implements UserOrganisationInterface
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setId(string $id): self
     {
@@ -23,7 +23,7 @@ class UserOrganisation extends AbstractSimpleObject implements UserOrganisationI
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setRole(string $role): self
     {

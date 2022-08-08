@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data\Gateway;
 
-use Hokodo\BNPL\Api\Data\Webapi\UserOrganisationInterface;
-
 interface CreateUserRequestInterface
 {
     public const NAME = 'name';

@@ -14,7 +14,7 @@ use Magento\Framework\DataObject;
 class CreateUserRequest extends DataObject implements CreateUserRequestInterface
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function getEmail(): string
     {
@@ -22,7 +22,7 @@ class CreateUserRequest extends DataObject implements CreateUserRequestInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setEmail(string $email): self
     {
@@ -31,7 +31,7 @@ class CreateUserRequest extends DataObject implements CreateUserRequestInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function getName(): string
     {
@@ -39,7 +39,7 @@ class CreateUserRequest extends DataObject implements CreateUserRequestInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setName(string $name): self
     {
@@ -48,7 +48,7 @@ class CreateUserRequest extends DataObject implements CreateUserRequestInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function getOrganisationId(): string
     {
@@ -56,7 +56,7 @@ class CreateUserRequest extends DataObject implements CreateUserRequestInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setOrganisationId(string $organisationId): self
     {

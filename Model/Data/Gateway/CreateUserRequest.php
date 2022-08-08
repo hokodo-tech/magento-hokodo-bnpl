@@ -14,7 +14,7 @@ use Magento\Framework\Api\AbstractSimpleObject;
 class CreateUserRequest extends AbstractSimpleObject implements CreateUserRequestInterface
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setName(string $name): self
     {
@@ -23,7 +23,7 @@ class CreateUserRequest extends AbstractSimpleObject implements CreateUserReques
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setEmail(string $email): self
     {
@@ -32,7 +32,7 @@ class CreateUserRequest extends AbstractSimpleObject implements CreateUserReques
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setRegistered(string $registered): self
     {
@@ -41,7 +41,7 @@ class CreateUserRequest extends AbstractSimpleObject implements CreateUserReques
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setOrganisations(array $organisations): self
     {

@@ -3,22 +3,21 @@
  * Copyright © 2018-2021 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
-
 declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Data\Webapi;
 
-use Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterface;
+use Hokodo\BNPL\Api\Data\Webapi\CreateOrderResponseInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
-class CreateUserResponse extends AbstractSimpleObject implements CreateUserResponseInterface
+class CreateOrderResponse extends AbstractSimpleObject implements CreateOrderResponseInterface
 {
     /**
      * @inheritDoc
      */
     public function getId(): string
     {
-        return $this->_get(self::USER_ID);
+        return $this->_get(self::ORDER_ID);
     }
 
     /**
@@ -26,7 +25,7 @@ class CreateUserResponse extends AbstractSimpleObject implements CreateUserRespo
      */
     public function setId(string $id): self
     {
-        $this->setData(self::USER_ID, $id);
+        $this->setData(self::ORDER_ID, $id);
         return $this;
     }
 }

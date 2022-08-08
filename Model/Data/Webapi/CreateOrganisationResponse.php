@@ -14,7 +14,7 @@ use Magento\Framework\Api\AbstractSimpleObject;
 class CreateOrganisationResponse extends AbstractSimpleObject implements CreateOrganisationResponseInterface
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setId(string $id): self
     {
@@ -23,7 +23,7 @@ class CreateOrganisationResponse extends AbstractSimpleObject implements CreateO
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function getId(): string
     {

@@ -1162,10 +1162,18 @@
     <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOrganisationRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CreateOrganisationRequest" />
 
     <preference for="Hokodo\BNPL\Api\Webapi\UserInterface" type="Hokodo\BNPL\Model\Webapi\User" />
-    <preference for="Hokodo\BNPL\Api\Data\Webapi\UserOrganisationInterface" type="Hokodo\BNPL\Model\Data\Webapi\UserOrganisation" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\UserOrganisationInterface" type="Hokodo\BNPL\Model\Data\Gateway\UserOrganisation" />
     <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateUserRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateUserRequest" />
     <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateUserResponse" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CreateUserRequest" />
+
+    <preference for="Hokodo\BNPL\Api\Webapi\OrderInterface" type="Hokodo\BNPL\Model\Webapi\Order" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrderRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrderRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrderResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrderResponse" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CreateOrderRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\PatchOrderRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\PatchOrderRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\PatchOrderResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\PatchOrderResponse" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\PatchOrderRequest" />
 
     <!-- Commands infrastructure -->
     <virtualType name="Hokodo\BNPL\Gateway\Command\CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
@@ -1173,6 +1181,8 @@
             <argument name="commands" xsi:type="array">
                 <item name="sdk_organisation_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationCreateSdk</item>
                 <item name="sdk_user_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\UserCreateSdk</item>
+                <item name="sdk_order_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderCreateSdk</item>
+<!--                <item name="sdk_order_patch" xsi:type="string">Hokodo\BNPL\Gateway\Command\UserCreateSdk</item>-->
             </argument>
         </arguments>
     </virtualType>
@@ -1220,6 +1230,29 @@
     <virtualType name="Hokodo\BNPL\Gateway\Request\Sdk\UserEndpointBuilder" type="Hokodo\BNPL\Gateway\Request\Sdk\EndpointBuilder">
         <arguments>
             <argument name="endpoint" xsi:type="string">users</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Order create gateway set up -->
+    <virtualType name="Hokodo\BNPL\Gateway\Command\OrderCreateSdk" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\OrderCreateSdk\BuilderComposite</argument>
+            <argument name="resultFactory" xsi:type="object">Hokodo\BNPL\Gateway\Command\Order\ResultInterfaceFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\OrderCreateSdk\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\Sdk\OrderEndpointBuilder</item>
+                <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostMethodBuilder</item>
+                <item name="body" xsi:type="string">Hokodo\BNPL\Gateway\Request\Sdk\GeneralSubjectBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\Sdk\OrderEndpointBuilder" type="Hokodo\BNPL\Gateway\Request\Sdk\EndpointBuilder">
+        <arguments>
+            <argument name="endpoint" xsi:type="string">payment/orders</argument>
         </arguments>
     </virtualType>
 </config>

@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Hokodo\BNPL\Api\Data\Webapi;
+namespace Hokodo\BNPL\Api\Data\Gateway;
 
 interface UserOrganisationInterface
 {

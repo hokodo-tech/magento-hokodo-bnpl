@@ -14,7 +14,7 @@ use Magento\Framework\Api\AbstractSimpleObject;
 class CreateOrganisationRequest extends AbstractSimpleObject implements CreateOrganisationRequestInterface
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setCompanyId(string $companyId): self
     {
@@ -23,7 +23,7 @@ class CreateOrganisationRequest extends AbstractSimpleObject implements CreateOr
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setUniqueId(string $uniqueId): self
     {
@@ -32,7 +32,7 @@ class CreateOrganisationRequest extends AbstractSimpleObject implements CreateOr
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setRegistered(string $registered): self
     {
