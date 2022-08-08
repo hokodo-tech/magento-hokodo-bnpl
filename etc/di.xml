@@ -1145,4 +1145,81 @@
     <!-- Reduce PDF file size -->
     <preference for="Magento\Sales\Model\Order\Pdf\Invoice" type="Hokodo\BNPL\Model\Pdf\Invoice" />
     <preference for="Magento\Sales\Model\Order\Pdf\Shipment" type="Hokodo\BNPL\Model\Pdf\Shipment" />
+
+
+    <!-- SDK UPGRADE -->
+
+    <type name="Hokodo\BNPL\Gateway\Service\AbstractService">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">Hokodo\BNPL\Gateway\Command\CommandPool</argument>
+        </arguments>
+    </type>
+
+    <!-- js SDK API backend-frontend communication config -->
+    <preference for="Hokodo\BNPL\Api\Webapi\OrganisationInterface" type="Hokodo\BNPL\Model\Webapi\Organisation" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrganisationRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrganisationResponse" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOrganisationRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CreateOrganisationRequest" />
+
+    <preference for="Hokodo\BNPL\Api\Webapi\UserInterface" type="Hokodo\BNPL\Model\Webapi\User" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\UserOrganisationInterface" type="Hokodo\BNPL\Model\Data\Webapi\UserOrganisation" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateUserRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateUserRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateUserResponse" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CreateUserRequest" />
+
+    <!-- Commands infrastructure -->
+    <virtualType name="Hokodo\BNPL\Gateway\Command\CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="sdk_organisation_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationCreateSdk</item>
+                <item name="sdk_user_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\UserCreateSdk</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Organisation create gateway set up -->
+    <virtualType name="Hokodo\BNPL\Gateway\Command\OrganisationCreateSdk" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\OrganisationCreateSdk\BuilderComposite</argument>
+            <argument name="resultFactory" xsi:type="object">Hokodo\BNPL\Gateway\Command\Organisation\ResultInterfaceFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\OrganisationCreateSdk\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\Sdk\OrganisationEndpointBuilder</item>
+                <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostMethodBuilder</item>
+                <item name="body" xsi:type="string">Hokodo\BNPL\Gateway\Request\Sdk\GeneralSubjectBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\Sdk\OrganisationEndpointBuilder" type="Hokodo\BNPL\Gateway\Request\Sdk\EndpointBuilder">
+        <arguments>
+            <argument name="endpoint" xsi:type="string">organisations</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- User create gateway set up -->
+    <virtualType name="Hokodo\BNPL\Gateway\Command\UserCreateSdk" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\UserCreateSdk\BuilderComposite</argument>
+            <argument name="resultFactory" xsi:type="object">Hokodo\BNPL\Gateway\Command\User\ResultInterfaceFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\UserCreateSdk\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\Sdk\UserEndpointBuilder</item>
+                <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostMethodBuilder</item>
+                <item name="body" xsi:type="string">Hokodo\BNPL\Gateway\Request\Sdk\GeneralSubjectBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\Sdk\UserEndpointBuilder" type="Hokodo\BNPL\Gateway\Request\Sdk\EndpointBuilder">
+        <arguments>
+            <argument name="endpoint" xsi:type="string">users</argument>
+        </arguments>
+    </virtualType>
 </config>
