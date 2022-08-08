@@ -14,6 +14,8 @@ use Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterface;
 interface UserInterface
 {
     /**
+     * User create request webapi handler.
+     *
      * @param CreateUserRequestInterface $payload
      *
      * @return CreateUserResponseInterface

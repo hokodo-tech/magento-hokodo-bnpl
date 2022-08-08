@@ -14,6 +14,8 @@ use Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationResponseInterface;
 interface OrganisationInterface
 {
     /**
+     * Organisation create request webapi handler.
+     *
      * @param CreateOrganisationRequestInterface $payload
      *
      * @return CreateOrganisationResponseInterface
