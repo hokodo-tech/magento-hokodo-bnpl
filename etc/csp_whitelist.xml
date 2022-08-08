@@ -4,12 +4,24 @@
         <policy id="script-src">
             <values>
                 <value id="segment-cdn" type="host">https://cdn.segment.com</value>
+                <!--Development -->
+                <value id="dev" type="host">https://api-dev.hokodo.co</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
                 <value id="segment-cdn" type="host">https://cdn.segment.com</value>
                 <value id="segment-io" type="host">https://api.segment.io</value>
+                <!--Development -->
+                <value id="dev" type="host">https://api-dev.hokodo.co</value>
+            </values>
+        </policy>
+        <policy id="font-src">
+            <values>
+                <value id="segment-cdn" type="host">https://cdn.segment.com</value>
+                <value id="segment-io" type="host">https://api.segment.io</value>
+                <!--Development -->
+                <value id="dev" type="host">https://api-dev.hokodo.co</value>
             </values>
         </policy>
         <policy id="font-src">

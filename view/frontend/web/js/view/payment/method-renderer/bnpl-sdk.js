@@ -7,37 +7,74 @@ define([
     'underscore',
     'ko',
     'Magento_Checkout/js/view/payment/default',
+    'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
+    'Hokodo_BNPL/js/sdk/hokodo-data-checkout',
     'HokodoSDK'
 ], function (
         $,
         _,
         ko,
         Component,
+        hokodoData,
+        hokodoCheckout
         ) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Hokodo_BNPL/payment/bnpl-sdk',
-            listens: {
-                'checkout.steps.shipping-step.shippingAddress.customer-email:email': ''
-            }
+            template: 'Hokodo_BNPL/payment/bnpl-sdk'
         },
 
         // TODO: Get key from backend
-        hokodoElements: Hokodo("pk_test_6H224CyVnIgrsP6o5IDnFoTT-CB5YSXEvOQ8idk_QzQ").elements(),
+        hokodoElements: Hokodo("pk_test_g7ziU-hyBnm6oQmALykxnnwliwWmRj-TukvjZ3iKNvU").elements(),
 
         /**
          * Init component
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
+
+            if (hokodoData.getOrganisation().api_id) {
+                this.companySearch = this.hokodoElements.create("companySearch", {companyId: hokodoData.getOrganisation().company_api_id});
+            } else {
+                this.companySearch = this.hokodoElements.create("companySearch");
+            }
+            this.companySearch.on("companySelection", this.onSDKCompanySelection.bind(this));
 
             return this;
         },
 
-        isChecked: ko.computed(function () {
-            return quote.paymentMethod() ? quote.paymentMethod().method : null;
-        }),
+        /**
+         * Get payment method code.
+         * @returns {String}
+         */
+        getCode: function() {
+            return 'hokodo_bnpl';
+        },
+
+        // /**
+        //  * Get payment method data
+        //  * @returns {Object}
+        //  */
+        // getData: function () {
+        //     return this._super();
+        // },
+
+        mountSearch: function() {
+            this.companySearch.mount("#hokodoCompanySearch");
+        },
+
+        mountCheckout: function() {
+            if (hokodoData.getOffer().id) {
+                this.userCheckout = this.hokodoElements.create("checkout", {
+                    paymentOffer: hokodoData.getOffer()
+                });
+                this.userCheckout.mount("#hokodoCheckout");
+            }
+        },
+
+        onSDKCompanySelection: function(company) {
+            var self = this;
+        }
     });
 });

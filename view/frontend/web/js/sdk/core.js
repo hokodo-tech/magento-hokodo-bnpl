@@ -5,7 +5,7 @@ define([
         sdk: undefined,
 
         init() {
-            return Hokodo("pk_test_6H224CyVnIgrsP6o5IDnFoTT-CB5YSXEvOQ8idk_QzQ", {
+            return Hokodo("pk_test_g7ziU-hyBnm6oQmALykxnnwliwWmRj-TukvjZ3iKNvU", {
                 locale: "en"
             });
         },

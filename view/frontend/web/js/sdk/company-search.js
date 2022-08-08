@@ -1,10 +1,11 @@
 define([
     'jquery',
+    'underscore',
     'Hokodo_BNPL/js/sdk/core',
     'uiComponent',
-    'Hokodo_BNPL/js/sdk/hokodo-data',
+    'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
     'Magento_Ui/js/modal/modal'
-], function ($, sdkCore, Component, hokodoData, modal) {
+], function ($, _, sdkCore, Component, hokodoData) {
     return Component.extend({
         defaults: {
             template: 'Hokodo_BNPL/sdk/company-search'
@@ -12,22 +13,28 @@ define([
 
         initialize() {
             this._super();
-            this.comapnySearch = sdkCore.getSdk().elements().create("companySearch");
+            if (hokodoData.getCompanyId()) {
+                this.companySearch = sdkCore.getSdk().elements().create("companySearch", {companyId: hokodoData.getCompanyId()});
+            } else {
+                this.companySearch = sdkCore.getSdk().elements().create("companySearch");
+            }
             const self = this;
-            this.comapnySearch.on("ready", () => {
+            this.companySearch.on("ready", () => {
 
             });
-            this.comapnySearch.on("failure", () => {
+            this.companySearch.on("failure", () => {
 
             });
-            this.comapnySearch.on("countryInputChange", (country) => {
+            this.companySearch.on("countryInputChange", (country) => {
 
             });
-            this.comapnySearch.on("companyTypeInputChange", (companyType) => {
+            this.companySearch.on("companyTypeInputChange", (companyType) => {
 
             });
-            this.comapnySearch.on("companySelection", (company) => {
-                hokodoData.setCompany(company);
+            this.companySearch.on("companySelection", (company) => {
+                if (company !== null) {
+                    hokodoData.setCompanyId(company.id);
+                }
             });
 
             //this.openModal();
@@ -40,7 +47,7 @@ define([
         },
 
         onAfterRender() {
-            this.comapnySearch.mount("#hokodoCompanySearch");
+            this.companySearch.mount("#hokodoCompanySearch");
         }
     })
 })

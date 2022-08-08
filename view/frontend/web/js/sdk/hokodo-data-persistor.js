@@ -18,9 +18,10 @@ define([
         },
         initData = function () {
             return {
-                'user': null,
-                'organisation': null,
-                'company': null
+                'userId': '',
+                'organisationId': '',
+                'offerId': '',
+                'companyId': ''
             };
         },
         getData = function () {
@@ -61,15 +62,26 @@ define([
             return getData().organisation;
         },
 
-        setCompany: function (company) {
+        setOffer: function (offer) {
             var obj = getData();
 
-            obj.company = company;
+            obj.offer = offer;
             saveData(obj);
         },
 
-        getCompany: function () {
-            return getData().company;
+        getOffer: function () {
+            return getData().offer;
+        },
+
+        setCompanyId: function (companyId) {
+            var obj = getData();
+
+            obj.companyId = companyId;
+            saveData(obj);
+        },
+
+        getCompanyId: function () {
+            return getData().companyId;
         },
 
         clearData: function () {
