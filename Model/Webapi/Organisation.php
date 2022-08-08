@@ -59,7 +59,11 @@ class Organisation implements OrganisationInterface
     }
 
     /**
-     * @inheirtDoc
+     * Organisation create request webapi handler.
+     *
+     * @param CreateOrganisationRequestInterface $payload
+     *
+     * @return CreateOrganisationResponseInterface
      */
     public function create(CreateOrganisationRequestInterface $payload): CreateOrganisationResponseInterface
     {
@@ -78,6 +82,7 @@ class Organisation implements OrganisationInterface
             }
         } catch (\Exception $e) {
             //TODO add error resolving
+            $result->setId('');
         }
         return $result;
     }

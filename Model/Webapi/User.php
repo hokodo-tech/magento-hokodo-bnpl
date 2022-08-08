@@ -79,7 +79,11 @@ class User implements UserInterface
     }
 
     /**
-     * @inheirtDoc
+     * User create request webapi handler.
+     *
+     * @param CreateUserRequestInterface $payload
+     *
+     * @return CreateUserResponseInterface
      */
     public function create(CreateUserRequestInterface $payload): CreateUserResponseInterface
     {
