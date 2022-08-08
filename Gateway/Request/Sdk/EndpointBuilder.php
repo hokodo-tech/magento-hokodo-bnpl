@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Gateway\Request\Sdk;
 
 use Hokodo\BNPL\Gateway\SubjectReaderInterface;
@@ -52,7 +54,7 @@ class EndpointBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         return [
-            'uri' => $this->endpoint
+            'uri' => $this->endpoint,
         ];
     }
 

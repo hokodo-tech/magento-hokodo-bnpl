@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+
 declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Webapi;
@@ -6,10 +11,9 @@ namespace Hokodo\BNPL\Model\Webapi;
 use Hokodo\BNPL\Api\Data\Gateway\CreateOrganisationRequestInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationRequestInterface;
 use Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationResponseInterface;
+use Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationResponseInterfaceFactory;
 use Hokodo\BNPL\Api\Webapi\OrganisationInterface;
 use Hokodo\BNPL\Gateway\Service\Organisation as OrganisationService;
-use Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationResponseInterfaceFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Organisation implements OrganisationInterface
@@ -54,7 +58,7 @@ class Organisation implements OrganisationInterface
                 $result->setId($dataModel->getId());
             }
         } catch (\Exception $e) {
-
+            //TODO add error resolving
         }
         return $result;
     }

@@ -4,9 +4,10 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Gateway\Request\Sdk;
 
-use Hokodo\BNPL\Gateway\OrganisationSubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
@@ -22,7 +23,7 @@ class GeneralSubjectBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         return [
-            'body' => $buildSubject
+            'body' => $buildSubject,
         ];
     }
 }

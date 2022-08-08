@@ -33,14 +33,15 @@ abstract class AbstractService
     /**
      * A function that returns command code.
      *
-     * @param string       $commandCode
-     * @param array|object $commandSubject
+     * @param string $commandCode
+     * @param object $commandSubject
      *
-     * @return ResultInterface
+     * @return ResultInterface|null
+     *
      * @throws NotFoundException
      * @throws CommandException
      */
-    protected function executeCommand($commandCode, $commandSubject)
+    public function executeCommand(string $commandCode, object $commandSubject): ?ResultInterface
     {
         return $this->commandPool->get($commandCode)->execute($commandSubject->__toArray());
     }
