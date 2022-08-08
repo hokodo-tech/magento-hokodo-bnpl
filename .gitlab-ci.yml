@@ -188,41 +188,41 @@ review:detach [2.4.4]:
   resource_group: review-2.4.4
 
 # ======= E2E TESTS =======
-test:e2e:
-  stage: test
-  needs:
-    - review:create
-  rules:
-    - if: $CI_MERGE_REQUEST_ID
-  image:
-    name: cypress/included:9.5.4
-    entrypoint: [""]
-  variables:
-    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
-  script:
-    - CYPRESS_BASE_URL=$BASE_URL cypress run --browser chrome --project ./tests/ --config-file ../cypress.json --env MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER,MAGENTO_ADMIN_PASSWORD=$MAGENTO_ADMIN_PASSWORD
-  artifacts:
-    paths:
-      - /builds/hokodo/engineering/plugins/magento-hokodo-bnpl/tests/cypress/screenshots/
-      - /builds/hokodo/engineering/plugins/magento-hokodo-bnpl/tests/cypress/videos/
-    expose_as: screencasts
-    expire_in: 1 week
-    when: on_failure
-
-test:e2e [2.3.7]:
-  extends: test:e2e
-  needs:
-    - review:create [2.3.7]
-  variables:
-    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
-
-test:e2e [2.4.4]:
-  extends: test:e2e
-  needs:
-    - review:create [2.4.4]
-  variables:
-    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m244.${DEPLOY_HOST_DEV}
-  allow_failure: true
+#test:e2e:
+#  stage: test
+#  needs:
+#    - review:create
+#  rules:
+#    - if: $CI_MERGE_REQUEST_ID
+#  image:
+#    name: cypress/included:9.5.4
+#    entrypoint: [""]
+#  variables:
+#    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
+#  script:
+#    - CYPRESS_BASE_URL=$BASE_URL cypress run --browser chrome --project ./tests/ --config-file ../cypress.json --env MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER,MAGENTO_ADMIN_PASSWORD=$MAGENTO_ADMIN_PASSWORD
+#  artifacts:
+#    paths:
+#      - /builds/hokodo/engineering/plugins/magento-hokodo-bnpl/tests/cypress/screenshots/
+#      - /builds/hokodo/engineering/plugins/magento-hokodo-bnpl/tests/cypress/videos/
+#    expose_as: screencasts
+#    expire_in: 1 week
+#    when: on_failure
+#
+#test:e2e [2.3.7]:
+#  extends: test:e2e
+#  needs:
+#    - review:create [2.3.7]
+#  variables:
+#    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
+#
+#test:e2e [2.4.4]:
+#  extends: test:e2e
+#  needs:
+#    - review:create [2.4.4]
+#  variables:
+#    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m244.${DEPLOY_HOST_DEV}
+#  allow_failure: true
 
 # ======= DEPLOYMENT =======
 .deploy:
