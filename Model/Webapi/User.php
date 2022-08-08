@@ -22,18 +22,46 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class User implements UserInterface
 {
+    /**
+     * @var UserService
+     */
     private UserService $userService;
 
+    /**
+     * @var CreateUserRequestInterfaceFactory
+     */
     private CreateUserRequestInterfaceFactory $createUserGatewayRequestFactory;
 
+    /**
+     * @var StoreManagerInterface
+     */
     private StoreManagerInterface $storeManager;
 
+    /**
+     * @var CreateUserResponseInterfaceFactory
+     */
     private CreateUserResponseInterfaceFactory $createUserResponseFactory;
 
+    /**
+     * @var CustomerRepositoryInterface
+     */
     private CustomerRepositoryInterface $customerRepository;
 
+    /**
+     * @var UserOrganisationInterfaceFactory
+     */
     private UserOrganisationInterfaceFactory $userOrganisationInterfaceFactory;
 
+    /**
+     * User constructor.
+     *
+     * @param UserService                        $userService
+     * @param CustomerRepositoryInterface        $customerRepository
+     * @param StoreManagerInterface              $storeManager
+     * @param CreateUserRequestInterfaceFactory  $createUserGatewayRequestFactory
+     * @param CreateUserResponseInterfaceFactory $createUserResponseFactory
+     * @param UserOrganisationInterfaceFactory   $userOrganisationInterfaceFactory
+     */
     public function __construct(
         UserService $userService,
         CustomerRepositoryInterface $customerRepository,

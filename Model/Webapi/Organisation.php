@@ -18,14 +18,34 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class Organisation implements OrganisationInterface
 {
+    /**
+     * @var OrganisationService
+     */
     private OrganisationService $organisationService;
 
+    /**
+     * @var CreateOrganisationRequestInterfaceFactory
+     */
     private CreateOrganisationRequestInterfaceFactory $createOrganisationGatewayRequestFactory;
 
+    /**
+     * @var StoreManagerInterface
+     */
     private StoreManagerInterface $storeManager;
 
+    /**
+     * @var CreateOrganisationResponseInterfaceFactory
+     */
     private CreateOrganisationResponseInterfaceFactory $createOrganisationResponseFactory;
 
+    /**
+     * Organisation constructor.
+     *
+     * @param OrganisationService                        $organisationService
+     * @param CreateOrganisationRequestInterfaceFactory  $createOrganisationGatewayRequestFactory
+     * @param StoreManagerInterface                      $storeManager
+     * @param CreateOrganisationResponseInterfaceFactory $createOrganisationResponseFactory
+     */
     public function __construct(
         OrganisationService $organisationService,
         CreateOrganisationRequestInterfaceFactory $createOrganisationGatewayRequestFactory,
