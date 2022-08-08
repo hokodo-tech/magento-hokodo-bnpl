@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Webapi;
 
-use Hokodo\BNPL\Api\Webapi\UserInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterface as CreateUserGatewayRequest;
 use Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Webapi\CreateUserRequestInterface;
@@ -16,6 +15,7 @@ use Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterface;
 use Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Webapi\UserOrganisationInterface;
 use Hokodo\BNPL\Api\Data\Webapi\UserOrganisationInterfaceFactory;
+use Hokodo\BNPL\Api\Webapi\UserInterface;
 use Hokodo\BNPL\Gateway\Service\User as UserService;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
