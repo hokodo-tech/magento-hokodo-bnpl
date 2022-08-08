@@ -3,6 +3,7 @@
  * Copyright © 2018-2021 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
+// @codingStandardsIgnoreFile
 
 declare(strict_types=1);
 
@@ -24,7 +25,7 @@ class CreateOrganisationRequest extends DataObject implements CreateOrganisation
     /**
      * @inerhitdoc
      */
-    public function setCompanyId(string $companyId): CreateOrganisationRequestInterface
+    public function setCompanyId(string $companyId): self
     {
         $this->setData(self::COMPANY_ID, $companyId);
         return $this;
@@ -33,7 +34,7 @@ class CreateOrganisationRequest extends DataObject implements CreateOrganisation
     /**
      * @inerhitdoc
      */
-    public function setQuoteId(string $quoteId): CreateOrganisationRequestInterface
+    public function setQuoteId(string $quoteId): self
     {
         $this->setData(self::QUOTE_ID, $quoteId);
         return $this;
