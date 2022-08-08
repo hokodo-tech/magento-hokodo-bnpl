@@ -33,7 +33,7 @@ php:compat:
   image: registry.gitlab.com/pipeline-components/php-codesniffer:latest
   parallel:
     matrix:
-      - PHP_VERSION: ["7.3", "7.4"]
+      - PHP_VERSION: ["7.4", "8.1"]
   script:
     - phpcs -s -p --colors --extensions=php --standard=PHPCompatibility --runtime-set testVersion $PHP_VERSION .
 
