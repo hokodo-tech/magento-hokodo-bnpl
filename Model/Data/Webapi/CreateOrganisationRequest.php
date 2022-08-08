@@ -14,7 +14,7 @@ use Magento\Framework\DataObject;
 class CreateOrganisationRequest extends DataObject implements CreateOrganisationRequestInterface
 {
     /**
-     * @return string
+     * @inerhitDoc
      */
     public function getCompanyId(): string
     {
@@ -22,9 +22,7 @@ class CreateOrganisationRequest extends DataObject implements CreateOrganisation
     }
 
     /**
-     * @param string $companyId
-     *
-     * @return CreateOrganisationRequestInterface
+     * @inerhitDoc
      */
     public function setCompanyId(string $companyId): CreateOrganisationRequestInterface
     {
