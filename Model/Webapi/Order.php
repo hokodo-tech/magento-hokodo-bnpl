@@ -329,7 +329,7 @@ class Order implements OrderInterface
             TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
             ScopeInterface::SCOPE_STORE,
             $storeId
-            ) &&
+        ) &&
             !$this->config->getValue(
                 TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
                 ScopeInterface::SCOPE_STORE,
