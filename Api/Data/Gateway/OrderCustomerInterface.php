@@ -13,6 +13,7 @@ interface OrderCustomerInterface
     public const ORGANISATION = 'organisation';
     public const USER = 'user';
     public const DELIVERY_ADDRESS = 'delivery_address';
+    public const INVOICE_ADDRESS = 'invoice_address';
 
     /**
      * Type setter.
@@ -49,4 +50,13 @@ interface OrderCustomerInterface
      * @return $this
      */
     public function setDeliveryAddress(CustomerAddressInterface $deliveryAddress): self;
+
+    /**
+     * Invoice Address setter.
+     *
+     * @param CustomerAddressInterface $invoiceAddress
+     *
+     * @return $this
+     */
+    public function setInvoiceAddress(CustomerAddressInterface $invoiceAddress): self;
 }

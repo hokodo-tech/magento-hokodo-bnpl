@@ -48,4 +48,13 @@ class OrderCustomer extends AbstractSimpleObject implements OrderCustomerInterfa
         $this->setData(self::DELIVERY_ADDRESS, $deliveryAddress);
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function setInvoiceAddress(CustomerAddressInterface $invoiceAddress): self
+    {
+        $this->setData(self::INVOICE_ADDRESS, $invoiceAddress);
+        return $this;
+    }
 }
