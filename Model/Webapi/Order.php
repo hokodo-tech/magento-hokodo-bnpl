@@ -103,6 +103,21 @@ class Order implements OrderInterface
      */
     private OrderGatewayService $orderGatewayService;
 
+    /**
+     * @param CreateOrderResponseInterfaceFactory $responseInterfaceFactory
+     * @param CartRepositoryInterface             $cartRepository
+     * @param GatewayRequestFactory               $gatewayRequestFactory
+     * @param OrderCustomerInterfaceFactory       $orderCustomerFactory
+     * @param CustomerAddressInterfaceFactory     $customerAddressFactory
+     * @param OrderItemInterfaceFactory           $orderItemFactory
+     * @param ScopeConfigInterface                $config
+     * @param ProductMetadataInterface            $productMetadata
+     * @param StoreManagerInterface               $storeManager
+     * @param DateTimeFactory                     $dateTimeFactory
+     * @param ComponentRegistrarInterface         $componentRegistrar
+     * @param ReadFactory                         $readFactory
+     * @param OrderGatewayService                 $orderGatewayService
+     */
     public function __construct(
         CreateOrderResponseInterfaceFactory $responseInterfaceFactory,
         CartRepositoryInterface $cartRepository,
@@ -260,7 +275,8 @@ class Order implements OrderInterface
     {
         //Item total calculation adjustment based on tax settings in Magento
         if ($this->isApplyTaxAdjustment($item->getStoreId())) {
-            $totalAmount = $item->getRowTotalInclTax() - $item->getDiscountAmount() * (($item->getTaxPercent() + 100) / 100);
+            $totalAmount = $item->getRowTotalInclTax() - $item->getDiscountAmount() *
+                (($item->getTaxPercent() + 100) / 100);
         } else {
             $totalAmount = $item->getRowTotalInclTax() - $item->getDiscountAmount();
         }
@@ -310,9 +326,9 @@ class Order implements OrderInterface
     private function isApplyTaxAdjustment(int $storeId = 0): bool
     {
         return $this->config->getValue(
-                TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
-                ScopeInterface::SCOPE_STORE,
-                $storeId
+            TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
             ) &&
             !$this->config->getValue(
                 TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
