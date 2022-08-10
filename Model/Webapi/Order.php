@@ -42,17 +42,65 @@ class Order implements OrderInterface
      * @var CreateOrderResponseInterfaceFactory
      */
     private CreateOrderResponseInterfaceFactory $responseInterfaceFactory;
+
+    /**
+     * @var CartRepositoryInterface
+     */
     private CartRepositoryInterface $cartRepository;
+
+    /**
+     * @var GatewayRequestFactory
+     */
     private GatewayRequestFactory $gatewayRequestFactory;
+
+    /**
+     * @var OrderCustomerInterfaceFactory
+     */
     private OrderCustomerInterfaceFactory $orderCustomerFactory;
+
+    /**
+     * @var CustomerAddressInterfaceFactory
+     */
     private CustomerAddressInterfaceFactory $customerAddressFactory;
+
+    /**
+     * @var OrderItemInterfaceFactory
+     */
     private OrderItemInterfaceFactory $orderItemFactory;
+
+    /**
+     * @var ScopeConfigInterface
+     */
     private ScopeConfigInterface $config;
+
+    /**
+     * @var ProductMetadataInterface
+     */
     private ProductMetadataInterface $productMetadata;
+
+    /**
+     * @var StoreManagerInterface
+     */
     private StoreManagerInterface $storeManager;
+
+    /**
+     * @var DateTimeFactory
+     */
     private DateTimeFactory $dateTimeFactory;
+
+    /**
+     * @var ComponentRegistrarInterface
+     */
     private ComponentRegistrarInterface $componentRegistrar;
+
+    /**
+     * @var ReadFactory
+     */
     private ReadFactory $readFactory;
+
+    /**
+     * @var OrderGatewayService
+     */
     private OrderGatewayService $orderGatewayService;
 
     public function __construct(
@@ -69,7 +117,6 @@ class Order implements OrderInterface
         ComponentRegistrarInterface $componentRegistrar,
         ReadFactory $readFactory,
         OrderGatewayService $orderGatewayService
-
     ) {
         $this->responseInterfaceFactory = $responseInterfaceFactory;
         $this->cartRepository = $cartRepository;

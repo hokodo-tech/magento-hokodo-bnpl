@@ -12,11 +12,31 @@ use Magento\Payment\Gateway\Command\ResultInterface;
 
 class Order extends AbstractService
 {
+    /**
+     * Create Order gateway command.
+     *
+     * @param CreateOrderRequestInterface $createOrderRequest
+     *
+     * @return ResultInterface|null
+     *
+     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws \Magento\Payment\Gateway\Command\CommandException
+     */
     public function createOrder(CreateOrderRequestInterface $createOrderRequest): ?ResultInterface
     {
         return $this->commandPool->get('sdk_order_create')->execute($createOrderRequest->__toArray());
     }
 
+    /**
+     * Patch order gateway command.
+     *
+     * @param CreateOrderRequestInterface $createOrderRequest
+     *
+     * @return ResultInterface|null
+     *
+     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws \Magento\Payment\Gateway\Command\CommandException
+     */
     public function patchOrder(CreateOrderRequestInterface $createOrderRequest): ?ResultInterface
     {
         return $this->commandPool->get('sdk_order_patch')->execute($createOrderRequest->__toArray());
