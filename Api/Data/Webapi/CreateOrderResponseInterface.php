@@ -9,9 +9,12 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data\Webapi;
 
+use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
+
 interface CreateOrderResponseInterface
 {
     public const ORDER_ID = 'id';
+    public const OFFER = 'offer';
 
     /**
      * Id getter.
@@ -28,4 +31,20 @@ interface CreateOrderResponseInterface
      * @return $this
      */
     public function setId(string $id): self;
+
+    /**
+     * Offer getter.
+     *
+     * @return \Hokodo\BNPL\Api\Data\PaymentOffersInterface|null
+     */
+    public function getOffer(): ?PaymentOffersInterface;
+
+    /**
+     * Offer setter.
+     *
+     * @param \Hokodo\BNPL\Api\Data\PaymentOffersInterface|null $offer
+     *
+     * @return $this
+     */
+    public function setOffer(?PaymentOffersInterface $offer): self;
 }

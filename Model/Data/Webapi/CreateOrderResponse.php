@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Data\Webapi;
 
+use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
 use Hokodo\BNPL\Api\Data\Webapi\CreateOrderResponseInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
@@ -26,6 +27,23 @@ class CreateOrderResponse extends AbstractSimpleObject implements CreateOrderRes
     public function setId(string $id): self
     {
         $this->setData(self::ORDER_ID, $id);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOffer(): ?PaymentOffersInterface
+    {
+        return $this->_get(self::OFFER);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setOffer(?PaymentOffersInterface $offer): self
+    {
+        $this->setData(self::OFFER, $offer);
         return $this;
     }
 }

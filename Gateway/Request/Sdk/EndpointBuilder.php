@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Gateway\Request\Sdk;
 
-use Hokodo\BNPL\Gateway\SubjectReaderInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
@@ -16,11 +15,6 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
  */
 class EndpointBuilder implements BuilderInterface
 {
-    /**
-     * @var SubjectReaderInterface
-     */
-    private $subjectReader;
-
     /**
      * @var string
      */
@@ -32,16 +26,13 @@ class EndpointBuilder implements BuilderInterface
     private $params;
 
     /**
-     * @param SubjectReaderInterface $subjectReader
-     * @param string                 $endpoint
-     * @param array                  $params
+     * @param string $endpoint
+     * @param array  $params
      */
     public function __construct(
-        SubjectReaderInterface $subjectReader,
-        $endpoint,
+        string $endpoint,
         array $params = []
     ) {
-        $this->subjectReader = $subjectReader;
         $this->endpoint = $endpoint;
         $this->params = $params;
     }

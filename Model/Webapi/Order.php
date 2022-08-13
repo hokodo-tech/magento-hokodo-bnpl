@@ -8,10 +8,14 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Webapi;
 
+use Hokodo\BNPL\Api\Data\Gateway\CreateOfferRequestInterface;
+use Hokodo\BNPL\Api\Data\Gateway\CreateOfferRequestInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterface as GatewayRequest;
 use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterfaceFactory as GatewayRequestFactory;
 use Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterfaceFactory;
+use Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterface;
+use Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\OrderCustomerInterface;
 use Hokodo\BNPL\Api\Data\Gateway\OrderCustomerInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\OrderItemInterface;
@@ -20,6 +24,7 @@ use Hokodo\BNPL\Api\Data\Webapi\CreateOrderRequestInterface;
 use Hokodo\BNPL\Api\Data\Webapi\CreateOrderResponseInterface;
 use Hokodo\BNPL\Api\Data\Webapi\CreateOrderResponseInterfaceFactory;
 use Hokodo\BNPL\Api\Webapi\OrderInterface;
+use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order as OrderGatewayService;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
@@ -102,6 +107,9 @@ class Order implements OrderInterface
      * @var OrderGatewayService
      */
     private OrderGatewayService $orderGatewayService;
+    private CreateOfferRequestInterfaceFactory $createOfferRequestFactory;
+    private OfferGatewayService $offerGatewayService;
+    private OfferUrlsInterfaceFactory $offerUrlsFactory;
 
     /**
      * @param CreateOrderResponseInterfaceFactory $responseInterfaceFactory
@@ -131,7 +139,10 @@ class Order implements OrderInterface
         DateTimeFactory $dateTimeFactory,
         ComponentRegistrarInterface $componentRegistrar,
         ReadFactory $readFactory,
-        OrderGatewayService $orderGatewayService
+        OrderGatewayService $orderGatewayService,
+        CreateOfferRequestInterfaceFactory $createOfferRequestFactory,
+        OfferGatewayService $offerGatewayService,
+        OfferUrlsInterfaceFactory $offerUrlsFactory
     ) {
         $this->responseInterfaceFactory = $responseInterfaceFactory;
         $this->cartRepository = $cartRepository;
@@ -146,6 +157,9 @@ class Order implements OrderInterface
         $this->componentRegistrar = $componentRegistrar;
         $this->readFactory = $readFactory;
         $this->orderGatewayService = $orderGatewayService;
+        $this->createOfferRequestFactory = $createOfferRequestFactory;
+        $this->offerGatewayService = $offerGatewayService;
+        $this->offerUrlsFactory = $offerUrlsFactory;
     }
 
     /**
@@ -156,6 +170,51 @@ class Order implements OrderInterface
      * @return CreateOrderResponseInterface
      */
     public function create(CreateOrderRequestInterface $payload): CreateOrderResponseInterface
+    {
+        $response = $this->responseInterfaceFactory->create();
+        /* @var $response CreateOrderResponseInterface */
+
+        try {
+            $quote = $this->cartRepository->get($payload->getQuoteId());
+            $createOrderRequest = $this->buildOrderRequestBase($quote);
+            $createOrderRequest->setCustomer(
+                $this->buildCustomer($quote)
+                    ->setUser($payload->getUserId())
+                    ->setOrganisation($payload->getOrganisationId())
+            );
+            $createOrderRequest->setItems($this->buildOrderItems($quote));
+            $order = $this->orderGatewayService->createOrder($createOrderRequest);
+            if ($dataModel = $order->getDataModel()) {
+                $response->setId($dataModel->getId());
+            }
+            //Set Offer
+            $urls = $this->offerUrlsFactory->create();
+            /* @var $urls OfferUrlsInterface */
+            $urls->setSuccessUrl('http://hokodo.local')
+                ->setCancelUrl('http://hokodo.local')
+                ->setFailureUrl('http://hokodo.local')
+                ->setMerchantTermsUrl('http://hokodo.local')
+                ->setNotificationUrl('http://hokodo.local');
+            $createOfferRequest = $this->createOfferRequestFactory->create();
+            /* @var $createOfferRequest CreateOfferRequestInterface */
+            $createOfferRequest
+                ->setOrder($response->getId())
+                ->setUrls($urls)
+                ->setLocale('en-gb')
+                ->setMetadata([]);
+
+            $offer = $this->offerGatewayService->createOffer($createOfferRequest);
+            if ($dataModel = $offer->getDataModel()) {
+                $response->setOffer($dataModel);
+            }
+        } catch (\Exception $e) {
+            //TODO Handle Exception
+            $response->setId('');
+        }
+        return $response;
+    }
+
+    public function patch(CreateOrderRequestInterface $payload): CreateOrderResponseInterface
     {
         $response = $this->responseInterfaceFactory->create();
         /* @var $response CreateOrderResponseInterface */
@@ -326,10 +385,10 @@ class Order implements OrderInterface
     private function isApplyTaxAdjustment(int $storeId = 0): bool
     {
         return $this->config->getValue(
-            TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        ) &&
+                TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            ) &&
             !$this->config->getValue(
                 TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
                 ScopeInterface::SCOPE_STORE,
