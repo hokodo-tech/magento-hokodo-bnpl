@@ -13,7 +13,7 @@ use Magento\Payment\Gateway\Command\ResultInterface;
 class Offer extends AbstractService
 {
     /**
-     * Create offer gateway request
+     * Create offer gateway request.
      *
      * @param CreateOfferRequestInterface $createOfferRequest
      *
