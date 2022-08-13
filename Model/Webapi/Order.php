@@ -107,8 +107,20 @@ class Order implements OrderInterface
      * @var OrderGatewayService
      */
     private OrderGatewayService $orderGatewayService;
+
+    /**
+     * @var CreateOfferRequestInterfaceFactory
+     */
     private CreateOfferRequestInterfaceFactory $createOfferRequestFactory;
+
+    /**
+     * @var OfferGatewayService
+     */
     private OfferGatewayService $offerGatewayService;
+
+    /**
+     * @var OfferUrlsInterfaceFactory
+     */
     private OfferUrlsInterfaceFactory $offerUrlsFactory;
 
     /**
@@ -125,6 +137,9 @@ class Order implements OrderInterface
      * @param ComponentRegistrarInterface         $componentRegistrar
      * @param ReadFactory                         $readFactory
      * @param OrderGatewayService                 $orderGatewayService
+     * @param CreateOfferRequestInterfaceFactory  $createOfferRequestFactory
+     * @param OfferGatewayService                 $offerGatewayService
+     * @param OfferUrlsInterfaceFactory           $offerUrlsFactory
      */
     public function __construct(
         CreateOrderResponseInterfaceFactory $responseInterfaceFactory,
@@ -214,30 +229,30 @@ class Order implements OrderInterface
         return $response;
     }
 
-    public function patch(CreateOrderRequestInterface $payload): CreateOrderResponseInterface
-    {
-        $response = $this->responseInterfaceFactory->create();
-        /* @var $response CreateOrderResponseInterface */
-
-        try {
-            $quote = $this->cartRepository->get($payload->getQuoteId());
-            $createOrderRequest = $this->buildOrderRequestBase($quote);
-            $createOrderRequest->setCustomer(
-                $this->buildCustomer($quote)
-                    ->setUser($payload->getUserId())
-                    ->setOrganisation($payload->getOrganisationId())
-            );
-            $createOrderRequest->setItems($this->buildOrderItems($quote));
-            $order = $this->orderGatewayService->createOrder($createOrderRequest);
-            if ($dataModel = $order->getDataModel()) {
-                $response->setId($dataModel->getId());
-            }
-        } catch (\Exception $e) {
-            $response->setId('');
-        }
-
-        return $response;
-    }
+//    public function patch(CreateOrderRequestInterface $payload): CreateOrderResponseInterface
+//    {
+//        $response = $this->responseInterfaceFactory->create();
+//        /* @var $response CreateOrderResponseInterface */
+//
+//        try {
+//            $quote = $this->cartRepository->get($payload->getQuoteId());
+//            $createOrderRequest = $this->buildOrderRequestBase($quote);
+//            $createOrderRequest->setCustomer(
+//                $this->buildCustomer($quote)
+//                    ->setUser($payload->getUserId())
+//                    ->setOrganisation($payload->getOrganisationId())
+//            );
+//            $createOrderRequest->setItems($this->buildOrderItems($quote));
+//            $order = $this->orderGatewayService->createOrder($createOrderRequest);
+//            if ($dataModel = $order->getDataModel()) {
+//                $response->setId($dataModel->getId());
+//            }
+//        } catch (\Exception $e) {
+//            $response->setId('');
+//        }
+//
+//        return $response;
+//    }
 
     /**
      * Build Order create request object with base info from quote.
