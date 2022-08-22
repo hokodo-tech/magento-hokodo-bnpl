@@ -57,10 +57,14 @@ class DataAssignObserver extends AbstractDataAssignObserver
      */
     private $logger;
 
+    /**
+     * @var Order
+     */
     private $orderService;
 
     /**
      * @param PaymentQuoteRepositoryInterface $paymentQuoteRepository
+     * @param Order                           $orderService
      * @param Logger                          $logger
      */
     public function __construct(
