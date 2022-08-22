@@ -11,7 +11,7 @@ namespace Hokodo\BNPL\Api\Data\Gateway;
 
 interface CreateOrganisationRequestInterface
 {
-    public const COMPANY_ID = 'comapny_id';
+    public const COMPANY_ID = 'company';
     public const UNIQUE_ID = 'unique_id';
     public const REGISTERED = 'registered';
 

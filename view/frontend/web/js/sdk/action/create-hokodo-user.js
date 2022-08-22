@@ -4,7 +4,7 @@
  */
 define([
     'mage/storage',
-    'Hokodo_BNPL/js/model/resource-url-manager',
+    'Hokodo_BNPL/js/sdk/resource-url-manager',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/error-processor',
     'Magento_Customer/js/model/customer'
@@ -17,11 +17,17 @@ define([
         ) {
     'use strict';
 
-    return function (user, messageContainer) {
-        var payload = {user: user};
+    return function (organisation_id, email, name) {
+        var payload = {
+            payload: {
+                organisation_id: organisation_id,
+                email: email,
+                name: name
+            }
+        };
 
         return storage.post(
-                resourceUrlManager.getUrlForCreateUser(),
+                resourceUrlManager.getCreateUserUrl(),
                 JSON.stringify(payload),
                 true,
                 'application/json'

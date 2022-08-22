@@ -42,7 +42,7 @@
     <div class="payment-method-content hokodo-content-wrapper">
 
         <div id="hokodoCompanySearch" data-bind="afterRender: mountSearch"></div>
-        <div id="hokodoCheckout" data-bind="afterRender: mountCheckout"></div>
+        <div id="hokodoCheckout" data-bind="afterRender: function() {console.log('bnpl-template:afterRender'); this.mountCheckout()}"></div>
 
         <p class="hokodo-footer" data-bind="i18n: 'Hokodo Services is authorised by the Financial Conduct Authority as Appointed Representative of Innovation Risk Ltd.'"></p>
     </div>

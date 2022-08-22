@@ -12,29 +12,29 @@ define([
     'use strict';
 
     var config = window.checkoutConfig.payment;
-    // rendererList.push(
-    //     {
-    //         type: 'hokodo_bnpl',
-    //         component: 'Hokodo_BNPL/js/view/payment/method-renderer/bnpl-sdk'
-    //     }
-    // );
-    if (config.hokodo_bnpl.isActive) {
-        if (!config.hokodo_bnpl.replace_place_order_hooks) {
-            rendererList.push(
-                {
-                    type: 'hokodo_bnpl',
-                    component: 'Hokodo_BNPL/js/view/payment/method-renderer/bnpl'
-                }
-            );
-        } else if (config.hokodo_bnpl.magentoVersion < 241 || config.hokodo_bnpl.replace_place_order_hooks) {
-            rendererList.push(
-                    {
-                        type: 'hokodo_bnpl',
-                        component: 'Hokodo_BNPL/js/view/payment/method-renderer/old-bnpl'
-                    }
-            );
+    rendererList.push(
+        {
+            type: 'hokodo_bnpl',
+            component: 'Hokodo_BNPL/js/view/payment/method-renderer/bnpl-sdk'
         }
-    }
+    );
+    // if (config.hokodo_bnpl.isActive) {
+    //     if (!config.hokodo_bnpl.replace_place_order_hooks) {
+    //         rendererList.push(
+    //             {
+    //                 type: 'hokodo_bnpl',
+    //                 component: 'Hokodo_BNPL/js/view/payment/method-renderer/bnpl'
+    //             }
+    //         );
+    //     } else if (config.hokodo_bnpl.magentoVersion < 241 || config.hokodo_bnpl.replace_place_order_hooks) {
+    //         rendererList.push(
+    //                 {
+    //                     type: 'hokodo_bnpl',
+    //                     component: 'Hokodo_BNPL/js/view/payment/method-renderer/old-bnpl'
+    //                 }
+    //         );
+    //     }
+    // }
 
     /** Add view logic here if needed */
     return Component.extend({});

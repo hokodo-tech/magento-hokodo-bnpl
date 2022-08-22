@@ -4,90 +4,91 @@
  */
 define([
     'jquery',
+    'ko',
     'Magento_Customer/js/customer-data',
-    'jquery/jquery-storageapi'
+    'uiComponent'
 ], function (
     $,
-    storage
+    ko,
+    storage,
 ) {
     'use strict';
 
-    var cacheKey = 'hokodo-data',
-        saveData = function (data) {
-            storage.set(cacheKey, data);
-        },
-        initData = function () {
-            return {
-                'userId': '',
-                'organisationId': '',
-                'offerId': '',
-                'companyId': ''
-            };
-        },
-        getData = function () {
-            var data = storage.get(cacheKey)();
-
-            if ($.isEmptyObject(data)) {
-                data = $.initNamespaceStorage('mage-cache-storage').localStorage.get(cacheKey);
-
-                if ($.isEmptyObject(data)) {
-                    data = initData();
-                    saveData(data);
-                }
-            }
-
-            return data;
-        };
-
     return {
-        setUser: function (user) {
-            var obj = getData();
-
-            obj.user = user;
-            saveData(obj);
+        storageSearchGet(key) {
+            const data = storage.get('hokodo-search')()[key];
+            return data !== undefined ? data : null;
         },
 
-        getUser: function () {
-            return getData().user;
+        storageCheckoutGet(key) {
+            const data = storage.get('hokodo-checkout')()[key];
+            return data !== undefined ? data : null;
         },
 
-        setOrganisation: function (organisation) {
-            var obj = getData();
-
-            obj.organisation = organisation;
-            saveData(obj);
+        storageCheckoutSet(key, data) {
+            let hokodoData = storage.get('hokodo-checkout')();
+            hokodoData[key] = data;
+            storage.set('hokodo-checkout', hokodoData);
+            return this;
         },
 
-        getOrganisation: function () {
-            return getData().organisation;
+        storageSearchSet(key, data) {
+            let hokodoData = storage.get('hokodo-search')();
+            hokodoData[key] = data;
+            storage.set('hokodo-search', hokodoData);
+            return this;
         },
 
-        setOffer: function (offer) {
-            var obj = getData();
-
-            obj.offer = offer;
-            saveData(obj);
+        getCompanyId() {
+            return this.storageSearchGet('companyId');
         },
 
-        getOffer: function () {
-            return getData().offer;
+        setCompanyId(id) {
+            this.storageSearchSet('companyId', id);
+            return this;
         },
 
-        setCompanyId: function (companyId) {
-            var obj = getData();
-
-            obj.companyId = companyId;
-            saveData(obj);
+        getOrganisationId() {
+            return this.storageCheckoutGet('organisationId');
         },
 
-        getCompanyId: function () {
-            return getData().companyId;
+        setOrganisationId(id) {
+            this.storageCheckoutSet('organisationId', id);
+            return this;
         },
 
-        clearData: function () {
-            var data = initData();
-            saveData(data);
+        getUserId() {
+            return this.storageCheckoutGet('userId');
+        },
+
+        setUserId(id) {
+            this.storageCheckoutSet('userId', id);
+            return this;
+        },
+
+        getOffer() {
+            return this.storageCheckoutGet('offer');
+        },
+
+        setOffer(offer) {
+            this.storageCheckoutSet('offer', offer);
+            return this;
+        },
+
+
+        clearData() {
+            this.setCompanyId(null);
+            this.setOrganisationId(null);
+            this.setUserId(null);
+            this.setOffer(null);
+        },
+
+        storageGetCheckoutObservable() {
+            return storage.get('hokodo-checkout');
+        },
+
+        storageGetSearchObservable() {
+            return storage.get('hokodo-search');
         }
-    };
-
+    }
 });

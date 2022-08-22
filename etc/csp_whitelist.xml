@@ -4,6 +4,7 @@
         <policy id="script-src">
             <values>
                 <value id="segment-cdn" type="host">https://cdn.segment.com</value>
+                <value id="js" type="host">https://js.hokodo.co</value>
                 <!--Development -->
                 <value id="dev" type="host">https://api-dev.hokodo.co</value>
             </values>
@@ -12,6 +13,15 @@
             <values>
                 <value id="segment-cdn" type="host">https://cdn.segment.com</value>
                 <value id="segment-io" type="host">https://api.segment.io</value>
+                <value id="js" type="host">https://js.hokodo.co</value>
+                <!--Development -->
+                <value id="dev" type="host">https://api-dev.hokodo.co</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="js" type="host">https://js.hokodo.co</value>
+                <value id="api" type="host">https://i-pay.hokodo.co</value>
                 <!--Development -->
                 <value id="dev" type="host">https://api-dev.hokodo.co</value>
             </values>

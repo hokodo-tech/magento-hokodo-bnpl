@@ -17,29 +17,19 @@ define([
 
     return {
         getCreateOrganisationUrl() {
-
+            return urlBuilder.createUrl('/hokodo-create-organisation', {});
         },
 
-    	/**
-         * Get url for service.
-         *
-         * @param {*} urls
-         * @param {*} urlParams
-         * @return {String|*}
-         */
-        getUrl: function (urls, urlParams) {
-            var url;
+        getCreateUserUrl() {
+            return urlBuilder.createUrl('/hokodo-create-user', {});
+        },
 
-            if (utils.isEmpty(urls)) {
-                return 'Provided service call does not exist.';
-            }
+        getCreateOfferUrl() {
+            return urlBuilder.createUrl('/hokodo-create-offer', {});
+        },
 
-            if (!utils.isEmpty(urls['default'])) {
-                url = urls['default'];
-            }
-
-            return urlBuilder.createUrl(url, urlParams);
+        getCreateOrderUrl() {
+            return urlBuilder.createUrl('/hokodo-create-order', {});
         },
     };
-
 });

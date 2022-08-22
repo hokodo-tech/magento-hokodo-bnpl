@@ -45,7 +45,7 @@ class EndpointBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         return [
-            'uri' => $this->endpoint,
+            'uri' => $this->buildUri($buildSubject),
         ];
     }
 
@@ -56,26 +56,13 @@ class EndpointBuilder implements BuilderInterface
      *
      * @return string
      */
-    private function buildUri(array $buildSubject)
+    private function buildUri(array $buildSubject): string
     {
         $params = [];
-        foreach ($this->params as $key => $param) {
-            $params[$key] = $this->buildParam($param, $buildSubject);
+        foreach ($this->params as $param) {
+            $params[':' . $param] = $buildSubject[$param];
         }
 
         return str_replace(array_keys($params), array_values($params), $this->endpoint);
-    }
-
-    /**
-     * A function that build param.
-     *
-     * @param string $param
-     * @param array  $buildSubject
-     *
-     * @return string
-     */
-    private function buildParam($param, array $buildSubject)
-    {
-        return $this->subjectReader->readEndpointParam($param, $buildSubject);
     }
 }

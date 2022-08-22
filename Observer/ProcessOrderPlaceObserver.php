@@ -68,6 +68,16 @@ class ProcessOrderPlaceObserver implements ObserverInterface
             $order->setDeferredPaymentId($paymentQuote->getDeferredPaymentId());
         }
 
+        if ($additionalInformation = $quote->getPayment()->getAdditionalInformation()) {
+            /**
+             * @var Order $order
+             */
+            $order = $observer->getEvent()->getOrder();
+
+            $order->setOrderApiId($additionalInformation['hokodo_order_id']);
+            $order->setDeferredPaymentId($additionalInformation['hokodo_deferred_payment_id']);
+        }
+
         return $this;
     }
 

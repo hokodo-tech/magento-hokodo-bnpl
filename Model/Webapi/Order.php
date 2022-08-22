@@ -221,6 +221,8 @@ class Order implements OrderInterface
             $offer = $this->offerGatewayService->createOffer($createOfferRequest);
             if ($dataModel = $offer->getDataModel()) {
                 $response->setOffer($dataModel);
+                $quote->setData('payment_offer_id', $dataModel->getId());
+                $this->cartRepository->save($quote);
             }
         } catch (\Exception $e) {
             //TODO Handle Exception

@@ -33,6 +33,7 @@ define([
             });
             this.companySearch.on("companySelection", (company) => {
                 if (company !== null) {
+                    hokodoData.clearData();
                     hokodoData.setCompanyId(company.id);
                 }
             });

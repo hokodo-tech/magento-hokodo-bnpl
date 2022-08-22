@@ -28,7 +28,7 @@
                                     <item name="children" xsi:type="array">
                                         <item name="shipping-methods-step" xsi:type="array">
                                             <item name="children" xsi:type="array">
-                                                <item name="HokodoDataCheckout" xsi:type="array">
+                                                <item name="hokodo-checkout" xsi:type="array">
                                                     <item name="component" xsi:type="string">Hokodo_BNPL/js/sdk/hokodo-data-checkout</item>
                                                 </item>
                                                 <!--                                                <item name="shippingAddress" xsi:type="array">-->

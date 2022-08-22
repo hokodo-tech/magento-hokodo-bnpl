@@ -4,7 +4,7 @@
  */
 define([
     'mage/storage',
-    'Hokodo_BNPL/js/model/resource-url-manager',
+    'Hokodo_BNPL/js/sdk/resource-url-manager',
     'Hokodo_BNPL/js/hokodo-data',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/error-processor',
@@ -19,30 +19,21 @@ define([
         ) {
     'use strict';
 
-    return function (user, organisation, messageContainer) {
+    return function (id) {
 
         var payload = {
-            user: user,
-            organisation: organisation
+            payload: {
+                company_id: id,
+            }
         };
-
-        delete payload.organisation.isVisited;
-        delete payload.organisation.level;
-/*
-   var storage = JSON.parse(window.localStorage["mage-cache-storage"]);
-           var user = storage["checkout-data"]["shippingAddressFromData"];
-            payload.user._latestValue = user;
-            payload.user._latestValue.email = storage["checkout-data"]["inputFieldEmailValue"];
-            payload.user._latestValue.id = false;
-            console.log(payload.user);*/
         return storage.post(
-                resourceUrlManager.getUrlForSetOrganisation(),
+                resourceUrlManager.getCreateOrganisationUrl(),
                 JSON.stringify(payload),
                 true,
                 'application/json'
                 ).fail(
                 function (response) {
-                    response = hokodoData.rebuildErrorMessage(response, 1);
+                    response = hokodoData().rebuildErrorMessage(response, 1);
                     errorProcessor.process(response, messageContainer);
                 }
         );
