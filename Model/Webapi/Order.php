@@ -23,9 +23,11 @@ use Hokodo\BNPL\Api\Data\Gateway\OrderItemInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Webapi\CreateOrderRequestInterface;
 use Hokodo\BNPL\Api\Data\Webapi\CreateOrderResponseInterface;
 use Hokodo\BNPL\Api\Data\Webapi\CreateOrderResponseInterfaceFactory;
+use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\OrderInterface;
 use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order as OrderGatewayService;
+use Magento\Checkout\Model\Session\Proxy;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Component\ComponentRegistrar;
@@ -124,6 +126,16 @@ class Order implements OrderInterface
     private OfferUrlsInterfaceFactory $offerUrlsFactory;
 
     /**
+     * @var Proxy
+     */
+    private Proxy $checkoutSession;
+
+    /**
+     * @var HokodoQuoteRepositoryInterface
+     */
+    private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
+
+    /**
      * @param CreateOrderResponseInterfaceFactory $responseInterfaceFactory
      * @param CartRepositoryInterface             $cartRepository
      * @param GatewayRequestFactory               $gatewayRequestFactory
@@ -140,6 +152,8 @@ class Order implements OrderInterface
      * @param CreateOfferRequestInterfaceFactory  $createOfferRequestFactory
      * @param OfferGatewayService                 $offerGatewayService
      * @param OfferUrlsInterfaceFactory           $offerUrlsFactory
+     * @param Proxy                               $checkoutSession
+     * @param HokodoQuoteRepositoryInterface      $hokodoQuoteRepository
      */
     public function __construct(
         CreateOrderResponseInterfaceFactory $responseInterfaceFactory,
@@ -157,7 +171,9 @@ class Order implements OrderInterface
         OrderGatewayService $orderGatewayService,
         CreateOfferRequestInterfaceFactory $createOfferRequestFactory,
         OfferGatewayService $offerGatewayService,
-        OfferUrlsInterfaceFactory $offerUrlsFactory
+        OfferUrlsInterfaceFactory $offerUrlsFactory,
+        Proxy $checkoutSession,
+        HokodoQuoteRepositoryInterface $hokodoQuoteRepository
     ) {
         $this->responseInterfaceFactory = $responseInterfaceFactory;
         $this->cartRepository = $cartRepository;
@@ -175,6 +191,8 @@ class Order implements OrderInterface
         $this->createOfferRequestFactory = $createOfferRequestFactory;
         $this->offerGatewayService = $offerGatewayService;
         $this->offerUrlsFactory = $offerUrlsFactory;
+        $this->checkoutSession = $checkoutSession;
+        $this->hokodoQuoteRepository = $hokodoQuoteRepository;
     }
 
     /**
@@ -199,8 +217,10 @@ class Order implements OrderInterface
             );
             $createOrderRequest->setItems($this->buildOrderItems($quote));
             $order = $this->orderGatewayService->createOrder($createOrderRequest);
+            $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
             if ($dataModel = $order->getDataModel()) {
                 $response->setId($dataModel->getId());
+                $hokodoQuote->setOrderId($dataModel->getId());
             }
             //Set Offer
             $urls = $this->offerUrlsFactory->create();
@@ -223,7 +243,9 @@ class Order implements OrderInterface
                 $response->setOffer($dataModel);
                 $quote->setData('payment_offer_id', $dataModel->getId());
                 $this->cartRepository->save($quote);
+                $hokodoQuote->setOfferId($dataModel->getId());
             }
+            $this->hokodoQuoteRepository->save($hokodoQuote);
         } catch (\Exception $e) {
             //TODO Handle Exception
             $response->setId('');

@@ -119,24 +119,24 @@
 
 
     <!-- Create organisation -->
-    <route url="/V1/hokodo-create-organisation" method="POST">
+    <route url="/V1/carts/mine/hokodo-create-organisation" method="POST">
         <service class="Hokodo\BNPL\Api\Webapi\OrganisationInterface" method="create"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="self" />
         </resources>
     </route>
 
-    <route url="/V1/hokodo-create-user" method="POST">
+    <route url="/V1/carts/mine/hokodo-create-user" method="POST">
         <service class="Hokodo\BNPL\Api\Webapi\UserInterface" method="create"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="self" />
         </resources>
     </route>
 
-    <route url="/V1/hokodo-create-order" method="POST">
+    <route url="/V1/carts/mine/hokodo-create-order" method="POST">
         <service class="Hokodo\BNPL\Api\Webapi\OrderInterface" method="create"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="self" />
         </resources>
     </route>
 

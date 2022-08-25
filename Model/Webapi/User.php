@@ -15,8 +15,10 @@ use Hokodo\BNPL\Api\Data\Gateway\UserOrganisationInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Webapi\CreateUserRequestInterface;
 use Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterface;
 use Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterfaceFactory;
+use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\UserInterface;
 use Hokodo\BNPL\Gateway\Service\User as UserService;
+use Magento\Checkout\Model\Session\Proxy;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -53,6 +55,16 @@ class User implements UserInterface
     private UserOrganisationInterfaceFactory $userOrganisationInterfaceFactory;
 
     /**
+     * @var Proxy
+     */
+    private Proxy $checkoutSession;
+
+    /**
+     * @var HokodoQuoteRepositoryInterface
+     */
+    private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
+
+    /**
      * User constructor.
      *
      * @param UserService                        $userService
@@ -61,6 +73,8 @@ class User implements UserInterface
      * @param CreateUserRequestInterfaceFactory  $createUserGatewayRequestFactory
      * @param CreateUserResponseInterfaceFactory $createUserResponseFactory
      * @param UserOrganisationInterfaceFactory   $userOrganisationInterfaceFactory
+     * @param Proxy                              $checkoutSession
+     * @param HokodoQuoteRepositoryInterface     $hokodoQuoteRepository
      */
     public function __construct(
         UserService $userService,
@@ -68,7 +82,9 @@ class User implements UserInterface
         StoreManagerInterface $storeManager,
         CreateUserRequestInterfaceFactory $createUserGatewayRequestFactory,
         CreateUserResponseInterfaceFactory $createUserResponseFactory,
-        UserOrganisationInterfaceFactory $userOrganisationInterfaceFactory
+        UserOrganisationInterfaceFactory $userOrganisationInterfaceFactory,
+        Proxy $checkoutSession,
+        HokodoQuoteRepositoryInterface $hokodoQuoteRepository
     ) {
         $this->userService = $userService;
         $this->createUserGatewayRequestFactory = $createUserGatewayRequestFactory;
@@ -76,6 +92,8 @@ class User implements UserInterface
         $this->createUserResponseFactory = $createUserResponseFactory;
         $this->customerRepository = $customerRepository;
         $this->userOrganisationInterfaceFactory = $userOrganisationInterfaceFactory;
+        $this->checkoutSession = $checkoutSession;
+        $this->hokodoQuoteRepository = $hokodoQuoteRepository;
     }
 
     /**
@@ -108,6 +126,12 @@ class User implements UserInterface
             $gatewayRequest->setOrganisations([$organisation]);
             $user = $this->userService->createUser($gatewayRequest);
             if ($dataModel = $user->getDataModel()) {
+                $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
+                if (!$hokodoQuote->getQuoteId()) {
+                    $hokodoQuote->setQuoteId((int) $this->checkoutSession->getQuoteId());
+                }
+                $hokodoQuote->setUserId($dataModel->getId());
+                $this->hokodoQuoteRepository->save($hokodoQuote);
                 $result->setId($dataModel->getId());
             }
         } catch (\Exception $e) {

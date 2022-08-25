@@ -17,19 +17,19 @@ define([
 
     return {
         getCreateOrganisationUrl() {
-            return urlBuilder.createUrl('/hokodo-create-organisation', {});
+            return urlBuilder.createUrl('/carts/mine/hokodo-create-organisation', {});
         },
 
         getCreateUserUrl() {
-            return urlBuilder.createUrl('/hokodo-create-user', {});
+            return urlBuilder.createUrl('/carts/mine/hokodo-create-user', {});
         },
 
         getCreateOfferUrl() {
-            return urlBuilder.createUrl('/hokodo-create-offer', {});
+            return urlBuilder.createUrl('/carts/mine/hokodo-create-offer', {});
         },
 
         getCreateOrderUrl() {
-            return urlBuilder.createUrl('/hokodo-create-order', {});
+            return urlBuilder.createUrl('/carts/mine/hokodo-create-order', {});
         },
     };
 });

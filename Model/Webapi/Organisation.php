@@ -12,8 +12,10 @@ use Hokodo\BNPL\Api\Data\Gateway\CreateOrganisationRequestInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationRequestInterface;
 use Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationResponseInterface;
 use Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationResponseInterfaceFactory;
+use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\OrganisationInterface;
 use Hokodo\BNPL\Gateway\Service\Organisation as OrganisationService;
+use Magento\Checkout\Model\Session\Proxy;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Organisation implements OrganisationInterface
@@ -39,23 +41,39 @@ class Organisation implements OrganisationInterface
     private CreateOrganisationResponseInterfaceFactory $createOrganisationResponseFactory;
 
     /**
+     * @var Proxy
+     */
+    private Proxy $checkoutSession;
+
+    /**
+     * @var HokodoQuoteRepositoryInterface
+     */
+    private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
+
+    /**
      * Organisation constructor.
      *
      * @param OrganisationService                        $organisationService
      * @param CreateOrganisationRequestInterfaceFactory  $createOrganisationGatewayRequestFactory
      * @param StoreManagerInterface                      $storeManager
      * @param CreateOrganisationResponseInterfaceFactory $createOrganisationResponseFactory
+     * @param Proxy                                      $checkoutSession
+     * @param HokodoQuoteRepositoryInterface             $hokodoQuoteRepository
      */
     public function __construct(
         OrganisationService $organisationService,
         CreateOrganisationRequestInterfaceFactory $createOrganisationGatewayRequestFactory,
         StoreManagerInterface $storeManager,
-        CreateOrganisationResponseInterfaceFactory $createOrganisationResponseFactory
+        CreateOrganisationResponseInterfaceFactory $createOrganisationResponseFactory,
+        Proxy $checkoutSession,
+        HokodoQuoteRepositoryInterface $hokodoQuoteRepository
     ) {
         $this->organisationService = $organisationService;
         $this->createOrganisationGatewayRequestFactory = $createOrganisationGatewayRequestFactory;
         $this->storeManager = $storeManager;
         $this->createOrganisationResponseFactory = $createOrganisationResponseFactory;
+        $this->checkoutSession = $checkoutSession;
+        $this->hokodoQuoteRepository = $hokodoQuoteRepository;
     }
 
     /**
@@ -78,6 +96,12 @@ class Organisation implements OrganisationInterface
                 ->setRegistered(date('Y-m-d\TH:i:s\Z'));
             $organisation = $this->organisationService->createOrganisation($gatewayRequest);
             if ($dataModel = $organisation->getDataModel()) {
+                $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
+                if (!$hokodoQuote->getQuoteId()) {
+                    $hokodoQuote->setQuoteId((int) $this->checkoutSession->getQuoteId());
+                }
+                $hokodoQuote->setOrganisationId($dataModel->getId());
+                $this->hokodoQuoteRepository->save($hokodoQuote);
                 $result->setId($dataModel->getId());
             }
         } catch (\Exception $e) {
