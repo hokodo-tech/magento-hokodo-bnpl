@@ -68,5 +68,22 @@
             "order_api_id": true,
             "hokodo_id": true
         }
+    },
+    "hokodo_quote": {
+        "column": {
+            "id": true,
+            "quote_id": true,
+            "user_id": true,
+            "organisation_id": true,
+            "order_id": true,
+            "offer_id": true
+        },
+        "index": {
+            "HOKODO_QUOTE_QUOTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "HOKODO_QUOTE_QUOTE_ID_QUOTE_ENTITY_ID": true
+        }
     }
 }

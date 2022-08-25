@@ -1149,6 +1149,8 @@
 
     <!-- SDK UPGRADE -->
 
+    <preference for="Hokodo\BNPL\Api\Data\HokodoQuoteInterface" type="Hokodo\BNPL\Model\HokodoQuote" />
+    <preference for="Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface" type="Hokodo\BNPL\Model\HokodoQuoteRepository" />
     <type name="Hokodo\BNPL\Gateway\Service\AbstractService">
         <arguments>
             <argument name="commandPool" xsi:type="object">Hokodo\BNPL\Gateway\Command\CommandPool</argument>
