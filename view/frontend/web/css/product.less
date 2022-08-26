@@ -33,3 +33,20 @@ div {
         }
     }
 }
+
+.modal-hokodo-lightbox {
+    .modal-inner-wrap {
+        max-width: 800px;
+        max-height: calc(~'100% - 10rem');
+        @media only screen and (max-width: 480px) {
+            width: 100%;
+            max-height: 100%;
+            margin: 0;
+        }
+        .modal-content {
+            padding: 0;
+            max-height: 100%;
+            overflow: auto;
+        }
+    }
+}
