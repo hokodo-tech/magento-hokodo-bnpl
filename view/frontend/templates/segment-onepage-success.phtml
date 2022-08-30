@@ -2,6 +2,7 @@
 /**
  * @var $block \Magento\Framework\View\Element\Template
  * @var $viewModel \Hokodo\BNPL\ViewModel\Checkout\OnepageSuccess
+ * @var \Magento\Framework\Escaper $escaper
  */
 
 $viewModel = $block->getData('viewModel');
@@ -10,7 +11,10 @@ $viewModel = $block->getData('viewModel');
     require(['Hokodo_BNPL/js/segment/core'], function(segment) {
         segment.trackOrderPlaced(
             '<?= $viewModel->getSelectedPaymentMethodCode() ?>',
-            '<?= $viewModel->getOrder()->getIncrementId() ?>'
+            '<?= $viewModel->getOrder()->getIncrementId() ?>',
+            '<?= (float) $viewModel->getOrder()->getGrandTotal() - $viewModel->getOrder()->getShippingAmount() ?>',
+            '<?= $viewModel->getOrder()->getQuoteCurrencyCode() ?>',
+            '<?= $escaper->escapeHtml(__('v')) . $viewModel->getModuleVersion('Hokodo_BNPL') ?>'
         );
     })
 </script>

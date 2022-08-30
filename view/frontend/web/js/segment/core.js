@@ -85,12 +85,17 @@ define([
             )
         },
 
-        trackOrderPlaced(method, id) {
+        trackOrderPlaced(method, id, amount, currencyCode, version) {
             analytics.track(
                 'Order Placed',
                 {
                     PaymentMethod: method,
-                    OrderId: id
+                    OrderId: id,
+                    Initiation: {
+                        totalAmount: amount,
+                        currency: currencyCode,
+                        moduleVersion: version
+                    }
                 }
             )
         }
