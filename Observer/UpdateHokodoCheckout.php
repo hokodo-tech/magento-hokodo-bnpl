@@ -42,10 +42,12 @@ class UpdateHokodoCheckout implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkout->getQuoteId());
-        $hokodoQuote
-            ->setOfferId('')
-            ->setPatchRequired(HokodoQuoteInterface::PATCH_ITEMS);
-        $this->hokodoQuoteRepository->save($hokodoQuote);
+        if ($quoteId = $this->checkout->getQuoteId()) {
+            $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($quoteId);
+            $hokodoQuote
+                ->setOfferId('')
+                ->setPatchRequired(HokodoQuoteInterface::PATCH_ITEMS);
+            $this->hokodoQuoteRepository->save($hokodoQuote);
+        }
     }
 }
