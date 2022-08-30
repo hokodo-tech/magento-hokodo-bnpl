@@ -189,7 +189,6 @@ define([
                         ).done((response) => {
                             if (response.offer !== undefined) {
                                 hokodoData.setOffer(response.offer);
-                                this.offer(response.offer);
                             }
                         })
                     } else {

@@ -136,10 +136,6 @@ define([
                     self.placeOrder()
                 });
 
-                this.userCheckout.on('destroy', () => {
-                    console.log('destroy');
-                })
-
                 this.userCheckout.mount("#hokodoCheckout");
             } else {
                 console.log('bnpl:_mountCheckout:else')
