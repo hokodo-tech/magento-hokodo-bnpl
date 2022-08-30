@@ -9,24 +9,28 @@ namespace Hokodo\BNPL\Observer;
 
 use Hokodo\BNPL\Api\Data\HokodoQuoteInterface;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
-use Magento\Checkout\Model\Session\Proxy;
+use Magento\Checkout\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 class UpdateHokodoCheckout implements ObserverInterface
 {
     /**
-     * @var Proxy
+     * @var Session
      */
-    private Proxy $checkout;
+    private Session $checkout;
 
     /**
      * @var HokodoQuoteRepositoryInterface
      */
     private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
 
+    /**
+     * @param Session                        $checkout
+     * @param HokodoQuoteRepositoryInterface $hokodoQuoteRepository
+     */
     public function __construct(
-        Proxy $checkout,
+        Session $checkout,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository
     ) {
         $this->checkout = $checkout;

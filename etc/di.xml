@@ -1159,6 +1159,26 @@
     <type name="Magento\Checkout\Model\ShippingInformationManagement">
         <plugin name="after_shipping_address_saved" type="Hokodo\BNPL\Plugin\Model\Checkout\ShippingInformation" sortOrder="10"/>
     </type>
+    <type name="Hokodo\BNPL\Plugin\Model\Checkout\ShippingInformation">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Hokodo\BNPL\Model\Webapi\User">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Hokodo\BNPL\Model\Webapi\Organisation">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Hokodo\BNPL\Model\Webapi\Offer">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
 
     <!-- js SDK API backend-frontend communication config -->
     <preference for="Hokodo\BNPL\Api\Webapi\OrganisationInterface" type="Hokodo\BNPL\Model\Webapi\Organisation" />

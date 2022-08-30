@@ -10,7 +10,7 @@ namespace Hokodo\BNPL\CustomerData;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Gateway\Service\Order;
 use Hokodo\BNPL\Model\RequestBuilder\OrderBuilder;
-use Magento\Checkout\Model\Session\Proxy;
+use Magento\Checkout\Model\Session;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 
 class HokodoCheckout implements SectionSourceInterface
@@ -20,19 +20,33 @@ class HokodoCheckout implements SectionSourceInterface
     public const OFFER = 'offer';
 
     /**
-     * @var Proxy
+     * @var Session
      */
-    private Proxy $checkoutSession;
+    private Session $checkoutSession;
 
     /**
      * @var HokodoQuoteRepositoryInterface
      */
     private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
+
+    /**
+     * @var OrderBuilder
+     */
     private OrderBuilder $orderBuilder;
+
+    /**
+     * @var Order
+     */
     private Order $order;
 
+    /**
+     * @param Session                        $checkoutSession
+     * @param HokodoQuoteRepositoryInterface $hokodoQuoteRepository
+     * @param OrderBuilder                   $orderBuilder
+     * @param Order                          $order
+     */
     public function __construct(
-        Proxy $checkoutSession,
+        Session $checkoutSession,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
         OrderBuilder $orderBuilder,
         Order $order

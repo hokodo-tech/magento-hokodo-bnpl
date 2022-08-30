@@ -18,7 +18,7 @@ use Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterfaceFactory;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\UserInterface;
 use Hokodo\BNPL\Gateway\Service\User as UserService;
-use Magento\Checkout\Model\Session\Proxy;
+use Magento\Checkout\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -55,9 +55,9 @@ class User implements UserInterface
     private UserOrganisationInterfaceFactory $userOrganisationInterfaceFactory;
 
     /**
-     * @var Proxy
+     * @var Session
      */
-    private Proxy $checkoutSession;
+    private Session $checkoutSession;
 
     /**
      * @var HokodoQuoteRepositoryInterface
@@ -73,8 +73,8 @@ class User implements UserInterface
      * @param CreateUserRequestInterfaceFactory  $createUserGatewayRequestFactory
      * @param CreateUserResponseInterfaceFactory $createUserResponseFactory
      * @param UserOrganisationInterfaceFactory   $userOrganisationInterfaceFactory
-     * @param Proxy                              $checkoutSession
      * @param HokodoQuoteRepositoryInterface     $hokodoQuoteRepository
+     * @param Session                            $checkoutSession
      */
     public function __construct(
         UserService $userService,
@@ -83,8 +83,8 @@ class User implements UserInterface
         CreateUserRequestInterfaceFactory $createUserGatewayRequestFactory,
         CreateUserResponseInterfaceFactory $createUserResponseFactory,
         UserOrganisationInterfaceFactory $userOrganisationInterfaceFactory,
-        Proxy $checkoutSession,
-        HokodoQuoteRepositoryInterface $hokodoQuoteRepository
+        HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
+        Session $checkoutSession
     ) {
         $this->userService = $userService;
         $this->createUserGatewayRequestFactory = $createUserGatewayRequestFactory;

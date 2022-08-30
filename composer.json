@@ -50,8 +50,8 @@
         }
     },
     "scripts": {
-        "cs-check": "vendor/bin/phpcs --standard=Magento2 --extensions=php --ignore=vendor/*,.git/*,dev .",
-        "cs-fix": "vendor/bin/phpcbf --standard=Magento2 --ignore=vendor/*,.git/*,dev . ; vendor/bin/php-cs-fixer fix .",
+        "cs-check": "vendor/bin/phpcs --standard=Magento2 --ignore=vendor,Test,tests --extensions=php .",
+        "cs-fix": "vendor/bin/phpcbf --standard=Magento2 --ignore=vendor,Test,tests . ; vendor/bin/php-cs-fixer fix .",
         "lint": [
             "@cs-check",
             "vendor/bin/php-cs-fixer fix --dry-run --diff ."

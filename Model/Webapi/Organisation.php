@@ -15,7 +15,7 @@ use Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationResponseInterfaceFactory;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\OrganisationInterface;
 use Hokodo\BNPL\Gateway\Service\Organisation as OrganisationService;
-use Magento\Checkout\Model\Session\Proxy;
+use Magento\Checkout\Model\Session;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Organisation implements OrganisationInterface
@@ -41,9 +41,9 @@ class Organisation implements OrganisationInterface
     private CreateOrganisationResponseInterfaceFactory $createOrganisationResponseFactory;
 
     /**
-     * @var Proxy
+     * @var Session
      */
-    private Proxy $checkoutSession;
+    private Session $checkoutSession;
 
     /**
      * @var HokodoQuoteRepositoryInterface
@@ -57,7 +57,7 @@ class Organisation implements OrganisationInterface
      * @param CreateOrganisationRequestInterfaceFactory  $createOrganisationGatewayRequestFactory
      * @param StoreManagerInterface                      $storeManager
      * @param CreateOrganisationResponseInterfaceFactory $createOrganisationResponseFactory
-     * @param Proxy                                      $checkoutSession
+     * @param Session                                    $checkoutSession
      * @param HokodoQuoteRepositoryInterface             $hokodoQuoteRepository
      */
     public function __construct(
@@ -65,7 +65,7 @@ class Organisation implements OrganisationInterface
         CreateOrganisationRequestInterfaceFactory $createOrganisationGatewayRequestFactory,
         StoreManagerInterface $storeManager,
         CreateOrganisationResponseInterfaceFactory $createOrganisationResponseFactory,
-        Proxy $checkoutSession,
+        Session $checkoutSession,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository
     ) {
         $this->organisationService = $organisationService;

@@ -21,7 +21,7 @@ use Hokodo\BNPL\Api\Webapi\OfferInterface;
 use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order as OrderGatewayService;
 use Hokodo\BNPL\Model\RequestBuilder\OrderBuilder;
-use Magento\Checkout\Model\Session\Proxy;
+use Magento\Checkout\Model\Session;
 use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -59,9 +59,9 @@ class Offer implements OfferInterface
     private OfferUrlsInterfaceFactory $offerUrlsFactory;
 
     /**
-     * @var Proxy
+     * @var Session
      */
-    private Proxy $checkoutSession;
+    private Session $checkoutSession;
 
     /**
      * @var HokodoQuoteRepositoryInterface
@@ -80,7 +80,7 @@ class Offer implements OfferInterface
      * @param CreateOfferRequestInterfaceFactory $createOfferRequestFactory
      * @param OfferGatewayService                $offerGatewayService
      * @param OfferUrlsInterfaceFactory          $offerUrlsFactory
-     * @param Proxy                              $checkoutSession
+     * @param Session                            $checkoutSession
      * @param HokodoQuoteRepositoryInterface     $hokodoQuoteRepository
      * @param OrderBuilder                       $orderBuilder
      */
@@ -91,7 +91,7 @@ class Offer implements OfferInterface
         CreateOfferRequestInterfaceFactory $createOfferRequestFactory,
         OfferGatewayService $offerGatewayService,
         OfferUrlsInterfaceFactory $offerUrlsFactory,
-        Proxy $checkoutSession,
+        Session $checkoutSession,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
         OrderBuilder $orderBuilder
     ) {
@@ -129,6 +129,8 @@ class Offer implements OfferInterface
                         $patchFailed = false;
                     }
                 } catch (\Exception $e) {
+                    //TODO error log
+                    $patchFailed = true;
                 }
             }
             if ($patchFailed && $orderResponse = $this->createOrder($quote, $payload)) {
