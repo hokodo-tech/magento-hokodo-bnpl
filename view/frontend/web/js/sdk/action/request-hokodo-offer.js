@@ -31,7 +31,7 @@ define([
         };
 
         return storage.post(
-            resourceUrlManager.getCreateOrderUrl(),
+            resourceUrlManager.getRequestOfferUrl(),
             JSON.stringify(payload),
             true,
             'application/json'

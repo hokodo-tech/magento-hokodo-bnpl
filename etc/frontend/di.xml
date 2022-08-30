@@ -38,6 +38,15 @@
         <plugin name="hokodoBnplLayoutProcessor" type="Hokodo\BNPL\Plugin\Block\Checkout\LayoutProcessor"/>
     </type>
 
+    <!-- Sections invalidate -->
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="hokodo-checkout" xsi:type="string">Hokodo\BNPL\CustomerData\HokodoCheckout</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Checkout\CustomerData\Cart">
         <plugin name="hokodoAddDataToCustomerCart" type="Hokodo\BNPL\Plugin\CustomerData\Cart"/>
     </type>

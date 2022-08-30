@@ -3,31 +3,18 @@
  * Copyright © 2018-2021 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
-
 declare(strict_types=1);
 
-namespace Hokodo\BNPL\Model\Webapi;
+namespace Hokodo\BNPL\Model\RequestBuilder;
 
-use Hokodo\BNPL\Api\Data\Gateway\CreateOfferRequestInterface;
-use Hokodo\BNPL\Api\Data\Gateway\CreateOfferRequestInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterface as GatewayRequest;
 use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterfaceFactory as GatewayRequestFactory;
 use Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterfaceFactory;
-use Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterface;
-use Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\OrderCustomerInterface;
 use Hokodo\BNPL\Api\Data\Gateway\OrderCustomerInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\OrderItemInterface;
 use Hokodo\BNPL\Api\Data\Gateway\OrderItemInterfaceFactory;
-use Hokodo\BNPL\Api\Data\Webapi\CreateOrderRequestInterface;
-use Hokodo\BNPL\Api\Data\Webapi\CreateOrderResponseInterface;
-use Hokodo\BNPL\Api\Data\Webapi\CreateOrderResponseInterfaceFactory;
-use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
-use Hokodo\BNPL\Api\Webapi\OrderInterface;
-use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
-use Hokodo\BNPL\Gateway\Service\Order as OrderGatewayService;
-use Magento\Checkout\Model\Session\Proxy;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Component\ComponentRegistrar;
@@ -35,7 +22,6 @@ use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Item;
@@ -43,18 +29,8 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Model\Config as TaxConfig;
 
-class Order implements OrderInterface
+class OrderBuilder
 {
-    /**
-     * @var CreateOrderResponseInterfaceFactory
-     */
-    private CreateOrderResponseInterfaceFactory $responseInterfaceFactory;
-
-    /**
-     * @var CartRepositoryInterface
-     */
-    private CartRepositoryInterface $cartRepository;
-
     /**
      * @var GatewayRequestFactory
      */
@@ -106,58 +82,18 @@ class Order implements OrderInterface
     private ReadFactory $readFactory;
 
     /**
-     * @var OrderGatewayService
-     */
-    private OrderGatewayService $orderGatewayService;
-
-    /**
-     * @var CreateOfferRequestInterfaceFactory
-     */
-    private CreateOfferRequestInterfaceFactory $createOfferRequestFactory;
-
-    /**
-     * @var OfferGatewayService
-     */
-    private OfferGatewayService $offerGatewayService;
-
-    /**
-     * @var OfferUrlsInterfaceFactory
-     */
-    private OfferUrlsInterfaceFactory $offerUrlsFactory;
-
-    /**
-     * @var Proxy
-     */
-    private Proxy $checkoutSession;
-
-    /**
-     * @var HokodoQuoteRepositoryInterface
-     */
-    private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
-
-    /**
-     * @param CreateOrderResponseInterfaceFactory $responseInterfaceFactory
-     * @param CartRepositoryInterface             $cartRepository
-     * @param GatewayRequestFactory               $gatewayRequestFactory
-     * @param OrderCustomerInterfaceFactory       $orderCustomerFactory
-     * @param CustomerAddressInterfaceFactory     $customerAddressFactory
-     * @param OrderItemInterfaceFactory           $orderItemFactory
-     * @param ScopeConfigInterface                $config
-     * @param ProductMetadataInterface            $productMetadata
-     * @param StoreManagerInterface               $storeManager
-     * @param DateTimeFactory                     $dateTimeFactory
-     * @param ComponentRegistrarInterface         $componentRegistrar
-     * @param ReadFactory                         $readFactory
-     * @param OrderGatewayService                 $orderGatewayService
-     * @param CreateOfferRequestInterfaceFactory  $createOfferRequestFactory
-     * @param OfferGatewayService                 $offerGatewayService
-     * @param OfferUrlsInterfaceFactory           $offerUrlsFactory
-     * @param Proxy                               $checkoutSession
-     * @param HokodoQuoteRepositoryInterface      $hokodoQuoteRepository
+     * @param GatewayRequestFactory           $gatewayRequestFactory
+     * @param OrderCustomerInterfaceFactory   $orderCustomerFactory
+     * @param CustomerAddressInterfaceFactory $customerAddressFactory
+     * @param OrderItemInterfaceFactory       $orderItemFactory
+     * @param ScopeConfigInterface            $config
+     * @param ProductMetadataInterface        $productMetadata
+     * @param StoreManagerInterface           $storeManager
+     * @param DateTimeFactory                 $dateTimeFactory
+     * @param ComponentRegistrarInterface     $componentRegistrar
+     * @param ReadFactory                     $readFactory
      */
     public function __construct(
-        CreateOrderResponseInterfaceFactory $responseInterfaceFactory,
-        CartRepositoryInterface $cartRepository,
         GatewayRequestFactory $gatewayRequestFactory,
         OrderCustomerInterfaceFactory $orderCustomerFactory,
         CustomerAddressInterfaceFactory $customerAddressFactory,
@@ -167,16 +103,8 @@ class Order implements OrderInterface
         StoreManagerInterface $storeManager,
         DateTimeFactory $dateTimeFactory,
         ComponentRegistrarInterface $componentRegistrar,
-        ReadFactory $readFactory,
-        OrderGatewayService $orderGatewayService,
-        CreateOfferRequestInterfaceFactory $createOfferRequestFactory,
-        OfferGatewayService $offerGatewayService,
-        OfferUrlsInterfaceFactory $offerUrlsFactory,
-        Proxy $checkoutSession,
-        HokodoQuoteRepositoryInterface $hokodoQuoteRepository
+        ReadFactory $readFactory
     ) {
-        $this->responseInterfaceFactory = $responseInterfaceFactory;
-        $this->cartRepository = $cartRepository;
         $this->gatewayRequestFactory = $gatewayRequestFactory;
         $this->orderCustomerFactory = $orderCustomerFactory;
         $this->customerAddressFactory = $customerAddressFactory;
@@ -187,96 +115,7 @@ class Order implements OrderInterface
         $this->dateTimeFactory = $dateTimeFactory;
         $this->componentRegistrar = $componentRegistrar;
         $this->readFactory = $readFactory;
-        $this->orderGatewayService = $orderGatewayService;
-        $this->createOfferRequestFactory = $createOfferRequestFactory;
-        $this->offerGatewayService = $offerGatewayService;
-        $this->offerUrlsFactory = $offerUrlsFactory;
-        $this->checkoutSession = $checkoutSession;
-        $this->hokodoQuoteRepository = $hokodoQuoteRepository;
     }
-
-    /**
-     * Create order request webapi handler.
-     *
-     * @param CreateOrderRequestInterface $payload
-     *
-     * @return CreateOrderResponseInterface
-     */
-    public function create(CreateOrderRequestInterface $payload): CreateOrderResponseInterface
-    {
-        $response = $this->responseInterfaceFactory->create();
-        /* @var $response CreateOrderResponseInterface */
-
-        try {
-            $quote = $this->cartRepository->get($payload->getQuoteId());
-            $createOrderRequest = $this->buildOrderRequestBase($quote);
-            $createOrderRequest->setCustomer(
-                $this->buildCustomer($quote)
-                    ->setUser($payload->getUserId())
-                    ->setOrganisation($payload->getOrganisationId())
-            );
-            $createOrderRequest->setItems($this->buildOrderItems($quote));
-            $order = $this->orderGatewayService->createOrder($createOrderRequest);
-            $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
-            if ($dataModel = $order->getDataModel()) {
-                $response->setId($dataModel->getId());
-                $hokodoQuote->setOrderId($dataModel->getId());
-            }
-            //Set Offer
-            $urls = $this->offerUrlsFactory->create();
-            /* @var $urls OfferUrlsInterface */
-            $urls->setSuccessUrl('http://hokodo.local')
-                ->setCancelUrl('http://hokodo.local')
-                ->setFailureUrl('http://hokodo.local')
-                ->setMerchantTermsUrl('http://hokodo.local')
-                ->setNotificationUrl('http://hokodo.local');
-            $createOfferRequest = $this->createOfferRequestFactory->create();
-            /* @var $createOfferRequest CreateOfferRequestInterface */
-            $createOfferRequest
-                ->setOrder($response->getId())
-                ->setUrls($urls)
-                ->setLocale('en-gb')
-                ->setMetadata([]);
-
-            $offer = $this->offerGatewayService->createOffer($createOfferRequest);
-            if ($dataModel = $offer->getDataModel()) {
-                $response->setOffer($dataModel);
-                $quote->setData('payment_offer_id', $dataModel->getId());
-                $this->cartRepository->save($quote);
-                $hokodoQuote->setOfferId($dataModel->getId());
-            }
-            $this->hokodoQuoteRepository->save($hokodoQuote);
-        } catch (\Exception $e) {
-            //TODO Handle Exception
-            $response->setId('');
-        }
-        return $response;
-    }
-
-//    public function patch(CreateOrderRequestInterface $payload): CreateOrderResponseInterface
-//    {
-//        $response = $this->responseInterfaceFactory->create();
-//        /* @var $response CreateOrderResponseInterface */
-//
-//        try {
-//            $quote = $this->cartRepository->get($payload->getQuoteId());
-//            $createOrderRequest = $this->buildOrderRequestBase($quote);
-//            $createOrderRequest->setCustomer(
-//                $this->buildCustomer($quote)
-//                    ->setUser($payload->getUserId())
-//                    ->setOrganisation($payload->getOrganisationId())
-//            );
-//            $createOrderRequest->setItems($this->buildOrderItems($quote));
-//            $order = $this->orderGatewayService->createOrder($createOrderRequest);
-//            if ($dataModel = $order->getDataModel()) {
-//                $response->setId($dataModel->getId());
-//            }
-//        } catch (\Exception $e) {
-//            $response->setId('');
-//        }
-//
-//        return $response;
-//    }
 
     /**
      * Build Order create request object with base info from quote.
@@ -287,7 +126,7 @@ class Order implements OrderInterface
      *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function buildOrderRequestBase(CartInterface $quote): GatewayRequest
+    public function buildOrderRequestBase(CartInterface $quote): GatewayRequest
     {
         $orderRequest = $this->gatewayRequestFactory->create();
         return $orderRequest
@@ -316,7 +155,7 @@ class Order implements OrderInterface
      *
      * @return OrderCustomerInterface
      */
-    private function buildCustomer(CartInterface $quote): OrderCustomerInterface
+    public function buildCustomer(CartInterface $quote): OrderCustomerInterface
     {
         $customer = $quote->getCustomer();
         $customerRequest = $this->orderCustomerFactory->create();
@@ -351,7 +190,7 @@ class Order implements OrderInterface
      *
      * @return array
      */
-    private function buildOrderItems(CartInterface $quote): array
+    public function buildOrderItems(CartInterface $quote): array
     {
         $items = [];
         foreach ($quote->getAllVisibleItems() as $item) {
@@ -424,10 +263,10 @@ class Order implements OrderInterface
     private function isApplyTaxAdjustment(int $storeId = 0): bool
     {
         return $this->config->getValue(
-            TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        ) &&
+                TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            ) &&
             !$this->config->getValue(
                 TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
                 ScopeInterface::SCOPE_STORE,
@@ -453,5 +292,32 @@ class Order implements OrderInterface
         } catch (\Exception $e) {
             return __('Read Error!');
         }
+    }
+
+    /**
+     * Builds base object for patch request.
+     *
+     * @param string $orderId
+     *
+     * @return GatewayRequest
+     */
+    public function buildPatchOrderRequestBase(string $orderId)
+    {
+        return $this->gatewayRequestFactory->create()->setUniqueId($orderId);
+    }
+
+    /**
+     * Build Customer object method.
+     *
+     * @param CartInterface $quote
+     *
+     * @return OrderCustomerInterface
+     */
+    public function buildPatchCustomerAddress(CartInterface $quote): OrderCustomerInterface
+    {
+        $customerRequest = $this->orderCustomerFactory->create();
+        return $customerRequest
+            ->setDeliveryAddress($this->buildCustomerAddress($quote->getShippingAddress()))
+            ->setInvoiceAddress($this->buildCustomerAddress($quote->getBillingAddress()));
     }
 }

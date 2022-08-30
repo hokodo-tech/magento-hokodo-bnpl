@@ -1156,31 +1156,31 @@
             <argument name="commandPool" xsi:type="object">Hokodo\BNPL\Gateway\Command\CommandPool</argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Model\ShippingInformationManagement">
+        <plugin name="after_shipping_address_saved" type="Hokodo\BNPL\Plugin\Model\Checkout\ShippingInformation" sortOrder="10"/>
+    </type>
 
     <!-- js SDK API backend-frontend communication config -->
     <preference for="Hokodo\BNPL\Api\Webapi\OrganisationInterface" type="Hokodo\BNPL\Model\Webapi\Organisation" />
     <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrganisationRequest" />
     <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrganisationResponse" />
-    <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOrganisationRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CreateOrganisationRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOrganisationRequestInterface" type="Hokodo\BNPL\Model\Data\Gateway\CreateOrganisationRequest" />
 
     <preference for="Hokodo\BNPL\Api\Webapi\UserInterface" type="Hokodo\BNPL\Model\Webapi\User" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\UserOrganisationInterface" type="Hokodo\BNPL\Model\Data\Gateway\UserOrganisation" />
     <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateUserRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateUserRequest" />
     <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateUserResponse" />
-    <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CreateUserRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterface" type="Hokodo\BNPL\Model\Data\Gateway\CreateUserRequest" />
 
-    <preference for="Hokodo\BNPL\Api\Webapi\OrderInterface" type="Hokodo\BNPL\Model\Webapi\Order" />
-    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrderRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrderRequest" />
-    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrderResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrderResponse" />
+    <preference for="Hokodo\BNPL\Api\Webapi\OfferInterface" type="Hokodo\BNPL\Model\Webapi\Offer" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\OfferRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\OfferRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\OfferResponse" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CreateOrderRequest" />
-<!--    <preference for="Hokodo\BNPL\Api\Data\Webapi\PatchOrderRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\PatchOrderRequest" />-->
-<!--    <preference for="Hokodo\BNPL\Api\Data\Webapi\PatchOrderResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\PatchOrderResponse" />-->
-<!--    <preference for="Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\PatchOrderRequest" />-->
-    <preference for="Hokodo\BNPL\Api\Data\Gateway\OrderCustomerInterface" type="\Hokodo\BNPL\Model\Data\Gateway\OrderCustomer" />
-    <preference for="Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CustomerAddress" />
-    <preference for="Hokodo\BNPL\Api\Data\Gateway\OrderItemInterface" type="\Hokodo\BNPL\Model\Data\Gateway\OrderItem" />
-    <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOfferRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CreateOfferRequest" />
-    <preference for="Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterface" type="\Hokodo\BNPL\Model\Data\Gateway\OfferUrls" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\OrderCustomerInterface" type="Hokodo\BNPL\Model\Data\Gateway\OrderCustomer" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterface" type="Hokodo\BNPL\Model\Data\Gateway\CustomerAddress" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\OrderItemInterface" type="Hokodo\BNPL\Model\Data\Gateway\OrderItem" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOfferRequestInterface" type="Hokodo\BNPL\Model\Data\Gateway\CreateOfferRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterface" type="Hokodo\BNPL\Model\Data\Gateway\OfferUrls" />
 
     <!-- Commands infrastructure -->
     <virtualType name="Hokodo\BNPL\Gateway\Command\CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">

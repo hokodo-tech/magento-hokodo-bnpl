@@ -15,6 +15,11 @@ interface HokodoQuoteInterface
     public const ORGANISATION_ID = 'organisation_id';
     public const ORDER_ID = 'order_id';
     public const OFFER_ID = 'offer_id';
+    public const IS_PATCH_REQUIRED = 'patch_required';
+
+    public const PATCH_ADDRESS = 0;
+    public const PATCH_ITEMS = 1;
+    public const PATCH_BOTH = 2;
 
     /**
      * Quote Id getter.
@@ -95,4 +100,20 @@ interface HokodoQuoteInterface
      * @return $this
      */
     public function setOfferId(string $offerId): self;
+
+    /**
+     *  Is patch required getter.
+     *
+     * @return int|null
+     */
+    public function getPatchRequired(): ?int;
+
+    /**
+     *  Is patch required setter.
+     *
+     * @param int|null $patchType
+     *
+     * @return $this
+     */
+    public function setPatchRequired(?int $patchType): self;
 }

@@ -11,7 +11,7 @@ namespace Hokodo\BNPL\Api\Data\Webapi;
 
 use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
 
-interface CreateOrderResponseInterface
+interface OfferResponseInterface
 {
     public const ORDER_ID = 'id';
     public const OFFER = 'offer';

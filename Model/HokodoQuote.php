@@ -113,4 +113,29 @@ class HokodoQuote extends AbstractModel implements HokodoQuoteInterface
         $this->setData(self::OFFER_ID, $offerId);
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPatchRequired(): ?int
+    {
+        return $this->getData(self::IS_PATCH_REQUIRED) ? (int) $this->getData(self::IS_PATCH_REQUIRED) : null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPatchRequired(?int $patchType): self
+    {
+        $currentPatchRequired = $this->getPatchRequired();
+        $this->setData(self::IS_PATCH_REQUIRED, $patchType);
+        if ($patchType !== null
+            && $currentPatchRequired !== null
+            && $currentPatchRequired !== $patchType
+        ) {
+            $this->setData(self::IS_PATCH_REQUIRED, self::PATCH_BOTH);
+        }
+
+        return $this;
+    }
 }

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data\Webapi;
 
-interface CreateOrderRequestInterface
+interface OfferRequestInterface
 {
     public const ORGANISATION_ID = 'organisation_id';
     public const USER_ID = 'user_id';

@@ -76,7 +76,8 @@
             "user_id": true,
             "organisation_id": true,
             "order_id": true,
-            "offer_id": true
+            "offer_id": true,
+            "patch_required": true
         },
         "index": {
             "HOKODO_QUOTE_QUOTE_ID": true

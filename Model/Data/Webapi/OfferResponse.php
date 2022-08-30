@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Model\Data\Webapi;
 
 use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
-use Hokodo\BNPL\Api\Data\Webapi\CreateOrderResponseInterface;
+use Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
-class CreateOrderResponse extends AbstractSimpleObject implements CreateOrderResponseInterface
+class OfferResponse extends AbstractSimpleObject implements OfferResponseInterface
 {
     /**
      * @inheritDoc

@@ -60,9 +60,9 @@ define([
                     return;
                 }
                 if (company !== null && company.id !== self.hokodoCheckout().companyId()) {
-                    hokodoData.clearData();
+                    // hokodoData.clearData();
                     hokodoData.setCompanyId(company.id);
-                    self.hokodoCheckout().companyId(company.id);
+                    // self.hokodoCheckout().companyId(company.id);
                     self.userCheckout.destroy();
                 }
             });
@@ -115,12 +115,14 @@ define([
                 });
 
                 this.userCheckout.on("failure", () => {
+                    console.log('bnpl:_mountCheckout:!this.userCheckout:failure')
                     hokodoData.setOffer(null);
                     self.hokodoCheckout().offer(null);
                     self.mountCheckout();
                 });
 
                 this.userCheckout.on('declined', () => {
+                    console.log('bnpl:_mountCheckout:!this.userCheckout:declined')
                     hokodoData.setOffer(null);
                     self.hokodoCheckout().offer(null);
                     self.mountCheckout();
@@ -141,9 +143,12 @@ define([
                 this.userCheckout.mount("#hokodoCheckout");
             } else {
                 console.log('bnpl:_mountCheckout:else')
-                this.userCheckout.update({
-                    paymentOffer: this.hokodoCheckout().offer()
-                })
+                this.userCheckout.destroy();
+                this.userCheckout = null;
+                this._mountCheckout();
+                // this.userCheckout.update({
+                //     paymentOffer: this.hokodoCheckout().offer()
+                // })
             }
         },
 

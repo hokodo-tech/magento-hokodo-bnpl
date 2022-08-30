@@ -24,12 +24,8 @@ define([
             return urlBuilder.createUrl('/carts/mine/hokodo-create-user', {});
         },
 
-        getCreateOfferUrl() {
-            return urlBuilder.createUrl('/carts/mine/hokodo-create-offer', {});
-        },
-
-        getCreateOrderUrl() {
-            return urlBuilder.createUrl('/carts/mine/hokodo-create-order', {});
+        getRequestOfferUrl() {
+            return urlBuilder.createUrl('/carts/mine/hokodo-request-offer', {});
         },
     };
 });

@@ -8,9 +8,9 @@ define([
         'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
         'Hokodo_BNPL/js/sdk/action/create-hokodo-organisation',
         'Hokodo_BNPL/js/sdk/action/create-hokodo-user',
-        'Hokodo_BNPL/js/sdk/action/create-hokodo-order'
+        'Hokodo_BNPL/js/sdk/action/request-hokodo-offer'
     ],
-    function ($, ko, Component, customer, quote, customerData, hokodoData, createOrganisationAction, createUserAction, createOrderAction) {
+    function ($, ko, Component, customer, quote, customerData, hokodoData, createOrganisationAction, createUserAction, requestOfferAction) {
         return Component.extend({
             defaults: {
                 listens: {
@@ -34,20 +34,38 @@ define([
                 this.userId.subscribe((userId) => {
                     self.userIdChanged(userId);
                 })
+                this.offer.subscribe((offer) => {
+                    self.offerChanged(offer);
+                })
                 quote.shippingAddress.subscribe(() => {
                     console.log('data:shippingAddress.subscribe');
                 })
 
                 hokodoData.storageGetCheckoutObservable().subscribe((data) => {
-                    if (data.organisationId !== this.organisationId) {
+                    console.log('checkout data changed')
+                    if (data.organisationId !== this.organisationId()) {
                         this.organisationId(data.organisationId);
                         return;
                     }
-                    if (data.userId !== this.userId) {
+                    if (data.userId !== this.userId()) {
                         this.userId(data.userId);
                         return;
                     }
-                    if ((!data.offer && this.offer) || (data.offer && !this.offer) || ((data.offer.id !== this.offer.id))) {
+                    let offerChanged = false;
+                    if (!!data.offer) {
+                        if (!!this.offer()) {
+                            if (data.offer.id !== this.offer().id) {
+                                offerChanged = true;
+                            }
+                        } else {
+                            offerChanged = true;
+                        }
+                    } else {
+                        if (!!this.offer()) {
+                            offerChanged = true;
+                        }
+                    }
+                    if (offerChanged) {
                         this.offer(data.offer);
                     }
                 })
@@ -101,6 +119,12 @@ define([
                 if (id) {
                    this.createOfferAction();
                }
+            },
+
+            offerChanged(offer) {
+                if (offer === '' && (this.organisationId() && this.userId())) {
+                    this.createOfferAction();
+                }
             },
 
             initLoggedInCustomer() {
@@ -158,7 +182,7 @@ define([
                     console.log('data:createOfferAction:this.userId()')
                     if (this.organisationId) {
                         console.log('data:createOfferAction:this.userId():this.organisationId()')
-                        createOrderAction(
+                        requestOfferAction(
                             this.organisationId(),
                             this.userId(),
                             quote.getQuoteId()
@@ -203,7 +227,7 @@ define([
 
             // initCreateOrder() {
             //     if (hokodoData().getUserId()) {
-            //         return createOrderAction(
+            //         return requestOfferAction(
             //             hokodoData().getOrganisationId(),
             //             hokodoData().getUserId(),
             //             quote.getQuoteId()

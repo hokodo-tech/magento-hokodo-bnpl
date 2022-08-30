@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Data\Webapi;
 
-use Hokodo\BNPL\Api\Data\Webapi\CreateOrderRequestInterface;
+use Hokodo\BNPL\Api\Data\Webapi\OfferRequestInterface;
 use Magento\Framework\DataObject;
 
-class CreateOrderRequest extends DataObject implements CreateOrderRequestInterface
+class OfferRequest extends DataObject implements OfferRequestInterface
 {
     /**
      * @inheritDoc

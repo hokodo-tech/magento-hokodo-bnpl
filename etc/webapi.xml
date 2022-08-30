@@ -133,8 +133,8 @@
         </resources>
     </route>
 
-    <route url="/V1/carts/mine/hokodo-create-order" method="POST">
-        <service class="Hokodo\BNPL\Api\Webapi\OrderInterface" method="create"/>
+    <route url="/V1/carts/mine/hokodo-request-offer" method="POST">
+        <service class="Hokodo\BNPL\Api\Webapi\OfferInterface" method="requestNew"/>
         <resources>
             <resource ref="self" />
         </resources>

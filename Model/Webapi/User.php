@@ -105,12 +105,12 @@ class User implements UserInterface
      */
     public function create(CreateUserRequestInterface $payload): CreateUserResponseInterface
     {
-        //TODO create User Logic
         $result = $this->createUserResponseFactory->create();
         $customer = null;
         try {
             $customer = $this->customerRepository->get($payload->getEmail(), $this->storeManager->getStore()->getId());
         } catch (\Exception $e) {
+            //TODO error reporting
             $customer = null;
         }
         try {
