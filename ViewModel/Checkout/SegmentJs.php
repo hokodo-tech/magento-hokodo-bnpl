@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\ViewModel\Checkout;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -30,17 +33,33 @@ class SegmentJs implements ArgumentInterface
     private $storeManager;
 
     /**
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
+     * @var ReadFactory
+     */
+    private $readFactory;
+
+    /**
      * SegmentJs constructor.
      *
-     * @param ScopeConfigInterface  $config
-     * @param StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface        $config
+     * @param StoreManagerInterface       $storeManager
+     * @param ComponentRegistrarInterface $componentRegistrar
+     * @param ReadFactory                 $readFactory
      */
     public function __construct(
         ScopeConfigInterface $config,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ComponentRegistrarInterface $componentRegistrar,
+        ReadFactory $readFactory
     ) {
         $this->config = $config;
         $this->storeManager = $storeManager;
+        $this->componentRegistrar = $componentRegistrar;
+        $this->readFactory = $readFactory;
     }
 
     /**
@@ -79,5 +98,25 @@ class SegmentJs implements ArgumentInterface
     {
         $storeId = $this->storeManager->getStore()->getId();
         return $this->config->getValue(self::SEGMENT_ENABLED, ScopeInterface::SCOPE_STORE, $storeId);
+    }
+
+    /**
+     * Get module composer version.
+     *
+     * @param string $moduleName
+     *
+     * @return Phrase|string|void
+     */
+    public function getModuleVersion($moduleName)
+    {
+        $path = $this->componentRegistrar->getPath(
+            ComponentRegistrar::MODULE,
+            $moduleName
+        );
+        $directoryRead = $this->readFactory->create($path);
+        $composerJsonData = $directoryRead->readFile('composer.json');
+        $data = json_decode($composerJsonData);
+
+        return !empty($data->version) ? $data->version : __('Read error!');
     }
 }

@@ -30,7 +30,8 @@ define([
                     Impression: position !== undefined,
                     Position: position !== undefined ? position : null,
                     totalAmount: amount,
-                    currency: currency
+                    currency: currency,
+                    moduleVersion: analytics.MODULE_VERSION
                 }
             );
             this.initialized = true;
@@ -85,17 +86,14 @@ define([
             )
         },
 
-        trackOrderPlaced(method, id, amount, currencyCode, version) {
+        trackOrderPlaced(method, id, amount, currencyCode) {
             analytics.track(
                 'Order Placed',
                 {
-                    PaymentMethod: method,
+                    currency: currencyCode,
+                    totalAmount: amount,
                     OrderId: id,
-                    Initiation: {
-                        totalAmount: amount,
-                        currency: currencyCode,
-                        moduleVersion: version
-                    }
+                    PaymentMethod: method
                 }
             )
         }

@@ -2,6 +2,7 @@
 /**
  * @var $block \Magento\Framework\View\Element\Template
  * @var $viewModel \Hokodo\BNPL\ViewModel\Checkout\SegmentJs
+ * @var \Magento\Framework\Escaper $escaper
  */
 
 $viewModel = $block->getData('viewModel');
@@ -36,6 +37,7 @@ $viewModel = $block->getData('viewModel');
             };
             analytics._writeKey = "<?= $key ?>";
             ;analytics.SNIPPET_VERSION = "4.15.3";
+            analytics.MODULE_VERSION = "<?= $escaper->escapeHtml(__('v')) . $viewModel->getModuleVersion('Hokodo_BNPL') ?>";
             analytics.load("<?= $key ?>");
         }
     }();

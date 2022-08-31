@@ -12,9 +12,8 @@ $viewModel = $block->getData('viewModel');
         segment.trackOrderPlaced(
             '<?= $viewModel->getSelectedPaymentMethodCode() ?>',
             '<?= $viewModel->getOrder()->getIncrementId() ?>',
-            '<?= (float) $viewModel->getOrder()->getGrandTotal() - $viewModel->getOrder()->getShippingAmount() ?>',
-            '<?= $viewModel->getOrder()->getQuoteCurrencyCode() ?>',
-            '<?= $escaper->escapeHtml(__('v')) . $viewModel->getModuleVersion('Hokodo_BNPL') ?>'
+            '<?= (float) ($viewModel->getOrder()->getGrandTotal() - $viewModel->getOrder()->getShippingAmount()) ?>',
+            '<?= $viewModel->getOrder()->getOrderCurrencyCode() ?>'
         );
     })
 </script>
