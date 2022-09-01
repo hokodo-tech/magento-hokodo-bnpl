@@ -60,9 +60,7 @@ define([
                     return;
                 }
                 if (company !== null && company.id !== self.hokodoCheckout().companyId()) {
-                    // hokodoData.clearData();
                     hokodoData.setCompanyId(company.id);
-                    // self.hokodoCheckout().companyId(company.id);
                     self.userCheckout.destroy();
                 }
             });
@@ -77,14 +75,6 @@ define([
         getCode: function() {
             return 'hokodo_bnpl';
         },
-
-        // /**
-        //  * Get payment method data
-        //  * @returns {Object}
-        //  */
-        // getData: function () {
-        //     return this._super();
-        // },
 
         mountSearch: function() {
             console.log('bnpl:mountSearch')
@@ -173,6 +163,12 @@ define([
         selectPaymentMethod: function() {
             this._super();
             this.mountCheckout();
+        },
+
+        destroyCheckout() {
+            if (this.userCheckout) {
+                this.userCheckout.destroy();
+            }
         }
     });
 });

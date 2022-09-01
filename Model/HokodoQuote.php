@@ -119,7 +119,11 @@ class HokodoQuote extends AbstractModel implements HokodoQuoteInterface
      */
     public function getPatchRequired(): ?int
     {
-        return $this->getData(self::IS_PATCH_REQUIRED) ? (int) $this->getData(self::IS_PATCH_REQUIRED) : null;
+        //TODO rewrite without using null
+        if ($this->getData(self::IS_PATCH_REQUIRED) === null) {
+            return null;
+        }
+        return (int) $this->getData(self::IS_PATCH_REQUIRED);
     }
 
     /**

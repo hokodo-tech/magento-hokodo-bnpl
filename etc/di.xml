@@ -1164,6 +1164,14 @@
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\CouponManagement">
+        <plugin name="hokodo_coupon" type="Hokodo\BNPL\Plugin\Quote\Model\CouponManagement"/>
+    </type>
+    <type name="Hokodo\BNPL\Plugin\Quote\Model\CouponManagement">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Hokodo\BNPL\Model\Webapi\User">
         <arguments>
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
@@ -1212,6 +1220,7 @@
                 <item name="sdk_order_get" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderGetSdk</item>
                 <item name="sdk_order_patch" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderPatchSdk</item>
                 <item name="sdk_offer_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\OfferCreateSdk</item>
+                <item name="sdk_offer_get" xsi:type="string">Hokodo\BNPL\Gateway\Command\OfferGetSdk</item>
             </argument>
         </arguments>
     </virtualType>
@@ -1332,12 +1341,12 @@
         <arguments>
             <argument name="endpoint" xsi:type="string">payment/orders/:id</argument>
             <argument name="params" xsi:type="array">
-                <item name=":id" xsi:type="string">id</item>
+                <item name=":id" xsi:type="string">unique_id</item>
             </argument>
         </arguments>
     </virtualType>
 
-    <!-- Order create gateway set up -->
+    <!-- Offer create gateway set up -->
     <virtualType name="Hokodo\BNPL\Gateway\Command\OfferCreateSdk" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\OfferCreateSdk\BuilderComposite</argument>
@@ -1357,6 +1366,32 @@
     <virtualType name="Hokodo\BNPL\Gateway\Request\Sdk\OfferEndpointBuilder" type="Hokodo\BNPL\Gateway\Request\Sdk\EndpointBuilder">
         <arguments>
             <argument name="endpoint" xsi:type="string">payment/offers</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Offer get gateway set up -->
+    <virtualType name="Hokodo\BNPL\Gateway\Command\OfferGetSdk" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\OfferGetSdk\BuilderComposite</argument>
+            <argument name="resultFactory" xsi:type="object">Hokodo\BNPL\Gateway\Command\PaymentOffer\ResultInterfaceFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\OfferGetSdk\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\Sdk\OfferGetEndpointBuilder</item>
+                <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\GetMethodBuilder</item>
+                <item name="body" xsi:type="string">Hokodo\BNPL\Gateway\Request\Sdk\GeneralSubjectBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\Sdk\OfferGetEndpointBuilder" type="Hokodo\BNPL\Gateway\Request\Sdk\EndpointBuilder">
+        <arguments>
+            <argument name="endpoint" xsi:type="string">payment/offers/:id</argument>
+            <argument name="params" xsi:type="array">
+                <item name=":id" xsi:type="string">id</item>
+            </argument>
         </arguments>
     </virtualType>
 </config>

@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\CustomerData;
 
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
-use Hokodo\BNPL\Gateway\Service\Order;
-use Hokodo\BNPL\Model\RequestBuilder\OrderBuilder;
+use Hokodo\BNPL\Gateway\Service\Offer;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\CustomerData\SectionSourceInterface;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Payment\Gateway\Command\CommandException;
 
 class HokodoCheckout implements SectionSourceInterface
 {
@@ -30,31 +31,23 @@ class HokodoCheckout implements SectionSourceInterface
     private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
 
     /**
-     * @var OrderBuilder
+     * @var Offer
      */
-    private OrderBuilder $orderBuilder;
-
-    /**
-     * @var Order
-     */
-    private Order $order;
+    private Offer $offerService;
 
     /**
      * @param Session                        $checkoutSession
      * @param HokodoQuoteRepositoryInterface $hokodoQuoteRepository
-     * @param OrderBuilder                   $orderBuilder
-     * @param Order                          $order
+     * @param Offer                          $offerService
      */
     public function __construct(
         Session $checkoutSession,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
-        OrderBuilder $orderBuilder,
-        Order $order
+        Offer $offerService
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->hokodoQuoteRepository = $hokodoQuoteRepository;
-        $this->orderBuilder = $orderBuilder;
-        $this->order = $order;
+        $this->offerService = $offerService;
     }
 
     /**
@@ -63,14 +56,22 @@ class HokodoCheckout implements SectionSourceInterface
     public function getSectionData()
     {
         $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
+        $offer = '';
         if ($hokodoQuote->getPatchRequired() !== null) {
             $hokodoQuote->setOfferId('');
+        } else {
+            try {
+                $offer = $this->offerService->getOffer(['id' => $hokodoQuote->getOfferId()])->getDataModel();
+            } catch (NotFoundException|CommandException $e) {
+                //TODO error logging
+                $offer = '';
+            }
         }
 
         return [
             self::USER_ID => $hokodoQuote->getUserId() ?? '',
             self::ORGANISATION_ID => $hokodoQuote->getOrganisationId() ?? '',
-            self::OFFER => '', //TODO GET OFFER ENDPOINT
+            self::OFFER => $offer ? $offer->__toArray() : '',
         ];
     }
 }

@@ -75,7 +75,6 @@ define([
             return this;
         },
 
-
         clearData() {
             this.setCompanyId(null);
             this.setOrganisationId(null);
@@ -89,6 +88,10 @@ define([
 
         storageGetSearchObservable() {
             return storage.get('hokodo-search');
+        },
+
+        reload() {
+            storage.reload(['hokodo-checkout'], false);
         }
     }
 });

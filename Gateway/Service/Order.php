@@ -45,15 +45,15 @@ class Order extends AbstractService
     /**
      * Get order gateway command.
      *
-     * @param array $createOrderRequest
+     * @param array $getOrderRequest
      *
      * @return ResultInterface|null
      *
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Payment\Gateway\Command\CommandException
      */
-    public function getOrder($createOrderRequest): ?ResultInterface
+    public function getOrder($getOrderRequest): ?ResultInterface
     {
-        return $this->commandPool->get('sdk_order_get')->execute($createOrderRequest);
+        return $this->commandPool->get('sdk_order_get')->execute($getOrderRequest);
     }
 }

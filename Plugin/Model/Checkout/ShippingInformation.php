@@ -54,7 +54,11 @@ class ShippingInformation
         ShippingInformationInterface $addressInformation
     ) {
         if ($addressInformation->getShippingAddress()->getCustomerAddressId()
-            != $this->checkoutSession->getQuote()->getShippingAddress()->getCustomerAddressId()) {
+            != $this->checkoutSession->getQuote()->getShippingAddress()->getCustomerAddressId()
+        ||
+            $this->checkoutSession->getQuote()->getShippingAddress()->getShippingMethod() !==
+            $addressInformation->getShippingMethodCode() . '_' . $addressInformation->getShippingCarrierCode()
+        ) {
             $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($cartId);
             if ($hokodoQuote->getOrderId()) {
                 $hokodoQuote->setOfferId('')->setPatchRequired(HokodoQuoteInterface::PATCH_ADDRESS);

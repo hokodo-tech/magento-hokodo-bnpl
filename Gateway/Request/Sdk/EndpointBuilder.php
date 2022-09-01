@@ -59,8 +59,9 @@ class EndpointBuilder implements BuilderInterface
     private function buildUri(array $buildSubject): string
     {
         $params = [];
-        foreach ($this->params as $param) {
-            $params[':' . $param] = $buildSubject[$param];
+        foreach ($this->params as $key => $value) {
+            $params[$key] = $buildSubject[$value];
+            unset($buildSubject[$value]);
         }
 
         return str_replace(array_keys($params), array_values($params), $this->endpoint);

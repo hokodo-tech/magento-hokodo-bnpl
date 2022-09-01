@@ -160,6 +160,7 @@ class Offer implements OfferInterface
                 $quote->setData('payment_offer_id', $dataModel->getId());
                 $this->cartRepository->save($quote);
                 $hokodoQuote->setOfferId($dataModel->getId());
+                $hokodoQuote->setPatchRequired(null);
             }
             $this->hokodoQuoteRepository->save($hokodoQuote);
         } catch (\Exception $e) {

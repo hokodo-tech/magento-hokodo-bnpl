@@ -8,22 +8,57 @@ define([
         'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
         'Hokodo_BNPL/js/sdk/action/create-hokodo-organisation',
         'Hokodo_BNPL/js/sdk/action/create-hokodo-user',
-        'Hokodo_BNPL/js/sdk/action/request-hokodo-offer'
+        'Hokodo_BNPL/js/sdk/action/request-hokodo-offer',
+        'Magento_SalesRule/js/action/set-coupon-code',
+        'Magento_SalesRule/js/action/cancel-coupon'
     ],
-    function ($, ko, Component, customer, quote, customerData, hokodoData, createOrganisationAction, createUserAction, requestOfferAction) {
+    function (
+        $,
+        ko,
+        Component,
+        customer,
+        quote,
+        customerData,
+        hokodoData,
+        createOrganisationAction,
+        createUserAction,
+        requestOfferAction,
+        setCouponCodeAction,
+        cancelCouponAction
+    ) {
         return Component.extend({
+
             defaults: {
-                listens: {
-                    // customerEmailShipping: 'reloadHokodoData'
-                },
-                imports: {
-                    // customerEmailShipping: 'checkout.steps.shipping-step.shippingAddress.customer-email:email'
-                },
+                modules: {
+                    hokodoPaymentMethod: 'checkout.steps.billing-step.payment.payments-list.hokodo_bnpl'
+                }
             },
 
             initialize() {
                 this._super();
                 console.log('data:initialize')
+                this.initSubscribers();
+
+                if (customer.isLoggedIn()) {
+                    this.initLoggedInCustomer();
+                }
+
+                return this;
+            },
+
+            initObservable() {
+                this._super()
+                    .observe({
+                        companyId: ko.observable(hokodoData.storageSearchGet('companyId')),
+                        organisationId: ko.observable(hokodoData.storageCheckoutGet('organisationId')),
+                        userId: ko.observable(hokodoData.storageCheckoutGet('userId')),
+                        offer: ko.observable(hokodoData.storageCheckoutGet('offer'))
+                    });
+
+                return this;
+            },
+
+            initSubscribers() {
                 const self = this;
                 this.companyId.subscribe((companyId) => {
                     self.companyIdChanged(companyId);
@@ -37,10 +72,6 @@ define([
                 this.offer.subscribe((offer) => {
                     self.offerChanged(offer);
                 })
-                quote.shippingAddress.subscribe(() => {
-                    console.log('data:shippingAddress.subscribe');
-                })
-
                 hokodoData.storageGetCheckoutObservable().subscribe((data) => {
                     console.log('checkout data changed')
                     if (data.organisationId !== this.organisationId()) {
@@ -69,32 +100,14 @@ define([
                         this.offer(data.offer);
                     }
                 })
-
                 hokodoData.storageGetSearchObservable().subscribe((data) => {
                     if (data.companyId !== this.companyId) {
                         this.companyId(data.companyId);
                     }
                 })
 
-
-                if (customer.isLoggedIn()) {
-                    this.initLoggedInCustomer();
-                }
-                // quote.shippingAddress.subscribe(function() {
-                //     this.reloadOrder();
-                // }, this)
-                return this;
-            },
-
-            initObservable() {
-                this._super()
-                    .observe({
-                        companyId: ko.observable(hokodoData.storageSearchGet('companyId')),
-                        organisationId: ko.observable(hokodoData.storageCheckoutGet('organisationId')),
-                        userId: ko.observable(hokodoData.storageCheckoutGet('userId')),
-                        offer: ko.observable(hokodoData.storageCheckoutGet('offer'))
-                    });
-                return this;
+                setCouponCodeAction.registerSuccessCallback(hokodoData.reload);
+                cancelCouponAction.registerSuccessCallback(hokodoData.reload);
             },
 
             companyIdChanged(id) {
@@ -117,8 +130,8 @@ define([
             userIdChanged(id) {
                 console.log('data.userIdChanged: ' + id)
                 if (id) {
-                   this.createOfferAction();
-               }
+                    this.createOfferAction();
+                }
             },
 
             offerChanged(offer) {
@@ -182,6 +195,9 @@ define([
                     console.log('data:createOfferAction:this.userId()')
                     if (this.organisationId) {
                         console.log('data:createOfferAction:this.userId():this.organisationId()')
+                        if (this.hokodoPaymentMethod() !== undefined) {
+                            this.hokodoPaymentMethod().destroyCheckout();
+                        }
                         requestOfferAction(
                             this.organisationId(),
                             this.userId(),
