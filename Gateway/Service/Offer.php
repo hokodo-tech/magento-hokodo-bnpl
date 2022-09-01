@@ -30,7 +30,7 @@ class Offer extends AbstractService
     }
 
     /**
-     * Get offer from Hokodo
+     * Get offer from Hokodo.
      *
      * @param array $getOfferRequest
      *
