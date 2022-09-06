@@ -16,7 +16,9 @@ use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\OrganisationInterface;
 use Hokodo\BNPL\Gateway\Service\Organisation as OrganisationService;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\Webapi\Exception;
 use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class Organisation implements OrganisationInterface
 {
@@ -51,6 +53,11 @@ class Organisation implements OrganisationInterface
     private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * Organisation constructor.
      *
      * @param OrganisationService                        $organisationService
@@ -59,6 +66,7 @@ class Organisation implements OrganisationInterface
      * @param CreateOrganisationResponseInterfaceFactory $createOrganisationResponseFactory
      * @param Session                                    $checkoutSession
      * @param HokodoQuoteRepositoryInterface             $hokodoQuoteRepository
+     * @param LoggerInterface                            $logger
      */
     public function __construct(
         OrganisationService $organisationService,
@@ -66,7 +74,8 @@ class Organisation implements OrganisationInterface
         StoreManagerInterface $storeManager,
         CreateOrganisationResponseInterfaceFactory $createOrganisationResponseFactory,
         Session $checkoutSession,
-        HokodoQuoteRepositoryInterface $hokodoQuoteRepository
+        HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
+        LoggerInterface $logger
     ) {
         $this->organisationService = $organisationService;
         $this->createOrganisationGatewayRequestFactory = $createOrganisationGatewayRequestFactory;
@@ -74,6 +83,7 @@ class Organisation implements OrganisationInterface
         $this->createOrganisationResponseFactory = $createOrganisationResponseFactory;
         $this->checkoutSession = $checkoutSession;
         $this->hokodoQuoteRepository = $hokodoQuoteRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -82,10 +92,11 @@ class Organisation implements OrganisationInterface
      * @param CreateOrganisationRequestInterface $payload
      *
      * @return CreateOrganisationResponseInterface
+     *
+     * @throws Exception
      */
     public function create(CreateOrganisationRequestInterface $payload): CreateOrganisationResponseInterface
     {
-        //TODO create Organisation Logic
         $result = $this->createOrganisationResponseFactory->create();
         try {
             $gatewayRequest = $this->createOrganisationGatewayRequestFactory->create();
@@ -103,10 +114,14 @@ class Organisation implements OrganisationInterface
                 $hokodoQuote->setOrganisationId($dataModel->getId());
                 $this->hokodoQuoteRepository->save($hokodoQuote);
                 $result->setId($dataModel->getId());
+            } else {
+                $result->setId('');
             }
         } catch (\Exception $e) {
-            //TODO add error resolving
-            $result->setId('');
+            $this->logger->error(__('Hokodo_BNPL: createOrganisation call failed with error - %1', $e->getMessage()));
+            throw new Exception(
+                __('There was an error during payment method set up. Please reload the page or try again later.')
+            );
         }
         return $result;
     }

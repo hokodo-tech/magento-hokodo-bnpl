@@ -10,7 +10,8 @@ define([
         'Hokodo_BNPL/js/sdk/action/create-hokodo-user',
         'Hokodo_BNPL/js/sdk/action/request-hokodo-offer',
         'Magento_SalesRule/js/action/set-coupon-code',
-        'Magento_SalesRule/js/action/cancel-coupon'
+        'Magento_SalesRule/js/action/cancel-coupon',
+        'Magento_Checkout/js/model/error-processor'
     ],
     function (
         $,
@@ -24,7 +25,8 @@ define([
         createUserAction,
         requestOfferAction,
         setCouponCodeAction,
-        cancelCouponAction
+        cancelCouponAction,
+        errorProcessor
     ) {
         return Component.extend({
 
@@ -36,7 +38,8 @@ define([
 
             initialize() {
                 this._super();
-                console.log('data:initialize')
+                console.log('data:initialize');
+                hokodoData.reload();
                 this.initSubscribers();
 
                 if (customer.isLoggedIn()) {
@@ -76,10 +79,12 @@ define([
                     console.log('checkout data changed')
                     if (data.organisationId !== this.organisationId()) {
                         this.organisationId(data.organisationId);
+                        console.log('organisation Id changed')
                         return;
                     }
                     if (data.userId !== this.userId()) {
                         this.userId(data.userId);
+                        console.log('User id changed')
                         return;
                     }
                     let offerChanged = false;
@@ -97,6 +102,7 @@ define([
                         }
                     }
                     if (offerChanged) {
+                        console.log('Offer changed')
                         this.offer(data.offer);
                     }
                 })
@@ -162,6 +168,10 @@ define([
                             hokodoData.setOrganisationId(response.id)
                             this.organisationId(response.id)
                         }
+                    }).fail((response) => {
+                        if (this.hokodoPaymentMethod()) {
+                            errorProcessor.process(response, this.hokodoPaymentMethod().messageContainer)
+                        }
                     })
                 }
             },
@@ -180,6 +190,10 @@ define([
                             if (response.id !== '') {
                                 hokodoData.setUserId(response.id)
                                 this.userId(response.id)
+                            }
+                        }).fail((response) => {
+                            if (this.hokodoPaymentMethod()) {
+                                errorProcessor.process(response, this.hokodoPaymentMethod().messageContainer)
                             }
                         })
                     }
@@ -206,7 +220,12 @@ define([
                             if (response.offer !== undefined) {
                                 hokodoData.setOffer(response.offer);
                             }
+                        }).fail((response) => {
+                            if (this.hokodoPaymentMethod()) {
+                                errorProcessor.process(response, this.hokodoPaymentMethod().messageContainer)
+                            }
                         })
+
                     } else {
                         console.log('data:createOfferAction:!this.userId():!this.organisationId()')
                         this.createOrganisationAction();

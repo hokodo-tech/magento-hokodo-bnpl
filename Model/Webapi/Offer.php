@@ -22,9 +22,11 @@ use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order as OrderGatewayService;
 use Hokodo\BNPL\Model\RequestBuilder\OrderBuilder;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\Webapi\Exception;
 use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Psr\Log\LoggerInterface;
 
 class Offer implements OfferInterface
 {
@@ -74,6 +76,11 @@ class Offer implements OfferInterface
     private OrderBuilder $orderBuilder;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param OfferResponseInterfaceFactory      $responseInterfaceFactory
      * @param CartRepositoryInterface            $cartRepository
      * @param OrderGatewayService                $orderGatewayService
@@ -83,6 +90,7 @@ class Offer implements OfferInterface
      * @param Session                            $checkoutSession
      * @param HokodoQuoteRepositoryInterface     $hokodoQuoteRepository
      * @param OrderBuilder                       $orderBuilder
+     * @param LoggerInterface                    $logger
      */
     public function __construct(
         OfferResponseInterfaceFactory $responseInterfaceFactory,
@@ -93,7 +101,8 @@ class Offer implements OfferInterface
         OfferUrlsInterfaceFactory $offerUrlsFactory,
         Session $checkoutSession,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
-        OrderBuilder $orderBuilder
+        OrderBuilder $orderBuilder,
+        LoggerInterface $logger
     ) {
         $this->responseInterfaceFactory = $responseInterfaceFactory;
         $this->cartRepository = $cartRepository;
@@ -104,6 +113,7 @@ class Offer implements OfferInterface
         $this->checkoutSession = $checkoutSession;
         $this->hokodoQuoteRepository = $hokodoQuoteRepository;
         $this->orderBuilder = $orderBuilder;
+        $this->logger = $logger;
     }
 
     /**
@@ -112,6 +122,8 @@ class Offer implements OfferInterface
      * @param OfferRequestInterface $payload
      *
      * @return OfferResponseInterface
+     *
+     * @throws Exception
      */
     public function requestNew(OfferRequestInterface $payload): OfferResponseInterface
     {
@@ -129,8 +141,13 @@ class Offer implements OfferInterface
                         $patchFailed = false;
                     }
                 } catch (\Exception $e) {
-                    //TODO error log
-                    $patchFailed = true;
+                    $this->logger->warning(
+                        __(
+                            'Hokodo_BNPL: patching order %1 failed with error - %1. Falling back to create order.',
+                            $hokodoQuote->getOrderId(),
+                            $e->getMessage()
+                        )
+                    );
                 }
             }
             if ($patchFailed && $orderResponse = $this->createOrder($quote, $payload)) {
@@ -161,10 +178,15 @@ class Offer implements OfferInterface
                 $this->cartRepository->save($quote);
                 $hokodoQuote->setOfferId($dataModel->getId());
                 $hokodoQuote->setPatchRequired(null);
+            } else {
+                $response->setId('');
             }
             $this->hokodoQuoteRepository->save($hokodoQuote);
         } catch (\Exception $e) {
-            $response->setId('');
+            $this->logger->error(__('Hokodo_BNPL: createOffer call failed with error - %1', $e->getMessage()));
+            throw new Exception(
+                __('There was an error during payment method set up. Please reload the page or try again later.')
+            );
         }
         return $response;
     }

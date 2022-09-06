@@ -4,18 +4,10 @@
  */
 define([
     'mage/storage',
-    'Hokodo_BNPL/js/sdk/resource-url-manager',
-    'Hokodo_BNPL/js/hokodo-data',
-    'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/model/error-processor',
-    'Magento_Customer/js/model/customer'
+    'Hokodo_BNPL/js/sdk/resource-url-manager'
 ], function (
         storage,
-        resourceUrlManager,
-        hokodoData,
-        quote,
-        errorProcessor,
-        customer
+        resourceUrlManager
         ) {
     'use strict';
 
@@ -31,11 +23,6 @@ define([
                 JSON.stringify(payload),
                 true,
                 'application/json'
-                ).fail(
-                function (response) {
-                    response = hokodoData().rebuildErrorMessage(response, 1);
-                    errorProcessor.process(response, messageContainer);
-                }
-        );
+                );
     };
 });

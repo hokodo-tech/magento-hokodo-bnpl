@@ -3,21 +3,11 @@
  * See LICENSE for license details.
  */
 define([
-    'underscore',
     'mage/storage',
-    'Hokodo_BNPL/js/sdk/resource-url-manager',
-    'Hokodo_BNPL/js/hokodo-data',
-    'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/model/error-processor',
-    'Magento_Customer/js/model/customer'
+    'Hokodo_BNPL/js/sdk/resource-url-manager'
 ], function (
-    _,
     storage,
-    resourceUrlManager,
-    hokodoData,
-    quote,
-    errorProcessor,
-    customerModel
+    resourceUrlManager
 ) {
     'use strict';
 
@@ -35,10 +25,6 @@ define([
             JSON.stringify(payload),
             true,
             'application/json'
-        ).fail(
-            function (response) {
-                errorProcessor.process(response, messageContainer);
-            }
         );
     };
 

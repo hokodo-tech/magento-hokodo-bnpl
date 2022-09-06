@@ -20,7 +20,9 @@ use Hokodo\BNPL\Api\Webapi\UserInterface;
 use Hokodo\BNPL\Gateway\Service\User as UserService;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Webapi\Exception;
 use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class User implements UserInterface
 {
@@ -65,6 +67,11 @@ class User implements UserInterface
     private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * User constructor.
      *
      * @param UserService                        $userService
@@ -75,6 +82,7 @@ class User implements UserInterface
      * @param UserOrganisationInterfaceFactory   $userOrganisationInterfaceFactory
      * @param HokodoQuoteRepositoryInterface     $hokodoQuoteRepository
      * @param Session                            $checkoutSession
+     * @param LoggerInterface                    $logger
      */
     public function __construct(
         UserService $userService,
@@ -84,7 +92,8 @@ class User implements UserInterface
         CreateUserResponseInterfaceFactory $createUserResponseFactory,
         UserOrganisationInterfaceFactory $userOrganisationInterfaceFactory,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
-        Session $checkoutSession
+        Session $checkoutSession,
+        LoggerInterface $logger
     ) {
         $this->userService = $userService;
         $this->createUserGatewayRequestFactory = $createUserGatewayRequestFactory;
@@ -94,6 +103,7 @@ class User implements UserInterface
         $this->userOrganisationInterfaceFactory = $userOrganisationInterfaceFactory;
         $this->checkoutSession = $checkoutSession;
         $this->hokodoQuoteRepository = $hokodoQuoteRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -102,6 +112,8 @@ class User implements UserInterface
      * @param CreateUserRequestInterface $payload
      *
      * @return CreateUserResponseInterface
+     *
+     * @throws Exception
      */
     public function create(CreateUserRequestInterface $payload): CreateUserResponseInterface
     {
@@ -110,8 +122,7 @@ class User implements UserInterface
         try {
             $customer = $this->customerRepository->get($payload->getEmail(), $this->storeManager->getStore()->getId());
         } catch (\Exception $e) {
-            //TODO error reporting
-            $customer = null;
+            $this->logger->error(__('Hokodo_BNPL: createUser call failed with error - %1', $e->getMessage()));
         }
         try {
             $gatewayRequest = $this->createUserGatewayRequestFactory->create();
@@ -133,10 +144,14 @@ class User implements UserInterface
                 $hokodoQuote->setUserId($dataModel->getId());
                 $this->hokodoQuoteRepository->save($hokodoQuote);
                 $result->setId($dataModel->getId());
+            } else {
+                $result->setId('');
             }
         } catch (\Exception $e) {
-            //TODO error reporting
-            $result->setId('');
+            $this->logger->error(__('Hokodo_BNPL: createUser call failed with error - %1', $e->getMessage()));
+            throw new Exception(
+                __('There was an error during payment method set up. Please reload the page or try again later.')
+            );
         }
         return $result;
     }

@@ -4,16 +4,10 @@
  */
 define([
     'mage/storage',
-    'Hokodo_BNPL/js/sdk/resource-url-manager',
-    'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/model/error-processor',
-    'Magento_Customer/js/model/customer'
+    'Hokodo_BNPL/js/sdk/resource-url-manager'
 ], function (
         storage,
-        resourceUrlManager,
-        quote,
-        errorProcessor,
-        customer
+        resourceUrlManager
         ) {
     'use strict';
 
@@ -31,11 +25,7 @@ define([
                 JSON.stringify(payload),
                 true,
                 'application/json'
-                ).fail(
-                function (response) {
-                    errorProcessor.process(response, messageContainer);
-                }
-        );
+                );
     };
 
 });

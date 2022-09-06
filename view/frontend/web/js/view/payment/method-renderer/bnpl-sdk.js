@@ -61,7 +61,7 @@ define([
                 }
                 if (company !== null && company.id !== self.hokodoCheckout().companyId()) {
                     hokodoData.setCompanyId(company.id);
-                    self.userCheckout.destroy();
+                    self.destroyCheckout();
                 }
             });
 
