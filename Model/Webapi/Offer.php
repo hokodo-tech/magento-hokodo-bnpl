@@ -122,7 +122,7 @@ class Offer implements OfferInterface
             $quote = $this->checkoutSession->getQuote();
             $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($quote->getId());
             $patchFailed = true;
-            if ($hokodoQuote->getPatchRequired() !== null) {
+            if ($hokodoQuote->getOrderId() && $hokodoQuote->getPatchRequired() !== null) {
                 try {
                     if (($orderResponse = $this->patchOrder($quote, $hokodoQuote))
                         && $orderResponse->getDataModel()) {
