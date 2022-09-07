@@ -10,7 +10,9 @@ $viewModel = $block->getData('viewModel');
     require(['Hokodo_BNPL/js/segment/core'], function(segment) {
         segment.trackOrderPlaced(
             '<?= $viewModel->getSelectedPaymentMethodCode() ?>',
-            '<?= $viewModel->getOrder()->getIncrementId() ?>'
+            '<?= $viewModel->getOrder()->getIncrementId() ?>',
+            '<?= (float) ($viewModel->getOrder()->getGrandTotal() - $viewModel->getOrder()->getShippingAmount()) ?>',
+            '<?= $viewModel->getOrder()->getOrderCurrencyCode() ?>'
         );
     })
 </script>

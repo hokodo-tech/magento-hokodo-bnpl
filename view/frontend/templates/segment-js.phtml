@@ -35,7 +35,8 @@ $viewModel = $block->getData('viewModel');
                 analytics._loadOptions = e
             };
             analytics._writeKey = "<?= $key ?>";
-            ;analytics.SNIPPET_VERSION = "4.15.3";
+            analytics.SNIPPET_VERSION = "4.15.3";
+            analytics.MODULE_VERSION = "<?= $block->escapeHtml(__('v')) . $viewModel->getModuleVersion('Hokodo_BNPL') ?>";
             analytics.load("<?= $key ?>");
         }
     }();
