@@ -98,6 +98,14 @@ class Organisation implements OrganisationInterface
     public function create(CreateOrganisationRequestInterface $payload): CreateOrganisationResponseInterface
     {
         $result = $this->createOrganisationResponseFactory->create();
+        $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
+        //Reset quote data if new organisation create request received
+        $hokodoQuote
+            ->setOrganisationId('')
+            ->setUserId('')
+            ->setOrderId('')
+            ->setOfferId('');
+        $this->hokodoQuoteRepository->save($hokodoQuote);
         try {
             $gatewayRequest = $this->createOrganisationGatewayRequestFactory->create();
             $gatewayRequest
@@ -107,7 +115,6 @@ class Organisation implements OrganisationInterface
                 ->setRegistered(date('Y-m-d\TH:i:s\Z'));
             $organisation = $this->organisationService->createOrganisation($gatewayRequest);
             if ($dataModel = $organisation->getDataModel()) {
-                $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
                 if (!$hokodoQuote->getQuoteId()) {
                     $hokodoQuote->setQuoteId((int) $this->checkoutSession->getQuoteId());
                 }

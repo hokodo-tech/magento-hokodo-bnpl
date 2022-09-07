@@ -169,6 +169,7 @@ define([
                             this.organisationId(response.id)
                         }
                     }).fail((response) => {
+                        hokodoData.reload();
                         if (this.hokodoPaymentMethod()) {
                             errorProcessor.process(response, this.hokodoPaymentMethod().messageContainer)
                         }
@@ -242,53 +243,6 @@ define([
             //         hokodoData().setOrganisation(response.organisation);
             //     }).bind(this);
             // },
-
-            // initCreateUser(email, name) {
-            //     if (!email && !name) {
-            //         return;
-            //     }
-            //     const self = this;
-            //     createUserAction(
-            //         hokodoData().getOrganisationId(),
-            //         email,
-            //         name
-            //     ).done((response) => {
-            //         if (response.id !== '') {
-            //             hokodoData().setUserId(response.id)
-            //         }
-            //     })
-            // },
-
-            // initCreateOrder() {
-            //     if (hokodoData().getUserId()) {
-            //         return requestOfferAction(
-            //             hokodoData().getOrganisationId(),
-            //             hokodoData().getUserId(),
-            //             quote.getQuoteId()
-            //         );
-            //     }
-            // },
-
-            // resolvePaymentOffer() {
-            //     const self = this;
-            //     if (!hokodoData().getOrganisation().api_id) {
-            //
-            //     } else {
-            //         this.createOrder().done((response) => {
-            //             requestPaymentOfferAction(response, '').done((deferredPayment) => {
-            //                 hokodoData().setOffer(deferredPayment);
-            //             })
-            //         })
-            //     }
-            // },
-
-            // createOrder() {
-            //     return setHokodoOrderAction(
-            //         hokodoData().getUser(),
-            //         hokodoData().getOrganisation(),
-            //         ''
-            //     )
-            // }
 
             getCustomerEmail() {
                 return customer.isLoggedIn ? customer.customerData.email : quote.shippingAddress().customerEmail

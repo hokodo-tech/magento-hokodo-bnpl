@@ -119,6 +119,13 @@ class User implements UserInterface
     {
         $result = $this->createUserResponseFactory->create();
         $customer = null;
+        $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
+        $hokodoQuote
+            ->setUserId('')
+            ->setOrderId('')
+            ->setOfferId('');
+        $this->hokodoQuoteRepository->save($hokodoQuote);
+
         try {
             $customer = $this->customerRepository->get($payload->getEmail(), $this->storeManager->getStore()->getId());
         } catch (\Exception $e) {
@@ -137,7 +144,6 @@ class User implements UserInterface
             $gatewayRequest->setOrganisations([$organisation]);
             $user = $this->userService->createUser($gatewayRequest);
             if ($dataModel = $user->getDataModel()) {
-                $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
                 if (!$hokodoQuote->getQuoteId()) {
                     $hokodoQuote->setQuoteId((int) $this->checkoutSession->getQuoteId());
                 }

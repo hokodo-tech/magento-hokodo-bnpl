@@ -97,7 +97,7 @@ define([
 
         _mountCheckout: function() {
             var self = this;
-            if (!this.userCheckout) {
+            if (!this.userCheckout && this.hokodoCheckout().offer()) {
                 console.log('bnpl:_mountCheckout:!this.userCheckout')
                 console.log(this.hokodoCheckout().offer())
                 this.userCheckout = this.hokodoElements.create("checkout", {

@@ -91,7 +91,7 @@ define([
         },
 
         reload() {
-            storage.reload(['hokodo-checkout'], false);
+            storage.invalidate(['hokodo-checkout']);
         }
     }
 });

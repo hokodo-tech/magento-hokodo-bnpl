@@ -141,6 +141,7 @@ class Offer implements OfferInterface
                         $patchFailed = false;
                     }
                 } catch (\Exception $e) {
+                    $hokodoQuote->setOrderId('');
                     $this->logger->warning(
                         __(
                             'Hokodo_BNPL: patching order %1 failed with error - %1. Falling back to create order.',
@@ -150,6 +151,8 @@ class Offer implements OfferInterface
                     );
                 }
             }
+            $hokodoQuote->setOfferId('');
+            $this->hokodoQuoteRepository->save($hokodoQuote);
             if ($patchFailed && $orderResponse = $this->createOrder($quote, $payload)) {
                 $hokodoQuote->setOrderId($orderResponse->getDataModel()->getId());
             }
