@@ -13,6 +13,7 @@ use Magento\Checkout\Model\Session;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\Command\CommandException;
+use Psr\Log\LoggerInterface;
 
 class HokodoCheckout implements SectionSourceInterface
 {
@@ -36,18 +37,26 @@ class HokodoCheckout implements SectionSourceInterface
     private Offer $offerService;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param Session                        $checkoutSession
      * @param HokodoQuoteRepositoryInterface $hokodoQuoteRepository
      * @param Offer                          $offerService
+     * @param LoggerInterface                $logger
      */
     public function __construct(
         Session $checkoutSession,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
-        Offer $offerService
+        Offer $offerService,
+        LoggerInterface $logger
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->hokodoQuoteRepository = $hokodoQuoteRepository;
         $this->offerService = $offerService;
+        $this->logger = $logger;
     }
 
     /**
@@ -59,14 +68,15 @@ class HokodoCheckout implements SectionSourceInterface
         $offer = '';
         if ($hokodoQuote->getPatchRequired() !== null) {
             $hokodoQuote->setOfferId('');
-        } else {
+        }
+        if ($hokodoQuote->getOfferId()) {
             try {
                 $offer = $this->offerService->getOffer(['id' => $hokodoQuote->getOfferId()])->getDataModel();
             } catch (NotFoundException|CommandException $e) {
-                //TODO error logging
-                $offer = '';
+                $this->logger->error(__('Hokodo_BNPL: getOffer call failed with error - %1', $e->getMessage()));
             }
         }
+        $this->hokodoQuoteRepository->save($hokodoQuote);
 
         return [
             self::USER_ID => $hokodoQuote->getUserId() ?? '',
