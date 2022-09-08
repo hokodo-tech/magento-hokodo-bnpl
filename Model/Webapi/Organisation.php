@@ -100,12 +100,14 @@ class Organisation implements OrganisationInterface
         $result = $this->createOrganisationResponseFactory->create();
         $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
         //Reset quote data if new organisation create request received
-        $hokodoQuote
-            ->setOrganisationId('')
-            ->setUserId('')
-            ->setOrderId('')
-            ->setOfferId('');
-        $this->hokodoQuoteRepository->save($hokodoQuote);
+        if ($hokodoQuote->getQuoteId()) {
+            $hokodoQuote
+                ->setOrganisationId('')
+                ->setUserId('')
+                ->setOrderId('')
+                ->setOfferId('');
+            $this->hokodoQuoteRepository->save($hokodoQuote);
+        }
         try {
             $gatewayRequest = $this->createOrganisationGatewayRequestFactory->create();
             $gatewayRequest
