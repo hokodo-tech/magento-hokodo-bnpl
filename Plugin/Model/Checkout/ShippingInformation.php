@@ -11,6 +11,7 @@ use Hokodo\BNPL\Api\Data\HokodoQuoteInterface;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Model\Session;
+use Magento\Quote\Api\Data\AddressInterface;
 
 class ShippingInformation
 {
@@ -53,9 +54,7 @@ class ShippingInformation
         $cartId,
         ShippingInformationInterface $addressInformation
     ) {
-        if ($addressInformation->getShippingAddress()->getCustomerAddressId()
-            != $this->checkoutSession->getQuote()->getShippingAddress()->getCustomerAddressId()
-        ||
+        if ($this->isAddressChanged($addressInformation->getShippingAddress()) ||
             $this->checkoutSession->getQuote()->getShippingAddress()->getShippingMethod() !==
             $addressInformation->getShippingMethodCode() . '_' . $addressInformation->getShippingCarrierCode()
         ) {
@@ -65,5 +64,40 @@ class ShippingInformation
                 $this->hokodoQuoteRepository->save($hokodoQuote);
             }
         }
+    }
+
+    /**
+     * Checks if Address was changed.
+     *
+     * @param AddressInterface $addressToSave
+     *
+     * @return bool
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function isAddressChanged(AddressInterface $addressToSave): bool
+    {
+        $addressOriginal = $this->checkoutSession->getQuote()->getShippingAddress();
+        return (int) $addressToSave->getCustomerAddressId() !== (int) $addressOriginal->getCustomerAddressId()
+            || $this->isAddressesFieldsChanged($addressToSave->getData(), $addressOriginal->getData());
+    }
+
+    /**
+     * Checks if address changed comparing fields.
+     *
+     * @param array $fieldsToSave
+     * @param array $fieldsOriginal
+     *
+     * @return bool
+     */
+    private function isAddressesFieldsChanged(array $fieldsToSave, array $fieldsOriginal): bool
+    {
+        foreach ($fieldsToSave as $fieldName => $value) {
+            if (isset($fieldsOriginal[$fieldName]) && $fieldsOriginal[$fieldName] != $value) {
+                return true;
+            }
+        }
+        return false;
     }
 }
