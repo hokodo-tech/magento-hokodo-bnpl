@@ -18,7 +18,7 @@ define([
                  * Update coupon form
                  */
                 invalidateHokodoOffer = function () {
-                    customerData.invalidate(['hokodo-checkout']);
+                    customerData.reload(['hokodo-checkout'], true);
                     console.log('shipping mixin invalidate');
                 };
 
