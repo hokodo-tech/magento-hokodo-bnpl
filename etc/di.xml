@@ -1315,7 +1315,7 @@
         <arguments>
             <argument name="endpoint" xsi:type="string">payment/orders/:id</argument>
             <argument name="params" xsi:type="array">
-                <item name="0" xsi:type="string">id</item>
+                <item name=":id" xsi:type="string">id</item>
             </argument>
         </arguments>
     </virtualType>
