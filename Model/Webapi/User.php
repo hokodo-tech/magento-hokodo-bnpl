@@ -156,7 +156,9 @@ class User implements UserInterface
         } catch (\Exception $e) {
             $this->logger->error(__('Hokodo_BNPL: createUser call failed with error - %1', $e->getMessage()));
             throw new Exception(
-                __('There was an error during payment method set up. Please reload the page or try again later.')
+//                __('There was an error during payment method set up. Please reload the page or try again later.')
+            //TODO REMOVE BEFORE GOING TO PROD
+                $e->getMessage()
             );
         }
         return $result;
