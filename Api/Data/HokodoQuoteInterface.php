@@ -11,15 +11,17 @@ interface HokodoQuoteInterface
 {
     public const ID = 'id';
     public const QUOTE_ID = 'quote_id';
+    public const COMPANY_ID = 'company_id';
     public const USER_ID = 'user_id';
     public const ORGANISATION_ID = 'organisation_id';
     public const ORDER_ID = 'order_id';
     public const OFFER_ID = 'offer_id';
-    public const IS_PATCH_REQUIRED = 'patch_required';
+    public const PATCH_TYPE = 'patch_type';
 
     public const PATCH_ADDRESS = 0;
-    public const PATCH_ITEMS = 1;
-    public const PATCH_BOTH = 2;
+    public const PATCH_SHIPPING = 1;
+    public const PATCH_ITEMS = 2;
+    public const PATCH_ALL = 3;
 
     /**
      * Quote Id getter.
@@ -36,6 +38,22 @@ interface HokodoQuoteInterface
      * @return $this
      */
     public function setQuoteId(int $quoteId): self;
+
+    /**
+     * Company Id getter.
+     *
+     * @return string|null
+     */
+    public function getCompanyId(): ?string;
+
+    /**
+     * Company Id setter.
+     *
+     * @param string $companyId
+     *
+     * @return $this
+     */
+    public function setCompanyId(string $companyId): self;
 
     /**
      * User Id getter.
@@ -106,7 +124,7 @@ interface HokodoQuoteInterface
      *
      * @return int|null
      */
-    public function getPatchRequired(): ?int;
+    public function getPatchType(): ?int;
 
     /**
      *  Is patch required setter.
@@ -115,5 +133,5 @@ interface HokodoQuoteInterface
      *
      * @return $this
      */
-    public function setPatchRequired(?int $patchType): self;
+    public function setPatchType(?int $patchType): self;
 }

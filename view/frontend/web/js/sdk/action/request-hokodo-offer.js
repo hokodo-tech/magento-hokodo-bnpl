@@ -11,12 +11,10 @@ define([
 ) {
     'use strict';
 
-    return function (organisationId, userId, quoteId) {
+    return function (companyId) {
         var payload = {
             payload: {
-                user_id: userId,
-                organisation_id: organisationId,
-                quote_id: quoteId
+                company_id: companyId
             }
         };
 

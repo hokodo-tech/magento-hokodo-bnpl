@@ -53,8 +53,6 @@ define([
                 this._super()
                     .observe({
                         companyId: ko.observable(hokodoData.storageSearchGet('companyId')),
-                        organisationId: ko.observable(hokodoData.storageCheckoutGet('organisationId')),
-                        userId: ko.observable(hokodoData.storageCheckoutGet('userId')),
                         offer: ko.observable(hokodoData.storageCheckoutGet('offer'))
                     });
 
@@ -66,27 +64,11 @@ define([
                 this.companyId.subscribe((companyId) => {
                     self.companyIdChanged(companyId);
                 })
-                this.organisationId.subscribe((organisationId) => {
-                    self.organisationIdChanged(organisationId);
-                })
-                this.userId.subscribe((userId) => {
-                    self.userIdChanged(userId);
-                })
                 this.offer.subscribe((offer) => {
                     self.offerChanged(offer);
                 })
                 hokodoData.storageGetCheckoutObservable().subscribe((data) => {
                     console.log('checkout data changed')
-                    if (data.organisationId !== this.organisationId()) {
-                        this.organisationId(data.organisationId);
-                        console.log('organisation Id changed')
-                        return;
-                    }
-                    if (data.userId !== this.userId()) {
-                        this.userId(data.userId);
-                        console.log('User id changed')
-                        return;
-                    }
                     let offerChanged = false;
                     if (!!data.offer) {
                         if (!!this.offer()) {
@@ -118,122 +100,43 @@ define([
 
             companyIdChanged(id) {
                 console.log('data.companyIdChanged: ' + id)
-                this.organisationId(null);
-                this.userId(null);
+                // this.organisationId(null);
+                // this.userId(null);
                 this.offer(null);
-                if (id) {
-                    this.createOrganisationAction();
-                }
-            },
-
-            organisationIdChanged(id) {
-                console.log('data.organisationIdChanged: ' + id)
-                if (id) {
-                    this.createUserAction();
-                }
-            },
-
-            userIdChanged(id) {
-                console.log('data.userIdChanged: ' + id)
                 if (id) {
                     this.createOfferAction();
                 }
             },
 
             offerChanged(offer) {
-                if (offer === '' && (this.organisationId() && this.userId())) {
+                if (offer === '') {
                     this.createOfferAction();
                 }
             },
 
             initLoggedInCustomer() {
                 console.log('data:initLoggedInCustomer')
-                if (this.companyId()) {
-                    if (this.organisationId()) {
-                        if (!this.userId()) {
-                            this.createUserAction();
-                        }
-                    } else {
-                        this.createOrganisationAction();
-                    }
-                }
-            },
-
-            createOrganisationAction() {
-                console.log('data:createOrganisationAction')
-                if (this.companyId()) {
-                    console.log('data:createOrganisationAction:companyId')
-                    createOrganisationAction(this.companyId()).done((response) => {
-                        if (response.id !== '') {
-                            hokodoData.setOrganisationId(response.id)
-                            this.organisationId(response.id)
-                        }
-                    }).fail((response) => {
-                        hokodoData.reload();
-                        if (this.hokodoPaymentMethod()) {
-                            errorProcessor.process(response, this.hokodoPaymentMethod().messageContainer)
-                        }
-                    })
-                }
-            },
-
-            createUserAction() {
-                console.log('data:createUserAction')
-                if (this.organisationId()) {
-                    console.log('data:createUserAction:this.organisationId()')
-                    if (customer.isLoggedIn() || quote.shippingAddress()) {
-                        console.log('data:createUserAction:this.organisationId():customer.isLoggedIn')
-                        createUserAction(
-                            this.organisationId(),
-                            this.getCustomerEmail(),
-                            this.getCustomerName()
-                        ).done((response) => {
-                            if (response.id !== '') {
-                                hokodoData.setUserId(response.id)
-                                this.userId(response.id)
-                            }
-                        }).fail((response) => {
-                            if (this.hokodoPaymentMethod()) {
-                                errorProcessor.process(response, this.hokodoPaymentMethod().messageContainer)
-                            }
-                        })
-                    }
-                } else {
-                    console.log('data:createUserAction:!this.organisationId()')
-                    this.createOrganisationAction();
-                }
+                this.createOfferAction();
             },
 
             createOfferAction() {
                 console.log('data:createOfferAction:')
-                if (this.userId()) {
-                    console.log('data:createOfferAction:this.userId()')
-                    if (this.organisationId) {
-                        console.log('data:createOfferAction:this.userId():this.organisationId()')
-                        if (this.hokodoPaymentMethod() !== undefined) {
-                            this.hokodoPaymentMethod().destroyCheckout();
-                        }
-                        requestOfferAction(
-                            this.organisationId(),
-                            this.userId(),
-                            quote.getQuoteId()
-                        ).done((response) => {
-                            if (response.offer !== undefined) {
-                                hokodoData.setOffer(response.offer);
-                            }
-                        }).fail((response) => {
-                            if (this.hokodoPaymentMethod()) {
-                                errorProcessor.process(response, this.hokodoPaymentMethod().messageContainer)
-                            }
-                        })
-
-                    } else {
-                        console.log('data:createOfferAction:!this.userId():!this.organisationId()')
-                        this.createOrganisationAction();
+                if (this.companyId()) {
+                    console.log('data:createOfferAction:this.companyId()')
+                    if (this.hokodoPaymentMethod() !== undefined) {
+                        this.hokodoPaymentMethod().destroyCheckout();
                     }
-                } else {
-                    console.log('data:createOfferAction:!this.userId()')
-                    this.createUserAction();
+                    requestOfferAction(
+                        this.companyId()
+                    ).done((response) => {
+                        if (response.offer !== undefined) {
+                            hokodoData.setOffer(response.offer);
+                        }
+                    }).fail((response) => {
+                        if (this.hokodoPaymentMethod()) {
+                            errorProcessor.process(response, this.hokodoPaymentMethod().messageContainer)
+                        }
+                    })
                 }
             },
 

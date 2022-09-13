@@ -47,7 +47,7 @@ class UpdateHokodoCheckout implements ObserverInterface
             if ($hokodoQuote->getQuoteId()) {
                 $hokodoQuote
                     ->setOfferId('')
-                    ->setPatchRequired(HokodoQuoteInterface::PATCH_ITEMS);
+                    ->setPatchType(HokodoQuoteInterface::PATCH_ITEMS);
                 $this->hokodoQuoteRepository->save($hokodoQuote);
             }
         }

@@ -13,24 +13,7 @@ use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
 
 interface OfferResponseInterface
 {
-    public const ORDER_ID = 'id';
     public const OFFER = 'offer';
-
-    /**
-     * Id getter.
-     *
-     * @return string
-     */
-    public function getId(): string;
-
-    /**
-     * Id setter.
-     *
-     * @param string $id
-     *
-     * @return $this
-     */
-    public function setId(string $id): self;
 
     /**
      * Offer getter.

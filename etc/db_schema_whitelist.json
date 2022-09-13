@@ -73,10 +73,12 @@
         "column": {
             "id": true,
             "quote_id": true,
+            "company_id": true,
             "user_id": true,
             "organisation_id": true,
             "order_id": true,
             "offer_id": true,
+            "patch_type": true,
             "patch_required": true
         },
         "index": {

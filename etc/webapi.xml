@@ -117,22 +117,7 @@
         </resources>
     </route>
 
-
-    <!-- Create organisation -->
-    <route url="/V1/carts/mine/hokodo-create-organisation" method="POST">
-        <service class="Hokodo\BNPL\Api\Webapi\OrganisationInterface" method="create"/>
-        <resources>
-            <resource ref="self" />
-        </resources>
-    </route>
-
-    <route url="/V1/carts/mine/hokodo-create-user" method="POST">
-        <service class="Hokodo\BNPL\Api\Webapi\UserInterface" method="create"/>
-        <resources>
-            <resource ref="self" />
-        </resources>
-    </route>
-
+    <!-- SDK -->
     <route url="/V1/carts/mine/hokodo-request-offer" method="POST">
         <service class="Hokodo\BNPL\Api\Webapi\OfferInterface" method="requestNew"/>
         <resources>

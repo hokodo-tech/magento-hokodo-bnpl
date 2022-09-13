@@ -13,6 +13,7 @@ use Hokodo\BNPL\Api\Data\Gateway\CreateOfferRequestInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterface;
 use Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterfaceFactory;
 use Hokodo\BNPL\Api\Data\HokodoQuoteInterface;
+use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
 use Hokodo\BNPL\Api\Data\Webapi\OfferRequestInterface;
 use Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterface;
 use Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterfaceFactory;
@@ -20,16 +21,27 @@ use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\OfferInterface;
 use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order as OrderGatewayService;
+use Hokodo\BNPL\Gateway\Service\Organisation as OrganisationService;
+use Hokodo\BNPL\Gateway\Service\User as UserService;
 use Hokodo\BNPL\Model\RequestBuilder\OrderBuilder;
+use Hokodo\BNPL\Model\RequestBuilder\OrganisationBuilder;
+use Hokodo\BNPL\Model\RequestBuilder\UserBuilder;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Webapi\Exception;
-use Magento\Payment\Gateway\Command\ResultInterface;
+use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\CartInterface;
 use Psr\Log\LoggerInterface;
 
 class Offer implements OfferInterface
 {
+    /**
+     * @var HokodoQuoteInterface|null
+     */
+    private ?HokodoQuoteInterface $hokodoQuote;
+
     /**
      * @var OfferResponseInterfaceFactory
      */
@@ -81,6 +93,26 @@ class Offer implements OfferInterface
     private LoggerInterface $logger;
 
     /**
+     * @var OrganisationBuilder
+     */
+    private OrganisationBuilder $organisationBuilder;
+
+    /**
+     * @var OrganisationService
+     */
+    private OrganisationService $organisationService;
+
+    /**
+     * @var UserBuilder
+     */
+    private UserBuilder $userBuilder;
+
+    /**
+     * @var UserService
+     */
+    private UserService $userService;
+
+    /**
      * @param OfferResponseInterfaceFactory      $responseInterfaceFactory
      * @param CartRepositoryInterface            $cartRepository
      * @param OrderGatewayService                $orderGatewayService
@@ -91,6 +123,10 @@ class Offer implements OfferInterface
      * @param HokodoQuoteRepositoryInterface     $hokodoQuoteRepository
      * @param OrderBuilder                       $orderBuilder
      * @param LoggerInterface                    $logger
+     * @param OrganisationBuilder                $organisationBuilder
+     * @param OrganisationService                $organisationService
+     * @param UserBuilder                        $userBuilder
+     * @param UserService                        $userService
      */
     public function __construct(
         OfferResponseInterfaceFactory $responseInterfaceFactory,
@@ -102,7 +138,11 @@ class Offer implements OfferInterface
         Session $checkoutSession,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
         OrderBuilder $orderBuilder,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OrganisationBuilder $organisationBuilder,
+        OrganisationService $organisationService,
+        UserBuilder $userBuilder,
+        UserService $userService
     ) {
         $this->responseInterfaceFactory = $responseInterfaceFactory;
         $this->cartRepository = $cartRepository;
@@ -114,143 +154,232 @@ class Offer implements OfferInterface
         $this->hokodoQuoteRepository = $hokodoQuoteRepository;
         $this->orderBuilder = $orderBuilder;
         $this->logger = $logger;
+        $this->organisationBuilder = $organisationBuilder;
+        $this->organisationService = $organisationService;
+        $this->userBuilder = $userBuilder;
+        $this->userService = $userService;
     }
 
     /**
-     * Request offer webapi handler.
+     * Request new offer method.
      *
      * @param OfferRequestInterface $payload
      *
      * @return OfferResponseInterface
      *
+     * @throws CommandException
      * @throws Exception
+     * @throws NoSuchEntityException
+     * @throws NotFoundException
+     * @throws LocalizedException
      */
     public function requestNew(OfferRequestInterface $payload): OfferResponseInterface
     {
-        $response = $this->responseInterfaceFactory->create()->setId('');
-        /* @var $response OfferResponseInterface */
+        $this->hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
+        if (($companyId = $payload->getCompanyId()) !== $this->hokodoQuote->getCompanyId()) {
+            if (!$this->hokodoQuote->getQuoteId()) {
+                $this->hokodoQuote->setQuoteId((int) $this->checkoutSession->getQuoteId());
+                $this->hokodoQuote->setCompanyId($companyId);
+            }
+            $this->createOrganisation($companyId);
+            $this->createUser();
+            $this->createOrder();
+        } else {
+            //Fallback in case patch failed
+            if ($this->hokodoQuote->getPatchType() !== null && !$this->patchOrder()) {
+                $this->createOrder();
+            }
+        }
 
+        return $this->responseInterfaceFactory->create()->setOffer($this->getOffer());
+    }
+
+    /**
+     * Create hokodo organisation request.
+     *
+     * @param string $companyId
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    private function createOrganisation(string $companyId): void
+    {
         try {
-            $quote = $this->checkoutSession->getQuote();
-            $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($quote->getId());
-            $patchFailed = true;
-            if ($hokodoQuote->getOrderId() && $hokodoQuote->getPatchRequired() !== null) {
-                try {
-                    if (($orderResponse = $this->patchOrder($quote, $hokodoQuote))
-                        && $orderResponse->getDataModel()) {
-                        $patchFailed = false;
-                    }
-                } catch (\Exception $e) {
-                    $hokodoQuote->setOrderId('');
-                    $this->logger->warning(
-                        __(
-                            'Hokodo_BNPL: patching order %1 failed with error - %1. Falling back to create order.',
-                            $hokodoQuote->getOrderId(),
-                            $e->getMessage()
-                        )
-                    );
-                }
-            }
-            $hokodoQuote->setOfferId('');
-            $this->hokodoQuoteRepository->save($hokodoQuote);
-            if ($patchFailed && $orderResponse = $this->createOrder($quote, $payload)) {
-                $hokodoQuote->setOrderId($orderResponse->getDataModel()->getId());
-            }
-            //Set Offer
-            $urls = $this->offerUrlsFactory->create();
-            /* @var $urls OfferUrlsInterface */
-            //TODO add correct urls
-            $urls->setSuccessUrl('http://hokodo.local')
-                ->setCancelUrl('http://hokodo.local')
-                ->setFailureUrl('http://hokodo.local')
-                ->setMerchantTermsUrl('http://hokodo.local')
-                ->setNotificationUrl('http://hokodo.local');
-            $createOfferRequest = $this->createOfferRequestFactory->create();
-            /* @var $createOfferRequest CreateOfferRequestInterface */
-            //TODO locales
-            $createOfferRequest
-                ->setOrder($hokodoQuote->getOrderId())
-                ->setUrls($urls)
-                ->setLocale('en-gb')
-                ->setMetadata([]);
-
-            $offer = $this->offerGatewayService->createOffer($createOfferRequest);
-            if ($dataModel = $offer->getDataModel()) {
-                $response->setOffer($dataModel);
-                $quote->setData('payment_offer_id', $dataModel->getId());
-                $this->cartRepository->save($quote);
-                $hokodoQuote->setOfferId($dataModel->getId());
-                $hokodoQuote->setPatchRequired(null);
+            $organisation = $this->organisationService->createOrganisation(
+                $this->organisationBuilder->build($companyId)
+            );
+            if ($dataModel = $organisation->getDataModel()) {
+                $this->hokodoQuote->setOrganisationId($dataModel->getId());
+                $this->hokodoQuoteRepository->save($this->hokodoQuote);
             } else {
-                $response->setId('');
+                throw new NotFoundException(__('No organisation found in API response'));
             }
-            $this->hokodoQuoteRepository->save($hokodoQuote);
         } catch (\Exception $e) {
-            $this->logger->error(__('Hokodo_BNPL: createOffer call failed with error - %1', $e->getMessage()));
+            $this->logger->error(__('Hokodo_BNPL: createOrganisation call failed with error - %1', $e->getMessage()));
             throw new Exception(
 //                __('There was an error during payment method set up. Please reload the page or try again later.')
             //TODO REMOVE BEFORE GOING TO PROD
                 __('%1', $e->getMessage())
             );
         }
-        return $response;
     }
 
     /**
-     * Create Order request.
+     * Create hokodo user request.
      *
-     * @param CartInterface         $quote
-     * @param OfferRequestInterface $payload
+     * @return void
      *
-     * @return ResultInterface|null
-     *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\NotFoundException
-     * @throws \Magento\Payment\Gateway\Command\CommandException
+     * @throws Exception
      */
-    private function createOrder(CartInterface $quote, OfferRequestInterface $payload): ?ResultInterface
+    private function createUser(): void
     {
-        $orderRequest = $this->orderBuilder->buildOrderRequestBase($quote);
-        $orderRequest->setCustomer(
-            $this->orderBuilder->buildCustomer($quote)
-                ->setUser($payload->getUserId())
-                ->setOrganisation($payload->getOrganisationId())
-        );
-        $orderRequest->setItems($this->orderBuilder->buildOrderItems($quote));
-        return $this->orderGatewayService->createOrder($orderRequest);
+        try {
+            $customer = $this->checkoutSession->getQuote()->getCustomer();
+            $user = $this->userService->createUser(
+                $this->userBuilder->build(
+                    $customer->getEmail(),
+                    $customer->getFirstname() . ' ' . $customer->getLastname(),
+                    $this->hokodoQuote->getOrganisationId()
+                )
+            );
+            if ($dataModel = $user->getDataModel()) {
+                $this->hokodoQuote->setUserId($dataModel->getId());
+                $this->hokodoQuoteRepository->save($this->hokodoQuote);
+            } else {
+                throw new NotFoundException(__('No user found in API response'));
+            }
+        } catch (\Exception $e) {
+            $this->logger->error(__('Hokodo_BNPL: createUser call failed with error - %1', $e->getMessage()));
+            throw new Exception(
+//                __('There was an error during payment method set up. Please reload the page or try again later.')
+            //TODO REMOVE BEFORE GOING TO PROD
+                __('%1', $e->getMessage())
+            );
+        }
+    }
+
+    /**
+     * Create hokodo order request.
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    private function createOrder(): void
+    {
+        try {
+            $orderRequest = $this->orderBuilder->buildOrderRequestBase($this->checkoutSession->getQuote());
+            $orderRequest->setCustomer(
+                $this->orderBuilder->buildCustomer($this->checkoutSession->getQuote())
+                    ->setUser($this->hokodoQuote->getUserId())
+                    ->setOrganisation($this->hokodoQuote->getOrganisationId())
+            );
+            $orderRequest->setItems($this->orderBuilder->buildOrderItems($this->checkoutSession->getQuote()));
+            if ($dataModel = $this->orderGatewayService->createOrder($orderRequest)->getDataModel()) {
+                $this->hokodoQuote->setOrderId($dataModel->getId());
+                $this->hokodoQuoteRepository->save($this->hokodoQuote);
+            } else {
+                throw new NotFoundException(__('No order found in API response'));
+            }
+        } catch (\Exception $e) {
+            $this->logger->error(__('Hokodo_BNPL: createOrder call failed with error - %1', $e->getMessage()));
+            throw new Exception(
+//                __('There was an error during payment method set up. Please reload the page or try again later.')
+            //TODO REMOVE BEFORE GOING TO PROD
+                __('%1', $e->getMessage())
+            );
+        }
     }
 
     /**
      * Patch order request.
      *
-     * @param CartInterface        $quote
-     * @param HokodoQuoteInterface $hokodoQuote
-     *
-     * @return ResultInterface|null
-     *
-     * @throws \Magento\Framework\Exception\NotFoundException
-     * @throws \Magento\Payment\Gateway\Command\CommandException
+     * @return bool
      */
-    private function patchOrder(CartInterface $quote, HokodoQuoteInterface $hokodoQuote): ?ResultInterface
+    private function patchOrder(): bool
     {
-        $patchRequest = $this->orderBuilder->buildPatchOrderRequestBase($hokodoQuote->getOrderId());
-        if ($hokodoQuote->getPatchRequired() === HokodoQuoteInterface::PATCH_ADDRESS) {
-            $patchRequest->setCustomer($this->orderBuilder->buildPatchCustomerAddress($quote));
+        //TODO refactor
+        try {
+            $quote = $this->checkoutSession->getQuote();
+            $patchRequest = $this->orderBuilder->buildPatchOrderRequestBase($this->hokodoQuote->getOrderId());
+            if (in_array(
+                $this->hokodoQuote->getPatchType(),
+                [
+                        HokodoQuoteInterface::PATCH_ADDRESS,
+                        HokodoQuoteInterface::PATCH_ALL,
+                    ],
+                true
+            )
+            ) {
+                $patchRequest->setCustomer($this->orderBuilder->buildPatchCustomerAddress($quote));
+            }
+            if (in_array(
+                $this->hokodoQuote->getPatchType(),
+                [
+                        HokodoQuoteInterface::PATCH_ITEMS,
+                        HokodoQuoteInterface::PATCH_SHIPPING,
+                        HokodoQuoteInterface::PATCH_ALL,
+                    ],
+                true
+            )
+            ) {
+                $patchRequest
+                    ->setTotalAmount((int) ($quote->getGrandTotal() * 100))
+                    ->setTaxAmount((int) ($quote->getShippingAddress()->getTaxAmount() * 100));
+                $patchRequest->setItems($this->orderBuilder->buildOrderItems($quote));
+            }
+            $this->orderGatewayService->patchOrder($patchRequest);
+            return true;
+        } catch (\Exception $e) {
+            $this->logger->error(__('Hokodo_BNPL: createUser call failed with error - %1', $e->getMessage()));
+            return false;
         }
-        if ($hokodoQuote->getPatchRequired() === HokodoQuoteInterface::PATCH_ITEMS) {
-            $patchRequest
-                ->setTotalAmount((int) ($quote->getGrandTotal() * 100))
-                ->setTaxAmount((int) ($quote->getShippingAddress()->getTaxAmount() * 100));
-            $patchRequest->setItems($this->orderBuilder->buildOrderItems($quote));
-        }
-        if ($hokodoQuote->getPatchRequired() === HokodoQuoteInterface::PATCH_BOTH) {
-            $patchRequest->setCustomer($this->orderBuilder->buildPatchCustomerAddress($quote));
-            $patchRequest
-                ->setTotalAmount((int) ($quote->getGrandTotal() * 100))
-                ->setTaxAmount((int) ($quote->getShippingAddress()->getTaxAmount() * 100));
-            $patchRequest->setItems($this->orderBuilder->buildOrderItems($quote));
+    }
+
+    /**
+     * Get new offer method.
+     *
+     * @return PaymentOffersInterface
+     *
+     * @throws CommandException
+     * @throws NoSuchEntityException
+     * @throws NotFoundException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getOffer(): PaymentOffersInterface
+    {
+        //Set Offer
+        $urls = $this->offerUrlsFactory->create();
+        /* @var $urls OfferUrlsInterface */
+        //TODO add correct urls
+        $urls->setSuccessUrl('http://hokodo.local')
+            ->setCancelUrl('http://hokodo.local')
+            ->setFailureUrl('http://hokodo.local')
+            ->setMerchantTermsUrl('http://hokodo.local')
+            ->setNotificationUrl('http://hokodo.local');
+        $createOfferRequest = $this->createOfferRequestFactory->create();
+        /* @var $createOfferRequest CreateOfferRequestInterface */
+        //TODO locales
+        $createOfferRequest
+            ->setOrder($this->hokodoQuote->getOrderId())
+            ->setUrls($urls)
+            ->setLocale('en-gb')
+            ->setMetadata([]);
+
+        $offer = $this->offerGatewayService->createOffer($createOfferRequest);
+        if ($dataModel = $offer->getDataModel()) {
+            $quote = $this->checkoutSession->getQuote();
+            $quote->setData('payment_offer_id', $dataModel->getId());
+            $this->cartRepository->save($quote);
+
+            $this->hokodoQuote->setOfferId($dataModel->getId());
+            $this->hokodoQuote->setPatchType(null);
+            $this->hokodoQuoteRepository->save($this->hokodoQuote);
+
+            return $dataModel;
         }
 
-        return $this->orderGatewayService->patchOrder($patchRequest);
+        throw new NotFoundException(__('No offer found in API response'));
     }
 }

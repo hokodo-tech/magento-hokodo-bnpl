@@ -121,8 +121,6 @@ define([
                 this.userCheckout.on('success', () => {
                     self.additionalData.hokodo_payment_offer_id = this.hokodoCheckout().offer().id;
                     self.additionalData.hokodo_order_id = this.hokodoCheckout().offer().order;
-                    self.additionalData.hokodo_user_id = this.hokodoCheckout().userId();
-                    self.additionalData.hokodo_organisation_id = this.hokodoCheckout().organisationId();
                     self.placeOrder()
                 });
 
@@ -139,7 +137,6 @@ define([
         },
 
         afterPlaceOrder() {
-            // hokodoData.clearOrderData();
             this._super();
         },
 

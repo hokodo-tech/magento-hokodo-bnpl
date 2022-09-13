@@ -77,8 +77,6 @@ define([
 
         clearData() {
             this.setCompanyId(null);
-            this.setOrganisationId(null);
-            this.setUserId(null);
             this.setOffer(null);
         },
 

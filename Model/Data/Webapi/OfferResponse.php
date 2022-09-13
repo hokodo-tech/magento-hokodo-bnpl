@@ -14,23 +14,6 @@ use Magento\Framework\Api\AbstractSimpleObject;
 class OfferResponse extends AbstractSimpleObject implements OfferResponseInterface
 {
     /**
-     * @inheritDoc
-     */
-    public function getId(): string
-    {
-        return $this->_get(self::ORDER_ID);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setId(string $id): self
-    {
-        $this->setData(self::ORDER_ID, $id);
-        return $this;
-    }
-
-    /**
      * @inheritdoc
      */
     public function getOffer(): ?PaymentOffersInterface

@@ -66,7 +66,7 @@ class HokodoCheckout implements SectionSourceInterface
     {
         $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
         $offer = '';
-        if ($hokodoQuote->getPatchRequired() !== null) {
+        if ($hokodoQuote->getPatchType() !== null) {
             $hokodoQuote->setOfferId('');
         }
         if ($hokodoQuote->getOfferId()) {
@@ -79,8 +79,6 @@ class HokodoCheckout implements SectionSourceInterface
         $this->hokodoQuoteRepository->save($hokodoQuote);
 
         return [
-            self::USER_ID => $hokodoQuote->getUserId() ?? '',
-            self::ORGANISATION_ID => $hokodoQuote->getOrganisationId() ?? '',
             self::OFFER => $offer ? $offer->__toArray() : '',
         ];
     }

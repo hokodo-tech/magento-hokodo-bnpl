@@ -49,6 +49,23 @@ class HokodoQuote extends AbstractModel implements HokodoQuoteInterface
     /**
      * @inheritdoc
      */
+    public function getCompanyId(): ?string
+    {
+        return $this->getData(self::COMPANY_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCompanyId(string $companyId): self
+    {
+        $this->setData(self::COMPANY_ID, $companyId);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getUserId(): ?string
     {
         return $this->getData(self::USER_ID);
@@ -117,28 +134,27 @@ class HokodoQuote extends AbstractModel implements HokodoQuoteInterface
     /**
      * @inheritdoc
      */
-    public function getPatchRequired(): ?int
+    public function getPatchType(): ?int
     {
-        //TODO rewrite without using null
-        if ($this->getData(self::IS_PATCH_REQUIRED) === null) {
+        if ($this->getData(self::PATCH_TYPE) === null) {
             return null;
         }
-        return (int) $this->getData(self::IS_PATCH_REQUIRED);
+        return (int) $this->getData(self::PATCH_TYPE);
     }
 
     /**
      * @inheritdoc
      */
-    public function setPatchRequired(?int $patchType): self
+    public function setPatchType(?int $patchType): self
     {
-        $currentPatchRequired = $this->getPatchRequired();
-        $this->setData(self::IS_PATCH_REQUIRED, $patchType);
+        $currentPatchRequired = $this->getPatchType();
         if ($patchType !== null
             && $currentPatchRequired !== null
             && $currentPatchRequired !== $patchType
         ) {
-            $this->setData(self::IS_PATCH_REQUIRED, self::PATCH_BOTH);
+            $patchType = self::PATCH_ALL;
         }
+        $this->setData(self::PATCH_TYPE, $patchType);
 
         return $this;
     }

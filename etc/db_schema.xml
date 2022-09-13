@@ -73,11 +73,12 @@
     <table name="hokodo_quote" resource="default" engine="innodb" comment="Hokodo Quote">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Hokodo Quote Id"/>
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" comment="Magento Quote ID"/>
+        <column xsi:type="varchar" name="company_id" nullable="true" length="255" comment="Selected Company Id"/>
         <column xsi:type="varchar" name="user_id" nullable="true" length="255" comment="User Api Id"/>
         <column xsi:type="varchar" name="organisation_id" nullable="true" length="255" comment="Organisation Api Id"/>
         <column xsi:type="varchar" name="order_id" nullable="true" length="255" comment="Order Api Id"/>
         <column xsi:type="varchar" name="offer_id" nullable="true" length="255" comment="Payment Offer Api Id"/>
-        <column xsi:type="tinyint" name="patch_required" default="0" nullable="true" unsigned="false" comment="Order patch required"/>
+        <column xsi:type="tinyint" name="patch_type" default="null" nullable="true" unsigned="false" comment="Order patch type"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>

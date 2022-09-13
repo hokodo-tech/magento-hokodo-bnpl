@@ -42,7 +42,7 @@ class ShippingInformation
      *
      * @param \Magento\Checkout\Model\ShippingInformationManagement $subject
      * @param string                                                $cartId
-     * @param ShippingInformationInterface                          $addressInformation
+     * @param ShippingInformationInterface                          $shippingInformation
      *
      * @return void
      *
@@ -52,15 +52,20 @@ class ShippingInformation
     public function beforeSaveAddressInformation(
         \Magento\Checkout\Model\ShippingInformationManagement $subject,
         $cartId,
-        ShippingInformationInterface $addressInformation
+        ShippingInformationInterface $shippingInformation
     ) {
-        if ($this->isAddressChanged($addressInformation->getShippingAddress()) ||
-            $this->checkoutSession->getQuote()->getShippingAddress()->getShippingMethod() !==
-            $addressInformation->getShippingMethodCode() . '_' . $addressInformation->getShippingCarrierCode()
-        ) {
+        $shippingChange = $this->isShippingChanged($shippingInformation);
+        $addressChange = $this->isAddressChanged($shippingInformation->getShippingAddress());
+        if ($shippingChange || $addressChange) {
             $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($cartId);
             if ($hokodoQuote->getOrderId()) {
-                $hokodoQuote->setOfferId('')->setPatchRequired(HokodoQuoteInterface::PATCH_ADDRESS);
+                $hokodoQuote->setOfferId('');
+                if ($shippingChange) {
+                    $hokodoQuote->setPatchType(HokodoQuoteInterface::PATCH_SHIPPING);
+                }
+                if ($addressChange) {
+                    $hokodoQuote->setPatchType(HokodoQuoteInterface::PATCH_ADDRESS);
+                }
                 $this->hokodoQuoteRepository->save($hokodoQuote);
             }
         }
@@ -99,5 +104,21 @@ class ShippingInformation
             }
         }
         return false;
+    }
+
+    /**
+     * Checks if shipping method was changed.
+     *
+     * @param ShippingInformationInterface $shippingInformation
+     *
+     * @return bool
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function isShippingChanged(ShippingInformationInterface $shippingInformation): bool
+    {
+        return $this->checkoutSession->getQuote()->getShippingAddress()->getShippingMethod() !==
+            $shippingInformation->getShippingMethodCode() . '_' . $shippingInformation->getShippingCarrierCode();
     }
 }

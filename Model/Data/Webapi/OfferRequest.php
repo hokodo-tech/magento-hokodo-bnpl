@@ -13,53 +13,19 @@ use Magento\Framework\DataObject;
 class OfferRequest extends DataObject implements OfferRequestInterface
 {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function getOrganisationId(): string
+    public function getCompanyId(): string
     {
-        return $this->getData(self::ORGANISATION_ID);
+        return $this->getData(self::COMPANY_ID);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function setOrganisationId(string $organisationId): self
+    public function setCompanyId(string $companyId): self
     {
-        $this->setData(self::ORGANISATION_ID, $organisationId);
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getUserId(): string
-    {
-        return $this->getData(self::USER_ID);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setUserId(string $userId): self
-    {
-        $this->setData(self::USER_ID, $userId);
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getQuoteId(): string
-    {
-        return $this->getData(self::QUOTE_ID);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setQuoteId(string $quoteId): self
-    {
-        $this->setData(self::QUOTE_ID, $quoteId);
+        $this->setData(self::COMPANY_ID, $companyId);
         return $this;
     }
 }
