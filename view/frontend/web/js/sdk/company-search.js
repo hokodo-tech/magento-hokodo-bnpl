@@ -1,11 +1,10 @@
 define([
     'jquery',
     'underscore',
-    'Hokodo_BNPL/js/sdk/core',
     'uiComponent',
     'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
     'Magento_Ui/js/modal/modal'
-], function ($, _, sdkCore, Component, hokodoData) {
+], function ($, _, Component, hokodoData) {
     return Component.extend({
         defaults: {
             template: 'Hokodo_BNPL/sdk/company-search'
@@ -14,9 +13,9 @@ define([
         initialize() {
             this._super();
             if (hokodoData.getCompanyId()) {
-                this.companySearch = sdkCore.getSdk().elements().create("companySearch", {companyId: hokodoData.getCompanyId()});
+                this.companySearch = this.getSdk().elements().create("companySearch", {companyId: hokodoData.getCompanyId()});
             } else {
-                this.companySearch = sdkCore.getSdk().elements().create("companySearch");
+                this.companySearch = this.getSdk().elements().create("companySearch");
             }
             const self = this;
             this.companySearch.on("ready", () => {
@@ -49,6 +48,10 @@ define([
 
         onAfterRender() {
             this.companySearch.mount("#hokodoCompanySearch");
+        },
+
+        getSdk() {
+            return Hokodo(this.sdkKey);
         }
     })
 })

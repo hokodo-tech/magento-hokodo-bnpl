@@ -50,6 +50,7 @@ class OrganisationBuilder
         $gatewayRequest = $this->createOrganisationGatewayRequestFactory->create();
         return $gatewayRequest
             ->setCompanyId($companyId)
+            //TODO Review the organisation unique id creation pattern
             ->setUniqueId('mage-org-' . hash('md5', $this->storeManager->getStore()->getCode() .
                     $this->storeManager->getStore()->getName() . $companyId))
             ->setRegistered(date('Y-m-d\TH:i:s\Z'));

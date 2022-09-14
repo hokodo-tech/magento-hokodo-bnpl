@@ -1,3 +1,11 @@
+<?php
+/**
+ * @var $block \Magento\Framework\View\Element\Template
+ * @var $viewModel \Hokodo\BNPL\ViewModel\CompanySearch
+ */
+
+$viewModel = $block->getData('viewModel');
+?>
 <div id="company-search-placeholder" data-bind="scope: 'hokodo-company-search'">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
@@ -7,7 +15,10 @@
             "Magento_Ui/js/core/app": {
                 "components": {
                     "hokodo-company-search": {
-                        "component": "Hokodo_BNPL/js/sdk/company-search"
+                        "component": "Hokodo_BNPL/js/sdk/company-search",
+                        "config": {
+                            "sdkKey": "<?= $viewModel->getSdkKey() ?>"
+                        }
                     }
                 }
             }

@@ -7,8 +7,7 @@ define([
     'underscore',
     'ko',
     'Magento_Checkout/js/view/payment/default',
-    'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
-    'HokodoSDK'
+    'Hokodo_BNPL/js/sdk/hokodo-data-persistor'
 ], function (
         $,
         _,
@@ -29,8 +28,7 @@ define([
             searchInitialized: false
         },
 
-        // TODO: Get key from backend
-        hokodoElements: Hokodo("pk_test_g7ziU-hyBnm6oQmALykxnnwliwWmRj-TukvjZ3iKNvU").elements(),
+        hokodoElements: Hokodo(window.checkoutConfig.hokodoSdkKey).elements(),
 
         /**
          * Init component

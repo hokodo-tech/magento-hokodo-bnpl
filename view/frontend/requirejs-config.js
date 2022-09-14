@@ -31,8 +31,7 @@ config = {
     map: {
         '*': {
             'Magento_SalesRule/js/action/set-coupon-code': 'Hokodo_BNPL/js/salerule/set-coupon-code',
-            'Magento_SalesRule/js/action/cancel-coupon': 'Hokodo_BNPL/js/salerule/cancel-coupon',
-            'HokodoSDK': 'https://js-dev.hokodo.co/hokodo-js/v1/'
+            'Magento_SalesRule/js/action/cancel-coupon': 'Hokodo_BNPL/js/salerule/cancel-coupon'
         }
     }
 };

@@ -1,0 +1,11 @@
+<?php
+/**
+ * @var $block \Magento\Framework\View\Element\Template
+ * @var $viewModel \Hokodo\BNPL\ViewModel\SdkLoader
+ */
+
+$viewModel = $block->getData('viewModel');
+?>
+<script>
+    require(['<?= $viewModel->getSdkUrl() ?>'])
+</script>

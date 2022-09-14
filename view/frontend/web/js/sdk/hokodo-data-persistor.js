@@ -48,24 +48,6 @@ define([
             return this;
         },
 
-        getOrganisationId() {
-            return this.storageCheckoutGet('organisationId');
-        },
-
-        setOrganisationId(id) {
-            this.storageCheckoutSet('organisationId', id);
-            return this;
-        },
-
-        getUserId() {
-            return this.storageCheckoutGet('userId');
-        },
-
-        setUserId(id) {
-            this.storageCheckoutSet('userId', id);
-            return this;
-        },
-
         getOffer() {
             return this.storageCheckoutGet('offer');
         },
