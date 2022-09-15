@@ -7,7 +7,17 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Data\Gateway;
 
-class PatchOrderRequest
+use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface;
+
+class PatchOrderRequest extends CreateOrderRequest implements PatchOrderRequestInterface
 {
 
+    /**
+     * @inheritDoc
+     */
+    public function setOrderId(string $orderId): PatchOrderRequestInterface
+    {
+        $this->setData(self::ORDER_ID, $orderId);
+        return $this;
+    }
 }

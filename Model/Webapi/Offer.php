@@ -175,7 +175,9 @@ class Offer implements OfferInterface
             $this->createOrder();
         } else {
             //Fallback in case patch failed
-            if ($this->hokodoQuote->getPatchType() !== null && !$this->patchOrder()) {
+            if (!$this->hokodoQuote->getOrderId() ||
+                ($this->hokodoQuote->getPatchType() !== null && !$this->patchOrder())
+            ) {
                 $this->createOrder();
             }
         }

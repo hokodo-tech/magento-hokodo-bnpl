@@ -1204,6 +1204,7 @@
     <preference for="Hokodo\BNPL\Api\Data\Webapi\OfferRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\OfferRequest" />
     <preference for="Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\OfferResponse" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CreateOrderRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\PatchOrderRequest" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\OrderCustomerInterface" type="Hokodo\BNPL\Model\Data\Gateway\OrderCustomer" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterface" type="Hokodo\BNPL\Model\Data\Gateway\CustomerAddress" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\OrderItemInterface" type="Hokodo\BNPL\Model\Data\Gateway\OrderItem" />
@@ -1341,7 +1342,7 @@
         <arguments>
             <argument name="endpoint" xsi:type="string">payment/orders/:id</argument>
             <argument name="params" xsi:type="array">
-                <item name=":id" xsi:type="string">unique_id</item>
+                <item name=":id" xsi:type="string">order_id</item>
             </argument>
         </arguments>
     </virtualType>

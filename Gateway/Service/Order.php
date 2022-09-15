@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Gateway\Service;
 
 use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterface;
+use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface;
 use Magento\Payment\Gateway\Command\ResultInterface;
 
 class Order extends AbstractService
@@ -30,14 +31,14 @@ class Order extends AbstractService
     /**
      * Patch order gateway command.
      *
-     * @param CreateOrderRequestInterface $createOrderRequest
+     * @param PatchOrderRequestInterface $createOrderRequest
      *
      * @return ResultInterface|null
      *
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Payment\Gateway\Command\CommandException
      */
-    public function patchOrder(CreateOrderRequestInterface $createOrderRequest): ?ResultInterface
+    public function patchOrder(PatchOrderRequestInterface $createOrderRequest): ?ResultInterface
     {
         return $this->commandPool->get('sdk_order_patch')->execute($createOrderRequest->__toArray());
     }

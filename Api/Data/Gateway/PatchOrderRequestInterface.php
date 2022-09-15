@@ -9,5 +9,14 @@ namespace Hokodo\BNPL\Api\Data\Gateway;
 
 interface PatchOrderRequestInterface
 {
+    public const ORDER_ID = 'order_id';
 
+    /**
+     * Order Id setter.
+     *
+     * @param string $orderId
+     *
+     * @return $this
+     */
+    public function setOrderId(string $orderId): self;
 }

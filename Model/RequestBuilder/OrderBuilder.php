@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\RequestBuilder;
 
-use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterface as GatewayRequest;
-use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterfaceFactory as GatewayRequestFactory;
+use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterface;
+use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterfaceFactory;
+use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface;
+use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\OrderCustomerInterface;
@@ -32,9 +34,14 @@ use Magento\Tax\Model\Config as TaxConfig;
 class OrderBuilder
 {
     /**
-     * @var GatewayRequestFactory
+     * @var CreateOrderRequestInterfaceFactory
      */
-    private GatewayRequestFactory $gatewayRequestFactory;
+    private CreateOrderRequestInterfaceFactory $createOrderRequestInterfaceFactory;
+
+    /**
+     * @var PatchOrderRequestInterfaceFactory
+     */
+    private PatchOrderRequestInterfaceFactory $patchOrderRequestInterfaceFactory;
 
     /**
      * @var OrderCustomerInterfaceFactory
@@ -82,19 +89,21 @@ class OrderBuilder
     private ReadFactory $readFactory;
 
     /**
-     * @param GatewayRequestFactory           $gatewayRequestFactory
-     * @param OrderCustomerInterfaceFactory   $orderCustomerFactory
-     * @param CustomerAddressInterfaceFactory $customerAddressFactory
-     * @param OrderItemInterfaceFactory       $orderItemFactory
-     * @param ScopeConfigInterface            $config
-     * @param ProductMetadataInterface        $productMetadata
-     * @param StoreManagerInterface           $storeManager
-     * @param DateTimeFactory                 $dateTimeFactory
-     * @param ComponentRegistrarInterface     $componentRegistrar
-     * @param ReadFactory                     $readFactory
+     * @param CreateOrderRequestInterfaceFactory $createOrderRequestInterfaceFactory
+     * @param PatchOrderRequestInterfaceFactory  $patchOrderRequestInterfaceFactory
+     * @param OrderCustomerInterfaceFactory      $orderCustomerFactory
+     * @param CustomerAddressInterfaceFactory    $customerAddressFactory
+     * @param OrderItemInterfaceFactory          $orderItemFactory
+     * @param ScopeConfigInterface               $config
+     * @param ProductMetadataInterface           $productMetadata
+     * @param StoreManagerInterface              $storeManager
+     * @param DateTimeFactory                    $dateTimeFactory
+     * @param ComponentRegistrarInterface        $componentRegistrar
+     * @param ReadFactory                        $readFactory
      */
     public function __construct(
-        GatewayRequestFactory $gatewayRequestFactory,
+        CreateOrderRequestInterfaceFactory $createOrderRequestInterfaceFactory,
+        PatchOrderRequestInterfaceFactory $patchOrderRequestInterfaceFactory,
         OrderCustomerInterfaceFactory $orderCustomerFactory,
         CustomerAddressInterfaceFactory $customerAddressFactory,
         OrderItemInterfaceFactory $orderItemFactory,
@@ -105,7 +114,8 @@ class OrderBuilder
         ComponentRegistrarInterface $componentRegistrar,
         ReadFactory $readFactory
     ) {
-        $this->gatewayRequestFactory = $gatewayRequestFactory;
+        $this->createOrderRequestInterfaceFactory = $createOrderRequestInterfaceFactory;
+        $this->patchOrderRequestInterfaceFactory = $patchOrderRequestInterfaceFactory;
         $this->orderCustomerFactory = $orderCustomerFactory;
         $this->customerAddressFactory = $customerAddressFactory;
         $this->orderItemFactory = $orderItemFactory;
@@ -122,13 +132,13 @@ class OrderBuilder
      *
      * @param CartInterface $quote
      *
-     * @return GatewayRequest
+     * @return CreateOrderRequestInterface
      *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function buildOrderRequestBase(CartInterface $quote): GatewayRequest
+    public function buildOrderRequestBase(CartInterface $quote): CreateOrderRequestInterface
     {
-        $orderRequest = $this->gatewayRequestFactory->create();
+        $orderRequest = $this->createOrderRequestInterfaceFactory->create();
         return $orderRequest
             ->setUniqueId(
                 'magento-temp-' . hash('md5', $this->storeManager->getStore()->getCode() .
@@ -263,10 +273,10 @@ class OrderBuilder
     private function isApplyTaxAdjustment(int $storeId = 0): bool
     {
         return $this->config->getValue(
-            TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        ) &&
+                TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            ) &&
             !$this->config->getValue(
                 TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
                 ScopeInterface::SCOPE_STORE,
@@ -299,11 +309,11 @@ class OrderBuilder
      *
      * @param string $orderId
      *
-     * @return GatewayRequest
+     * @return PatchOrderRequestInterface
      */
-    public function buildPatchOrderRequestBase(string $orderId)
+    public function buildPatchOrderRequestBase(string $orderId): PatchOrderRequestInterface
     {
-        return $this->gatewayRequestFactory->create()->setUniqueId($orderId);
+        return $this->patchOrderRequestInterfaceFactory->create()->setOrderId($orderId);
     }
 
     /**
