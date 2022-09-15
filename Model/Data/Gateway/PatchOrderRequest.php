@@ -11,7 +11,6 @@ use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface;
 
 class PatchOrderRequest extends CreateOrderRequest implements PatchOrderRequestInterface
 {
-
     /**
      * @inheritDoc
      */

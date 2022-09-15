@@ -9,14 +9,14 @@ namespace Hokodo\BNPL\Model\RequestBuilder;
 
 use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterfaceFactory;
-use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface;
-use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\OrderCustomerInterface;
 use Hokodo\BNPL\Api\Data\Gateway\OrderCustomerInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\OrderItemInterface;
 use Hokodo\BNPL\Api\Data\Gateway\OrderItemInterfaceFactory;
+use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface;
+use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterfaceFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Component\ComponentRegistrar;
@@ -273,10 +273,10 @@ class OrderBuilder
     private function isApplyTaxAdjustment(int $storeId = 0): bool
     {
         return $this->config->getValue(
-                TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
-                ScopeInterface::SCOPE_STORE,
-                $storeId
-            ) &&
+            TaxConfig::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        ) &&
             !$this->config->getValue(
                 TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
                 ScopeInterface::SCOPE_STORE,

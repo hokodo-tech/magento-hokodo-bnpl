@@ -6,8 +6,8 @@
 
 namespace Hokodo\BNPL\Observer;
 
-use Hokodo\BNPL\Model\RequestBuilder\OrderBuilder;
 use Hokodo\BNPL\Gateway\Service\Order;
+use Hokodo\BNPL\Model\RequestBuilder\OrderBuilder;
 use Hokodo\BNPL\Model\SaveLog as Logger;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -43,7 +43,6 @@ class OrderPlaceSuccessObserver implements ObserverInterface
         Order $orderService,
         LoggerInterface $logger
     ) {
-
         $this->orderBuilder = $orderBuilder;
         $this->orderService = $orderService;
         $this->logger = $logger;
