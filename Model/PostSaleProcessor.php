@@ -238,7 +238,9 @@ class PostSaleProcessor
 
         $orderItem->setItemId($salesOrderItem->getQuoteItemId());
         $orderItem->setQuantity($shipItem->getQty());
-        $shipmentItemTotalInclTax = $salesOrderItem->getPriceInclTax() * $shipItem->getQty();
+        $shipmentItemTotalInclTax = round(
+            ($salesOrderItem->getRowTotalInclTax() / $salesOrderItem->getQtyOrdered()) * $shipItem->getQty()
+        );
         $shipmentItemTotalExclTax = $salesOrderItem->getBasePrice() * $shipItem->getQty();
         $currentTax = $shipmentItemTotalInclTax / $shipmentItemTotalExclTax;
         $discountAmount = ($salesOrderItem->getDiscountAmount() * $shipItem->getQty())
