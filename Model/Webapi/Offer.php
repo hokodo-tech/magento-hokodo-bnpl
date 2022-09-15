@@ -8,10 +8,6 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Webapi;
 
-use Hokodo\BNPL\Api\Data\Gateway\CreateOfferRequestInterface;
-use Hokodo\BNPL\Api\Data\Gateway\CreateOfferRequestInterfaceFactory;
-use Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterface;
-use Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterfaceFactory;
 use Hokodo\BNPL\Api\Data\HokodoQuoteInterface;
 use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
 use Hokodo\BNPL\Api\Data\Webapi\OfferRequestInterface;
@@ -23,6 +19,7 @@ use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order as OrderGatewayService;
 use Hokodo\BNPL\Gateway\Service\Organisation as OrganisationService;
 use Hokodo\BNPL\Gateway\Service\User as UserService;
+use Hokodo\BNPL\Model\RequestBuilder\OfferBuilder;
 use Hokodo\BNPL\Model\RequestBuilder\OrderBuilder;
 use Hokodo\BNPL\Model\RequestBuilder\OrganisationBuilder;
 use Hokodo\BNPL\Model\RequestBuilder\UserBuilder;
@@ -58,19 +55,9 @@ class Offer implements OfferInterface
     private OrderGatewayService $orderGatewayService;
 
     /**
-     * @var CreateOfferRequestInterfaceFactory
-     */
-    private CreateOfferRequestInterfaceFactory $createOfferRequestFactory;
-
-    /**
      * @var OfferGatewayService
      */
     private OfferGatewayService $offerGatewayService;
-
-    /**
-     * @var OfferUrlsInterfaceFactory
-     */
-    private OfferUrlsInterfaceFactory $offerUrlsFactory;
 
     /**
      * @var Session
@@ -113,28 +100,30 @@ class Offer implements OfferInterface
     private UserService $userService;
 
     /**
-     * @param OfferResponseInterfaceFactory      $responseInterfaceFactory
-     * @param CartRepositoryInterface            $cartRepository
-     * @param OrderGatewayService                $orderGatewayService
-     * @param CreateOfferRequestInterfaceFactory $createOfferRequestFactory
-     * @param OfferGatewayService                $offerGatewayService
-     * @param OfferUrlsInterfaceFactory          $offerUrlsFactory
-     * @param Session                            $checkoutSession
-     * @param HokodoQuoteRepositoryInterface     $hokodoQuoteRepository
-     * @param OrderBuilder                       $orderBuilder
-     * @param LoggerInterface                    $logger
-     * @param OrganisationBuilder                $organisationBuilder
-     * @param OrganisationService                $organisationService
-     * @param UserBuilder                        $userBuilder
-     * @param UserService                        $userService
+     * @var OfferBuilder
+     */
+    private OfferBuilder $offerBuilder;
+
+    /**
+     * @param OfferResponseInterfaceFactory  $responseInterfaceFactory
+     * @param CartRepositoryInterface        $cartRepository
+     * @param OrderGatewayService            $orderGatewayService
+     * @param OfferGatewayService            $offerGatewayService
+     * @param Session                        $checkoutSession
+     * @param HokodoQuoteRepositoryInterface $hokodoQuoteRepository
+     * @param OrderBuilder                   $orderBuilder
+     * @param LoggerInterface                $logger
+     * @param OrganisationBuilder            $organisationBuilder
+     * @param OrganisationService            $organisationService
+     * @param UserBuilder                    $userBuilder
+     * @param UserService                    $userService
+     * @param OfferBuilder                   $offerBuilder
      */
     public function __construct(
         OfferResponseInterfaceFactory $responseInterfaceFactory,
         CartRepositoryInterface $cartRepository,
         OrderGatewayService $orderGatewayService,
-        CreateOfferRequestInterfaceFactory $createOfferRequestFactory,
         OfferGatewayService $offerGatewayService,
-        OfferUrlsInterfaceFactory $offerUrlsFactory,
         Session $checkoutSession,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
         OrderBuilder $orderBuilder,
@@ -142,14 +131,13 @@ class Offer implements OfferInterface
         OrganisationBuilder $organisationBuilder,
         OrganisationService $organisationService,
         UserBuilder $userBuilder,
-        UserService $userService
+        UserService $userService,
+        OfferBuilder $offerBuilder
     ) {
         $this->responseInterfaceFactory = $responseInterfaceFactory;
         $this->cartRepository = $cartRepository;
         $this->orderGatewayService = $orderGatewayService;
-        $this->createOfferRequestFactory = $createOfferRequestFactory;
         $this->offerGatewayService = $offerGatewayService;
-        $this->offerUrlsFactory = $offerUrlsFactory;
         $this->checkoutSession = $checkoutSession;
         $this->hokodoQuoteRepository = $hokodoQuoteRepository;
         $this->orderBuilder = $orderBuilder;
@@ -158,6 +146,7 @@ class Offer implements OfferInterface
         $this->organisationService = $organisationService;
         $this->userBuilder = $userBuilder;
         $this->userService = $userService;
+        $this->offerBuilder = $offerBuilder;
     }
 
     /**
@@ -306,9 +295,9 @@ class Offer implements OfferInterface
             if (in_array(
                 $this->hokodoQuote->getPatchType(),
                 [
-                        HokodoQuoteInterface::PATCH_ADDRESS,
-                        HokodoQuoteInterface::PATCH_ALL,
-                    ],
+                    HokodoQuoteInterface::PATCH_ADDRESS,
+                    HokodoQuoteInterface::PATCH_ALL,
+                ],
                 true
             )
             ) {
@@ -317,10 +306,10 @@ class Offer implements OfferInterface
             if (in_array(
                 $this->hokodoQuote->getPatchType(),
                 [
-                        HokodoQuoteInterface::PATCH_ITEMS,
-                        HokodoQuoteInterface::PATCH_SHIPPING,
-                        HokodoQuoteInterface::PATCH_ALL,
-                    ],
+                    HokodoQuoteInterface::PATCH_ITEMS,
+                    HokodoQuoteInterface::PATCH_SHIPPING,
+                    HokodoQuoteInterface::PATCH_ALL,
+                ],
                 true
             )
             ) {
@@ -349,25 +338,7 @@ class Offer implements OfferInterface
      */
     private function getOffer(): PaymentOffersInterface
     {
-        //Set Offer
-        $urls = $this->offerUrlsFactory->create();
-        /* @var $urls OfferUrlsInterface */
-        //TODO add correct urls
-        $urls->setSuccessUrl('http://hokodo.local')
-            ->setCancelUrl('http://hokodo.local')
-            ->setFailureUrl('http://hokodo.local')
-            ->setMerchantTermsUrl('http://hokodo.local')
-            ->setNotificationUrl('http://hokodo.local');
-        $createOfferRequest = $this->createOfferRequestFactory->create();
-        /* @var $createOfferRequest CreateOfferRequestInterface */
-        //TODO locales
-        $createOfferRequest
-            ->setOrder($this->hokodoQuote->getOrderId())
-            ->setUrls($urls)
-            ->setLocale('en-gb')
-            ->setMetadata([]);
-
-        $offer = $this->offerGatewayService->createOffer($createOfferRequest);
+        $offer = $this->offerGatewayService->createOffer($this->offerBuilder->build($this->hokodoQuote->getOrderId()));
         if ($dataModel = $offer->getDataModel()) {
             $quote = $this->checkoutSession->getQuote();
             $quote->setData('payment_offer_id', $dataModel->getId());
@@ -379,7 +350,7 @@ class Offer implements OfferInterface
 
             return $dataModel;
         }
-
+        //TODO Handle errors by reseting the whole quote
         throw new NotFoundException(__('No offer found in API response'));
     }
 }
