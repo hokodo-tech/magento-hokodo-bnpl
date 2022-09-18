@@ -24,7 +24,7 @@
                    template="Hokodo_BNPL::sdk/company-search.phtml"
                    ifconfig="payment/hokodo_bnpl/active">
                 <arguments>
-                    <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\CompanySearch</argument>
+                    <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\SdkLoader</argument>
                 </arguments>
             </block>
         </referenceContainer>

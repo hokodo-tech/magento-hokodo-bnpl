@@ -25,17 +25,4 @@ class CompanySearch implements ArgumentInterface
     ) {
         $this->sdkConfig = $sdkConfig;
     }
-
-    /**
-     * Get SDK key for Search Component.
-     *
-     * @return string
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function getSdkKey(): string
-    {
-        return $this->sdkConfig->getSdkKey();
-    }
 }
