@@ -158,6 +158,8 @@ define([
         selectPaymentMethod: function() {
             this._super();
             this.mountCheckout();
+
+            return true;
         },
 
         destroyCheckout() {
