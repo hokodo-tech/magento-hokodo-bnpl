@@ -198,7 +198,10 @@ class Offer implements OfferInterface
     {
         try {
             $organisation = $this->organisationService->createOrganisation(
-                $this->organisationBuilder->build($companyId)
+                $this->organisationBuilder->build(
+                    $companyId,
+                    $this->checkoutSession->getQuote()->getCustomer()->getEmail()
+                )
             );
             if ($dataModel = $organisation->getDataModel()) {
                 $this->hokodoQuote->setOrganisationId($dataModel->getId());

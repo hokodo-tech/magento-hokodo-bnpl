@@ -40,19 +40,19 @@ class OrganisationBuilder
      * Organisation request object builder.
      *
      * @param string $companyId
+     * @param string $userEmail
      *
      * @return CreateOrganisationRequestInterface
      *
      * @throws NoSuchEntityException
      */
-    public function build(string $companyId): CreateOrganisationRequestInterface
+    public function build(string $companyId, string $userEmail): CreateOrganisationRequestInterface
     {
         $gatewayRequest = $this->createOrganisationGatewayRequestFactory->create();
         return $gatewayRequest
             ->setCompanyId($companyId)
-            //TODO Review the organisation unique id creation pattern
             ->setUniqueId('mage-org-' . hash('md5', $this->storeManager->getStore()->getCode() .
-                    $this->storeManager->getStore()->getName() . $companyId))
+                    $this->storeManager->getStore()->getName() . $userEmail . $companyId))
             ->setRegistered(date('Y-m-d\TH:i:s\Z'));
     }
 }
