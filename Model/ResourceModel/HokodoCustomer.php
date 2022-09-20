@@ -9,12 +9,12 @@ namespace Hokodo\BNPL\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
-class HokodoDataWebApi extends AbstractDb
+class HokodoCustomer extends AbstractDb
 {
     /**
      * @var string
      */
-    protected $_eventPrefix = 'hokodo_data_webapi_resource_model';
+    protected $_eventPrefix = 'hokodo_customer_resource';
 
     /**
      * Initialize resource model.
@@ -22,6 +22,5 @@ class HokodoDataWebApi extends AbstractDb
     protected function _construct()
     {
         $this->_init('hokodo_data_webapi', 'id');
-        $this->_useIsObjectNew = true;
     }
 }

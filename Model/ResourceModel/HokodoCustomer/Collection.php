@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Hokodo\BNPL\Model\ResourceModel\HokodoQuote;
+namespace Hokodo\BNPL\Model\ResourceModel\HokodoCustomer;
 
-use Hokodo\BNPL\Model\HokodoDataWebApi as Model;
-use Hokodo\BNPL\Model\ResourceModel\HokodoDataWebApi as ResourceModel;
+use Hokodo\BNPL\Model\HokodoCustomer as Model;
+use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer as ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class Collection extends AbstractCollection
@@ -16,7 +16,7 @@ class Collection extends AbstractCollection
     /**
      * @var string
      */
-    protected $_eventPrefix = 'hokodo_data_webapi_collection';
+    protected $_eventPrefix = 'hokodo_customer_collection';
 
     /**
      * Initialize collection model.

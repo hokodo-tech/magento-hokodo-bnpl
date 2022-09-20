@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model;
 
-use Hokodo\BNPL\Api\Data\HokodoDataWebApiInterface;
-use Hokodo\BNPL\Model\ResourceModel\HokodoDataWebApi as ResourceModel;
+use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
+use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer as ResourceModel;
 use Magento\Framework\Model\AbstractModel;
 
-class HokodoDataWebApi extends AbstractModel implements HokodoDataWebApiInterface
+class HokodoCustomer extends AbstractModel implements HokodoCustomerInterface
 {
     /**
      * @var string
      */
-    protected $_eventPrefix = 'hokodo_data_webapi_model';
+    protected $_eventPrefix = 'hokodo_customer';
 
     /**
      * Initialize magento model.
