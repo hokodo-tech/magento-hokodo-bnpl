@@ -9,12 +9,12 @@ define([
     'Magento_Checkout/js/view/payment/default',
     'Hokodo_BNPL/js/sdk/hokodo-data-persistor'
 ], function (
-        $,
-        _,
-        ko,
-        Component,
-        hokodoData
-        ) {
+    $,
+    _,
+    ko,
+    Component,
+    hokodoData
+) {
     'use strict';
 
     return Component.extend({
@@ -27,17 +27,20 @@ define([
             //temp SDK search event fix
             searchInitialized: false
         },
-
+        isOfferLoading: ko.observable(false),
         hokodoElements: Hokodo(window.checkoutConfig.hokodoSdkKey).elements(),
 
         /**
          * Init component
          */
-        initialize: function() {
+        initialize: function () {
             this._super();
             const self = this;
             console.log('bnpl:initialize');
 
+            this.hokodoCheckout().isLoading.subscribe((value) => {
+                this.isOfferLoading(value);
+            })
 
             this.hokodoCheckout().offer.subscribe((offer) => {
                 if (offer) {
@@ -70,16 +73,16 @@ define([
          * Get payment method code.
          * @returns {String}
          */
-        getCode: function() {
+        getCode: function () {
             return 'hokodo_bnpl';
         },
 
-        mountSearch: function() {
+        mountSearch: function () {
             console.log('bnpl:mountSearch')
             this.companySearch.mount("#hokodoCompanySearch");
         },
 
-        mountCheckout: function() {
+        mountCheckout: function () {
             if (this.hokodoCheckout().offer()) {
                 console.log('bnpl:mountCheckout:offer: ' + this.hokodoCheckout().offer().id)
                 this._mountCheckout()
@@ -89,11 +92,7 @@ define([
             }
         },
 
-        reMountCheckout: function() {
-
-        },
-
-        _mountCheckout: function() {
+        _mountCheckout: function () {
             var self = this;
             if (!this.userCheckout && this.hokodoCheckout().offer()) {
                 console.log('bnpl:_mountCheckout:!this.userCheckout')
@@ -128,9 +127,6 @@ define([
                 this.userCheckout.destroy();
                 this.userCheckout = null;
                 this._mountCheckout();
-                // this.userCheckout.update({
-                //     paymentOffer: this.hokodoCheckout().offer()
-                // })
             }
         },
 
@@ -138,7 +134,7 @@ define([
             this._super();
         },
 
-        onSDKCompanySelection: function(company) {
+        onSDKCompanySelection: function (company) {
             var self = this;
         },
 
@@ -155,7 +151,7 @@ define([
             return data;
         },
 
-        selectPaymentMethod: function() {
+        selectPaymentMethod: function () {
             this._super();
             this.mountCheckout();
 

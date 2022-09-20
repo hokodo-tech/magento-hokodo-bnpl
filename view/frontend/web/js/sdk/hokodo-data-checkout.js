@@ -53,7 +53,8 @@ define([
                 this._super()
                     .observe({
                         companyId: ko.observable(hokodoData.storageSearchGet('companyId')),
-                        offer: ko.observable(hokodoData.storageCheckoutGet('offer'))
+                        offer: ko.observable(hokodoData.storageCheckoutGet('offer')),
+                        isLoading: ko.observable(false),
                     });
 
                 return this;
@@ -68,7 +69,8 @@ define([
                     self.offerChanged(offer);
                 })
                 hokodoData.storageGetCheckoutObservable().subscribe((data) => {
-                    console.log('checkout data changed')
+                    console.log('checkout data changed:')
+                    console.log(data.offer)
                     let offerChanged = false;
                     if (!!data.offer) {
                         if (!!this.offer()) {
@@ -126,6 +128,7 @@ define([
                     if (this.hokodoPaymentMethod() !== undefined) {
                         this.hokodoPaymentMethod().destroyCheckout();
                     }
+                    this.isLoading(true);
                     requestOfferAction(
                         this.companyId()
                     ).done((response) => {
@@ -136,16 +139,11 @@ define([
                         if (this.hokodoPaymentMethod()) {
                             errorProcessor.process(response, this.hokodoPaymentMethod().messageContainer)
                         }
+                    }).always(() => {
+                        this.isLoading(false);
                     })
                 }
             },
-
-            // initGuestCustomer() {
-            //     this.createUser().done((response) => {
-            //         hokodoData().setUser(response.user);
-            //         hokodoData().setOrganisation(response.organisation);
-            //     }).bind(this);
-            // },
 
             getCustomerEmail() {
                 return customer.isLoggedIn ? customer.customerData.email : quote.shippingAddress().customerEmail
