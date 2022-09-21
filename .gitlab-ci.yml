@@ -119,6 +119,7 @@ review:create:
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/active 1 &&
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/environment dev &&
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_api_key '$HOKODO_API_KEY_DEV' &&
+        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_sdk_key '$HOKODO_SDK_KEY_DEV' &&
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/create_invoice_on_payment_accepted 1 &&
         $PHP_CLI bin/magento module:disable Magento_TwoFactorAuth ;
         echo '{}' > ./auth.json &&
