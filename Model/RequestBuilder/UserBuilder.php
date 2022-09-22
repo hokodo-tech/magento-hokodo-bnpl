@@ -12,6 +12,8 @@ use Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\UserOrganisationInterface;
 use Hokodo\BNPL\Api\Data\Gateway\UserOrganisationInterfaceFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Customer;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -23,24 +25,9 @@ class UserBuilder
     private CreateUserRequestInterfaceFactory $createUserGatewayRequestFactory;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private StoreManagerInterface $storeManager;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private CustomerRepositoryInterface $customerRepository;
-
-    /**
      * @var UserOrganisationInterfaceFactory
      */
     private UserOrganisationInterfaceFactory $userOrganisationInterfaceFactory;
-
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
 
     /**
      * @param CreateUserRequestInterfaceFactory $createUserGatewayRequestFactory
@@ -51,42 +38,28 @@ class UserBuilder
      */
     public function __construct(
         CreateUserRequestInterfaceFactory $createUserGatewayRequestFactory,
-        StoreManagerInterface $storeManager,
-        CustomerRepositoryInterface $customerRepository,
-        UserOrganisationInterfaceFactory $userOrganisationInterfaceFactory,
-        LoggerInterface $logger
+        UserOrganisationInterfaceFactory $userOrganisationInterfaceFactory
     ) {
         $this->createUserGatewayRequestFactory = $createUserGatewayRequestFactory;
-        $this->storeManager = $storeManager;
-        $this->customerRepository = $customerRepository;
         $this->userOrganisationInterfaceFactory = $userOrganisationInterfaceFactory;
-        $this->logger = $logger;
     }
 
     /**
      * User request object builder.
      *
-     * @param string $email
-     * @param string $name
-     * @param string $organisationId
+     * @param CustomerInterface|Customer $customer
+     * @param string            $organisationId
      *
      * @return CreateUserRequestInterface
      */
-    public function build(string $email, string $name, string $organisationId): CreateUserRequestInterface
+    public function build($customer, string $organisationId): CreateUserRequestInterface
     {
-        $customer = null;
-        try {
-            $customer = $this->customerRepository->get($email, $this->storeManager->getStore()->getId());
-        } catch (\Exception $e) {
-            $this->logger->error(__('Hokodo_BNPL: createUser call failed with error - %1', $e->getMessage()));
-        }
-
         $gatewayRequest = $this->createUserGatewayRequestFactory->create();
         /* @var $gatewayRequest CreateUserRequestInterface */
         $gatewayRequest
-            ->setEmail($email)
-            ->setName($name)
-            ->setRegistered($customer ? $customer->getCreatedAt() : date('Y-m-d\TH:i:s\Z'));
+            ->setEmail($customer->getEmail())
+            ->setName($customer->getFirstname() . ' ' . $customer->getLastname())
+            ->setRegistered($customer->getCreatedAt() ?: date('Y-m-d\TH:i:s\Z'));
 
         $organisation = $this->userOrganisationInterfaceFactory->create();
         /* @var $organisation UserOrganisationInterface */

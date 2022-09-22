@@ -46,7 +46,7 @@ class OrganisationBuilder
      *
      * @throws NoSuchEntityException
      */
-    public function build(string $companyId, string $userEmail): CreateOrganisationRequestInterface
+    public function build(string $companyId, string $userEmail = ''): CreateOrganisationRequestInterface
     {
         $gatewayRequest = $this->createOrganisationGatewayRequestFactory->create();
         return $gatewayRequest

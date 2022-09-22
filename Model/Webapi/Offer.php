@@ -231,11 +231,7 @@ class Offer implements OfferInterface
         try {
             $customer = $this->checkoutSession->getQuote()->getCustomer();
             $user = $this->userService->createUser(
-                $this->userBuilder->build(
-                    $customer->getEmail(),
-                    $customer->getFirstname() . ' ' . $customer->getLastname(),
-                    $this->hokodoQuote->getOrganisationId()
-                )
+                $this->userBuilder->build($customer, $this->hokodoQuote->getOrganisationId())
             );
             if ($dataModel = $user->getDataModel()) {
                 $this->hokodoQuote->setUserId($dataModel->getId());
