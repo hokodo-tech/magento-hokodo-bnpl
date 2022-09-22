@@ -1151,6 +1151,8 @@
 
     <preference for="Hokodo\BNPL\Api\Data\HokodoQuoteInterface" type="Hokodo\BNPL\Model\HokodoQuote" />
     <preference for="Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface" type="Hokodo\BNPL\Model\HokodoQuoteRepository" />
+    <preference for="Hokodo\BNPL\Api\Data\HokodoCustomerInterface" type="Hokodo\BNPL\Model\Data\HokodoCustomer" />
+    <preference for="Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface" type="Hokodo\BNPL\Model\HokodoCustomerRepository" />
     <type name="Hokodo\BNPL\Gateway\Service\AbstractService">
         <arguments>
             <argument name="commandPool" xsi:type="object">Hokodo\BNPL\Gateway\Command\CommandPool</argument>
@@ -1210,6 +1212,10 @@
     <preference for="Hokodo\BNPL\Api\Data\Gateway\OrderItemInterface" type="Hokodo\BNPL\Model\Data\Gateway\OrderItem" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOfferRequestInterface" type="Hokodo\BNPL\Model\Data\Gateway\CreateOfferRequest" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterface" type="Hokodo\BNPL\Model\Data\Gateway\OfferUrls" />
+
+    <preference for="Hokodo\BNPL\Api\Webapi\HokodoCustomerInterface" type="Hokodo\BNPL\Model\Webapi\HokodoCustomer"/>
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\HokodoCustomerRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\HokodoCustomerResponse" />
 
     <!-- Commands infrastructure -->
     <virtualType name="Hokodo\BNPL\Gateway\Command\CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
