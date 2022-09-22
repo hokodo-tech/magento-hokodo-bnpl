@@ -13,6 +13,8 @@ use Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterface;
 interface HokodoCustomerInterface
 {
     /**
+     * Assign Hokodo(companyId, organisationId, userId) to a magento customer.
+     *
      * @param HokodoCustomerRequestInterface $payload
      *
      * @return HokodoCustomerResponseInterface

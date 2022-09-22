@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Data\Webapi;
 
-use Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterface;
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
+use Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
 class HokodoCustomerResponse extends AbstractSimpleObject implements HokodoCustomerResponseInterface

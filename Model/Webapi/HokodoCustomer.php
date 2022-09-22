@@ -9,32 +9,71 @@ namespace Hokodo\BNPL\Model\Webapi;
 
 use Hokodo\BNPL\Api\Data\OrganisationInterface;
 use Hokodo\BNPL\Api\Data\UserInterface;
-use Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterfaceFactory;
-use Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterface;
 use Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerRequestInterface;
+use Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterface;
+use Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterfaceFactory;
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\HokodoCustomerInterface;
 use Hokodo\BNPL\Gateway\Service\Organisation;
 use Hokodo\BNPL\Gateway\Service\User;
 use Hokodo\BNPL\Model\RequestBuilder\OrganisationBuilder;
 use Hokodo\BNPL\Model\RequestBuilder\UserBuilder;
-use Hokodo\BNPL\Service\OrganisationService;
-use Hokodo\BNPL\Service\UserService;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Exception\RuntimeException;
 use Psr\Log\LoggerInterface;
 
 class HokodoCustomer implements HokodoCustomerInterface
 {
+    /**
+     * @var HokodoCustomerResponseInterfaceFactory
+     */
     private HokodoCustomerResponseInterfaceFactory $hokodoCustomerResponseFactory;
+
+    /**
+     * @var Session
+     */
     private Session $customerSession;
+
+    /**
+     * @var HokodoCustomerRepositoryInterface
+     */
     private HokodoCustomerRepositoryInterface $hokodoCustomerRepository;
+
+    /**
+     * @var OrganisationBuilder
+     */
     private OrganisationBuilder $organisationBuilder;
+
+    /**
+     * @var UserBuilder
+     */
     private UserBuilder $userBuilder;
+
+    /**
+     * @var Organisation
+     */
     private Organisation $organisationService;
+
+    /**
+     * @var User
+     */
     private User $userService;
+
+    /**
+     * @var LoggerInterface
+     */
     private LoggerInterface $logger;
 
+    /**
+     * @param HokodoCustomerResponseInterfaceFactory $hokodoCustomerResponseFactory
+     * @param Session                                $customerSession
+     * @param HokodoCustomerRepositoryInterface      $hokodoCustomerRepository
+     * @param OrganisationBuilder                    $organisationBuilder
+     * @param UserBuilder                            $userBuilder
+     * @param Organisation                           $organisationService
+     * @param User                                   $userService
+     * @param LoggerInterface                        $logger
+     */
     public function __construct(
         HokodoCustomerResponseInterfaceFactory $hokodoCustomerResponseFactory,
         Session $customerSession,
@@ -56,9 +95,12 @@ class HokodoCustomer implements HokodoCustomerInterface
     }
 
     /**
+     * Assign Hokodo(companyId, organisationId, userId) to a magento customer.
+     *
      * @param HokodoCustomerRequestInterface $payload
      *
      * @return HokodoCustomerResponseInterface
+     *
      * @throws RuntimeException
      */
     public function assignCompany(HokodoCustomerRequestInterface $payload): HokodoCustomerResponseInterface
@@ -95,6 +137,13 @@ class HokodoCustomer implements HokodoCustomerInterface
         throw new RuntimeException(__('There was an error. Please try again.'));
     }
 
+    /**
+     * Get Hokodo user from repository.
+     *
+     * @param HokodoCustomerRequestInterface $payload
+     *
+     * @return \Hokodo\BNPL\Api\Data\HokodoCustomerInterface
+     */
     private function getHokodoCustomer(HokodoCustomerRequestInterface $payload)
     {
         $customerId = (int) $payload->getCustomerId() ?: (int) $this->customerSession->getCustomer()->getId();

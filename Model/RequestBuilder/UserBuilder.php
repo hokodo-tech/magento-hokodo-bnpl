@@ -11,11 +11,8 @@ use Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\UserOrganisationInterface;
 use Hokodo\BNPL\Api\Data\Gateway\UserOrganisationInterfaceFactory;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Customer;
-use Magento\Store\Model\StoreManagerInterface;
-use Psr\Log\LoggerInterface;
 
 class UserBuilder
 {
@@ -31,10 +28,7 @@ class UserBuilder
 
     /**
      * @param CreateUserRequestInterfaceFactory $createUserGatewayRequestFactory
-     * @param StoreManagerInterface             $storeManager
-     * @param CustomerRepositoryInterface       $customerRepository
      * @param UserOrganisationInterfaceFactory  $userOrganisationInterfaceFactory
-     * @param LoggerInterface                   $logger
      */
     public function __construct(
         CreateUserRequestInterfaceFactory $createUserGatewayRequestFactory,
@@ -48,7 +42,7 @@ class UserBuilder
      * User request object builder.
      *
      * @param CustomerInterface|Customer $customer
-     * @param string            $organisationId
+     * @param string                     $organisationId
      *
      * @return CreateUserRequestInterface
      */
