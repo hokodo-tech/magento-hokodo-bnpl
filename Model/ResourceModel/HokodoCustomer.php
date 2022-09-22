@@ -21,6 +21,6 @@ class HokodoCustomer extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('hokodo_data_webapi', 'id');
+        $this->_init('hokodo_customer', 'id');
     }
 }

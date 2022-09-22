@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\ResourceModel\HokodoCustomer;
 
-use Hokodo\BNPL\Model\HokodoCustomer as Model;
+use Hokodo\BNPL\Model\Data\HokodoCustomer as Model;
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer as ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 

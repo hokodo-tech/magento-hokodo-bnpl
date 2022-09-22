@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Hokodo\BNPL\Model;
+namespace Hokodo\BNPL\Model\Data;
 
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer as ResourceModel;
