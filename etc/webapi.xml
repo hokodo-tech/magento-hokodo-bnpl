@@ -5,12 +5,13 @@
  * See LICENSE for license details.
  */
 -->
-<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <!-- Company search -->
     <route url="/V1/hokodo-company/search" method="GET">
         <service class="Hokodo\BNPL\Api\CompanySearchServiceInterface" method="search"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
 
@@ -18,7 +19,7 @@
     <route url="/V1/guest-customer/:cartId/set-hokodo-user" method="POST">
         <service class="Hokodo\BNPL\Api\GuestSetUserServiceInterface" method="setUser"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
 
@@ -26,7 +27,7 @@
     <route url="/V1/carts/mine/set-hokodo-user" method="POST">
         <service class="Hokodo\BNPL\Api\SetUserServiceInterface" method="setUser"/>
         <resources>
-            <resource ref="self" />
+            <resource ref="self"/>
         </resources>
         <data>
             <parameter name="cartId" force="true">%cart_id%</parameter>
@@ -37,7 +38,7 @@
     <route url="/V1/guest-customer/:cartId/set-hokodo-user-organisation" method="POST">
         <service class="Hokodo\BNPL\Api\GuestSetOrganisationServiceInterface" method="setOrganisation"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
 
@@ -45,7 +46,7 @@
     <route url="/V1/carts/mine/set-hokodo-user-organisation" method="POST">
         <service class="Hokodo\BNPL\Api\SetOrganisationServiceInterface" method="setOrganisation"/>
         <resources>
-            <resource ref="self" />
+            <resource ref="self"/>
         </resources>
         <data>
             <parameter name="cartId" force="true">%cart_id%</parameter>
@@ -56,7 +57,7 @@
     <route url="/V1/guest-customer/:cartId/set-hokodo-order" method="POST">
         <service class="Hokodo\BNPL\Api\GuestOrderInformationManagementInterface" method="setOrder"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
 
@@ -64,7 +65,7 @@
     <route url="/V1/carts/mine/set-hokodo-order" method="POST">
         <service class="Hokodo\BNPL\Api\OrderInformationManagementInterface" method="setOrder"/>
         <resources>
-            <resource ref="self" />
+            <resource ref="self"/>
         </resources>
         <data>
             <parameter name="cartId" force="true">%cart_id%</parameter>
@@ -75,7 +76,7 @@
     <route url="/V1/guest-customer/:cartId/request-new-hokodo-offer" method="POST">
         <service class="Hokodo\BNPL\Api\GuestOrderInformationManagementInterface" method="requestNewOffer"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
 
@@ -83,7 +84,7 @@
     <route url="/V1/carts/mine/request-new-hokodo-offer" method="POST">
         <service class="Hokodo\BNPL\Api\OrderInformationManagementInterface" method="requestNewOffer"/>
         <resources>
-            <resource ref="self" />
+            <resource ref="self"/>
         </resources>
         <data>
             <parameter name="cartId" force="true">%cart_id%</parameter>
@@ -95,7 +96,7 @@
     <route url="/V1/guest-customer/:cartId/get-hokodo-payment-offers/:offerId" method="GET">
         <service class="Hokodo\BNPL\Api\GuestOrderInformationManagementInterface" method="getPaymentOffer"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
 
@@ -103,7 +104,7 @@
     <route url="/V1/carts/mine/get-hokodo-payment-offers/:offerId" method="GET">
         <service class="Hokodo\BNPL\Api\OrderInformationManagementInterface" method="getPaymentOffer"/>
         <resources>
-            <resource ref="self" />
+            <resource ref="self"/>
         </resources>
         <data>
             <parameter name="cartId" force="true">%cart_id%</parameter>
@@ -113,7 +114,7 @@
     <route url="/V1/deferredpayment/ipn" method="POST">
         <service class="Hokodo\BNPL\Api\DeferredPaymentIpnProcessorInterface" method="process"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
 
@@ -121,8 +122,14 @@
     <route url="/V1/carts/mine/hokodo-request-offer" method="POST">
         <service class="Hokodo\BNPL\Api\Webapi\OfferInterface" method="requestNew"/>
         <resources>
-            <resource ref="self" />
+            <resource ref="self"/>
         </resources>
     </route>
 
+    <route url="/V1/hokodo/customer" method="POST">
+        <service class="Hokodo\BNPL\Api\Webapi\HokodoCustomerInterface" method="assignCompany"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+    </route>
 </routes>
