@@ -17,12 +17,12 @@ class ProductButton implements ArgumentInterface
     /**
      * @var Config
      */
-    private Config $config;
+    private $config;
 
     /**
      * @var Session
      */
-    private Session $customerSession;
+    private $customerSession;
 
     /**
      * ProductButton constructor.
