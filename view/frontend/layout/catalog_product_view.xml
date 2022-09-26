@@ -13,14 +13,10 @@
                     <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\SdkLoader</argument>
                 </arguments>
             </block>
-            <block class="Magento\Framework\View\Element\Template" name="btn_hokodo_checkout"
-                   template="Hokodo_BNPL::product/button.phtml" after="product.info.overview"
+            <block class="Magento\Framework\View\Element\Template" name="hokodo.credit-limit"
+                   template="Hokodo_BNPL::sdk/marketing/product-banner.phtml" after="product.info.overview"
                    ifconfig="payment/hokodo_bnpl/active">
-                <arguments>
-                    <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\ProductButton</argument>
-                </arguments>
             </block>
         </referenceContainer>
-        <move element="btn_hokodo_checkout" destination="product.info.main" after="product.info.overview"/>
     </body>
 </page>

@@ -3,29 +3,25 @@
  * See LICENSE for license details.
  */
 define([
-    'mage/storage',
-    'Hokodo_BNPL/js/sdk/resource-url-manager'
+    'mage/storage'
 ], function (
         storage,
         resourceUrlManager
         ) {
     'use strict';
 
-    return function (organisation_id, email, name) {
+    return function (id) {
+
         var payload = {
             payload: {
-                organisation_id: organisation_id,
-                email: email,
-                name: name
+                company_id: id,
             }
         };
-
         return storage.post(
-                resourceUrlManager.getCreateUserUrl(),
+                'rest/V1/hokodo/customer',
                 JSON.stringify(payload),
                 true,
                 'application/json'
                 );
     };
-
 });
