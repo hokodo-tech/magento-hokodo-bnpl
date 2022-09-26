@@ -55,12 +55,12 @@
                     <sandbox_key>1sTpGIGYD3zs1NnZ7VrP6AwqCsSnD8EA</sandbox_key>
                     <key>Ym0AF6w9WMfLO4FP1SUek96XSHw4fr99</key>
                 </segment>
-                <on_site_messaging>
-                    <enable>1</enable>
-                    <label>Pay in 30 Days. No interest. No fees.</label>
+                <marketing>
+                    <enable_product>1</enable_product>
+                    <faq>https://www.hokodo.co/hokodo-for-buyers</faq>
                     <enable_cart_page>1</enable_cart_page>
                     <label_cart_page>Pay in 30 days with</label_cart_page>
-                </on_site_messaging>
+                </marketing>
             </hokodo_bnpl>
         </payment>
         <csp>

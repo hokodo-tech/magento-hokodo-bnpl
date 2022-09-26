@@ -93,16 +93,16 @@
                         <label>Production Key</label>
                     </field>
                 </group>
-                <group id="on_site_messaging" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
-                    <label>Hokodo on-site messaging</label>
-                    <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Product Description Page Enable</label>
-                        <comment><![CDATA[Display button on product page]]></comment>
+                <group id="marketing" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
+                    <label>Marketing</label>
+                    <field id="enable_product" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Product Credit limit Banner enable</label>
+                        <comment><![CDATA[Display credit limit banner on product page]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
-                    <field id="label" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                        <label>Product Description Page Label</label>
-                        <comment><![CDATA[Label text for button on product details page.]]></comment>
+                    <field id="faq" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>FAQ link</label>
+                        <comment><![CDATA[FAQ for buyers link.]]></comment>
                     </field>
                     <field id="enable_cart_page" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Enable button on cart page, minicart</label>

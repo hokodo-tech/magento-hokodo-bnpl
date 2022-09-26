@@ -5,8 +5,7 @@
 define([
     'jquery',
     'ko',
-    'Magento_Customer/js/customer-data',
-    'uiComponent'
+    'Magento_Customer/js/customer-data'
 ], function (
     $,
     ko,
@@ -35,7 +34,7 @@ define([
         storageSearchSet(key, data) {
             let hokodoData = storage.get('hokodo-search')();
             hokodoData[key] = data;
-            storage.set('hokodo-search', hokodoData);
+            storage.set('hokodo-search', {companyId: data});
             return this;
         },
 

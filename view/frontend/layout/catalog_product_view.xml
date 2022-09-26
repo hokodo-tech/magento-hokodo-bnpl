@@ -15,7 +15,7 @@
             </block>
             <block class="Magento\Framework\View\Element\Template" name="hokodo.credit-limit"
                    template="Hokodo_BNPL::sdk/marketing/product-banner.phtml" after="product.info.overview"
-                   ifconfig="payment/hokodo_bnpl/active">
+                   ifconfig="payment/hokodo_bnpl/marketing/enable_product">
             </block>
         </referenceContainer>
     </body>

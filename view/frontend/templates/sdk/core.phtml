@@ -11,7 +11,8 @@ $viewModel = $block->getData('viewModel');
         "*": {
             "Hokodo_BNPL/js/sdk/core":{
                 "url":"<?= $viewModel->getSdkUrl() ?>",
-                "key":"<?= $viewModel->getSdkKey() ?>"
+                "key":"<?= $viewModel->getSdkKey() ?>",
+                "faq":"<?= $viewModel->getMarketingFaqUrl() ?>"
             }
         }
     }

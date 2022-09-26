@@ -16,6 +16,7 @@ class Sdk
     public const SDK_PROD_URL = 'https://js.hokodo.co/hokodo-js/v1/';
     public const SDK_SANDBOX_URL = 'https://js-sandbox.hokodo.co/hokodo-js/v1/';
     public const SDK_DEV_URL = 'https://js-dev.hokodo.co/hokodo-js/v1/';
+
     /**
      * @var Config
      */

@@ -2,7 +2,13 @@
 <script type="text/x-magento-init">
     {
         "*": {
-            "Hokodo_BNPL/js/sdk/marketing/product-banner":{}
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "section": {
+                        "component": "Hokodo_BNPL/js/sdk/marketing/product-banner"
+                    }
+                }
+            }
         }
     }
 </script>

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\ViewModel;
 
+use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Config\Sdk;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -19,12 +20,20 @@ class SdkLoader implements ArgumentInterface
     private Sdk $sdkConfig;
 
     /**
-     * @param Sdk $sdkConfig
+     * @var Config
+     */
+    private Config $paymentConfig;
+
+    /**
+     * @param Sdk    $sdkConfig
+     * @param Config $paymentConfig
      */
     public function __construct(
-        Sdk $sdkConfig
+        Sdk $sdkConfig,
+        Config $paymentConfig
     ) {
         $this->sdkConfig = $sdkConfig;
+        $this->paymentConfig = $paymentConfig;
     }
 
     /**
@@ -50,5 +59,15 @@ class SdkLoader implements ArgumentInterface
     public function getSdkKey(): string
     {
         return $this->sdkConfig->getSdkKey();
+    }
+
+    /**
+     * Get Url for faq on Hokodo marketing elements.
+     *
+     * @return string|null
+     */
+    public function getMarketingFaqUrl(): ?string
+    {
+        return $this->paymentConfig->getMarketingFaqUrl();
     }
 }
