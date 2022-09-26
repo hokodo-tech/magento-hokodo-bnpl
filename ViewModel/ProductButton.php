@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\ViewModel;
 
 use Hokodo\BNPL\Gateway\Config\Config;
+use Magento\Customer\Model\Session;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class ProductButton implements ArgumentInterface
@@ -16,17 +17,25 @@ class ProductButton implements ArgumentInterface
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
+
+    /**
+     * @var Session
+     */
+    private Session $customerSession;
 
     /**
      * ProductButton constructor.
      *
-     * @param Config $config
+     * @param Config  $config
+     * @param Session $customerSession
      */
     public function __construct(
-        Config $config
+        Config $config,
+        Session $customerSession
     ) {
         $this->config = $config;
+        $this->customerSession = $customerSession;
     }
 
     /**
@@ -78,6 +87,57 @@ class ProductButton implements ArgumentInterface
     public function isSandbox(): bool
     {
         if ($this->config->getValue(Config::KEY_ENVIRONMENT) == Config::ENV_SANDBOX) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get list customer group selected config.
+     *
+     * @return array
+     */
+    private function getSelectedCustomerGroups(): array
+    {
+        if ($this->config->getValue(Config::CUSTOMER_GROUPS)) {
+            return explode(',', $this->config->getValue(Config::CUSTOMER_GROUPS));
+        }
+        return [];
+    }
+
+    /**
+     * Check current customer group.
+     *
+     * @return int
+     */
+    private function getGroupId(): int
+    {
+        return (int) $this->customerSession->getCustomer()->getGroupId();
+    }
+
+    /**
+     * Check current customer group possible to show banner.
+     *
+     * @return bool
+     */
+    private function checkGroupId(): bool
+    {
+        if (in_array($this->getGroupId(), $this->getSelectedCustomerGroups())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check customer on list customer group.
+     *
+     * @return bool
+     */
+    public function canShow(): bool
+    {
+        if ($this->isEnable() && $this->checkGroupId()) {
             return true;
         }
 

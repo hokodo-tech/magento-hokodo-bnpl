@@ -58,6 +58,10 @@
                     <comment><![CDATA[Sets method on the first place on checkout and makes it selected]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="customer_groups" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1">
+                    <label>Enable for Customer Groups</label>
+                    <source_model>Magento\Customer\Model\Config\Source\Group\Multiselect</source_model>
+                </field>
                 <group id="segment" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
                     <label>Analytics</label>
                     <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">

@@ -17,6 +17,7 @@ use Hokodo\BNPL\Api\HokodoOrganisationRepositoryInterface;
 use Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface;
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\SaveLog as Logger;
+use Hokodo\BNPL\ViewModel\ProductButton;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
@@ -108,6 +109,11 @@ class ConfigProvider implements ConfigProviderInterface
     private $request;
 
     /**
+     * @var ProductButton
+     */
+    private $helperConfig;
+
+    /**
      * @param UserInterfaceFactory                  $userFactory
      * @param HokodoOrganisationRepositoryInterface $organisationRepository
      * @param PaymentQuoteRepositoryInterface       $paymentQuoteRepository
@@ -122,6 +128,7 @@ class ConfigProvider implements ConfigProviderInterface
      * @param ProductMetadataInterface              $productMetadata
      * @param StoreManagerInterface                 $storeManager
      * @param RequestInterface                      $request
+     * @param ProductButton                         $helperConfig
      */
     public function __construct(
         UserInterfaceFactory $userFactory,
@@ -137,7 +144,8 @@ class ConfigProvider implements ConfigProviderInterface
         HttpContext $httpContext,
         ProductMetadataInterface $productMetadata,
         StoreManagerInterface $storeManager,
-        RequestInterface $request
+        RequestInterface $request,
+        ProductButton $helperConfig
     ) {
         $this->userFactory = $userFactory;
         $this->organisationRepository = $organisationRepository;
@@ -153,6 +161,7 @@ class ConfigProvider implements ConfigProviderInterface
         $this->productMetadata = $productMetadata;
         $this->storeManager = $storeManager;
         $this->request = $request;
+        $this->helperConfig = $helperConfig;
     }
 
     /**
@@ -164,8 +173,12 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $isActive = true;
+        if (!$this->config->isActive() || !$this->helperConfig->canShow()) {
+            $isActive = false;
+        }
         $config = [
-            'isActive' => $this->config->isActive(),
+            'isActive' => $isActive,
         ];
 
         if ($this->config->isAllowSpecific()) {
