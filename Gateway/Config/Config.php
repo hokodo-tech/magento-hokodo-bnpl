@@ -38,6 +38,7 @@ class Config extends DefaultPaymentConfig
     public const KEY_BTN_PRODUCT_PAGE_LABEL = 'on_site_messaging/label';
     public const KEY_BTN_PRODUCT_PAGE_ENABLE = 'on_site_messaging/enable';
     public const CUSTOMER_GROUPS = 'customer_groups';
+    public const ENABLE_CUSTOMER_GROUPS = 'enable_customer_groups';
 
     /**
      * @var StoreInterface

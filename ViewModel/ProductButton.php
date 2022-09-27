@@ -94,6 +94,20 @@ class ProductButton implements ArgumentInterface
     }
 
     /**
+     * Check enable feature customer groups.
+     *
+     * @return bool
+     */
+    private function enableCustomerGroups(): bool
+    {
+        if ($this->config->getValue(Config::ENABLE_CUSTOMER_GROUPS) == '1') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get list customer group selected config.
      *
      * @return array
@@ -123,6 +137,10 @@ class ProductButton implements ArgumentInterface
      */
     private function checkGroupId(): bool
     {
+        if (!$this->enableCustomerGroups()) {
+            return true;
+        }
+
         if (in_array($this->getGroupId(), $this->getSelectedCustomerGroups())) {
             return true;
         }
