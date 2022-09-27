@@ -75,14 +75,21 @@
                     <comment>Invoice will be created automatically after payment update</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="is_default" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1">
+                <field id="enable_customer_groups" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1">
+                    <label>Enable Customer Groups</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="customer_groups" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1">
+                    <label>Customer Groups</label>
+                    <source_model>Magento\Customer\Model\Config\Source\Group\Multiselect</source_model>
+                    <depends>
+                        <field id="enable_customer_groups">1</field>
+                    </depends>
+                </field>
+                <field id="is_default" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="1">
                     <label>Set as Default</label>
                     <comment><![CDATA[Sets method on the first place on checkout and makes it selected]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="customer_groups" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1">
-                    <label>Enable for Customer Groups</label>
-                    <source_model>Magento\Customer\Model\Config\Source\Group\Multiselect</source_model>
                 </field>
                 <group id="segment" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
                     <label>Analytics</label>
