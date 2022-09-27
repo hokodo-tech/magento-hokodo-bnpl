@@ -6,7 +6,7 @@
 
 $viewModel = $block->getData('viewModel');
 ?>
-<?php if ($viewModel->isAnalyticsEnabled() && $key = $viewModel->getKey()) : ?>
+<?php if ($viewModel->isAnalyticsEnabled() && $key = $viewModel->getKey()): ?>
 <script>
     !function () {
         var analytics = window.analytics = window.analytics || [];

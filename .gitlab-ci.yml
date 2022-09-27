@@ -33,7 +33,7 @@ php:compat:
   image: registry.gitlab.com/pipeline-components/php-codesniffer:latest
   parallel:
     matrix:
-      - PHP_VERSION: ["7.3", "7.4"]
+      - PHP_VERSION: ["7.4", "8.1"]
   script:
     - phpcs -s -p --colors --extensions=php --standard=PHPCompatibility --runtime-set testVersion $PHP_VERSION .
 
@@ -119,6 +119,7 @@ review:create:
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/active 1 &&
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/environment dev &&
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_api_key '$HOKODO_API_KEY_DEV' &&
+        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_sdk_key '$HOKODO_SDK_KEY_DEV' &&
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/create_invoice_on_payment_accepted 1 &&
         $PHP_CLI bin/magento module:disable Magento_TwoFactorAuth ;
         echo '{}' > ./auth.json &&
@@ -188,41 +189,41 @@ review:detach [2.4.4]:
   resource_group: review-2.4.4
 
 # ======= E2E TESTS =======
-test:e2e:
-  stage: test
-  needs:
-    - review:create
-  rules:
-    - if: $CI_MERGE_REQUEST_ID
-  image:
-    name: cypress/included:9.5.4
-    entrypoint: [""]
-  variables:
-    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
-  script:
-    - CYPRESS_BASE_URL=$BASE_URL cypress run --browser chrome --project ./tests/ --config-file ../cypress.json --env MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER,MAGENTO_ADMIN_PASSWORD=$MAGENTO_ADMIN_PASSWORD
-  artifacts:
-    paths:
-      - /builds/hokodo/engineering/plugins/magento-hokodo-bnpl/tests/cypress/screenshots/
-      - /builds/hokodo/engineering/plugins/magento-hokodo-bnpl/tests/cypress/videos/
-    expose_as: screencasts
-    expire_in: 1 week
-    when: on_failure
-
-test:e2e [2.3.7]:
-  extends: test:e2e
-  needs:
-    - review:create [2.3.7]
-  variables:
-    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
-
-test:e2e [2.4.4]:
-  extends: test:e2e
-  needs:
-    - review:create [2.4.4]
-  variables:
-    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m244.${DEPLOY_HOST_DEV}
-  allow_failure: true
+#test:e2e:
+#  stage: test
+#  needs:
+#    - review:create
+#  rules:
+#    - if: $CI_MERGE_REQUEST_ID
+#  image:
+#    name: cypress/included:9.5.4
+#    entrypoint: [""]
+#  variables:
+#    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
+#  script:
+#    - CYPRESS_BASE_URL=$BASE_URL cypress run --browser chrome --project ./tests/ --config-file ../cypress.json --env MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER,MAGENTO_ADMIN_PASSWORD=$MAGENTO_ADMIN_PASSWORD
+#  artifacts:
+#    paths:
+#      - /builds/hokodo/engineering/plugins/magento-hokodo-bnpl/tests/cypress/screenshots/
+#      - /builds/hokodo/engineering/plugins/magento-hokodo-bnpl/tests/cypress/videos/
+#    expose_as: screencasts
+#    expire_in: 1 week
+#    when: on_failure
+#
+#test:e2e [2.3.7]:
+#  extends: test:e2e
+#  needs:
+#    - review:create [2.3.7]
+#  variables:
+#    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
+#
+#test:e2e [2.4.4]:
+#  extends: test:e2e
+#  needs:
+#    - review:create [2.4.4]
+#  variables:
+#    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m244.${DEPLOY_HOST_DEV}
+#  allow_failure: true
 
 # ======= DEPLOYMENT =======
 .deploy:

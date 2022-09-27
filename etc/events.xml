@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="payment_method_assign_data">
+    <event name="payment_method_assign_data_hokodo_bnpl">
         <observer name="hokodo_bnpl_data_assign" instance="Hokodo\BNPL\Observer\DataAssignObserver" />
     </event>
     <event name="sales_model_service_quote_submit_before">
@@ -21,4 +21,5 @@
     <event name="admin_system_config_changed_section_payment">
         <observer name="custom_admin_system_config_changed_section_general" instance="Hokodo\BNPL\Observer\ConfigObserver"/>
     </event>
+<!--    <event name="sales_quote_item_set_product"></event>-->
 </config>

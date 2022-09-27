@@ -22,6 +22,9 @@ config = {
             },
             'Magento_Checkout/js/view/minicart': {
                 'Hokodo_BNPL/js/view/minicart-mixin': true
+            },
+            'Magento_Checkout/js/model/shipping-save-processor': {
+                'Hokodo_BNPL/js/sdk/mixin/shipping-save-processor-mixin': true
             }
         },
     },

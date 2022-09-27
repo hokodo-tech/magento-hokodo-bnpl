@@ -4,21 +4,22 @@
  */
 define([
     'uiComponent',
-    'Magento_Checkout/js/model/payment/renderer-list'
+    'Magento_Checkout/js/model/payment/renderer-list',
+    'Magento_Customer/js/model/customer'
 ], function (
         Component,
-        rendererList
+        rendererList,
+        customer
         ) {
     'use strict';
 
     var config = window.checkoutConfig.payment;
-
-    if (config.hokodo_bnpl.isActive) {
+    if (config.hokodo_bnpl.isActive && customer.isLoggedIn()) {
         if (!config.hokodo_bnpl.replace_place_order_hooks) {
             rendererList.push(
                 {
                     type: 'hokodo_bnpl',
-                    component: 'Hokodo_BNPL/js/view/payment/method-renderer/bnpl'
+                    component: 'Hokodo_BNPL/js/view/payment/method-renderer/bnpl-sdk'
                 }
             );
         } else if (config.hokodo_bnpl.magentoVersion < 241 || config.hokodo_bnpl.replace_place_order_hooks) {

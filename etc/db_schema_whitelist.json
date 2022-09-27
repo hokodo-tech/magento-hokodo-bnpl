@@ -68,5 +68,41 @@
             "order_api_id": true,
             "hokodo_id": true
         }
+    },
+    "hokodo_quote": {
+        "column": {
+            "id": true,
+            "quote_id": true,
+            "company_id": true,
+            "user_id": true,
+            "organisation_id": true,
+            "order_id": true,
+            "offer_id": true,
+            "patch_type": true,
+            "patch_required": true
+        },
+        "index": {
+            "HOKODO_QUOTE_QUOTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "HOKODO_QUOTE_QUOTE_ID_QUOTE_ENTITY_ID": true
+        }
+    },
+    "hokodo_customer": {
+        "column": {
+            "id": true,
+            "customer_id": true,
+            "company_id": true,
+            "organisation_id": true,
+            "user_id": true
+        },
+        "index": {
+            "HOKODO_CUSTOMER_CUSTOMER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "HOKODO_CUSTOMER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
     }
 }

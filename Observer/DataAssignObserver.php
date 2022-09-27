@@ -8,6 +8,7 @@ namespace Hokodo\BNPL\Observer;
 
 use Hokodo\BNPL\Api\Data\PaymentQuoteInterface;
 use Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface;
+use Hokodo\BNPL\Gateway\Service\Order;
 use Hokodo\BNPL\Model\SaveLog as Logger;
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
@@ -57,15 +58,23 @@ class DataAssignObserver extends AbstractDataAssignObserver
     private $logger;
 
     /**
+     * @var Order
+     */
+    private $orderService;
+
+    /**
      * @param PaymentQuoteRepositoryInterface $paymentQuoteRepository
+     * @param Order                           $orderService
      * @param Logger                          $logger
      */
     public function __construct(
         PaymentQuoteRepositoryInterface $paymentQuoteRepository,
+        Order $orderService,
         Logger $logger
     ) {
         $this->paymentQuoteRepository = $paymentQuoteRepository;
         $this->logger = $logger;
+        $this->orderService = $orderService;
     }
 
     /**
@@ -93,6 +102,13 @@ class DataAssignObserver extends AbstractDataAssignObserver
                     $additionalData[$additionalInformationKey]
                 );
             }
+        }
+
+        if (isset($additionalData['hokodo_order_id'])) {
+            //TODO rebuild using DTO
+            $hokodoOrder = $this->orderService->getOrder(['id' => $additionalData['hokodo_order_id']])->getDataModel();
+            $additionalData['hokodo_deferred_payment_id'] = $hokodoOrder->getDeferredPayment();
+            $quote->getPayment()->setAdditionalInformation($additionalData)->save();
         }
 
         $paymentQuote = $this->getPaymentQuote($quote->getId());

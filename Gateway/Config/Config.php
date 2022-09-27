@@ -28,6 +28,9 @@ class Config extends DefaultPaymentConfig
     public const KEY_DEV_API_KEY = 'dev_api_key';
     public const KEY_SANDBOX_API_KEY = 'sandbox_api_key';
     public const KEY_API_KEY = 'api_key';
+    public const KEY_DEV_SDK_KEY = 'dev_sdk_key';
+    public const KEY_SANDBOX_SDK_KEY = 'sandbox_sdk_key';
+    public const KEY_SDK_KEY = 'sdk_key';
     public const KEY_ALLOW_SPECIFIC = 'allowspecific';
     public const KEY_SPECIFIC_COUNTRY = 'specificcountry';
     public const INVOICE_ON_PAYMENT = 'payment/hokodo_bnpl/create_invoice_on_payment_accepted';
@@ -179,6 +182,42 @@ class Config extends DefaultPaymentConfig
     public function getApiKey(int $storeId = null): string
     {
         return $this->getValue(self::KEY_API_KEY, $storeId);
+    }
+
+    /**
+     * Returns development API key.
+     *
+     * @param int|null $storeId
+     *
+     * @return string
+     */
+    public function getDevSdkKey(int $storeId = null): string
+    {
+        return $this->getValue(self::KEY_DEV_SDK_KEY, $storeId);
+    }
+
+    /**
+     * Returns sandbox API key.
+     *
+     * @param int|null $storeId
+     *
+     * @return string
+     */
+    public function getSandboxSdkKey(int $storeId = null): string
+    {
+        return $this->getValue(self::KEY_SANDBOX_SDK_KEY, $storeId);
+    }
+
+    /**
+     * Returns production API key.
+     *
+     * @param int|null $storeId
+     *
+     * @return string
+     */
+    public function getSdkKey(int $storeId = null): string
+    {
+        return $this->getValue(self::KEY_SDK_KEY, $storeId);
     }
 
     /**

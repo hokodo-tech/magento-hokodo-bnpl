@@ -24,7 +24,7 @@
                     <label>Environment</label>
                     <source_model>Hokodo\BNPL\Model\Adminhtml\Source\Environment</source_model>
                 </field>
-                <field id="dev_api_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="dev_api_key" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Development API Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <attribute type="shared">1</attribute>
@@ -32,7 +32,7 @@
                         <field id="environment">dev</field>
                     </depends>
                 </field>
-                <field id="sandbox_api_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="sandbox_api_key" translate="label" type="obscure" sortOrder="33" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Sandbox API Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <attribute type="shared">1</attribute>
@@ -40,7 +40,7 @@
                         <field id="environment">sandbox</field>
                     </depends>
                 </field>
-                <field id="api_key" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="api_key" translate="label" type="obscure" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Production API Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <attribute type="shared">1</attribute>
@@ -48,6 +48,28 @@
                         <field id="environment">production</field>
                     </depends>
                 </field>
+                <field id="dev_sdk_key" translate="label" type="text" sortOrder="31" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Development SDK Key</label>
+                    <attribute type="shared">1</attribute>
+                    <depends>
+                        <field id="environment">dev</field>
+                    </depends>
+                </field>
+                <field id="sandbox_sdk_key" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sandbox SDK Key</label>
+                    <attribute type="shared">1</attribute>
+                    <depends>
+                        <field id="environment">sandbox</field>
+                    </depends>
+                </field>
+                <field id="sdk_key" translate="label" type="text" sortOrder="36" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Production SDK Key</label>
+                    <attribute type="shared">1</attribute>
+                    <depends>
+                        <field id="environment">production</field>
+                    </depends>
+                </field>
+
                 <field id="create_invoice_on_payment_accepted" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Create invoice automatically</label>
                     <comment>Invoice will be created automatically after payment update</comment>

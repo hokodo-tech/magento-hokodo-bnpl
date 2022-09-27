@@ -6,12 +6,12 @@
 
 namespace Hokodo\BNPL\Observer;
 
-use Hokodo\BNPL\Api\Data\PaymentQuoteInterface;
-use Hokodo\BNPL\Api\HokodoOrganisationRepositoryInterface;
-use Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface;
+use Hokodo\BNPL\Gateway\Service\Order;
+use Hokodo\BNPL\Model\RequestBuilder\OrderBuilder;
 use Hokodo\BNPL\Model\SaveLog as Logger;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Hokodo\BNPL\Observer\OrderPlaceSuccessObserver.
@@ -19,40 +19,32 @@ use Magento\Framework\Event\ObserverInterface;
 class OrderPlaceSuccessObserver implements ObserverInterface
 {
     /**
-     * @var HokodoOrganisationRepositoryInterface
-     */
-    private $hokodoOrganisationRepository;
-
-    /**
-     * @var PaymentQuoteRepositoryInterface
-     */
-    private $paymentQuoteRepository;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
      * @var Logger
      */
     private $logger;
 
     /**
-     * @param HokodoOrganisationRepositoryInterface $hokodoOrganisationRepository
-     * @param PaymentQuoteRepositoryInterface       $paymentQuoteRepository
-     * @param CustomerRepositoryInterface           $customerRepository
-     * @param Logger                                $logger
+     * @var OrderBuilder
+     */
+    private OrderBuilder $orderBuilder;
+
+    /**
+     * @var Order
+     */
+    private Order $orderService;
+
+    /**
+     * @param OrderBuilder    $orderBuilder
+     * @param Order           $orderService
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        HokodoOrganisationRepositoryInterface $hokodoOrganisationRepository,
-        PaymentQuoteRepositoryInterface $paymentQuoteRepository,
-        CustomerRepositoryInterface $customerRepository,
-        Logger $logger
+        OrderBuilder $orderBuilder,
+        Order $orderService,
+        LoggerInterface $logger
     ) {
-        $this->hokodoOrganisationRepository = $hokodoOrganisationRepository;
-        $this->paymentQuoteRepository = $paymentQuoteRepository;
-        $this->customerRepository = $customerRepository;
+        $this->orderBuilder = $orderBuilder;
+        $this->orderService = $orderService;
         $this->logger = $logger;
     }
 
@@ -63,57 +55,14 @@ class OrderPlaceSuccessObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /**
-         * @var \Magento\Quote\Model\Quote $quote
-         */
-        $quote = $observer->getEvent()->getQuote();
-
-        $paymentQuote = $this->getPaymentQuote($quote->getId());
-
-        if ($quote->getCustomerId() && $paymentQuote && $paymentQuote->getId()) {
-            try {
-                if ($paymentQuote->getUserId() && $paymentQuote->getOrganisationId()) {
-                    $customer = $this->customerRepository->getById($quote->getCustomerId());
-                    $customer->setCustomAttribute('hokodo_user_id', $paymentQuote->getUserId());
-
-                    $organisation = $this->hokodoOrganisationRepository->getByApiId($paymentQuote->getOrganisationId());
-
-                    $customer->setCustomAttribute('hokodo_organization_id', $organisation->getId());
-                    $this->customerRepository->save($customer);
-                }
-            } catch (\Exception $e) {
-                $data = [
-                    'payment_log_content' => $e->getMessage(),
-                    'action_title' => 'OrderPlaceSuccessObserver:: Exception',
-                    'status' => 0,
-                    'quote_id' => $quote->getId(),
-                ];
-                $this->logger->execute($data);
-                return;
-            }
-        }
-    }
-
-    /**
-     * A function that catch exception from payment quote.
-     *
-     * @param int $quoteId
-     *
-     * @return PaymentQuoteInterface|null
-     */
-    private function getPaymentQuote($quoteId)
-    {
+        /** @var OrderInterface $order */
+        $order = $observer->getEvent()->getOrder();
+        $orderRequest = $this->orderBuilder->buildPatchOrderRequestBase($order->getData('order_api_id'));
+        $orderRequest->setUniqueId($order->getIncrementId());
         try {
-            return $this->paymentQuoteRepository->getByQuoteId($quoteId);
+            $this->orderService->patchOrder($orderRequest);
         } catch (\Exception $e) {
-            $data = [
-                'payment_log_content' => $e->getMessage(),
-                'action_title' => 'OrderPlaceSuccessObserver:: Exception',
-                'status' => 0,
-                'quote_id' => $quoteId,
-            ];
-            $this->logger->execute($data);
-            return null;
+            $this->logger->critical(__('Hokodo_BNPL: There was an error when patching an order: %1', $e->getMessage()));
         }
     }
 }
