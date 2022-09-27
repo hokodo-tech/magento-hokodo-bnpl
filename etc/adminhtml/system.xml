@@ -100,6 +100,19 @@
                         <comment><![CDATA[Display credit limit banner on product page]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
+                    <field id="enable_top" translate="label comment" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Top Credit limit Banner enable</label>
+                        <comment><![CDATA[Display top credit limit banner on all the pages.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="top_theme" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Top banner theme</label>
+                        <comment><![CDATA[Select theme for top banner.]]></comment>
+                        <source_model>Hokodo\BNPL\Model\Adminhtml\Source\MarketingTopBannerThemeOptions</source_model>
+                        <depends>
+                            <field id="enable_top">1</field>
+                        </depends>
+                    </field>
                     <field id="faq" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>FAQ link</label>
                         <comment><![CDATA[FAQ for buyers link.]]></comment>

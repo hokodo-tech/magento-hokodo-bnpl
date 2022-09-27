@@ -40,6 +40,8 @@ class Config extends DefaultPaymentConfig
     public const KEY_BTN_CART_PAGE_ENABLE = 'marketing/enable_cart_page';
     public const MARKETING_FAQ = 'marketing/faq';
     public const MARKETING_PRODUCT_PAGE_ENABLE = 'marketing/enable_product';
+    public const MARKETING_TOP_BANNER_ENABLE = 'marketing/enable_top';
+    public const MARKETING_TOP_BANNER_THEME = 'marketing/top_theme';
 
     /**
      * @var StoreInterface
@@ -300,5 +302,25 @@ class Config extends DefaultPaymentConfig
     public function getMarketingProductBannerEnabled(): bool
     {
         return $this->getValue(self::MARKETING_PRODUCT_PAGE_ENABLE);
+    }
+
+    /**
+     * Get top credit limit banner enabled.
+     *
+     * @return bool
+     */
+    public function getMarketingTopBannerEnabled(): bool
+    {
+        return $this->getValue(self::MARKETING_TOP_BANNER_ENABLE);
+    }
+
+    /**
+     * Get top credit limit banner theme.
+     *
+     * @return string
+     */
+    public function getMarketingTopBannerTheme(): string
+    {
+        return $this->getValue(self::MARKETING_TOP_BANNER_THEME);
     }
 }

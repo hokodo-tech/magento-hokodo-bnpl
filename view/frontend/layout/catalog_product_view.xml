@@ -6,9 +6,9 @@
     </head>
     <body>
         <referenceContainer name="product.info.main">
-            <block class="Magento\Framework\View\Element\Template" name="sdkLoader"
+            <block class="Magento\Framework\View\Element\Template" name="hokodo.sdkLoader.product"
                    template="Hokodo_BNPL::sdk/core.phtml"
-                   ifconfig="payment/hokodo_bnpl/active">
+                   ifconfig="payment/hokodo_bnpl/marketing/enable_product">
                 <arguments>
                     <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\SdkLoader</argument>
                 </arguments>

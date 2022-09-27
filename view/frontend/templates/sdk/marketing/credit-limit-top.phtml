@@ -1,4 +1,25 @@
+<?php
+/**
+ * @var $block \Magento\Framework\View\Element\Template
+ * @var $viewModel \Hokodo\BNPL\ViewModel\Marketing\TopCreditLimitBanner
+ */
+$viewModel = $block->getData('viewModel');
+?>
+
 <hokodo-marketing
     data-element="credit-limit-top-strip"
-    data-theme="dark"
+    data-theme="<?= $viewModel->getTheme() ?>"
 ></hokodo-marketing>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "hokodo-credit-limit-banner-top": {
+                        "component": "Hokodo_BNPL/js/sdk/marketing/banner-top"
+                    }
+                }
+            }
+        }
+    }
+</script>
