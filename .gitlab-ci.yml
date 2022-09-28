@@ -242,7 +242,7 @@ review:detach [2.4.4]:
       $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/active 1 &&
       $PHP_CLI bin/magento config:set payment/hokodo_bnpl/environment dev &&
       $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_api_key '$HOKODO_API_KEY_DEV' &&
-      $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_sdk_key '$HOKODO_SDK_KEY_DEV' &&
+      $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_sdk_key '$HOKODO_SDK_KEY_DEV'
     # Magento commands: setup:upgrade => setup:di:compile => setup:static-content:deploy => cache:flush
     - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up && $PHP_CLI bin/magento se:d:c && $PHP_CLI bin/magento se:s:d && $PHP_CLI bin/magento c:f"
 
