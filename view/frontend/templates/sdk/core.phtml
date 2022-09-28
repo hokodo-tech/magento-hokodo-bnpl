@@ -6,6 +6,14 @@
 
 $viewModel = $block->getData('viewModel');
 ?>
-<script>
-    require(['<?= $viewModel->getSdkUrl() ?>'])
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Hokodo_BNPL/js/sdk/core":{
+                "url":"<?= $viewModel->getSdkUrl() ?>",
+                "key":"<?= $viewModel->getSdkKey() ?>",
+                "faq":"<?= $viewModel->getMarketingFaqUrl() ?>"
+            }
+        }
+    }
 </script>

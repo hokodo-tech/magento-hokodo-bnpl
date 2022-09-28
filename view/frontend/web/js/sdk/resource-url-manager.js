@@ -16,12 +16,8 @@ define([
     'use strict';
 
     return {
-        getCreateOrganisationUrl() {
-            return urlBuilder.createUrl('/carts/mine/hokodo-create-organisation', {});
-        },
-
-        getCreateUserUrl() {
-            return urlBuilder.createUrl('/carts/mine/hokodo-create-user', {});
+        getHokodoCustomerUrl() {
+            return urlBuilder.createUrl('/hokodo/customer', {});
         },
 
         getRequestOfferUrl() {

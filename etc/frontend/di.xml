@@ -43,6 +43,7 @@
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
                 <item name="hokodo-checkout" xsi:type="string">Hokodo\BNPL\CustomerData\HokodoCheckout</item>
+                <item name="hokodo-search" xsi:type="string">Hokodo\BNPL\CustomerData\HokodoSearch</item>
             </argument>
         </arguments>
     </type>
@@ -54,11 +55,9 @@
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+    <type name="Hokodo\BNPL\CustomerData\HokodoSearch">
         <arguments>
-            <argument name="configProviders" xsi:type="array">
-                <item name="hokodo_checkout" xsi:type="object">Hokodo\BNPL\Model\Config\Checkout\Provider\Sdk</item>
-            </argument>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
         </arguments>
     </type>
 </config>

@@ -36,10 +36,12 @@ class Config extends DefaultPaymentConfig
     public const INVOICE_ON_PAYMENT = 'payment/hokodo_bnpl/create_invoice_on_payment_accepted';
     public const REPLACE_PLACE_ORDER_HOOKS = 'payment/hokodo_bnpl/replace_place_order_hooks';
     public const IS_PAYMENT_DEFAULT_PATH = 'payment/hokodo_bnpl/is_default';
-    public const KEY_BTN_CART_PAGE_LABEL = 'on_site_messaging/label_cart_page';
-    public const KEY_BTN_CART_PAGE_ENABLE = 'on_site_messaging/enable_cart_page';
-    public const KEY_BTN_PRODUCT_PAGE_LABEL = 'on_site_messaging/label';
-    public const KEY_BTN_PRODUCT_PAGE_ENABLE = 'on_site_messaging/enable';
+    public const KEY_BTN_CART_PAGE_LABEL = 'marketing/label_cart_page';
+    public const KEY_BTN_CART_PAGE_ENABLE = 'marketing/enable_cart_page';
+    public const MARKETING_FAQ = 'marketing/faq';
+    public const MARKETING_PRODUCT_PAGE_ENABLE = 'marketing/enable_product';
+    public const MARKETING_TOP_BANNER_ENABLE = 'marketing/enable_top';
+    public const MARKETING_TOP_BANNER_THEME = 'marketing/top_theme';
 
     /**
      * @var StoreInterface
@@ -280,5 +282,45 @@ class Config extends DefaultPaymentConfig
         return (bool) $this->scopeConfig->getValue(
             self::REPLACE_PLACE_ORDER_HOOKS
         );
+    }
+
+    /**
+     * Provide faq url for Hokodo marketing elements.
+     *
+     * @return string|null
+     */
+    public function getMarketingFaqUrl(): ?string
+    {
+        return $this->getValue(self::MARKETING_FAQ);
+    }
+
+    /**
+     * Get Product page credit limit banner enabled.
+     *
+     * @return bool
+     */
+    public function getMarketingProductBannerEnabled(): bool
+    {
+        return $this->getValue(self::MARKETING_PRODUCT_PAGE_ENABLE);
+    }
+
+    /**
+     * Get top credit limit banner enabled.
+     *
+     * @return bool
+     */
+    public function getMarketingTopBannerEnabled(): bool
+    {
+        return $this->getValue(self::MARKETING_TOP_BANNER_ENABLE);
+    }
+
+    /**
+     * Get top credit limit banner theme.
+     *
+     * @return string
+     */
+    public function getMarketingTopBannerTheme(): string
+    {
+        return $this->getValue(self::MARKETING_TOP_BANNER_THEME);
     }
 }

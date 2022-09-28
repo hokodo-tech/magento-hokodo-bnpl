@@ -28,7 +28,7 @@ define([
             searchInitialized: false
         },
         isOfferLoading: ko.observable(false),
-        hokodoElements: Hokodo(window.checkoutConfig.hokodoSdkKey).elements(),
+        hokodoElements: window.hokodoSdk.elements(),
 
         /**
          * Init component

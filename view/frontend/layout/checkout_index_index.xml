@@ -13,7 +13,7 @@
                     <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\Checkout\SegmentJs</argument>
                 </arguments>
             </block>
-            <block class="Magento\Framework\View\Element\Template" name="sdkLoader"
+            <block class="Magento\Framework\View\Element\Template" name="hokodo.sdkLoader.checkout"
                    template="Hokodo_BNPL::sdk/core.phtml"
                    ifconfig="payment/hokodo_bnpl/active">
                 <arguments>

@@ -116,7 +116,7 @@ class HokodoCustomer implements HokodoCustomerInterface
 
             /** @var UserInterface $user */
             $user = $this->userService->createUser(
-                $this->userBuilder->build($this->customerSession->getCustomer(), $hokodoCustomer->getOrganisationId())
+                $this->userBuilder->build($this->customerSession->getCustomer(), $organisation->getId())
             )->getDataModel();
 
             $hokodoCustomer
