@@ -11,8 +11,6 @@ use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Gateway\Service\Offer;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\CustomerData\SectionSourceInterface;
-use Magento\Framework\Exception\NotFoundException;
-use Magento\Payment\Gateway\Command\CommandException;
 use Psr\Log\LoggerInterface;
 
 class HokodoCheckout implements SectionSourceInterface
