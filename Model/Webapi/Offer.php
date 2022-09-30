@@ -433,7 +433,11 @@ class Offer implements OfferInterface
         try {
             if ($this->hokodoQuote->getOfferId()) {
                 $offer = $this->offerGatewayService->getOffer(['id' => $this->hokodoQuote->getOfferId()]);
-            } else {
+                if ($this->isPaymentPlansExpired($offer->getDataModel())) {
+                    $this->hokodoQuote->setOfferId('');
+                }
+            }
+            if (!$this->hokodoQuote->getOfferId()) {
                 $offer = $this->offerGatewayService->createOffer(
                     $this->offerBuilder->build($this->hokodoQuote->getOrderId())
                 );
@@ -458,6 +462,22 @@ class Offer implements OfferInterface
             throw new Exception(
                 __('There was an error during payment method set up. Please reload the page or try again later.')
             );
+        }
+    }
+
+    /**
+     * Check if there expired payment plans.
+     *
+     * @param PaymentOffersInterface $offer
+     *
+     * @return bool
+     */
+    private function isPaymentPlansExpired(PaymentOffersInterface $offer): bool
+    {
+        foreach ($offer->getOfferedPaymentPlans() as $offeredPaymentPlan) {
+            if ($offeredPaymentPlan->getStatus() === 'expired') {
+                return true;
+            }
         }
     }
 }
