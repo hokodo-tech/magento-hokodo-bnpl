@@ -124,8 +124,10 @@ define([
                 this.userCheckout.mount("#hokodoCheckout");
             } else {
                 console.log('bnpl:_mountCheckout:else')
-                this.userCheckout.destroy();
-                this.userCheckout = null;
+                if (this.userCheckout) {
+                    this.userCheckout.destroy();
+                    this.userCheckout = null;
+                }
                 this._mountCheckout();
             }
         },
