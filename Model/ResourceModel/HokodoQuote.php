@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\ResourceModel;
 
+use Hokodo\BNPL\Api\Data\HokodoQuoteInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class HokodoQuote extends AbstractDb
@@ -21,7 +22,6 @@ class HokodoQuote extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('hokodo_quote', 'id');
-        $this->_useIsObjectNew = true;
+        $this->_init('hokodo_quote', HokodoQuoteInterface::ID);
     }
 }

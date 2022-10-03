@@ -19,6 +19,7 @@ use Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterfaceFactory;
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\OfferInterface;
+use Hokodo\BNPL\Exception\OfferDeclinedException;
 use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order as OrderGatewayService;
 use Hokodo\BNPL\Gateway\Service\Organisation as OrganisationService;
@@ -433,7 +434,7 @@ class Offer implements OfferInterface
         try {
             if ($this->hokodoQuote->getOfferId()) {
                 $offer = $this->offerGatewayService->getOffer(['id' => $this->hokodoQuote->getOfferId()]);
-                if ($this->isPaymentPlansExpired($offer->getDataModel())) {
+                if ($this->isPaymentPlanHaveStatus($offer->getDataModel(), 'expired')) {
                     $this->hokodoQuote->setOfferId('');
                 }
             }
@@ -442,7 +443,10 @@ class Offer implements OfferInterface
                     $this->offerBuilder->build($this->hokodoQuote->getOrderId())
                 );
             }
-            if ($dataModel = $offer->getDataModel()) {
+            if (($dataModel = $offer->getDataModel())) {
+                if (!$this->isPaymentPlanHaveStatus($dataModel, 'offered')) {
+                    throw new OfferDeclinedException(__('Offer declined'));
+                }
                 $quote = $this->checkoutSession->getQuote();
                 $quote->setData('payment_offer_id', $dataModel->getId());
                 $this->cartRepository->save($quote);
@@ -454,6 +458,14 @@ class Offer implements OfferInterface
                 return $dataModel;
             }
             throw new NotFoundException(__('No offer found in API response'));
+        } catch (OfferDeclinedException $exception) {
+            $this->hokodoQuote
+                ->setOrderId('')
+                ->setOfferId('');
+            $this->hokodoQuoteRepository->save($this->hokodoQuote);
+            throw new Exception(
+                __('Offer was declined. Please reload the page or try again later.')
+            );
         } catch (\Exception $e) {
             $this->hokodoQuote
                 ->setOrderId('')
@@ -479,5 +491,24 @@ class Offer implements OfferInterface
                 return true;
             }
         }
+        return false;
+    }
+
+    /**
+     * Check if the provided status exists within the offer's payment plans.
+     *
+     * @param PaymentOffersInterface $offer
+     * @param string                 $status
+     *
+     * @return bool
+     */
+    private function isPaymentPlanHaveStatus(PaymentOffersInterface $offer, string $status): bool
+    {
+        foreach ($offer->getOfferedPaymentPlans() as $offeredPaymentPlan) {
+            if ($offeredPaymentPlan->getStatus() === $status) {
+                return true;
+            }
+        }
+        return false;
     }
 }
