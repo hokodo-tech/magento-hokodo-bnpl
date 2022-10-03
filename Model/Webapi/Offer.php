@@ -232,6 +232,10 @@ class Offer implements OfferInterface
     {
         $customerCompanyId = $this->hokodoCustomer->getCompanyId();
 
+        if (!$this->hokodoQuote->getQuoteId()) {
+            $this->hokodoQuote->setQuoteId((int) $this->checkoutSession->getQuote()->getId());
+        }
+
         if ($customerCompanyId && $customerCompanyId === $companyId) {
             $this->hokodoQuote
                 ->setCompanyId($companyId)
@@ -244,7 +248,6 @@ class Offer implements OfferInterface
                 ->setOrganisationId('')
                 ->setUserId('');
             $this->hokodoQuote
-                ->setQuoteId((int) $this->checkoutSession->getQuoteId())
                 ->setCompanyId($companyId)
                 ->setOrganisationId('')
                 ->setUserId('')

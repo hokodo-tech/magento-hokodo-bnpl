@@ -43,7 +43,7 @@ class HokodoSearch implements SectionSourceInterface
     public function getSectionData()
     {
         $hokodoCustomer = $this->hokodoCustomerRepository->getByCustomerId(
-            $this->customerSession->getCustomerId()
+            (int) $this->customerSession->getCustomerId()
         );
 
         return [
