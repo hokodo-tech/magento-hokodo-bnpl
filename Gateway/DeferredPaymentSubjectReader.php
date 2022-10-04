@@ -27,7 +27,7 @@ class DeferredPaymentSubjectReader extends SubjectReader
         $user = $this->readFieldValue('deferred_payments', $subject);
 
         if (!($user instanceof DeferredPaymentInterface)) {
-            throw new \InvalidArgumentException('Deferred Payments field should be provided');
+            throw new \InvalidArgumentException(__('Deferred Payments field should be provided'));
         }
 
         return $user;
@@ -41,7 +41,9 @@ class DeferredPaymentSubjectReader extends SubjectReader
     public function readEndpointParam($param, array $subject)
     {
         if ($param != 'deferred_payment_id') {
-            throw new \InvalidArgumentException('For endopoint Deferred Payments param should be deferred_payment_id');
+            throw new \InvalidArgumentException(
+                __('For endopoint Deferred Payments param should be deferred_payment_id')
+            );
         }
         return $this->readDeferredPayment($subject)->getId();
     }

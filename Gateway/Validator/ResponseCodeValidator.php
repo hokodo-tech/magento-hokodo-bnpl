@@ -40,7 +40,7 @@ class ResponseCodeValidator extends AbstractValidator
     public function validate(array $validationSubject)
     {
         if (!isset($validationSubject['response'])) {
-            throw new \InvalidArgumentException('Response does not exist');
+            throw new \InvalidArgumentException(__('Response does not exist'));
         }
 
         $response = $validationSubject['response'];

@@ -60,7 +60,7 @@ class DeferredPaymentOrderSubjectReader extends SubjectReader
     public function readEndpointParam($param, array $subject)
     {
         if ($param != 'hokodo_deferred_payment_id') {
-            throw new InvalidArgumentException('Param should be hokodo_deferred_payment_id');
+            throw new InvalidArgumentException(__('Param should be hokodo_deferred_payment_id'));
         }
         $payment = $this->readPayment($subject);
 

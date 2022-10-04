@@ -27,7 +27,7 @@ class OrganisationSubjectReader extends SubjectReader
         $organization = $this->readFieldValue('organisations', $subject);
 
         if (!($organization instanceof OrganisationInterface)) {
-            throw new \InvalidArgumentException('Organization field should be provided');
+            throw new \InvalidArgumentException(__('Organization field should be provided'));
         }
 
         return $organization;
@@ -41,7 +41,7 @@ class OrganisationSubjectReader extends SubjectReader
     public function readEndpointParam($param, array $subject)
     {
         if ($param != 'id') {
-            throw new \InvalidArgumentException('For endpoint organization param should be id');
+            throw new \InvalidArgumentException(__('For endpoint organization param should be id'));
         }
         return $this->readOrganisation($subject)->getId();
     }

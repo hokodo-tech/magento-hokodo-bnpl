@@ -41,7 +41,7 @@ class UserOrganisationSubjectReader extends SubjectReader
         $user = $this->readFieldValue('user_organisation', $subject);
 
         if (!($user instanceof OrganisationUserInterface)) {
-            throw new \InvalidArgumentException('User organisation field should be provided');
+            throw new \InvalidArgumentException(__('User organisation field should be provided'));
         }
 
         return $user;

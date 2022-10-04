@@ -28,7 +28,7 @@ class UserSubjectReader extends SubjectReader
         $user = $this->readFieldValue('users', $subject);
 
         if (!($user instanceof UserInterface)) {
-            throw new InvalidArgumentException('User field should be provided');
+            throw new InvalidArgumentException(__('User field should be provided'));
         }
 
         return $user;
@@ -42,7 +42,7 @@ class UserSubjectReader extends SubjectReader
     public function readEndpointParam($param, array $subject)
     {
         if ($param != 'id') {
-            throw new InvalidArgumentException('For endopoint users param should be id');
+            throw new InvalidArgumentException(__('For endopoint users param should be id'));
         }
         return $this->readUser($subject)->getId();
     }

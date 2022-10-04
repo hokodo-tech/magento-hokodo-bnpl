@@ -11,6 +11,10 @@ define([
                         if (config.faq) {
                             sdkConfig.faqLink = config.faq
                         }
+                        sdkConfig.locale = config.locale
+                        if (config.currency) {
+                            sdkConfig.currency = config.currency
+                        }
                         window.hokodoSdk = Hokodo(config.key, sdkConfig);
                         console.log('hokodo Core loaded');
                         $('body').triggerHandler('hokodoSdkResolved');
