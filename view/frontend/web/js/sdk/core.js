@@ -4,15 +4,17 @@ define([
 ], function ($, customer) {
     return function (config) {
         customer().done((name) => {
-            if (name !== undefined && !window.hokodoSdk) {
+            if (name !== undefined) {
                 require([config.url], function () {
-                    let sdkConfig = {};
-                    if (config.faq) {
-                        sdkConfig.faqLink = config.faq
+                    if (!window.hokodoSdk) {
+                        let sdkConfig = {};
+                        if (config.faq) {
+                            sdkConfig.faqLink = config.faq
+                        }
+                        window.hokodoSdk = Hokodo(config.key, sdkConfig);
+                        console.log('hokodo Core loaded');
+                        $('body').triggerHandler('hokodoSdkResolved');
                     }
-                    window.hokodoSdk = Hokodo(config.key, sdkConfig);
-                    console.log('hokodo Core loaded');
-                    $('body').triggerHandler('hokodoSdkResolved');
                 })
             }
         })

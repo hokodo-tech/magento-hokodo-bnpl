@@ -447,9 +447,6 @@ class Offer implements OfferInterface
                 );
             }
             if (($dataModel = $offer->getDataModel())) {
-                if (!$this->isPaymentPlanHaveStatus($dataModel, 'offered')) {
-                    throw new OfferDeclinedException(__('Offer declined'));
-                }
                 $quote = $this->checkoutSession->getQuote();
                 $quote->setData('payment_offer_id', $dataModel->getId());
                 $this->cartRepository->save($quote);
@@ -461,14 +458,6 @@ class Offer implements OfferInterface
                 return $dataModel;
             }
             throw new NotFoundException(__('No offer found in API response'));
-        } catch (OfferDeclinedException $exception) {
-            $this->hokodoQuote
-                ->setOrderId('')
-                ->setOfferId('');
-            $this->hokodoQuoteRepository->save($this->hokodoQuote);
-            throw new Exception(
-                __('Offer was declined. Please reload the page or try again later.')
-            );
         } catch (\Exception $e) {
             $this->hokodoQuote
                 ->setOrderId('')
@@ -478,23 +467,6 @@ class Offer implements OfferInterface
                 __('There was an error during payment method set up. Please reload the page or try again later.')
             );
         }
-    }
-
-    /**
-     * Check if there expired payment plans.
-     *
-     * @param PaymentOffersInterface $offer
-     *
-     * @return bool
-     */
-    private function isPaymentPlansExpired(PaymentOffersInterface $offer): bool
-    {
-        foreach ($offer->getOfferedPaymentPlans() as $offeredPaymentPlan) {
-            if ($offeredPaymentPlan->getStatus() === 'expired') {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
