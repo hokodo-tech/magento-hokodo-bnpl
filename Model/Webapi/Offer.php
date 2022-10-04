@@ -19,7 +19,6 @@ use Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterfaceFactory;
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\OfferInterface;
-use Hokodo\BNPL\Exception\OfferDeclinedException;
 use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order as OrderGatewayService;
 use Hokodo\BNPL\Gateway\Service\Organisation as OrganisationService;
