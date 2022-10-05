@@ -3,13 +3,14 @@ define([
     'use strict';
 
     return {
-        identify() {
+        identify(companyId) {
             if (this.isAnalyticsLoaded()) {
                 this.userId = analytics.user().anonymousId();
                 analytics.identify(this.userId, {
                     Merchant: window.location.host,
                     LoggedIn: window.checkoutConfig.isCustomerLoggedIn,
-                    Module_version: window.bnpl_version
+                    Module_version: window.bnpl_version,
+                    Company_identified: !!companyId
                 })
             }
         },
@@ -30,7 +31,7 @@ define([
                 {
                     Impression: position !== undefined,
                     Position: position !== undefined ? position : null,
-                    total_mount: amount,
+                    total_amount: amount,
                     currency: currency
                 }
             );
@@ -49,7 +50,7 @@ define([
                 'Order Placed',
                 {
                     currency: currencyCode,
-                    totalAmount: amount,
+                    total_amount: amount,
                     OrderId: id,
                     PaymentMethod: method
                 }
