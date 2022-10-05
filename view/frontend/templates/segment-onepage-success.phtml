@@ -11,7 +11,10 @@ $viewModel = $block->getData('viewModel');
         segment.trackOrderPlaced(
             '<?= $viewModel->getSelectedPaymentMethodCode() ?>',
             '<?= $viewModel->getOrder()->getIncrementId() ?>',
-            '<?= (float) ($viewModel->getOrder()->getGrandTotal() - $viewModel->getOrder()->getShippingAmount()) ?>',
+            '<?= number_format(
+                (float) ($viewModel->getOrder()->getGrandTotal() - $viewModel->getOrder()->getShippingAmount()),
+                2
+            ) ?>',
             '<?= $viewModel->getOrder()->getOrderCurrencyCode() ?>'
         );
     })

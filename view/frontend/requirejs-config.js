@@ -6,7 +6,7 @@
 config = {
     config: {
         mixins: {
-            'Hokodo_BNPL/js/view/payment/method-renderer/bnpl': {
+            'Hokodo_BNPL/js/view/payment/method-renderer/bnpl-sdk': {
                 'Hokodo_BNPL/js/segment/method-renderer': true
             },
             'Magento_Checkout/js/view/minicart': {
