@@ -74,14 +74,14 @@ test:unit:
     - if: $CI_MERGE_REQUEST_ID
   resource_group: review
 
-# Magento 2.4.3
+# Magento 2.4.4
 review:create:
   extends: .review
   needs:
     - test:unit
   variables:
     PHP_VERSION: "7.4"
-    MAGENTO_VERSION: "2.4.3"
+    MAGENTO_VERSION: "2.4.4"
     PHP_CLI: php$PHP_VERSION
   environment:
     url: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
@@ -166,27 +166,27 @@ review:detach [2.3.7]:
     name: review/$CI_MERGE_REQUEST_IID-m237
   resource_group: review-2.3.7
 
-# Magento 2.4.4
-review:create [2.4.4]:
-  extends: review:create
-  variables:
-    MAGENTO_VERSION: "2.4.4"
-    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m244
-  environment:
-    name: review/$CI_MERGE_REQUEST_IID-m244
-    url: https://qa${CI_MERGE_REQUEST_IID}-m244.${DEPLOY_HOST_DEV}
-    on_stop: review:detach [2.4.4]
-  resource_group: review-2.4.4
-
-review:detach [2.4.4]:
-  extends: review:detach
-  needs:
-    - review:create [2.4.4]
-  variables:
-    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m244
-  environment:
-    name: review/$CI_MERGE_REQUEST_IID-m244
-  resource_group: review-2.4.4
+## Magento 2.4.4
+#review:create [2.4.4]:
+#  extends: review:create
+#  variables:
+#    MAGENTO_VERSION: "2.4.4"
+#    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m244
+#  environment:
+#    name: review/$CI_MERGE_REQUEST_IID-m244
+#    url: https://qa${CI_MERGE_REQUEST_IID}-m244.${DEPLOY_HOST_DEV}
+#    on_stop: review:detach [2.4.4]
+#  resource_group: review-2.4.4
+#
+#review:detach [2.4.4]:
+#  extends: review:detach
+#  needs:
+#    - review:create [2.4.4]
+#  variables:
+#    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m244
+#  environment:
+#    name: review/$CI_MERGE_REQUEST_IID-m244
+#  resource_group: review-2.4.4
 
 # ======= E2E TESTS =======
 #test:e2e:
