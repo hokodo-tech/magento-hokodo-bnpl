@@ -11,8 +11,6 @@ use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Gateway\Service\Offer;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\CustomerData\SectionSourceInterface;
-use Magento\Framework\Exception\NotFoundException;
-use Magento\Payment\Gateway\Command\CommandException;
 use Psr\Log\LoggerInterface;
 
 class HokodoCheckout implements SectionSourceInterface
@@ -72,8 +70,9 @@ class HokodoCheckout implements SectionSourceInterface
         if ($hokodoQuote->getOfferId()) {
             try {
                 $offer = $this->offerService->getOffer(['id' => $hokodoQuote->getOfferId()])->getDataModel();
-            } catch (NotFoundException|CommandException $e) {
+            } catch (\Exception $e) {
                 $this->logger->error(__('Hokodo_BNPL: getOffer call failed with error - %1', $e->getMessage()));
+                $hokodoQuote->setOfferId('');
             }
         }
         $this->hokodoQuoteRepository->save($hokodoQuote);

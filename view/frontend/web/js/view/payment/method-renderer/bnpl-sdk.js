@@ -7,13 +7,15 @@ define([
     'underscore',
     'ko',
     'Magento_Checkout/js/view/payment/default',
-    'Hokodo_BNPL/js/sdk/hokodo-data-persistor'
+    'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
+    'Magento_Checkout/js/model/error-processor'
 ], function (
     $,
     _,
     ko,
     Component,
-    hokodoData
+    hokodoData,
+    errorProcessor
 ) {
     'use strict';
 
@@ -105,14 +107,6 @@ define([
                     console.log('bnpl:_mountCheckout:!this.userCheckout:failure')
                     hokodoData.setOffer(null);
                     self.hokodoCheckout().offer(null);
-                    self.mountCheckout();
-                });
-
-                this.userCheckout.on('declined', () => {
-                    console.log('bnpl:_mountCheckout:!this.userCheckout:declined')
-                    hokodoData.setOffer(null);
-                    self.hokodoCheckout().offer(null);
-                    self.mountCheckout();
                 });
 
                 this.userCheckout.on('success', () => {
@@ -124,8 +118,10 @@ define([
                 this.userCheckout.mount("#hokodoCheckout");
             } else {
                 console.log('bnpl:_mountCheckout:else')
-                this.userCheckout.destroy();
-                this.userCheckout = null;
+                if (this.userCheckout) {
+                    this.userCheckout.destroy();
+                    this.userCheckout = null;
+                }
                 this._mountCheckout();
             }
         },

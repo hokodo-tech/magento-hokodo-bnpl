@@ -4,8 +4,9 @@ define([
     'priceUtils',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/payment/method-list',
+    'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
     'domReady!'
-], function (Component, segment, priceUtils, quote, methodList) {
+], function (Component, segment, priceUtils, quote, methodList, hokodoData) {
     'use strict';
 
     return Component.extend({
@@ -26,9 +27,9 @@ define([
                             }
                         }
                     )
-                    self.segment.identify();
+                    self.segment.identify(hokodoData.getCompanyId());
                     segment.trackLanding(
-                        self.quote.getCalculatedTotal(),
+                        self.priceUtils.formatPrice(self.quote.getCalculatedTotal(), {pattern: '%s'}),
                         self.quote.totals().quote_currency_code,
                         position
                     );

@@ -108,22 +108,30 @@ class HokodoCustomer implements HokodoCustomerInterface
         $hokodoCustomerResponse = $this->hokodoCustomerResponseFactory->create();
         $hokodoCustomer = $this->getHokodoCustomer($payload);
 
-        try {
-            /** @var OrganisationInterface $organisation */
-            $organisation = $this->organisationService->createOrganisation(
-                $this->organisationBuilder->build($payload->getCompanyId())
-            )->getDataModel();
-
-            /** @var UserInterface $user */
-            $user = $this->userService->createUser(
-                $this->userBuilder->build($this->customerSession->getCustomer(), $organisation->getId())
-            )->getDataModel();
-
+        if ($hokodoCustomer->getCompanyId() !== $payload->getCompanyId()) {
             $hokodoCustomer
                 ->setCompanyId($payload->getCompanyId())
-                ->setOrganisationId($organisation->getId())
-                ->setUserId($user->getId());
-            $this->hokodoCustomerRepository->save($hokodoCustomer);
+                ->setOrganisationId('')
+                ->setUserId('');
+        }
+
+        try {
+            if (!$hokodoCustomer->getOrganisationId()) {
+                /** @var OrganisationInterface $organisation */
+                $organisation = $this->organisationService->createOrganisation(
+                    $this->organisationBuilder->build($payload->getCompanyId())
+                )->getDataModel();
+                $hokodoCustomer->setOrganisationId($organisation->getId());
+            }
+
+            if (!$hokodoCustomer->getUserId()) {
+                /** @var UserInterface $user */
+                $user = $this->userService->createUser(
+                    $this->userBuilder->build($this->customerSession->getCustomer(), $organisation->getId())
+                )->getDataModel();
+                $hokodoCustomer->setUserId($user->getId());
+                $this->hokodoCustomerRepository->save($hokodoCustomer);
+            }
 
             $hokodoCustomerResponse
                 ->setOrganisationId($hokodoCustomer->getOrganisationId())

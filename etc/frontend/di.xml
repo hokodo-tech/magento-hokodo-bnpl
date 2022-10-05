@@ -34,10 +34,6 @@
         </arguments>
     </type>
 
-    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
-        <plugin name="hokodoBnplLayoutProcessor" type="Hokodo\BNPL\Plugin\Block\Checkout\LayoutProcessor"/>
-    </type>
-
     <!-- Sections invalidate -->
     <type name="Magento\Customer\CustomerData\SectionPoolInterface">
         <arguments>

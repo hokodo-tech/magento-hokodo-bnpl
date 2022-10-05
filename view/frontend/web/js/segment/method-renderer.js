@@ -12,21 +12,6 @@ define([
             selectPaymentMethod() {
                 segment.trackSelected();
                 return this._super();
-            },
-
-            selectRegisteredCompany() {
-                segment.trackCompanyType('Limited');
-                return this._super();
-            },
-
-            selectSoleTrader() {
-                segment.trackCompanyType('Sole Trader');
-                return this._super();
-            },
-
-            afterPlaceOrder() {
-                segment.trackRedirection(this.selectedPlan().name);
-                return this._super();
             }
         });
     }

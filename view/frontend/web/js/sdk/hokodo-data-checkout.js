@@ -135,6 +135,7 @@ define([
                         if (this.hokodoPaymentMethod()) {
                             errorProcessor.process(response, this.hokodoPaymentMethod().messageContainer)
                         }
+                        hokodoData.setOffer('');
                     }).always(() => {
                         this.isLoading(false);
                     })
