@@ -1,3 +1,10 @@
+2.0.0 / October 2022
+==================
+* Complete frontend redevelopment.
+* Introducing the latest JS SDK from Hokodo.
+* Checkout flow redevelopment.
+* Introducing Hokodo marketing banners.
+
 1.3.3 / July 2022
 ==================
 * Version 1.3.3
