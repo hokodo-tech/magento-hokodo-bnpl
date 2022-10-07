@@ -70,4 +70,14 @@ class SdkLoader implements ArgumentInterface
     {
         return $this->paymentConfig->getMarketingFaqUrl();
     }
+
+    /**
+     * Check is module active.
+     *
+     * @return bool
+     */
+    public function isModuleActive(): bool
+    {
+        return $this->paymentConfig->isActive();
+    }
 }

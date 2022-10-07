@@ -7,9 +7,11 @@
 namespace Hokodo\BNPL\Gateway\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Payment\Gateway\Config\Config as DefaultPaymentConfig;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Hokodo\BNPL\Gateway\Config\Config.
@@ -42,13 +44,8 @@ class Config extends DefaultPaymentConfig
     public const MARKETING_PRODUCT_PAGE_ENABLE = 'marketing/enable_product';
     public const MARKETING_TOP_BANNER_ENABLE = 'marketing/enable_top';
     public const MARKETING_TOP_BANNER_THEME = 'marketing/top_theme';
-    public const ENABLE_CUSTOMER_GROUPS = 'marketing/enable_customer_groups';
-    public const CUSTOMER_GROUPS = 'marketing/customer_groups';
-
-    /**
-     * @var StoreInterface
-     */
-    private $store;
+    public const ENABLE_CUSTOMER_GROUPS = 'enable_customer_groups';
+    public const CUSTOMER_GROUPS = 'customer_groups';
 
     /**
      * @var ScopeConfigInterface
@@ -56,22 +53,27 @@ class Config extends DefaultPaymentConfig
     private $scopeConfig;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private StoreManagerInterface $storeManager;
+
+    /**
      * Config constructor.
      *
-     * @param StoreInterface       $store
-     * @param ScopeConfigInterface $scopeConfig
-     * @param string               $methodCode
-     * @param string               $pathPattern
+     * @param StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface  $scopeConfig
+     * @param string                $methodCode
+     * @param string                $pathPattern
      */
     public function __construct(
-        StoreInterface $store,
+        StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         $methodCode = self::CODE,
         string $pathPattern = DefaultPaymentConfig::DEFAULT_PATH_PATTERN
     ) {
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
-        $this->store = $store;
         $this->scopeConfig = $scopeConfig;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -252,10 +254,12 @@ class Config extends DefaultPaymentConfig
      * A function that get store.
      *
      * @return StoreInterface
+     *
+     * @throws NoSuchEntityException
      */
     private function getStore(): StoreInterface
     {
-        return $this->store;
+        return $this->storeManager->getStore();
     }
 
     /**
@@ -301,9 +305,9 @@ class Config extends DefaultPaymentConfig
      *
      * @return bool
      */
-    public function getMarketingProductBannerEnabled(): bool
+    public function isMarketingProductBannerEnabled(): bool
     {
-        return $this->getValue(self::MARKETING_PRODUCT_PAGE_ENABLE);
+        return (bool) $this->getValue(self::MARKETING_PRODUCT_PAGE_ENABLE);
     }
 
     /**
@@ -311,9 +315,9 @@ class Config extends DefaultPaymentConfig
      *
      * @return bool
      */
-    public function getMarketingTopBannerEnabled(): bool
+    public function isMarketingTopBannerEnabled(): bool
     {
-        return $this->getValue(self::MARKETING_TOP_BANNER_ENABLE);
+        return (bool) $this->getValue(self::MARKETING_TOP_BANNER_ENABLE);
     }
 
     /**
@@ -324,5 +328,25 @@ class Config extends DefaultPaymentConfig
     public function getMarketingTopBannerTheme(): string
     {
         return $this->getValue(self::MARKETING_TOP_BANNER_THEME);
+    }
+
+    /**
+     * Check is customer groups enabled.
+     *
+     * @return bool
+     */
+    public function isCustomerGroupsEnabled(): bool
+    {
+        return (bool) $this->getValue(self::ENABLE_CUSTOMER_GROUPS);
+    }
+
+    /**
+     * Get customer groups array.
+     *
+     * @return array
+     */
+    public function getCustomerGroups(): array
+    {
+        return explode(',', $this->getValue(self::CUSTOMER_GROUPS));
     }
 }

@@ -7,12 +7,12 @@
 $viewModel = $block->getData('viewModel');
 ?>
 <?php if ($viewModel->isEnable()): ?>
-    <form method="get" action="<?= $this->getUrl('checkout') ?>">
+    <form method="get" action="<?= $block->getUrl('checkout') ?>">
         <input type="hidden" name="payment_method" value="<?= $viewModel->getCode() ?>">
         <button class="action primary checkout hokodo">
             <?= $viewModel->getLabelBtn(); ?>
             <img
-                src="<?= $this->getViewFileUrl('Hokodo_BNPL/img/hokodo_btn_background.svg'); ?>"
+                src="<?= $block->getViewFileUrl('Hokodo_BNPL/img/hokodo_btn_background.svg'); ?>"
                 alt="Hokodo"
             />
         </button>

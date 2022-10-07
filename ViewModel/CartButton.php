@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\ViewModel;
 
 use Hokodo\BNPL\Gateway\Config\Config;
+use Hokodo\BNPL\Service\CustomersGroup;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class CartButton implements ArgumentInterface
@@ -19,14 +20,22 @@ class CartButton implements ArgumentInterface
     private $config;
 
     /**
+     * @var CustomersGroup
+     */
+    private CustomersGroup $customersGroupService;
+
+    /**
      * CartButton constructor.
      *
-     * @param Config $config
+     * @param Config         $config
+     * @param CustomersGroup $customersGroupService
      */
     public function __construct(
-        Config $config
+        Config $config,
+        CustomersGroup $customersGroupService
     ) {
         $this->config = $config;
+        $this->customersGroupService = $customersGroupService;
     }
 
     /**
@@ -46,11 +55,7 @@ class CartButton implements ArgumentInterface
      */
     public function isEnable(): bool
     {
-        if ($this->config->getValue(Config::KEY_BTN_CART_PAGE_ENABLE) == '1') {
-            return true;
-        }
-
-        return false;
+        return $this->config->isActive() && $this->customersGroupService->isEnabledForCustomerGroup();
     }
 
     /**

@@ -1,3 +1,12 @@
+<?php
+/**
+ * @var $block \Magento\Framework\View\Element\Template
+ * @var $viewModel \Hokodo\BNPL\ViewModel\Marketing\CreditLimitBanners
+ */
+$viewModel = $block->getData('viewModel');
+?>
+
+<?php if ($viewModel->isEnabled()): ?>
 <hokodo-marketing data-element="credit-limit-banner"></hokodo-marketing>
 <script type="text/x-magento-init">
     {
@@ -12,3 +21,4 @@
         }
     }
 </script>
+<?php endif; ?>
