@@ -1,11 +1,12 @@
 <?php
 /**
  * @var $block \Magento\Framework\View\Element\Template
- * @var $viewModel \Hokodo\BNPL\ViewModel\Marketing\TopCreditLimitBanner
+ * @var $viewModel \Hokodo\BNPL\ViewModel\Marketing\CreditLimitBanners
  */
 $viewModel = $block->getData('viewModel');
 ?>
 
+<?php if ($viewModel->isEnabled()): ?>
 <hokodo-marketing
     data-element="credit-limit-top-strip"
     data-theme="<?= $viewModel->getTheme() ?>"
@@ -23,3 +24,4 @@ $viewModel = $block->getData('viewModel');
         }
     }
 </script>
+<?php endif; ?>

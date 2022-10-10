@@ -50,6 +50,8 @@
                 <debug>1</debug>
                 <paymentInfoKeys>hokodo_user_id,hokodo_organisation_id,hokodo_order_id,hokodo_payment_offer_id,hokodo_deferred_payment_id</paymentInfoKeys>
                 <replace_place_order_hooks>0</replace_place_order_hooks>
+                <enable_customer_groups>0</enable_customer_groups>
+                <is_default>0</is_default>
                 <segment>
                     <active>1</active>
                     <sandbox_key>1sTpGIGYD3zs1NnZ7VrP6AwqCsSnD8EA</sandbox_key>

@@ -81,8 +81,10 @@ review:create:
     - test:unit
   variables:
     PHP_VERSION: "7.4"
+    COMPOSER_VERSION: ""
     MAGENTO_VERSION: "2.4.4"
     PHP_CLI: php$PHP_VERSION
+    COMPOSER_CLI: composer$COMPOSER_VERSION
   environment:
     url: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
     on_stop: review:detach
@@ -90,8 +92,8 @@ review:create:
     - ssh "magento@$SSH_HOST"
       "[ ! -f '$SSH_PATH/app/etc/config.php' ] && {
         rm -rf $SSH_PATH && mkdir $SSH_PATH &&
-        $PHP_CLI /usr/bin/composer global config http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
-        $PHP_CLI /usr/bin/composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=$MAGENTO_VERSION $SSH_PATH &&
+        $PHP_CLI /usr/local/bin/$COMPOSER_CLI global config http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
+        $PHP_CLI /usr/local/bin/$COMPOSER_CLI create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=$MAGENTO_VERSION $SSH_PATH &&
         mysql -umagento -pmagento -e 'DROP DATABASE IF EXISTS $REVIEW_INSTANCE; CREATE DATABASE $REVIEW_INSTANCE' &&
         mkdir -p $SSH_PATH/app/code/Hokodo/BNPL/ ;
       } || echo 'Magento project exists in $SSH_PATH, skipping prerequisites.'"
@@ -123,7 +125,7 @@ review:create:
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/create_invoice_on_payment_accepted 1 &&
         $PHP_CLI bin/magento module:disable Magento_TwoFactorAuth ;
         echo '{}' > ./auth.json &&
-        $PHP_CLI /usr/bin/composer config --file=./auth.json http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
+        $PHP_CLI /usr/local/bin/$COMPOSER_CLI config --file=./auth.json http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
         $PHP_CLI bin/magento sampledata:deploy ;
       } || echo 'Magento project was installed with sample data, skipping configuration.'"
     # Magento commands: setup:upgrade => setup:di:compile => cache:flush
@@ -166,27 +168,28 @@ review:detach [2.3.7]:
     name: review/$CI_MERGE_REQUEST_IID-m237
   resource_group: review-2.3.7
 
-## Magento 2.4.4
-#review:create [2.4.4]:
-#  extends: review:create
-#  variables:
-#    MAGENTO_VERSION: "2.4.4"
-#    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m244
-#  environment:
-#    name: review/$CI_MERGE_REQUEST_IID-m244
-#    url: https://qa${CI_MERGE_REQUEST_IID}-m244.${DEPLOY_HOST_DEV}
-#    on_stop: review:detach [2.4.4]
-#  resource_group: review-2.4.4
-#
-#review:detach [2.4.4]:
-#  extends: review:detach
-#  needs:
-#    - review:create [2.4.4]
-#  variables:
-#    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m244
-#  environment:
-#    name: review/$CI_MERGE_REQUEST_IID-m244
-#  resource_group: review-2.4.4
+## Magento 2.4.5
+review:create [2.4.5]:
+  extends: review:create
+  variables:
+    PHP_VERSION: "8.1"
+    MAGENTO_VERSION: "2.4.5"
+    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m245
+  environment:
+    name: review/$CI_MERGE_REQUEST_IID-m245
+    url: https://qa${CI_MERGE_REQUEST_IID}-m245.${DEPLOY_HOST_DEV}
+    on_stop: review:detach [2.4.5]
+  resource_group: review-2.4.5
+
+review:detach [2.4.5]:
+  extends: review:detach
+  needs:
+    - review:create [2.4.5]
+  variables:
+    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m245
+  environment:
+    name: review/$CI_MERGE_REQUEST_IID-m245
+  resource_group: review-2.4.5
 
 # ======= E2E TESTS =======
 # test:e2e:
@@ -208,7 +211,7 @@ review:detach [2.3.7]:
 #     - npm install
 #     - npx playwright install --with-deps
 #     - HOKODO_API_BASE_URL=https://api-sandbox.hokodo.co MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER BASE_URL=$BASE_URL npx playwright test --config ./tests/playwright/playwright.config.ts
-  
+
 #    name: cypress/included:9.5.4
 #    entrypoint: [""]
 #  variables:
