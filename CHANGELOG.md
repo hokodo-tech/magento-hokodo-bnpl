@@ -1,3 +1,9 @@
+2.0.1 / October 2022
+==================
+* Added Customer Groups filtering for Hokodo BNPL
+* Upadated composer dependencies
+* Fixed marketing visibility settings
+
 2.0.0 / October 2022
 ==================
 * Complete frontend redevelopment.
