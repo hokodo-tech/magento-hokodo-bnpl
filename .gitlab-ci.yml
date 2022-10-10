@@ -151,6 +151,7 @@ review:create [2.3.7]:
   extends: review:create
   variables:
     MAGENTO_VERSION: "2.3.7"
+    COMPOSER_VERSION: "1"
     REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m237
   environment:
     name: review/$CI_MERGE_REQUEST_IID-m237
