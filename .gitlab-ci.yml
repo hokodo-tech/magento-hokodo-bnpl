@@ -166,27 +166,28 @@ review:detach [2.3.7]:
     name: review/$CI_MERGE_REQUEST_IID-m237
   resource_group: review-2.3.7
 
-## Magento 2.4.4
-#review:create [2.4.4]:
-#  extends: review:create
-#  variables:
-#    MAGENTO_VERSION: "2.4.4"
-#    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m244
-#  environment:
-#    name: review/$CI_MERGE_REQUEST_IID-m244
-#    url: https://qa${CI_MERGE_REQUEST_IID}-m244.${DEPLOY_HOST_DEV}
-#    on_stop: review:detach [2.4.4]
-#  resource_group: review-2.4.4
-#
-#review:detach [2.4.4]:
-#  extends: review:detach
-#  needs:
-#    - review:create [2.4.4]
-#  variables:
-#    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m244
-#  environment:
-#    name: review/$CI_MERGE_REQUEST_IID-m244
-#  resource_group: review-2.4.4
+## Magento 2.4.5
+review:create [2.4.5]:
+  extends: review:create
+  variables:
+    PHP_VERSION: "8.1"
+    MAGENTO_VERSION: "2.4.5"
+    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m245
+  environment:
+    name: review/$CI_MERGE_REQUEST_IID-m245
+    url: https://qa${CI_MERGE_REQUEST_IID}-m245.${DEPLOY_HOST_DEV}
+    on_stop: review:detach [2.4.5]
+  resource_group: review-2.4.5
+
+review:detach [2.4.5]:
+  extends: review:detach
+  needs:
+    - review:create [2.4.5]
+  variables:
+    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m245
+  environment:
+    name: review/$CI_MERGE_REQUEST_IID-m245
+  resource_group: review-2.4.5
 
 # ======= E2E TESTS =======
 # test:e2e:
@@ -208,7 +209,7 @@ review:detach [2.3.7]:
 #     - npm install
 #     - npx playwright install --with-deps
 #     - HOKODO_API_BASE_URL=https://api-sandbox.hokodo.co MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER BASE_URL=$BASE_URL npx playwright test --config ./tests/playwright/playwright.config.ts
-  
+
 #    name: cypress/included:9.5.4
 #    entrypoint: [""]
 #  variables:
