@@ -14,7 +14,9 @@ if ($viewModel->isModuleActive()):
             "Hokodo_BNPL/js/sdk/core":{
                 "url":"<?= $viewModel->getSdkUrl() ?>",
                 "key":"<?= $viewModel->getSdkKey() ?>",
-                "faq":"<?= $viewModel->getMarketingFaqUrl() ?>"
+                "faq":"<?= $viewModel->getMarketingFaqUrl() ?>",
+                "locale":"<?= $viewModel->getCurrentLocaleCode() ?>",
+                "currency":"<?= $viewModel->getCurrentCurrencyCode() ?>"
             }
         }
     }

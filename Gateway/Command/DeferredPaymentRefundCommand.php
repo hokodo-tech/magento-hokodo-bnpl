@@ -99,7 +99,7 @@ class DeferredPaymentRefundCommand implements CommandInterface
 
                 ContextHelper::assertOrderPayment($paymentInfo);
                 $data = [
-                    'payment_log_content' => 'Refund order id: ' . $paymentInfo->getOrder()->getIncrementId(),
+                    'payment_log_content' => __('Refund order id: %1', $paymentInfo->getOrder()->getIncrementId()),
                     'action_title' => 'DeferredPaymentRefundCommand',
                     'status' => 1,
                     'quote_id' => $paymentInfo->getOrder()->getQuoteId(),

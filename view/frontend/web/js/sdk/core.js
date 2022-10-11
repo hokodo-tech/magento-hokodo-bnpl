@@ -7,7 +7,10 @@ define([
             if (name !== undefined) {
                 require([config.url], function () {
                     if (!window.hokodoSdk) {
-                        let sdkConfig = {};
+                        let sdkConfig = {
+                            locale: config.locale,
+                            currency: config.currency
+                        };
                         if (config.faq) {
                             sdkConfig.faqLink = config.faq
                         }

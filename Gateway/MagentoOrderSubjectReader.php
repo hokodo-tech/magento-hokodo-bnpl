@@ -53,7 +53,7 @@ class MagentoOrderSubjectReader extends SubjectReader
     public function readEndpointParam($param, array $subject)
     {
         if ($param != 'order_id') {
-            throw new \InvalidArgumentException('For endpoint order param should be order_id');
+            throw new \InvalidArgumentException(__('For endpoint order param should be order_id'));
         }
 
         return $this->readOrder($subject)->getOrderApiId();

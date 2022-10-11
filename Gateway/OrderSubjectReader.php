@@ -30,7 +30,7 @@ class OrderSubjectReader extends SubjectReader
         $cart = $this->readFieldValue('quote', $subject);
 
         if (!$cart instanceof CartInterface) {
-            throw new \InvalidArgumentException('Cart should be provided');
+            throw new \InvalidArgumentException(__('Cart should be provided'));
         }
         return $cart;
     }
@@ -49,7 +49,7 @@ class OrderSubjectReader extends SubjectReader
         $shipment = $this->readFieldValue('shipment', $subject);
 
         if (!$shipment instanceof ShipmentInterface) {
-            throw new \InvalidArgumentException('Shipment should be provided');
+            throw new \InvalidArgumentException(__('Shipment should be provided'));
         }
         return $shipment;
     }
@@ -81,7 +81,7 @@ class OrderSubjectReader extends SubjectReader
     public function readEndpointParam($param, array $subject)
     {
         if (!in_array($param, ['order_id', 'order_api_id'])) {
-            throw new \InvalidArgumentException('For endpoint order param should be order_id or api_order_id');
+            throw new \InvalidArgumentException(__('For endpoint order param should be order_id or api_order_id'));
         }
 
         $backtrace = debug_backtrace(); // @codingStandardsIgnoreLine

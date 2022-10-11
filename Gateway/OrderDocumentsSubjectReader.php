@@ -31,7 +31,7 @@ class OrderDocumentsSubjectReader extends SubjectReader
         $invoice = $this->readFieldValue('invoice', $subject);
 
         if (!$invoice instanceof InvoiceInterface) {
-            throw new \InvalidArgumentException('Invoice should be provided');
+            throw new \InvalidArgumentException(__('Invoice should be provided'));
         }
         return $invoice;
     }
@@ -50,7 +50,7 @@ class OrderDocumentsSubjectReader extends SubjectReader
         $shipment = $this->readFieldValue('shipment', $subject);
 
         if (!$shipment instanceof ShipmentInterface) {
-            throw new \InvalidArgumentException('Shipment should be provided');
+            throw new \InvalidArgumentException(__('Shipment should be provided'));
         }
         return $shipment;
     }
@@ -69,7 +69,7 @@ class OrderDocumentsSubjectReader extends SubjectReader
         $document = $this->readFieldValue('document', $subject);
 
         if (!$document instanceof OrderDocumentsInterface) {
-            throw new \InvalidArgumentException('Order document should be provided');
+            throw new \InvalidArgumentException(__('Order document should be provided'));
         }
         return $document;
     }
@@ -88,7 +88,7 @@ class OrderDocumentsSubjectReader extends SubjectReader
         $document = $this->readFieldValue('order_id', $subject);
 
         if (!$document instanceof OrderInformationInterface) {
-            throw new \InvalidArgumentException('Order document should be provided');
+            throw new \InvalidArgumentException(__('Order document should be provided'));
         }
         return $document;
     }

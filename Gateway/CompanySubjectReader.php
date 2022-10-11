@@ -27,7 +27,7 @@ class CompanySubjectReader extends SubjectReader
         $user = $this->readFieldValue('companies', $subject);
 
         if (!($user instanceof CompanyInterface)) {
-            throw new \InvalidArgumentException('Companies field should be provided');
+            throw new \InvalidArgumentException(__('Companies field should be provided'));
         }
 
         return $user;
@@ -41,7 +41,7 @@ class CompanySubjectReader extends SubjectReader
     public function readEndpointParam($param, array $subject)
     {
         if ($param != 'id') {
-            throw new \InvalidArgumentException('For endopoint companies param should be id');
+            throw new \InvalidArgumentException(__('For endopoint companies param should be id'));
         }
         return $this->readCompany($subject)->getId();
     }

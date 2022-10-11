@@ -52,7 +52,7 @@ class PaymentOfferSubjectReader extends SubjectReader
         $offer = $this->readFieldValue('offers', $subject);
 
         if (!($offer instanceof PaymentOffersInterface)) {
-            throw new \InvalidArgumentException('Offer field should be provided');
+            throw new \InvalidArgumentException(__('Offer field should be provided'));
         }
 
         return $offer;
@@ -66,7 +66,7 @@ class PaymentOfferSubjectReader extends SubjectReader
     public function readEndpointParam($param, array $subject)
     {
         if ($param != 'offer_id') {
-            throw new \InvalidArgumentException('For endopoint offer param should be offer_id');
+            throw new \InvalidArgumentException(__('For endopoint offer param should be offer_id'));
         }
         return $this->readOffer($subject)->getId();
     }
