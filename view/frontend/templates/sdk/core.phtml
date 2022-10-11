@@ -5,7 +5,9 @@
  */
 
 $viewModel = $block->getData('viewModel');
-?>
+
+if ($viewModel->isModuleActive()):
+    ?>
 <script type="text/x-magento-init">
     {
         "*": {
@@ -19,3 +21,4 @@ $viewModel = $block->getData('viewModel');
         }
     }
 </script>
+<?php endif; ?>

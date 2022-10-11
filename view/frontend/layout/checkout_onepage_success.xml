@@ -8,12 +8,12 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="root">
-            <block name="hokodo_segment_js" class="Magento\Framework\View\Element\Template" template="Hokodo_BNPL::segment-js.phtml" before="page.wrapper">
+            <block name="hokodo_segment_js" class="Magento\Framework\View\Element\Template" template="Hokodo_BNPL::segment-js.phtml" before="page.wrapper" ifconfig="payment/hokodo_bnpl/active">
                 <arguments>
                     <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\Checkout\SegmentJs</argument>
                 </arguments>
             </block>
-            <block name="hokodo_segment_event_onepage_success" class="Magento\Framework\View\Element\Template" template="Hokodo_BNPL::segment-onepage-success.phtml">
+            <block name="hokodo_segment_event_onepage_success" class="Magento\Framework\View\Element\Template" template="Hokodo_BNPL::segment-onepage-success.phtml" ifconfig="payment/hokodo_bnpl/active">
                 <arguments>
                     <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\Checkout\OnepageSuccess</argument>
                 </arguments>

@@ -153,4 +153,14 @@ class SdkLoader implements ArgumentInterface
     {
         return $this->store->getStore()->getCurrentCurrencyCode();
     }
+
+    /**
+     * Check is module active.
+     *
+     * @return bool
+     */
+    public function isModuleActive(): bool
+    {
+        return $this->paymentConfig->isActive();
+    }
 }
