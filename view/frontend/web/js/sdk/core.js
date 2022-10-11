@@ -8,13 +8,11 @@ define([
                 require([config.url], function () {
                     if (!window.hokodoSdk) {
                         let sdkConfig = {
-                            locale: config.locale
+                            locale: config.locale,
+                            currency: config.currency
                         };
                         if (config.faq) {
                             sdkConfig.faqLink = config.faq
-                        }
-                        if (config.currency) {
-                            sdkConfig.currency = config.currency
                         }
                         window.hokodoSdk = Hokodo(config.key, sdkConfig);
                         console.log('hokodo Core loaded');
