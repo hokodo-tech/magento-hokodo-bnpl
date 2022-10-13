@@ -2,12 +2,12 @@
 
 namespace Hokodo\BNPL\Service;
 
+use Hokodo\BNPL\Gateway\Config\Config;
 use Magento\Framework\DB\Transaction;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
-use Magento\Sales\Model\Service\InvoiceService;
-use Hokodo\BNPL\Gateway\Config\Config;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Service\InvoiceService;
 
 class InvoiceCreatorService
 {
