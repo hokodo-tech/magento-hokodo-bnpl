@@ -46,6 +46,7 @@ class Config extends DefaultPaymentConfig
     public const MARKETING_TOP_BANNER_THEME = 'marketing/top_theme';
     public const ENABLE_CUSTOMER_GROUPS = 'enable_customer_groups';
     public const CUSTOMER_GROUPS = 'customer_groups';
+    public const CAPTURE_ONLINE = 'capture_online';
 
     /**
      * @var ScopeConfigInterface
