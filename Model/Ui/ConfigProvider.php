@@ -12,7 +12,6 @@ use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Service\CustomersGroup;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class Hokodo\BNPL\Model\Ui\ConfigProvider.
@@ -53,24 +52,21 @@ class ConfigProvider implements ConfigProviderInterface
      * Retrieve assoc array of checkout configuration.
      *
      * @return array
-     *
-     * @throws NoSuchEntityException
      */
     public function getConfig()
     {
-        $isActive = $this->config->isActive() && $this->customersGroupService->isEnabledForCustomerGroup();
-
-        $config = [
-            'isActive' => $isActive,
-        ];
-        $config['isDefault'] = (bool) $this->config->getValue(Config::IS_PAYMENT_DEFAULT_PATH);
-        if ($this->request->getParam('payment_method') === Config::CODE) {
-            $config['isDefault'] = true;
-        }
-
         return [
             'payment' => [
-                Config::CODE => $config,
+                Config::CODE => [
+                    'isActive' => $this->config->isActive() &&
+                        $this->customersGroupService->isEnabledForCustomerGroup(),
+                    'isDefault' => $this->request->getParam('payment_method') === Config::CODE ||
+                        (bool) $this->config->getValue(Config::IS_PAYMENT_DEFAULT_PATH),
+                    'subtitle' => $this->config->getValue(Config::PAYMENT_SUBTITLE),
+                    'hokodoLogo' => (bool) $this->config->getValue(Config::HOKODO_LOGO),
+                    'logos' => $this->config->getValue(Config::PAYMENT_METHOD_LOGOS),
+                    'moreInfo' => $this->config->getValue(Config::PAYMENT_MORE_INFO),
+                ],
             ],
         ];
     }

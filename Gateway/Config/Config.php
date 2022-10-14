@@ -44,6 +44,10 @@ class Config extends DefaultPaymentConfig
     public const MARKETING_PRODUCT_PAGE_ENABLE = 'marketing/enable_product';
     public const MARKETING_TOP_BANNER_ENABLE = 'marketing/enable_top';
     public const MARKETING_TOP_BANNER_THEME = 'marketing/top_theme';
+    public const PAYMENT_SUBTITLE = 'marketing/subtitle';
+    public const HOKODO_LOGO = 'marketing/hokodo_logo';
+    public const PAYMENT_METHOD_LOGOS = 'marketing/payment_method_logos';
+    public const PAYMENT_MORE_INFO = 'marketing/payment_more_info';
     public const ENABLE_CUSTOMER_GROUPS = 'enable_customer_groups';
     public const CUSTOMER_GROUPS = 'customer_groups';
 

@@ -85,6 +85,72 @@
             margin:20px;
             margin-top:40px;
         }
+
+        .none {
+            display: none;
+        }
+        .default {
+            height: 30px;
+        }
+        .title-hokodo {
+            margin-right: 5px;
+        }
+        .logo-hokodo {
+            width: 85px;
+        }
+        .debit {
+            width: 88px;
+            display: inline-block;
+            height: 30px;
+            background: url(../img/DD.svg) no-repeat center center;
+            background-size: cover;
+            margin-right: 5px;
+        }
+        .visa {
+            width: 43px;
+            display: inline-block;
+            height: 30px;
+            background: url(../img/visa.svg) no-repeat center center;
+            background-size: cover;
+            margin-right: 5px;
+        }
+        .mastercard {
+            width: 43px;
+            display: inline-block;
+            height: 30px;
+            background: url(../img/master_card.svg) no-repeat center center;
+            background-size: cover;
+            margin-right: 5px;
+        }
+        .amex {
+            width: 43px;
+            display: inline-block;
+            height: 30px;
+            background: url(../img/amex.svg) no-repeat center center;
+            background-size: cover;
+            margin-right: 5px;
+        }
+        .credit {
+            height: 30px;
+            .debit {
+                display: none;
+            }
+        }
+        .direct {
+            height: 30px;
+            .visa,
+            .mastercard,
+            .amex {
+                display: none;
+            }
+        }
+        .btn-click {
+            text-decoration: underline;
+            padding-left: 5px;
+        }
+        .label {
+            flex-wrap: wrap;
+        }
     }
     .block-minicart .block-content > .actions > .primary .action.primary.hokodo.checkout,
     .cart-summary .checkout-methods-items .action.hokodo.checkout.primary {
@@ -110,6 +176,22 @@
             width: auto;
             height: 15px;
             margin: 2px 0;
+        }
+    }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+    .hokodo-gateway {
+        .logo-hokodo,
+        .credit {
+            margin-bottom: 5px;
+        }
+    }
+}
+@media (max-width: 639px) {
+    .hokodo-gateway {
+        .logo-hokodo,
+        .credit {
+            margin-bottom: 5px;
         }
     }
 }

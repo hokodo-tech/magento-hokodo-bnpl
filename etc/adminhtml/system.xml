@@ -17,7 +17,7 @@
                 </field>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enabled</label>
-                    <comment>v2.0.2</comment>
+                    <comment>v2.0.3</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="enable_customer_groups" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
@@ -136,6 +136,21 @@
                     <field id="label_cart_page" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Label button on cart page, minicart</label>
                         <comment><![CDATA[Label text for button on cart page and minicart.]]></comment>
+                    </field>
+                    <field id="hokodo_logo" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Show Hokodo logo</label>
+                        <comment><![CDATA[Display Hokodo logo in checkout page with checkout payment method title.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="subtitle" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Subtitle</label>
+                    </field>
+                    <field id="payment_more_info" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>More Info</label>
+                    </field>
+                    <field id="payment_method_logos" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Payment Method logos</label>
+                        <source_model>Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos</source_model>
                     </field>
                 </group>
             </group>
