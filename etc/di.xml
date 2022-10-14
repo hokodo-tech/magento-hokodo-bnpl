@@ -1087,6 +1087,22 @@
         </arguments>
     </type>
 
+    <type name="Magento\Checkout\Model\ShippingInformationManagement">
+        <plugin name="sr_save_delivery_date_in_quote" type="Hokodo\BNPL\Plugin\Model\Checkout\ShippingInformationManagement" sortOrder="1"/>
+    </type>
+    <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
+        <plugin name="validate-guest-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation" sortOrder="20"/>
+    </type>
+    <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
+        <plugin name="validate-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation" sortOrder="20"/>
+    </type>
+    <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
+        <plugin name="hokodo-validate-guest-agreements" type="Hokodo\BNPL\Plugin\GuestValidation" sortOrder="10"/>
+    </type>
+    <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
+        <plugin name="hokodo-validate-agreements" type="Hokodo\BNPL\Plugin\Validation" sortOrder="10"/>
+    </type>
+
     <!-- Payment Logs -->
     <preference for="Hokodo\BNPL\Api\Data\PaymentLogSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Hokodo\BNPL\Api\PaymentLogRepositoryInterface" type="Hokodo\BNPL\Model\PaymentLogRepository" />
