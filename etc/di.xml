@@ -1087,6 +1087,22 @@
         </arguments>
     </type>
 
+    <type name="Magento\Checkout\Model\ShippingInformationManagement">
+        <plugin name="sr_save_delivery_date_in_quote" type="Hokodo\BNPL\Plugin\Model\Checkout\ShippingInformationManagement" sortOrder="1"/>
+    </type>
+    <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
+        <plugin name="validate-guest-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation" sortOrder="20"/>
+    </type>
+    <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
+        <plugin name="validate-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation" sortOrder="20"/>
+    </type>
+    <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
+        <plugin name="hokodo-validate-guest-agreements" type="Hokodo\BNPL\Plugin\GuestValidation" sortOrder="10"/>
+    </type>
+    <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
+        <plugin name="hokodo-validate-agreements" type="Hokodo\BNPL\Plugin\Validation" sortOrder="10"/>
+    </type>
+
     <!-- Payment Logs -->
     <preference for="Hokodo\BNPL\Api\Data\PaymentLogSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Hokodo\BNPL\Api\PaymentLogRepositoryInterface" type="Hokodo\BNPL\Model\PaymentLogRepository" />
@@ -1395,4 +1411,55 @@
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
         </arguments>
     </type>
+
+
+    <!-- Post Sale Actions v2 -->
+    <preference for="\Hokodo\BNPL\Api\Data\Gateway\DeferredPaymentsPostSaleActionInterface" type="\Hokodo\BNPL\Model\Data\Gateway\DeferredPaymentsPostSaleAction" />
+    <preference for="\Hokodo\BNPL\Api\Data\PostSaleEventInterface" type="\Hokodo\BNPL\Model\Data\PostSaleEvent" />
+    <preference for="\Hokodo\BNPL\Api\Data\PostSaleEventChangesInterface" type="\Hokodo\BNPL\Model\Data\PostSaleEventChanges" />
+
+    <!-- Commands infrastructure -->
+    <virtualType name="Hokodo\BNPL\Gateway\Command\CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="hokodo_post_sale" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentsPostSale</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Hokodo\BNPL\Gateway\Command\DeferredPaymentsPostSale" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\DeferredPaymentsPostSale\BuilderComposite</argument>
+            <argument name="resultFactory" xsi:type="object">Hokodo\BNPL\Gateway\Command\DeferredPaymentsPostSale\ResultInterfaceFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\DeferredPaymentsPostSale\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\DeferredPaymentsPostSale</item>
+                <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostMethodBuilder</item>
+                <item name="body" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostSaleEventBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\DeferredPaymentsPostSale" type="Hokodo\BNPL\Gateway\Request\Sdk\EndpointBuilder">
+        <arguments>
+            <argument name="endpoint" xsi:type="string">payment/deferred_payments/:payment_id/:type</argument>
+            <argument name="params" xsi:type="array">
+                <item name=":payment_id" xsi:type="string">payment_id</item>
+                <item name=":type" xsi:type="string">type</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\PostSaleEventBuilder" type="Hokodo\BNPL\Gateway\Request\Sdk\GeneralSubjectBuilder">
+        <arguments>
+            <argument name="endpointBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\DeferredPaymentsPostSale</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Command\DeferredPaymentsPostSale\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Hokodo\BNPL\Gateway\Command\Result\PostSaleEvent</argument>
+        </arguments>
+    </virtualType>
 </config>
