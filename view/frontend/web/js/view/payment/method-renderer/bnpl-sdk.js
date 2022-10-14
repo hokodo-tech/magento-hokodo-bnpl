@@ -8,7 +8,8 @@ define([
     'ko',
     'Magento_Checkout/js/view/payment/default',
     'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
-    'Magento_Checkout/js/model/error-processor'
+    'Magento_Checkout/js/model/error-processor',
+    'Magento_Ui/js/modal/modal'
 ], function (
     $,
     _,
@@ -19,6 +20,7 @@ define([
 ) {
     'use strict';
 
+    let paymentConfig = window.checkoutConfig.payment.hokodo_bnpl;
     return Component.extend({
         defaults: {
             template: 'Hokodo_BNPL/payment/bnpl-sdk',
@@ -71,12 +73,24 @@ define([
             return this;
         },
 
-        /**
-         * Get payment method code.
-         * @returns {String}
-         */
         getCode: function () {
             return 'hokodo_bnpl';
+        },
+
+        getSubTitle: function () {
+            return paymentConfig.subtitle;
+        },
+
+        getHokodoLogo: function () {
+            return paymentConfig.hokodoLogo;
+        },
+
+        getLogos: function () {
+            return paymentConfig.logos;
+        },
+
+        getInfo: function () {
+            return paymentConfig.moreInfo;
         },
 
         mountSearch: function () {
@@ -139,12 +153,10 @@ define([
          * @returns {Object}
          */
         getData: function () {
-            var data = {
+            return {
                 'method': this.getCode(),
                 'additional_data': this.additionalData
             };
-
-            return data;
         },
 
         selectPaymentMethod: function () {
@@ -158,6 +170,14 @@ define([
             if (this.userCheckout) {
                 this.userCheckout.destroy();
             }
+        },
+
+        openModal: function () {
+            let modalOpener = $("#hokodo-marketing-lightbox");
+            modalOpener.modal({
+                buttons: []
+            }).modal('openModal');
+            modalOpener.show();
         }
     });
 });

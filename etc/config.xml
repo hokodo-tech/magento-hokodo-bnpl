@@ -10,7 +10,7 @@
         <payment>
             <hokodo_bnpl>
                 <model>HokodoBnplFacade</model>
-                <title>Pay in 30 Days. No interest. No fees.</title>
+                <title>Pay in 30 Days.</title>
                 <payment_action>authorize</payment_action>
                 <active>0</active>
                 <can_order>0</can_order>
@@ -63,7 +63,11 @@
                     <top_theme>default</top_theme>
                     <faq>https://www.hokodo.co/hokodo-for-buyers</faq>
                     <enable_cart_page>1</enable_cart_page>
+                    <hokodo_logo>1</hokodo_logo>
                     <label_cart_page>Pay in 30 days with</label_cart_page>
+                    <subtitle>No interest. No fees</subtitle>
+                    <payment_more_info>More info</payment_more_info>
+                    <payment_method_logos>default</payment_method_logos>
                 </marketing>
             </hokodo_bnpl>
         </payment>
