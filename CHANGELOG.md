@@ -1,3 +1,9 @@
+2.0.3 / October 2022
+==================
+* Removed marketing text from payment method block
+* Fix hokodo order shipping tax calculation
+* Added variations of the payment method title design
+
 2.0.1 / October 2022
 ==================
 * Added Customer Groups filtering for Hokodo BNPL
