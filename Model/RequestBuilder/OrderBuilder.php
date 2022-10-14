@@ -249,18 +249,28 @@ class OrderBuilder
      */
     private function buildOrderShipping(CartInterface $quote): OrderItemInterface
     {
-        $shippingAddress = $quote->getShippingAddress();
+        $shipping = $quote->getShippingAddress();
 
         return $this->orderItemFactory->create()
             ->setItemId($quote->getId() . '-shipping')
             ->setType('shipping')
-            ->setDescription($shippingAddress->getShippingDescription() ?? '')
-            ->setReference($shippingAddress->getShippingMethod())
+            ->setDescription($shipping->getShippingDescription() ?? '')
+            ->setReference($shipping->getShippingMethod())
             ->setQuantity('1')
-            ->setUnitPrice((int) ($shippingAddress->getShippingInclTax() * 100))
-            ->setTaxRate('0')
-            ->setTaxAmount(0)
-            ->setTotalAmount((int) ($shippingAddress->getShippingInclTax() * 100));
+            ->setUnitPrice(
+                (int) (($shipping->getShippingInclTax() - $shipping->getShippingDiscountAmount()) * 100)
+            )
+            ->setTaxRate(
+                number_format(
+                    round(
+                        ($shipping->getShippingTaxAmount() / $shipping->getShippingInclTax()) * 100,
+                        2
+                    ),
+                    2
+                )
+            )
+            ->setTaxAmount((int) $shipping->getShippingTaxAmount() * 100)
+            ->setTotalAmount((int) (($shipping->getShippingInclTax() - $shipping->getShippingDiscountAmount()) * 100));
     }
 
     /**
