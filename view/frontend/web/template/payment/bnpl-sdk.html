@@ -20,28 +20,26 @@
                     visible: isRadioButtonVisible()
                "/>
         <label class="label" data-bind="attr: {'for': getCode()}">
-            <span class="title-hokodo" data-bind="text: getTitle()"></span>
-            <div
-                class="logo-hokodo"
-                data-bind="
-                    visible: getHokodoLogo()
-                "><hokodo-marketing data-element="badge-large" data-theme="default"></hokodo-marketing></div>
+            <div class="label-left">
+                <span data-bind="text: getTitle()"></span>
+                <div class="logo-hokodo"><hokodo-marketing data-element="badge-large" data-theme="default"></hokodo-marketing></div>
+                <!-- ko if: getSubTitle() -->
+                <span data-bind="text: '- ' + getSubTitle()"></span>
+                <!-- /ko -->
+
+                <!-- ko if: getInfo() -->
+                <a href= "#" class="btn-click" data-bind="click: openModal">
+                    <span data-bind="text: getInfo()"></span>
+                    <hokodo-marketing style="display: none;" id="hokodo-marketing-lightbox" data-element="lightbox"></hokodo-marketing>
+                </a>
+                <!-- /ko -->
+            </div>
             <div data-bind="attr: {class: getLogos()}">
                 <span class="visa"></span>
                 <span class="mastercard"></span>
                 <span class="amex"></span>
                 <span class="debit"></span>
             </div>
-            <!-- ko if: getSubTitle() -->
-            <span data-bind="text: getSubTitle()"></span>
-            <!-- /ko -->
-
-            <!-- ko if: getInfo() -->
-            <a href= "#" class="btn-click" data-bind="click: openModal">
-                <span data-bind="text: getInfo()"></span>
-                <hokodo-marketing style="display: none;" id="hokodo-marketing-lightbox" data-element="lightbox"></hokodo-marketing>
-            </a>
-            <!-- /ko -->
         </label>
     </div>
     <div class="payment-method-content hokodo-content-wrapper">

@@ -36,9 +36,14 @@
         > .payment-method-title {
             display: flex;
             position: relative;
+            > input[type="radio"] {
+                margin-right: 9px;
+            }
             > label {
-                display: inline-flex;
+                display: flex;
                 align-items: center;
+                width: 100%;
+                justify-content: space-between;
                 > input {
                     vertical-align: middle;
                 }
@@ -50,6 +55,16 @@
                     margin-right: 5px;
                     > span {
                         margin-left:2px;
+                    }
+                }
+                .label-left {
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                }
+                .payment-logos {
+                    @media (max-width: 1050px) {
+                        margin-top: 7.5px;
                     }
                 }
             }
@@ -96,10 +111,11 @@
             margin-right: 5px;
         }
         .logo-hokodo {
-            width: 85px;
+            width: 80px;
+            margin-left: 5px;
         }
         .debit {
-            width: 88px;
+            width: 43px;
             display: inline-block;
             height: 30px;
             background: url(../img/DD.svg) no-repeat center center;
@@ -147,6 +163,7 @@
         .btn-click {
             text-decoration: underline;
             padding-left: 5px;
+            padding-right: 10px;
         }
         .label {
             flex-wrap: wrap;
@@ -176,22 +193,6 @@
             width: auto;
             height: 15px;
             margin: 2px 0;
-        }
-    }
-}
-@media (min-width: 768px) and (max-width: 991px) {
-    .hokodo-gateway {
-        .logo-hokodo,
-        .credit {
-            margin-bottom: 5px;
-        }
-    }
-}
-@media (max-width: 639px) {
-    .hokodo-gateway {
-        .logo-hokodo,
-        .credit {
-            margin-bottom: 5px;
         }
     }
 }
