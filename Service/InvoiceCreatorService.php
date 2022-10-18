@@ -2,9 +2,11 @@
 
 namespace Hokodo\BNPL\Service;
 
+use Hokodo\BNPL\Gateway\Config\Config;
 use Magento\Framework\DB\Transaction;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Service\InvoiceService;
 
 class InvoiceCreatorService
@@ -27,23 +29,31 @@ class InvoiceCreatorService
     protected $invoiceSender;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * A construct.
      *
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceService           $invoiceService
      * @param InvoiceSender            $invoiceSender
      * @param Transaction              $transaction
+     * @param Config                   $config
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         InvoiceService $invoiceService,
         InvoiceSender $invoiceSender,
-        Transaction $transaction
+        Transaction $transaction,
+        Config $config
     ) {
         $this->orderRepository = $orderRepository;
         $this->invoiceService = $invoiceService;
         $this->transaction = $transaction;
         $this->invoiceSender = $invoiceSender;
+        $this->config = $config;
     }
 
     /**
@@ -58,6 +68,9 @@ class InvoiceCreatorService
         $order = $this->orderRepository->get($orderId);
         if ($order->canInvoice()) {
             $invoice = $this->invoiceService->prepareInvoice($order);
+            if ($this->config->getValue(Config::CAPTURE_ONLINE)) {
+                $invoice->setRequestedCaptureCase(Invoice::CAPTURE_ONLINE);
+            }
             $invoice->register();
             $invoice->save();
             $transactionSave = $this->transaction->addObject(

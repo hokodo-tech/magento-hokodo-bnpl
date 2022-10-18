@@ -86,6 +86,13 @@
                     <comment>Invoice will be created automatically after payment update</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="capture_online" translate="label" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Capture Online</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="create_invoice_on_payment_accepted">1</field>
+                    </depends>
+                </field>
                 <field id="is_default" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="1">
                     <label>Set as Default</label>
                     <comment><![CDATA[Sets method on the first place on checkout and makes it selected]]></comment>

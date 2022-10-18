@@ -50,6 +50,7 @@ class Config extends DefaultPaymentConfig
     public const PAYMENT_MORE_INFO = 'marketing/payment_more_info';
     public const ENABLE_CUSTOMER_GROUPS = 'enable_customer_groups';
     public const CUSTOMER_GROUPS = 'customer_groups';
+    public const CAPTURE_ONLINE = 'capture_online';
 
     /**
      * @var ScopeConfigInterface
