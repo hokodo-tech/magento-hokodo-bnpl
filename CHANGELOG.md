@@ -1,3 +1,8 @@
+2.0.4 / October 2022
+==================
+* Payment method title configuration added
+* Automatic capture
+
 2.0.3 / October 2022
 ==================
 * Removed marketing text from payment method block
