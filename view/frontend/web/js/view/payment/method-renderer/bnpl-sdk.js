@@ -82,7 +82,7 @@ define([
         },
 
         getHokodoLogo: function () {
-            return paymentConfig.hokodoLogo;
+            return 'payment-logos '+paymentConfig.logos;
         },
 
         getLogos: function () {
