@@ -250,6 +250,8 @@ class OrderBuilder
     private function buildOrderShipping(CartInterface $quote): OrderItemInterface
     {
         $shipping = $quote->getShippingAddress();
+        $shippingTotal = $shipping->getShippingInclTax() - $shipping->getShippingDiscountAmount();
+        $taxRate = $this->getShippingTaxRate($shipping);
 
         return $this->orderItemFactory->create()
             ->setItemId($quote->getId() . '-shipping')
@@ -257,20 +259,22 @@ class OrderBuilder
             ->setDescription($shipping->getShippingDescription() ?? '')
             ->setReference($shipping->getShippingMethod())
             ->setQuantity('1')
-            ->setUnitPrice(
-                (int) (($shipping->getShippingInclTax() - $shipping->getShippingDiscountAmount()) * 100)
-            )
-            ->setTaxRate(
-                number_format(
-                    round(
-                        ($shipping->getShippingTaxAmount() / ((float) $shipping->getShippingInclTax() ?: 1)) * 100,
-                        2
-                    ),
-                    2
-                )
-            )
-            ->setTaxAmount((int) $shipping->getShippingTaxAmount() * 100)
-            ->setTotalAmount((int) (($shipping->getShippingInclTax() - $shipping->getShippingDiscountAmount()) * 100));
+            ->setUnitPrice((int) ($shippingTotal * 100))
+            ->setTaxRate($taxRate)
+            ->setTaxAmount((int) round($taxRate / 100 * $shippingTotal) * 100)
+            ->setTotalAmount((int) ($shippingTotal * 100));
+    }
+
+
+    private function getShippingTaxRate($shipping)
+    {
+        return number_format(
+            round(
+                ($shipping->getShippingTaxAmount() / ((float) $shipping->getShippingInclTax() ?: 1)) * 100,
+                2
+            ),
+            2
+        );
     }
 
     /**

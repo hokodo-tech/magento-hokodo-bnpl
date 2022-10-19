@@ -1,3 +1,7 @@
+2.0.5 / October 2022
+==================
+* Fix hokodo order shipping tax calculation
+
 2.0.4 / October 2022
 ==================
 * Payment method title configuration added
