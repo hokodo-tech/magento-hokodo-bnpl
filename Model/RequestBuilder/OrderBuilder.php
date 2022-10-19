@@ -263,7 +263,7 @@ class OrderBuilder
             ->setTaxRate(
                 number_format(
                     round(
-                        ($shipping->getShippingTaxAmount() / $shipping->getShippingInclTax()) * 100,
+                        ($shipping->getShippingTaxAmount() / ((float) $shipping->getShippingInclTax() ?: 1)) * 100,
                         2
                     ),
                     2
