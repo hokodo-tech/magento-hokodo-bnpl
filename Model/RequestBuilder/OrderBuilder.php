@@ -265,8 +265,14 @@ class OrderBuilder
             ->setTotalAmount((int) ($shippingTotal * 100));
     }
 
-
-    private function getShippingTaxRate($shipping)
+    /**
+     * Get shipping tax rate value.
+     *
+     * @param AddressInterface $shipping
+     *
+     * @return string
+     */
+    private function getShippingTaxRate(AddressInterface $shipping): string
     {
         return number_format(
             round(
