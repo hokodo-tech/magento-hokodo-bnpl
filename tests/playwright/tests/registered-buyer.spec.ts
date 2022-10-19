@@ -8,7 +8,7 @@ test.describe("Full end-to-end", () => {
       
     });
   
-    test("Paying by Direct Debit @crossBrowser", async ({
+    test("Creating a Deferred Payment", async ({
       createAccountPage,
       homePage,
       orderData,
