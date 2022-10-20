@@ -1,6 +1,7 @@
 2.0.5 / October 2022
 ==================
 * Fix hokodo order shipping tax calculation
+* Fix Order Placed after events broke other payment methods
 
 2.0.4 / October 2022
 ==================
