@@ -6,7 +6,6 @@
 
 namespace Hokodo\BNPL\Observer;
 
-use Hokodo\BNPL\Api\Data\PaymentQuoteInterface;
 use Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface;
 use Hokodo\BNPL\Model\SaveLog as Logger;
 use Magento\Framework\Event\Observer;
