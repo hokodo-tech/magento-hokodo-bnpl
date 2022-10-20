@@ -185,11 +185,11 @@ class OrderBuilder
     private function buildCustomerAddress(AddressInterface $address): CustomerAddressInterface
     {
         return $this->customerAddressFactory->create()
-            ->setName($address->getName())
-            ->setAddressLineOne($address->getStreetLine(1))
-            ->setAddressLineTwo($address->getStreetLine(2))
-            ->setCity($address->getCity())
-            ->setCountry($address->getCountry())
+            ->setName($address->getName() ?? '')
+            ->setAddressLineOne($address->getStreetLine(1) ?? '')
+            ->setAddressLineTwo($address->getStreetLine(2) ?? '')
+            ->setCity($address->getCity() ?? '')
+            ->setCountry($address->getCountry() ?? '')
             ->setPostcode($address->getPostcode() ?? '');
     }
 
