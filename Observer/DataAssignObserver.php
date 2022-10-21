@@ -84,55 +84,55 @@ class DataAssignObserver extends AbstractDataAssignObserver
      */
     public function execute(Observer $observer)
     {
-        $data = $this->readDataArgument($observer);
-
-        $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
-        if (!is_array($additionalData)) {
-            return;
-        }
-
         $paymentInfo = $this->readPaymentModelArgument($observer);
-
         $quote = $paymentInfo->getQuote();
-
-        foreach ($this->additionalInformationList as $additionalInformationKey) {
-            if (isset($additionalData[$additionalInformationKey])) {
-                $paymentInfo->setAdditionalInformation(
-                    $additionalInformationKey,
-                    $additionalData[$additionalInformationKey]
-                );
+        if ($quote->getPayment()->getMethod() === \Hokodo\BNPL\Gateway\Config\Config::CODE) {
+            $data = $this->readDataArgument($observer);
+            $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+            if (!is_array($additionalData)) {
+                return;
             }
-        }
 
-        if (isset($additionalData['hokodo_order_id'])) {
-            //TODO rebuild using DTO
-            $hokodoOrder = $this->orderService->getOrder(['id' => $additionalData['hokodo_order_id']])->getDataModel();
-            $additionalData['hokodo_deferred_payment_id'] = $hokodoOrder->getDeferredPayment();
-            $quote->getPayment()->setAdditionalInformation($additionalData)->save();
-        }
-
-        $paymentQuote = $this->getPaymentQuote($quote->getId());
-
-        if ($paymentQuote && $paymentQuote->getId()) {
-            foreach ($this->additionalInformationMap as $key => $map) {
-                if ($paymentInfo->getAdditionalInformation($key)) {
-                    $paymentQuote->setData($map, $paymentInfo->getAdditionalInformation($key));
-                } else {
-                    $paymentQuote->setData($map, null);
+            foreach ($this->additionalInformationList as $additionalInformationKey) {
+                if (isset($additionalData[$additionalInformationKey])) {
+                    $paymentInfo->setAdditionalInformation(
+                        $additionalInformationKey,
+                        $additionalData[$additionalInformationKey]
+                    );
                 }
             }
 
-            try {
-                $this->paymentQuoteRepository->save($paymentQuote);
-            } catch (\Exception $e) {
-                $data = [
-                    'payment_log_content' => $e->getMessage(),
-                    'action_title' => 'DataAssignObserver::execute Exception',
-                    'status' => 0,
-                    'quote_id' => $quote->getId(),
-                ];
-                $this->logger->execute($data);
-                return;
+            if (isset($additionalData['hokodo_order_id'])) {
+                //TODO rebuild using DTO
+                $hokodoOrder = $this->orderService->getOrder(
+                    ['id' => $additionalData['hokodo_order_id']]
+                )->getDataModel();
+                $additionalData['hokodo_deferred_payment_id'] = $hokodoOrder->getDeferredPayment();
+                $quote->getPayment()->setAdditionalInformation($additionalData)->save();
+            }
+
+            $paymentQuote = $this->getPaymentQuote($quote->getId());
+            if ($paymentQuote && $paymentQuote->getId()) {
+                foreach ($this->additionalInformationMap as $key => $map) {
+                    if ($paymentInfo->getAdditionalInformation($key)) {
+                        $paymentQuote->setData($map, $paymentInfo->getAdditionalInformation($key));
+                    } else {
+                        $paymentQuote->setData($map, null);
+                    }
+                }
+
+                try {
+                    $this->paymentQuoteRepository->save($paymentQuote);
+                } catch (\Exception $e) {
+                    $data = [
+                        'payment_log_content' => $e->getMessage(),
+                        'action_title' => 'DataAssignObserver::execute Exception',
+                        'status' => 0,
+                        'quote_id' => $quote->getId(),
+                    ];
+                    $this->logger->execute($data);
+                    return;
+                }
             }
         }
     }

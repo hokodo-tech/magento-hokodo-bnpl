@@ -6,7 +6,6 @@
 
 namespace Hokodo\BNPL\Observer;
 
-use Hokodo\BNPL\Api\Data\PaymentQuoteInterface;
 use Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface;
 use Hokodo\BNPL\Model\SaveLog as Logger;
 use Magento\Framework\Event\Observer;
@@ -57,18 +56,9 @@ class ProcessOrderPlaceObserver implements ObserverInterface
          * @var Quote $quote
          */
         $quote = $observer->getEvent()->getQuote();
-        $paymentQuote = $this->getPaymentQuote($quote->getId());
-        if ($paymentQuote && $paymentQuote->getId()) {
-            /**
-             * @var Order $order
-             */
-            $order = $observer->getEvent()->getOrder();
 
-            $order->setOrderApiId($paymentQuote->getOrderId());
-            $order->setDeferredPaymentId($paymentQuote->getDeferredPaymentId());
-        }
-
-        if ($additionalInformation = $quote->getPayment()->getAdditionalInformation()) {
+        if ($quote->getPayment()->getMethod() === \Hokodo\BNPL\Gateway\Config\Config::CODE &&
+            ($additionalInformation = $quote->getPayment()->getAdditionalInformation())) {
             /**
              * @var Order $order
              */
@@ -79,30 +69,5 @@ class ProcessOrderPlaceObserver implements ObserverInterface
         }
 
         return $this;
-    }
-
-    /**
-     * A function that gets payment quote.
-     *
-     * @param int $quoteId
-     *
-     * @return PaymentQuoteInterface|null
-     *
-     * @throws LocalizedException
-     */
-    private function getPaymentQuote($quoteId)
-    {
-        try {
-            return $this->paymentQuoteRepository->getByQuoteId($quoteId);
-        } catch (\Exception $e) {
-            $data = [
-                'payment_log_content' => $e->getMessage(),
-                'action_title' => 'ProcessOrderPlaceObserver:: Exception',
-                'status' => 0,
-                'quote_id' => $quoteId,
-            ];
-            $this->logger->execute($data);
-            return null;
-        }
     }
 }
