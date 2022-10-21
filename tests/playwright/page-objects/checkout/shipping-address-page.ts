@@ -38,10 +38,7 @@ export default class ShippingAddressPage {
         if (lineTwo) await this.page.locator("[name='street[1]']").type(lineTwo);
         if (lineThree) await this.page.locator("[name='street[2]']").type(lineThree);
 
-        await Promise.all([
-            this.page.waitForResponse("**/estimate-shipping-methods"),
-            this.page.locator("[name='country_id']").selectOption(countryCode)
-          ])
+        await this.page.locator("[name='country_id']").selectOption(countryCode);
         
         await this.page.locator("[name='region']").type(state);
         await this.page.locator("[name='city']").type(city);
