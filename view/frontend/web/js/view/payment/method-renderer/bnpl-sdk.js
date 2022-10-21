@@ -33,6 +33,7 @@ define([
         },
         isOfferLoading: ko.observable(false),
         hokodoElements: window.hokodoSdk.elements(),
+        getLogos: ko.observableArray(paymentConfig.logos),
 
         /**
          * Init component
@@ -82,11 +83,7 @@ define([
         },
 
         getHokodoLogo: function () {
-            return 'payment-logos '+paymentConfig.logos;
-        },
-
-        getLogos: function () {
-            return paymentConfig.logos;
+            return paymentConfig.hokodoLogo;
         },
 
         getInfo: function () {

@@ -67,7 +67,8 @@
                     <label_cart_page>Pay in 30 days with</label_cart_page>
                     <subtitle>No interest. No fees</subtitle>
                     <payment_more_info>More info</payment_more_info>
-                    <payment_method_logos>default</payment_method_logos>
+                    <payment_method_logos>credit</payment_method_logos>
+                    <payment_method_direct_logos>direct_uk</payment_method_direct_logos>
                 </marketing>
             </hokodo_bnpl>
         </payment>

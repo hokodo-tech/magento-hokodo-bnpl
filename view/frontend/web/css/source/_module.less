@@ -63,6 +63,30 @@
                     flex-wrap: wrap;
                 }
                 .payment-logos {
+                    > span {
+                        width: 43px;
+                        display: inline-block;
+                        height: 30px;
+                        background-size: cover;
+                        margin-right: 5px;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                    }
+                    .direct_uk {
+                        background-image: url(../img/DD_UK.svg);
+                    }
+                    .direct_eu {
+                        background-image: url(../img/DD_EU.svg);
+                    }
+                    .visa {
+                        background-image: url(../img/visa.svg);
+                    }
+                    .mastercard {
+                        background-image: url(../img/master_card.svg);
+                    }
+                    .amex {
+                        background-image: url(../img/amex.svg);
+                    }
                     @media (max-width: 1050px) {
                         margin-top: 7.5px;
                     }
@@ -113,52 +137,6 @@
         .logo-hokodo {
             width: 80px;
             margin-left: 5px;
-        }
-        .debit {
-            width: 43px;
-            display: inline-block;
-            height: 30px;
-            background: url(../img/DD.svg) no-repeat center center;
-            background-size: cover;
-            margin-right: 5px;
-        }
-        .visa {
-            width: 43px;
-            display: inline-block;
-            height: 30px;
-            background: url(../img/visa.svg) no-repeat center center;
-            background-size: cover;
-            margin-right: 5px;
-        }
-        .mastercard {
-            width: 43px;
-            display: inline-block;
-            height: 30px;
-            background: url(../img/master_card.svg) no-repeat center center;
-            background-size: cover;
-            margin-right: 5px;
-        }
-        .amex {
-            width: 43px;
-            display: inline-block;
-            height: 30px;
-            background: url(../img/amex.svg) no-repeat center center;
-            background-size: cover;
-            margin-right: 5px;
-        }
-        .credit {
-            height: 30px;
-            .debit {
-                display: none;
-            }
-        }
-        .direct {
-            height: 30px;
-            .visa,
-            .mastercard,
-            .amex {
-                display: none;
-            }
         }
         .btn-click {
             text-decoration: underline;

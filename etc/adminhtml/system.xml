@@ -155,8 +155,12 @@
                     <field id="payment_more_info" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>More Info</label>
                     </field>
+                    <field id="payment_method_direct_logos" translate="label" type="select" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Direct Debit logo</label>
+                        <source_model>Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodDirectLogos</source_model>
+                    </field>
                     <field id="payment_method_logos" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Payment Method logos</label>
+                        <label>Credit Card logo</label>
                         <source_model>Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos</source_model>
                     </field>
                 </group>

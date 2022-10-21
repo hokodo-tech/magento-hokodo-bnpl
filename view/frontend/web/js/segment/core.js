@@ -26,13 +26,18 @@ define([
         },
 
         trackLanding(amount, currency, position) {
+            const logos = window.checkoutConfig.payment.hokodo_bnpl.logos;
             this.track(
                 'Initiation',
                 {
                     Impression: position !== undefined,
                     Position: position !== undefined ? position : null,
                     total_amount: amount,
-                    currency: currency
+                    currency: currency,
+                    Payment_method_title: window.checkoutConfig.payment.hokodo_bnpl.title,
+                    Payment_method_subtitle: window.checkoutConfig.payment.hokodo_bnpl.subtitle,
+                    Directdebit_logo: logos.includes('direct_eu') || logos.includes('direct_uk'),
+                    Creditcard_logo: logos.includes('visa')
                 }
             );
             this.initialized = true;

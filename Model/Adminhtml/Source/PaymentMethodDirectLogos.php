@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * Copyright © 2018-2022 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
 
@@ -9,11 +9,11 @@ namespace Hokodo\BNPL\Model\Adminhtml\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
 
-class PaymentMethodLogos implements OptionSourceInterface
+class PaymentMethodDirectLogos implements OptionSourceInterface
 {
-    public const CREDIT_CARDS = true;
+    public const DIRECT_DEBIT_UK = 'direct_uk';
+    public const DIRECT_DEBIT_EU = 'direct_eu';
     public const NONE_CARDS = false;
-    public const LOGOS_CLASS = ['visa', 'mastercard', 'amex'];
 
     /**
      * @inheritdoc
@@ -22,8 +22,12 @@ class PaymentMethodLogos implements OptionSourceInterface
     {
         return [
             [
-               'value' => self::CREDIT_CARDS,
-               'label' => __('Credit Card'),
+               'value' => self::DIRECT_DEBIT_UK,
+               'label' => __('Direct Debit UK'),
+            ],
+            [
+               'value' => self::DIRECT_DEBIT_EU,
+               'label' => __('Direct Debit EU'),
             ],
             [
                'value' => self::NONE_CARDS,

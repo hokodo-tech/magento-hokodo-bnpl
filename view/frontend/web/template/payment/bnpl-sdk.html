@@ -21,10 +21,14 @@
                "/>
         <label class="label" data-bind="attr: {'for': getCode()}">
             <div class="label-left">
-                <span data-bind="text: getTitle()"></span>
-                <div class="logo-hokodo"><hokodo-marketing data-element="badge-large" data-theme="default"></hokodo-marketing></div>
+                <span class="title-hokodo" data-bind="text: getTitle()"></span>
+                <div
+                    class="logo-hokodo"
+                    data-bind="
+                        visible: getHokodoLogo()
+                    "><hokodo-marketing data-element="badge-large" data-theme="default"></hokodo-marketing></div>
                 <!-- ko if: getSubTitle() -->
-                <span data-bind="text: '- ' + getSubTitle()"></span>
+                <span data-bind="text: getSubTitle()"></span>
                 <!-- /ko -->
 
                 <!-- ko if: getInfo() -->
@@ -34,11 +38,10 @@
                 </a>
                 <!-- /ko -->
             </div>
-            <div data-bind="attr: {class: getLogos()}">
-                <span class="visa"></span>
-                <span class="mastercard"></span>
-                <span class="amex"></span>
-                <span class="debit"></span>
+            <div data-bind="attr: {class: 'payment-logos'}">
+                <!-- ko foreach: getLogos -->
+                    <span data-bind="attr: {class: $data}"></span>
+                <!-- /ko -->
             </div>
         </label>
     </div>
