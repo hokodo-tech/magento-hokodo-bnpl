@@ -25,7 +25,7 @@ export default class HokodoCheckout {
         const iframe = this.page.frameLocator(".hokodo-content-wrapper iframe").first();
         await this.page.waitForRequest("https://h.online-metrix.net/**");
         await iframe.locator(`[for="${paymentMethod}"] [data-testid='customRadio']`).click();
-        await this.page.waitForTimeout(250);
+        await this.page.waitForTimeout(500);
         await iframe.locator("text='Continue'").click();
     }
 
