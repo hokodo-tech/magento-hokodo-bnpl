@@ -21,7 +21,9 @@ export default class ProductDetailsPage {
     }
 
     async addToBasket() {
-        await this.page.locator("#product-addtocart-button").click();
-        await this.page.waitForSelector("[data-ui-id='message-success']");
+        return await Promise.all([
+            this.page.locator("#product-addtocart-button").click(),
+            this.page.waitForResponse("**/checkout/cart/add/**") // wait for the item to be added
+          ]);
     }
 }

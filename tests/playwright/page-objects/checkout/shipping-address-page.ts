@@ -39,9 +39,15 @@ export default class ShippingAddressPage {
         if (lineThree) await this.page.locator("[name='street[2]']").type(lineThree);
 
         await this.page.locator("[name='country_id']").selectOption(countryCode);
+        
         await this.page.locator("[name='region']").type(state);
         await this.page.locator("[name='city']").type(city);
-        await this.page.locator("[name='postcode']").type(postCode);
+
+        await Promise.all([
+            this.page.waitForResponse("**/estimate-shipping-methods"),
+            this.page.locator("[name='postcode']").type(postCode)
+        ]);
+        
         await this.page.locator("[name='telephone']").type(phoneNumber);
     }
 
@@ -51,5 +57,6 @@ export default class ShippingAddressPage {
 
     async proceedToPaymentPage() {
         await this.page.locator('button.continue').click();
+        await this.page.waitForSelector('#checkout-step-shipping', { state: "hidden", timeout: 60000 });
     }
 }
