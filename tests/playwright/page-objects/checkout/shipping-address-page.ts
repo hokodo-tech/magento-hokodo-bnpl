@@ -51,5 +51,6 @@ export default class ShippingAddressPage {
 
     async proceedToPaymentPage() {
         await this.page.locator('button.continue').click();
+        await this.page.waitForSelector('#checkout-step-shipping', { state: "hidden", timeout: 60000 });
     }
 }
