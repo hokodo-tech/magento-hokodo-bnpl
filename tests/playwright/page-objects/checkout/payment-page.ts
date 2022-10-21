@@ -16,6 +16,6 @@ export default class PaymentPage {
     }
 
     async selectHokodo() {
-        await this.page.locator("#hokodo_bnpl").click();
+        await this.page.locator("#hokodo_bnpl").click({ timeout: 60000 });
     }
 }
