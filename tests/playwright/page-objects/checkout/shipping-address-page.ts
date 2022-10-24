@@ -31,6 +31,8 @@ export default class ShippingAddressPage {
         phoneNumber,
         companyName
     } : Address) {
+        await this.page.waitForSelector("[name='company']", { state: "visible", timeout: 60000 });
+
         if (companyName) await this.page.locator("[name='company']").type(companyName);
 
         await this.page.locator("[name='street[0]']").type(lineOne);
