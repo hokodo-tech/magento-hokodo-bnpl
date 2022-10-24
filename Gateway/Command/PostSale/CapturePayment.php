@@ -7,17 +7,15 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Gateway\Command\PostSale;
 
-
 use Hokodo\BNPL\Api\Data\Gateway\DeferredPaymentsPostSaleActionInterface;
 use Hokodo\BNPL\Api\Data\Gateway\DeferredPaymentsPostSaleActionInterfaceFactory;
 use Hokodo\BNPL\Exception\ApiGatewayException;
-use Hokodo\BNPL\Gateway\Service\DeferredPayments;
 use Hokodo\BNPL\Gateway\Service\PostSale;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Psr\Log\LoggerInterface;
 
-class VoidPayment implements CommandInterface
+class CapturePayment implements CommandInterface
 {
     private PostSale $postSale;
     private DeferredPaymentsPostSaleActionInterfaceFactory $postSaleActionInterfaceFactory;
@@ -35,21 +33,20 @@ class VoidPayment implements CommandInterface
 
     /**
      * @inheritDoc
-     * @throws ApiGatewayException
      */
     public function execute(array $commandSubject)
     {
         try {
-            if (isset($commandSubject['payment'])) {
-                $paymentDO = $commandSubject['payment'];
+            if (($paymentDO = $commandSubject['payment'] ?? null) && ($amount = $commandSubject['amount'] ?? null)) {
                 /* @var OrderPaymentInterface $paymentInfo */
                 $paymentInfo = $paymentDO->getPayment();
                 if ($hokodoDeferredPaymentId = $paymentInfo->getAdditionalInformation()['hokodo_deferred_payment_id']) {
                     /** @var $postSaleAction DeferredPaymentsPostSaleActionInterface */
                     $postSaleAction = $this->postSaleActionInterfaceFactory->create();
-                    $postSaleAction->setPaymentId($hokodoDeferredPaymentId);
+                    $postSaleAction->setPaymentId($hokodoDeferredPaymentId)->setAmount((int) ($amount * 100));
 
-                    return $this->postSale->voidRemaining($postSaleAction);
+                    $result =  $this->postSale->capture($postSaleAction);
+                    return $result;
                 }
             }
         } catch (\Exception $e) {
@@ -58,6 +55,6 @@ class VoidPayment implements CommandInterface
             );
         }
 
-        throw new ApiGatewayException(__('Void order payment error. See logs for details.'));
+        throw new ApiGatewayException(__('Capture order payment error. See logs for details.'));
     }
 }

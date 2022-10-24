@@ -102,7 +102,10 @@ class GuzzleHttpClient implements ClientInterface
                 case 'POST':
                 case 'PUT':
                 case 'PATCH':
-                    $data[$dataType] = $transferObject->getBody();
+                    //add dataType header if only content is present
+                    if ($transferObject->getBody()) {
+                        $data[$dataType] = $transferObject->getBody();
+                    }
                     break;
                 case 'GET':
                 case 'DELETE':
