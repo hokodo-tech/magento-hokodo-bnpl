@@ -39,13 +39,6 @@ export default class HokodoCheckout {
 
     async createDeferredPayment() {
         const iframe = this.page.frameLocator(".hokodo-content-wrapper iframe").first();
-        return await Promise.all([
-            this.page.waitForResponse("**/v1/payment/deferred_payments"),
-            iframe.locator("text='Confirm'").click(),
-          ]).then(async (result) => {
-            const response = await result[0].json();
-            const requestHeaders = await result[0].request().allHeaders();
-            return { orderId: response.order, token: requestHeaders.authorization };
-          });
+        await iframe.locator("text='Confirm'").click();
       }
 }
