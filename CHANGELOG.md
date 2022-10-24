@@ -1,3 +1,8 @@
+2.0.6 / October 2022
+==================
+* Logos display control
+* Tests adjustments
+
 2.0.5 / October 2022
 ==================
 * Fix hokodo order shipping tax calculation
