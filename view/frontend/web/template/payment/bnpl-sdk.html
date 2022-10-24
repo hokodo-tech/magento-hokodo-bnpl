@@ -9,7 +9,7 @@
     <div class="payment-method-title field choice">
         <input type="radio"
                name="payment[method]"
-               class="radio"
+               class="radio hokodo-radio"
                data-bind="
                     attr: {
                         id: getCode()
@@ -20,29 +20,27 @@
                     visible: isRadioButtonVisible()
                "/>
         <label class="label" data-bind="attr: {'for': getCode()}">
-            <div class="label-left">
+            <span class="label-left">
                 <span class="title-hokodo" data-bind="text: getTitle()"></span>
-                <div
-                    class="logo-hokodo"
-                    data-bind="
-                        visible: getHokodoLogo()
-                    "><hokodo-marketing data-element="badge-large" data-theme="default"></hokodo-marketing></div>
+                <span class="logo-hokodo" data-bind="visible: getHokodoLogo()">
+                    <hokodo-marketing data-element="badge-large" data-theme="default"></hokodo-marketing>
+                </span>
                 <!-- ko if: getSubTitle() -->
                 <span data-bind="text: getSubTitle()"></span>
                 <!-- /ko -->
 
                 <!-- ko if: getInfo() -->
-                <a href= "#" class="btn-click" data-bind="click: openModal">
+                <button class="btn-click" data-bind="click: openModal">
                     <span data-bind="text: getInfo()"></span>
                     <hokodo-marketing style="display: none;" id="hokodo-marketing-lightbox" data-element="lightbox"></hokodo-marketing>
-                </a>
+                </button>
                 <!-- /ko -->
-            </div>
-            <div data-bind="attr: {class: 'payment-logos'}">
+            </span>
+            <span data-bind="attr: {class: 'payment-logos'}">
                 <!-- ko foreach: getLogos -->
                     <span data-bind="attr: {class: $data}"></span>
                 <!-- /ko -->
-            </div>
+            </span>
         </label>
     </div>
     <div class="payment-method-content hokodo-content-wrapper">

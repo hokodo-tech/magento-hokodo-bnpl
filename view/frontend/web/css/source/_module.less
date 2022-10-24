@@ -33,37 +33,30 @@
                 }
             }
         }
-        > .payment-method-title {
+        .payment-method-title {
             display: flex;
             position: relative;
-            > input[type="radio"] {
+            .hokodo-radio {
                 margin-right: 9px;
             }
-            > label {
+            .label {
                 display: flex;
                 align-items: center;
                 width: 100%;
                 justify-content: space-between;
-                > input {
-                    vertical-align: middle;
-                }
-                > span.hokodo-logo {
-                    display: inline-block;
-                    background: url('@{baseDir}Hokodo_BNPL/img/hokodo.svg') no-repeat center transparent;
-                    width: 71px;
-                    height: 30px;
-                    margin-right: 5px;
-                    > span {
-                        margin-left:2px;
-                    }
-                }
+
                 .label-left {
                     display: flex;
                     align-items: center;
                     flex-wrap: wrap;
                 }
+
                 .payment-logos {
-                    > span {
+                    .direct_uk,
+                    .direct_eu,
+                    .visa,
+                    .mastercard,
+                    .amex {
                         width: 43px;
                         display: inline-block;
                         height: 30px;
@@ -140,8 +133,10 @@
         }
         .btn-click {
             text-decoration: underline;
-            padding-left: 5px;
-            padding-right: 10px;
+            background: none;
+            border: none;
+            color: #006bb4;
+            font-weight: 400;
         }
         .label {
             flex-wrap: wrap;
