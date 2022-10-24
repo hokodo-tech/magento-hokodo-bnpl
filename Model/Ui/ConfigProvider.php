@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Model\Ui;
 
 use Hokodo\BNPL\Gateway\Config\Config;
+use Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos;
 use Hokodo\BNPL\Service\CustomersGroup;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\RequestInterface;
@@ -55,6 +56,11 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $logos = $this->config->getValue(Config::PAYMENT_METHOD_LOGOS) ? PaymentMethodLogos::LOGOS_CLASS : [];
+        if ($this->config->getValue(Config::PAYMENT_METHOD_DIRECT_LOGOS)) {
+            $logos[] = $this->config->getValue(Config::PAYMENT_METHOD_DIRECT_LOGOS);
+        }
+
         return [
             'payment' => [
                 Config::CODE => [
@@ -62,9 +68,10 @@ class ConfigProvider implements ConfigProviderInterface
                         $this->customersGroupService->isEnabledForCustomerGroup(),
                     'isDefault' => $this->request->getParam('payment_method') === Config::CODE ||
                         (bool) $this->config->getValue(Config::IS_PAYMENT_DEFAULT_PATH),
+                    'title' => $this->config->getValue(Config::PAYMENT_TITLE),
                     'subtitle' => $this->config->getValue(Config::PAYMENT_SUBTITLE),
                     'hokodoLogo' => (bool) $this->config->getValue(Config::HOKODO_LOGO),
-                    'logos' => $this->config->getValue(Config::PAYMENT_METHOD_LOGOS),
+                    'logos' => $logos,
                     'moreInfo' => $this->config->getValue(Config::PAYMENT_MORE_INFO),
                 ],
             ],

@@ -39,14 +39,7 @@ test.describe("Full end-to-end", () => {
       await paymentPage.hokodoCheckout.findCompany(orderData.buyer);
       await paymentPage.hokodoCheckout.selectPaymentMethod("invoice");
       await paymentPage.hokodoCheckout.acceptTermsAndConditions();
-      const deferredPaymentResponse = await paymentPage.hokodoCheckout.createDeferredPayment();
-      const orderDetails = await new HokodoAPI().viewOrder(deferredPaymentResponse.orderId, deferredPaymentResponse.token);
-
-      for (const product of orderData.products) {
-        // this is a rudimentary check to make sure the items were added to the order.
-        expect (orderDetails.items.filter(x => x.description === product.name && parseInt(x.quantity) === product.quantity).length >= 10);
-      }
-
+      await paymentPage.hokodoCheckout.createDeferredPayment();
       await checkoutSuccessPage.viewOrder();
     });
   });

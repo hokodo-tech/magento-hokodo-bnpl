@@ -8,6 +8,6 @@ export default class CheckoutSuccessPage {
     }
 
     async viewOrder() {
-        await this.page.locator("a.order-number").click();
+        await this.page.locator("a.order-number").click({ timeout: 60000 });
     }
 }
