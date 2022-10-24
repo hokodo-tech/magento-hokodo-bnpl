@@ -37,7 +37,8 @@ define([
                     Payment_method_title: window.checkoutConfig.payment.hokodo_bnpl.title,
                     Payment_method_subtitle: window.checkoutConfig.payment.hokodo_bnpl.subtitle,
                     Directdebit_logo: logos.includes('direct_eu') || logos.includes('direct_uk'),
-                    Creditcard_logo: logos.includes('visa')
+                    Creditcard_logo: logos.includes('visa'),
+                    Hokodo_logo: window.checkoutConfig.payment.hokodo_bnpl.hokodoLogo
                 }
             );
             this.initialized = true;
