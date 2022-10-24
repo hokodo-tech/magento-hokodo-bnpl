@@ -120,7 +120,7 @@
                 <item name="deferred_payment_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentView</item>
                 <item name="deferred_payment_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentList</item>
                 <item name="authorize" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentAuthorize</item>
-                <item name="capture" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentCapture</item>
+                <item name="capture" xsi:type="string">Hokodo\BNPL\Gateway\Command\PostSale\CapturePayment</item>
                 <item name="void" xsi:type="string">Hokodo\BNPL\Gateway\Command\PostSale\VoidPayment</item>
                 <item name="cancel" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentCancelCommand</item>
                 <item name="refund" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentRefundCommand</item>
