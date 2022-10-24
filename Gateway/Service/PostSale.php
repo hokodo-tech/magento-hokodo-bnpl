@@ -12,7 +12,7 @@ use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Payment\Gateway\Command\ResultInterface;
 
-class DeferredPayments extends AbstractService
+class PostSale extends AbstractService
 {
     /**
      * @throws NotFoundException
