@@ -34,7 +34,6 @@ define([
 
             initialize() {
                 this._super();
-                console.log('data:initialize');
                 hokodoData.reload();
                 this.initSubscribers();
 
@@ -65,8 +64,6 @@ define([
                     self.offerChanged(offer);
                 })
                 hokodoData.storageGetCheckoutObservable().subscribe((data) => {
-                    console.log('checkout data changed:')
-                    console.log(data.offer)
                     let offerChanged = false;
                     if (!!data.offer) {
                         if (!!this.offer()) {
@@ -82,7 +79,6 @@ define([
                         }
                     }
                     if (offerChanged) {
-                        console.log('Offer changed')
                         this.offer(data.offer);
                     }
                 })
@@ -97,9 +93,6 @@ define([
             },
 
             companyIdChanged(id) {
-                console.log('data.companyIdChanged: ' + id)
-                // this.organisationId(null);
-                // this.userId(null);
                 this.offer(null);
                 if (id) {
                     this.createOfferAction();
@@ -113,14 +106,11 @@ define([
             },
 
             initLoggedInCustomer() {
-                console.log('data:initLoggedInCustomer')
                 this.createOfferAction();
             },
 
             createOfferAction() {
-                console.log('data:createOfferAction:')
                 if (this.companyId()) {
-                    console.log('data:createOfferAction:this.companyId()')
                     if (this.hokodoPaymentMethod() !== undefined) {
                         this.hokodoPaymentMethod().destroyCheckout();
                     }
@@ -140,15 +130,6 @@ define([
                         this.isLoading(false);
                     })
                 }
-            },
-
-            getCustomerEmail() {
-                return customer.isLoggedIn ? customer.customerData.email : quote.shippingAddress().customerEmail
-            },
-
-            getCustomerName() {
-                return customer.isLoggedIn ? customer.customerData.firstname + ' ' + customer.customerData.lastname :
-                    quote.shippingAddress().firstname + ' ' + quote.shippingAddress().lastname;
             }
         })
     })
