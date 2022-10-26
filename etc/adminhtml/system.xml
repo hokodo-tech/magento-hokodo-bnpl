@@ -26,7 +26,7 @@
                 </field>
                 <field id="customer_groups" translate="label" type="multiselect" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Customer Groups</label>
-                    <source_model>Magento\Customer\Model\Config\Source\Group\Multiselect</source_model>
+                    <source_model>Hokodo\BNPL\Model\Config\Source\CustomerGroups</source_model>
                     <depends>
                         <field id="enable_customer_groups">1</field>
                     </depends>
