@@ -16,7 +16,8 @@ define([
 
     return {
         getRequestOfferUrl() {
-            let url, params = ('/guest-customer/:quoteId/hokodo-request-offer', { quoteId: quote.getQuoteId() });
+            let url = '/guest-customer/:quoteId/hokodo-request-offer',
+                params = { quoteId: quote.getQuoteId() };
             if (customer.isLoggedIn()) {
                 url = '/carts/mine/hokodo-request-offer';
                 params = {};

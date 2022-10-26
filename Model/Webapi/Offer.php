@@ -165,6 +165,7 @@ class Offer implements OfferInterface
         $this->userService = $userService;
         $this->offerBuilder = $offerBuilder;
         $this->hokodoCustomerRepository = $hokodoCustomerRepository;
+        $this->hokodoCustomer = null;
     }
 
     /**
@@ -205,6 +206,34 @@ class Offer implements OfferInterface
     }
 
     /**
+     * Request new offer method for guest user.
+     *
+     * @param OfferRequestInterface $payload
+     *
+     * @return OfferResponseInterface
+     *
+     * @throws Exception
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function guestRequestNew(OfferRequestInterface $payload): OfferResponseInterface
+    {
+        $this->hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
+
+        if (!$this->hokodoQuote->getOrderId() || $this->isDiffersCompanyId($payload->getCompanyId())) {
+            $this->hokodoQuote
+                ->setQuoteId((int) $this->checkoutSession->getQuoteId())
+                ->setCompanyId($payload->getCompanyId());
+            $this->assignOrganisation();
+            $this->assignUser();
+            $this->createOrder();
+        } elseif ($this->hokodoQuote->getPatchType() !== null && !$this->patchOrder()) {
+            $this->createOrder();
+        }
+        return $this->responseInterfaceFactory->create()->setOffer($this->getOffer());
+    }
+
+    /**
      * Check if company id provided is different across Hokodo customer and offer.
      *
      * @param string $companyId
@@ -214,7 +243,7 @@ class Offer implements OfferInterface
     private function isDiffersCompanyId(string $companyId): bool
     {
         return $companyId !== $this->hokodoQuote->getCompanyId() ||
-            $companyId !== $this->hokodoCustomer->getCompanyId();
+            $companyId !== ($this->hokodoCustomer ? $this->hokodoCustomer->getCompanyId() : $companyId);
     }
 
     /**
@@ -263,7 +292,9 @@ class Offer implements OfferInterface
     {
         $organisation = $this->createOrganisation($this->hokodoQuote->getCompanyId());
         $this->hokodoQuote->setOrganisationId($organisation->getId());
-        $this->hokodoCustomer->setOrganisationId($organisation->getId());
+        if ($this->hokodoCustomer) {
+            $this->hokodoCustomer->setOrganisationId($organisation->getId());
+        }
     }
 
     /**
@@ -281,7 +312,7 @@ class Offer implements OfferInterface
             $organisation = $this->organisationService->createOrganisation(
                 $this->organisationBuilder->build(
                     $companyId,
-                    $this->checkoutSession->getQuote()->getCustomer()->getEmail()
+                    $this->getUserEmail()
                 )
             );
             if ($dataModel = $organisation->getDataModel()) {
@@ -298,6 +329,20 @@ class Offer implements OfferInterface
     }
 
     /**
+     * Get user email for logged in and guest.
+     *
+     * @return string
+     *
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    private function getUserEmail(): string
+    {
+        return $this->checkoutSession->getQuote()->getCustomerEmail()
+            ?: $this->checkoutSession->getQuote()->getBillingAddress()->getEmail();
+    }
+
+    /**
      * Create user and assign it to customer.
      *
      * @throws NoSuchEntityException
@@ -307,28 +352,28 @@ class Offer implements OfferInterface
     private function assignUser(): void
     {
         $user = $this->createUser(
-            $this->checkoutSession->getQuote()->getCustomer(),
             $this->hokodoQuote->getOrganisationId()
         );
         $this->hokodoQuote->setUserId($user->getId());
-        $this->hokodoCustomer->setUserId($user->getId());
+        if ($this->hokodoCustomer) {
+            $this->hokodoCustomer->setUserId($user->getId());
+        }
     }
 
     /**
      * Create hokodo user request.
      *
-     * @param CustomerInterface $customer
-     * @param string            $organisationId
+     * @param string $organisationId
      *
      * @return UserInterface
      *
      * @throws Exception
      */
-    private function createUser(CustomerInterface $customer, string $organisationId): UserInterface
+    private function createUser(string $organisationId): UserInterface
     {
         try {
             $user = $this->userService->createUser(
-                $this->userBuilder->build($customer, $organisationId)
+                $this->userBuilder->build($this->getCustomerDataObject(), $organisationId)
             );
             if ($dataModel = $user->getDataModel()) {
                 return $dataModel;
@@ -341,6 +386,28 @@ class Offer implements OfferInterface
                 __('There was an error during payment method set up. Please reload the page or try again later.')
             );
         }
+    }
+
+    /**
+     * Get customer object from quote or from billing address.
+     *
+     * @return CustomerInterface
+     *
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    private function getCustomerDataObject(): CustomerInterface
+    {
+        $customer = $this->checkoutSession->getQuote()->getCustomer();
+        if (!$customer->getId()) {
+            $billingAddress = $this->checkoutSession->getQuote()->getBillingAddress();
+            $customer
+                ->setEmail($billingAddress->getEmail())
+                ->setFirstname($billingAddress->getFirstname())
+                ->setLastname($billingAddress->getLastname());
+        }
+
+        return $customer;
     }
 
     /**

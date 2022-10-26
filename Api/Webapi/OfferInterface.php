@@ -21,4 +21,13 @@ interface OfferInterface
      * @return OfferResponseInterface
      */
     public function requestNew(OfferRequestInterface $payload): OfferResponseInterface;
+
+    /**
+     * Request new offer method for guest user.
+     *
+     * @param OfferRequestInterface $payload
+     *
+     * @return OfferResponseInterface
+     */
+    public function guestRequestNew(OfferRequestInterface $payload): OfferResponseInterface;
 }
