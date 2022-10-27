@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Model\Config\Source;
 
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\Convert\DataObject;
 
 class CustomerGroups implements \Magento\Framework\Data\OptionSourceInterface
 {
@@ -17,17 +18,17 @@ class CustomerGroups implements \Magento\Framework\Data\OptionSourceInterface
     private GroupManagementInterface $groupManagement;
 
     /**
-     * @var \Magento\Framework\Convert\DataObject
+     * @var DataObject
      */
-    private \Magento\Framework\Convert\DataObject $converter;
+    private DataObject $converter;
 
     /**
-     * @param GroupManagementInterface              $groupManagement
-     * @param \Magento\Framework\Convert\DataObject $converter
+     * @param GroupManagementInterface $groupManagement
+     * @param DataObject               $converter
      */
     public function __construct(
         GroupManagementInterface $groupManagement,
-        \Magento\Framework\Convert\DataObject $converter
+        DataObject $converter
     ) {
         $this->groupManagement = $groupManagement;
         $this->converter = $converter;

@@ -1,7 +1,3 @@
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
 define([
     'mage/utils/wrapper',
     'Magento_Customer/js/customer-data'
@@ -19,7 +15,6 @@ define([
                  */
                 invalidateHokodoOffer = function () {
                     customerData.reload(['hokodo-checkout'], true);
-                    console.log('shipping mixin invalidate');
                 };
 
                 return this._super(type).done(invalidateHokodoOffer);

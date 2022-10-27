@@ -1,8 +1,9 @@
 define([
     'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
     'Hokodo_BNPL/js/sdk/action/get-hokodo-customer',
+    'Hokodo_BNPL/js/sdk/customer',
     'Hokodo_BNPL/js/sdk/core'
-], function (hokodoData, getHokodoCustomerAction) {
+], function (hokodoData, getHokodoCustomerAction, customer) {
 
     return {
         getHokodoCustomer() {
@@ -20,7 +21,7 @@ define([
 
         initMarketing() {
             window.hokodoSdk.marketing();
-            if (hokodoData.getCompanyId()) {
+            if (hokodoData.getCompanyId() && customer.name) {
                 this.getHokodoCustomer();
             }
         }
