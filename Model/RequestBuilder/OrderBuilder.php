@@ -257,7 +257,7 @@ class OrderBuilder
             ->setItemId($quote->getId() . '-shipping')
             ->setType('shipping')
             ->setDescription($shipping->getShippingDescription() ?? '')
-            ->setReference($shipping->getShippingMethod())
+            ->setReference($shipping->getShippingMethod() ?? '')
             ->setQuantity('1')
             ->setUnitPrice((int) ($shippingTotal * 100))
             ->setTaxRate($taxRate)

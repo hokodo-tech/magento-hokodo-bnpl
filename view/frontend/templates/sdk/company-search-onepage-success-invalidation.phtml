@@ -1,0 +1,8 @@
+<script>
+    require([
+        'Magento_Customer/js/customer-data'
+    ], function (customerData) {
+        customerData.initStorage();
+        customerData.invalidate(['hokodo-search', 'hokodo-checkout']);
+    });
+</script>

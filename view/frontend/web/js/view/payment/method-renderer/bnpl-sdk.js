@@ -8,6 +8,7 @@ define([
     'ko',
     'Magento_Checkout/js/view/payment/default',
     'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
+    'Magento_Customer/js/model/customer',
     'Magento_Checkout/js/model/error-processor',
     'Magento_Ui/js/modal/modal'
 ], function (
@@ -16,6 +17,7 @@ define([
     ko,
     Component,
     hokodoData,
+    customer,
     errorProcessor
 ) {
     'use strict';
@@ -93,6 +95,12 @@ define([
         mountSearch: function () {
             console.log('bnpl:mountSearch')
             this.companySearch.mount("#hokodoCompanySearch");
+        },
+
+        afterRenderMount: function () {
+            if (customer.isLoggedIn()) {
+                this.mountCheckout();
+            }
         },
 
         mountCheckout: function () {

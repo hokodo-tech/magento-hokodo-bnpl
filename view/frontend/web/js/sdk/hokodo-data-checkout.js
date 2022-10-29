@@ -28,7 +28,10 @@ define([
 
             defaults: {
                 modules: {
-                    hokodoPaymentMethod: 'checkout.steps.billing-step.payment.payments-list.hokodo_bnpl'
+                    hokodoPaymentMethod: 'checkout.steps.billing-step.payment.payments-list.hokodo_bnpl',
+                },
+                listens: {
+                    'checkout.steps.shipping-step.shippingAddress.customer-email:email': 'guestUserEmailChangedHandler',
                 }
             },
 
@@ -129,6 +132,12 @@ define([
                     }).always(() => {
                         this.isLoading(false);
                     })
+                }
+            },
+
+            guestUserEmailChangedHandler() {
+                if (!customer.isLoggedIn() && !!this.hokodoPaymentMethod() && this.hokodoPaymentMethod().isChecked()) {
+                    this.hokodoPaymentMethod().selectPaymentMethod();
                 }
             }
         })
