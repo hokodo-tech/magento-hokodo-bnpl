@@ -9,7 +9,8 @@ define([
         'Hokodo_BNPL/js/sdk/action/request-hokodo-offer',
         'Magento_SalesRule/js/action/set-coupon-code',
         'Magento_SalesRule/js/action/cancel-coupon',
-        'Magento_Checkout/js/model/error-processor'
+        'Magento_Checkout/js/model/error-processor',
+        'Magento_Checkout/js/model/payment/place-order-hooks'
     ],
     function (
         $,
@@ -22,11 +23,14 @@ define([
         requestOfferAction,
         setCouponCodeAction,
         cancelCouponAction,
-        errorProcessor
+        errorProcessor,
+        placeOrderHooks
     ) {
         return Component.extend({
 
             defaults: {
+                isGuestUserChanged: false,
+                isWaitingForPaymentInformationUpdateHook: false,
                 modules: {
                     hokodoPaymentMethod: 'checkout.steps.billing-step.payment.payments-list.hokodo_bnpl',
                 },
@@ -36,6 +40,7 @@ define([
             },
 
             initialize() {
+                let self = this;
                 this._super();
                 hokodoData.reload();
                 this.initSubscribers();
@@ -43,6 +48,10 @@ define([
                 if (customer.isLoggedIn()) {
                     this.initLoggedInCustomer();
                 }
+
+                placeOrderHooks.afterRequestListeners.push(function() {
+                    self.paymentInformationUpdateHook();
+                })
 
                 return this;
             },
@@ -103,7 +112,11 @@ define([
             },
 
             offerChanged(offer) {
-                if (offer === '') {
+                if (this.isGuestUserChanged) {
+                    this.isGuestUserChanged = false;
+                    this.isWaitingForPaymentInformationUpdateHook = true;
+                    this.hokodoPaymentMethod().selectPaymentMethod();
+                } else if (offer === '') {
                     this.createOfferAction();
                 }
             },
@@ -113,7 +126,7 @@ define([
             },
 
             createOfferAction() {
-                if (this.companyId()) {
+                if (this.companyId() && !this.isWaitingForPaymentInformationUpdateHook) {
                     if (this.hokodoPaymentMethod() !== undefined) {
                         this.hokodoPaymentMethod().destroyCheckout();
                     }
@@ -137,7 +150,14 @@ define([
 
             guestUserEmailChangedHandler() {
                 if (!customer.isLoggedIn() && !!this.hokodoPaymentMethod() && this.hokodoPaymentMethod().isChecked()) {
-                    this.hokodoPaymentMethod().selectPaymentMethod();
+                    this.isGuestUserChanged = true;
+                }
+            },
+
+            paymentInformationUpdateHook() {
+                if (this.isWaitingForPaymentInformationUpdateHook) {
+                    this.isWaitingForPaymentInformationUpdateHook = false;
+                    this.createOfferAction();
                 }
             }
         })
