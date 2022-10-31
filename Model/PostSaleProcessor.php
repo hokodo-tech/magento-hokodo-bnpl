@@ -253,7 +253,7 @@ class PostSaleProcessor
         $taxAmount = ($salesOrderItem->getTaxAmount() * $shipItem->getQty())
         / $salesOrderItem->getQtyOrdered();
         $orderItem->setTotalAmount((int) round($totalAmount * 100));
-        $orderItem->setTaxAmount((int) round($taxAmount * 100));
+        $orderItem->setTaxAmount(0);
 
         return $orderItem;
     }
@@ -288,7 +288,7 @@ class PostSaleProcessor
         $orderItem->setItemId($apiItem->getItemId());
         $orderItem->setQuantity($shippingQty);
         $orderItem->setTotalAmount($totalAmount);
-        $orderItem->setTaxAmount($taxAmount);
+        $orderItem->setTaxAmount(0);
 
         return $orderItem;
     }
