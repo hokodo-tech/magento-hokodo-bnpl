@@ -151,7 +151,7 @@ class DeferredPaymentCancelCommand implements CommandInterface
                     if ($refundShipping == $apiItem->getTotalAmount()) {
                         $orderItem->setQuantity($apiItem->getQuantity());
                         $orderItem->setTotalAmount($apiItem->getTotalAmount());
-                        $orderItem->setTaxAmount($apiItem->getTaxAmount());
+                        $orderItem->setTaxAmount(0);
                     } else {
                         $deduceAmountPercent = ($refundShipping * 100) / $apiItem->getTotalAmount();
                         $cancelQuantity = round(($apiItem->getQuantity() * $deduceAmountPercent) / 100, 3);
@@ -202,7 +202,7 @@ class DeferredPaymentCancelCommand implements CommandInterface
         $totalAmount = ($cancelItem->getRowTotal() + $taxAmount) - $cancelItem->getDiscountAmount();
 
         $orderItem->setTotalAmount((int) ($totalAmount * 100));
-        $orderItem->setTaxAmount((int) ($taxAmount * 100));
+        $orderItem->setTaxAmount(0);
 
         return $orderItem;
     }

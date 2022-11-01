@@ -409,7 +409,7 @@ class Offer implements OfferInterface
             ) {
                 $patchRequest
                     ->setTotalAmount((int) ($quote->getGrandTotal() * 100))
-                    ->setTaxAmount((int) ($quote->getShippingAddress()->getTaxAmount() * 100));
+                    ->setTaxAmount(0);
                 $patchRequest->setItems($this->orderBuilder->buildOrderItems($quote));
             }
             $this->orderGatewayService->patchOrder($patchRequest);
