@@ -10,15 +10,12 @@ define([
 ], function (Component, $, hokodoData, getHokodoCustomerAction, customerData, marketing, uiRegistry) {
 
     return Component.extend({
+        defaults: {
+            template: 'Hokodo_BNPL/sdk/marketing/product-banner',
+        },
+
         initialize() {
             this._super();
-
-            document
-                .querySelector("[data-element='credit-limit-banner']")
-                .addEventListener("companySelection", (company) => {
-                    hokodoData.setCompanyId(company.detail.id);
-                    marketing.getHokodoCustomer();
-                });
 
             if (!uiRegistry.has('hokodo-credit-limit-banner-top')) {
                 if (!window.hokodoSdk) {
@@ -29,6 +26,19 @@ define([
                     marketing.initMarketing();
                 }
             }
+        },
+
+        initListener() {
+            document
+                .querySelector("[data-element='credit-limit-banner']")
+                .addEventListener("companySelection", (company) => {
+                    hokodoData.setCompanyId(company.detail.id);
+                    marketing.getHokodoCustomer();
+                });
+        },
+
+        canRender() {
+            return customerData.get('customer')().firstname;
         }
     })
 })

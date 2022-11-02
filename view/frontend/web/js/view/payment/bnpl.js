@@ -4,17 +4,15 @@
  */
 define([
     'uiComponent',
-    'Magento_Checkout/js/model/payment/renderer-list',
-    'Magento_Customer/js/model/customer'
+    'Magento_Checkout/js/model/payment/renderer-list'
 ], function (
         Component,
         rendererList,
-        customer
         ) {
     'use strict';
 
     var config = window.checkoutConfig.payment;
-    if (config.hokodo_bnpl.isActive && customer.isLoggedIn()) {
+    if (config.hokodo_bnpl.isActive) {
         rendererList.push(
             {
                 type: 'hokodo_bnpl',

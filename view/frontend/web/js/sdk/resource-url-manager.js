@@ -8,20 +8,21 @@ define([
     'Magento_Checkout/js/model/url-builder',
     'mageUtils'
 ], function (
-	customer,
-	quote,
-	urlBuilder,
-	utils
+    customer,
+    quote,
+    urlBuilder,
 ) {
     'use strict';
 
     return {
-        getHokodoCustomerUrl() {
-            return urlBuilder.createUrl('/hokodo/customer', {});
-        },
-
         getRequestOfferUrl() {
-            return urlBuilder.createUrl('/carts/mine/hokodo-request-offer', {});
+            let url = '/guest-customer/:quoteId/hokodo-request-offer',
+                params = { quoteId: quote.getQuoteId() };
+            if (customer.isLoggedIn()) {
+                url = '/carts/mine/hokodo-request-offer';
+                params = {};
+            }
+            return urlBuilder.createUrl(url, params);
         },
     };
 });

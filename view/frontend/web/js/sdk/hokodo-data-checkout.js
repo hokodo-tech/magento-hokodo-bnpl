@@ -9,7 +9,8 @@ define([
         'Hokodo_BNPL/js/sdk/action/request-hokodo-offer',
         'Magento_SalesRule/js/action/set-coupon-code',
         'Magento_SalesRule/js/action/cancel-coupon',
-        'Magento_Checkout/js/model/error-processor'
+        'Magento_Checkout/js/model/error-processor',
+        'Magento_Checkout/js/model/payment/place-order-hooks'
     ],
     function (
         $,
@@ -22,25 +23,35 @@ define([
         requestOfferAction,
         setCouponCodeAction,
         cancelCouponAction,
-        errorProcessor
+        errorProcessor,
+        placeOrderHooks
     ) {
         return Component.extend({
 
             defaults: {
+                isGuestUserChanged: false,
+                isWaitingForPaymentInformationUpdateHook: false,
                 modules: {
-                    hokodoPaymentMethod: 'checkout.steps.billing-step.payment.payments-list.hokodo_bnpl'
+                    hokodoPaymentMethod: 'checkout.steps.billing-step.payment.payments-list.hokodo_bnpl',
+                },
+                listens: {
+                    'checkout.steps.shipping-step.shippingAddress.customer-email:email': 'guestUserEmailChangedHandler',
                 }
             },
 
             initialize() {
+                let self = this;
                 this._super();
-                console.log('data:initialize');
                 hokodoData.reload();
                 this.initSubscribers();
 
                 if (customer.isLoggedIn()) {
                     this.initLoggedInCustomer();
                 }
+
+                placeOrderHooks.afterRequestListeners.push(function() {
+                    self.paymentInformationUpdateHook();
+                })
 
                 return this;
             },
@@ -65,8 +76,6 @@ define([
                     self.offerChanged(offer);
                 })
                 hokodoData.storageGetCheckoutObservable().subscribe((data) => {
-                    console.log('checkout data changed:')
-                    console.log(data.offer)
                     let offerChanged = false;
                     if (!!data.offer) {
                         if (!!this.offer()) {
@@ -82,7 +91,6 @@ define([
                         }
                     }
                     if (offerChanged) {
-                        console.log('Offer changed')
                         this.offer(data.offer);
                     }
                 })
@@ -97,9 +105,6 @@ define([
             },
 
             companyIdChanged(id) {
-                console.log('data.companyIdChanged: ' + id)
-                // this.organisationId(null);
-                // this.userId(null);
                 this.offer(null);
                 if (id) {
                     this.createOfferAction();
@@ -107,20 +112,21 @@ define([
             },
 
             offerChanged(offer) {
-                if (offer === '') {
+                if (this.isGuestUserChanged) {
+                    this.isGuestUserChanged = false;
+                    this.isWaitingForPaymentInformationUpdateHook = true;
+                    this.hokodoPaymentMethod().selectPaymentMethod();
+                } else if (offer === '') {
                     this.createOfferAction();
                 }
             },
 
             initLoggedInCustomer() {
-                console.log('data:initLoggedInCustomer')
                 this.createOfferAction();
             },
 
             createOfferAction() {
-                console.log('data:createOfferAction:')
-                if (this.companyId()) {
-                    console.log('data:createOfferAction:this.companyId()')
+                if (this.companyId() && !this.isWaitingForPaymentInformationUpdateHook) {
                     if (this.hokodoPaymentMethod() !== undefined) {
                         this.hokodoPaymentMethod().destroyCheckout();
                     }
@@ -142,13 +148,17 @@ define([
                 }
             },
 
-            getCustomerEmail() {
-                return customer.isLoggedIn ? customer.customerData.email : quote.shippingAddress().customerEmail
+            guestUserEmailChangedHandler() {
+                if (!customer.isLoggedIn() && !!this.hokodoPaymentMethod() && this.hokodoPaymentMethod().isChecked()) {
+                    this.isGuestUserChanged = true;
+                }
             },
 
-            getCustomerName() {
-                return customer.isLoggedIn ? customer.customerData.firstname + ' ' + customer.customerData.lastname :
-                    quote.shippingAddress().firstname + ' ' + quote.shippingAddress().lastname;
+            paymentInformationUpdateHook() {
+                if (this.isWaitingForPaymentInformationUpdateHook) {
+                    this.isWaitingForPaymentInformationUpdateHook = false;
+                    this.createOfferAction();
+                }
             }
         })
     })

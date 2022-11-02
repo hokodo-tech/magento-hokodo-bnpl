@@ -7,7 +7,9 @@ $viewModel = $block->getData('viewModel');
 ?>
 
 <?php if ($viewModel->isEnabled()): ?>
-<hokodo-marketing data-element="credit-limit-banner"></hokodo-marketing>
+<div data-bind="scope:'hokodo-product-credit-limit-banner' ">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
 <script type="text/x-magento-init">
     {
         "*": {

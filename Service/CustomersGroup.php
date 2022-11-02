@@ -61,6 +61,10 @@ class CustomersGroup
      */
     private function isUserInCustomerGroups(): bool
     {
-        return in_array($this->customerSession->getCustomerGroupId(), $this->config->getCustomerGroups(), true);
+        return in_array(
+            (string) $this->customerSession->getCustomerGroupId(),
+            $this->config->getCustomerGroups(),
+            true
+        );
     }
 }

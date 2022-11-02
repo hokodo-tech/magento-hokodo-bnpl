@@ -51,6 +51,6 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <div id="hokodoCheckout" data-bind="afterRender: function() {console.log('bnpl-template:afterRender'); this.mountCheckout()}, css: {'loading': isOfferLoading}"></div>
+        <div id="hokodoCheckout" data-bind="afterRender: this.afterRenderMount, css: {'loading': isOfferLoading}"></div>
     </div>
 </div>
