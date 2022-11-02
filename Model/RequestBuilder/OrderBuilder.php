@@ -147,7 +147,7 @@ class OrderBuilder
             ->setStatus('draft')
             ->setCurrency($quote->getQuoteCurrencyCode())
             ->setTotalAmount((int) ($quote->getGrandTotal() * 100))
-            ->setTaxAmount((int) ($quote->getShippingAddress()->getTaxAmount() * 100))
+            ->setTaxAmount(0)
             ->setOrderDate($this->dateTimeFactory->create()->gmtDate('Y-m-d', time()))
             ->setMetadata(
                 [
@@ -235,8 +235,8 @@ class OrderBuilder
             ->setReference($item->getSku())
             ->setQuantity((string) $item->getQty())
             ->setUnitPrice((int) round($totalAmount / $item->getQty() * 100))
-            ->setTaxRate(number_format((float) $item->getTaxPercent(), 2))
-            ->setTaxAmount((int) ($item->getTaxAmount() * 100))
+            ->setTaxRate('0')
+            ->setTaxAmount(0)
             ->setTotalAmount((int) ($totalAmount * 100));
     }
 
@@ -251,7 +251,6 @@ class OrderBuilder
     {
         $shipping = $quote->getShippingAddress();
         $shippingTotal = $shipping->getShippingInclTax() - $shipping->getShippingDiscountAmount();
-        $taxRate = $this->getShippingTaxRate($shipping);
 
         return $this->orderItemFactory->create()
             ->setItemId($quote->getId() . '-shipping')
@@ -260,27 +259,9 @@ class OrderBuilder
             ->setReference($shipping->getShippingMethod() ?? '')
             ->setQuantity('1')
             ->setUnitPrice((int) ($shippingTotal * 100))
-            ->setTaxRate($taxRate)
-            ->setTaxAmount((int) round($taxRate / 100 * $shippingTotal) * 100)
+            ->setTaxRate('0')
+            ->setTaxAmount(0)
             ->setTotalAmount((int) ($shippingTotal * 100));
-    }
-
-    /**
-     * Get shipping tax rate value.
-     *
-     * @param AddressInterface $shipping
-     *
-     * @return string
-     */
-    private function getShippingTaxRate(AddressInterface $shipping): string
-    {
-        return number_format(
-            round(
-                ($shipping->getShippingTaxAmount() / ((float) $shipping->getShippingInclTax() ?: 1)) * 100,
-                2
-            ),
-            2
-        );
     }
 
     /**
