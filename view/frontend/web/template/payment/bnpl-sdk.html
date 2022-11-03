@@ -51,6 +51,11 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <div id="hokodoCheckout" data-bind="afterRender: this.afterRenderMount, css: {'loading': isOfferLoading}"></div>
+        <div id="hokodoCheckout" data-bind="afterRender: function() {console.log('bnpl-template:afterRender'); this.mountCheckout()}, css: {'loading': isOfferLoading}"></div>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
     </div>
 </div>
