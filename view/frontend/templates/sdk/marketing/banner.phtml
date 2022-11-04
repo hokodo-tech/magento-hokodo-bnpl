@@ -1,0 +1,30 @@
+<?php
+/**
+ * @var $block \Magento\Framework\View\Element\Template
+ * @var $viewModel \Hokodo\BNPL\ViewModel\Marketing\CreditLimitBanners
+ */
+$viewModel = $block->getData('viewModel');
+$viewModel
+    ->setBannerTypeCredit($block->getData('bannerTypeCredit'))
+    ->setBannerTypeStatic($block->getData('bannerTypeStatic'));
+?>
+
+<?php if ($viewModel->isEnabled()): ?>
+    <div data-bind="scope:'<?= $block->getNameInLayout() ?>'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "<?= $block->getNameInLayout() ?>": {
+                            "component": "Hokodo_BNPL/js/sdk/marketing/banner",
+                            "config": <?= $viewModel->getJsConfig() ?>
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<?php endif; ?>
