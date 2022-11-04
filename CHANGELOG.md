@@ -1,3 +1,8 @@
+2.0.7 / November 2022
+==================
+* Marketing banners redevelopment
+* Added guest to be able checkout with Hokodo
+
 2.0.6 / October 2022
 ==================
 * Logos display control
