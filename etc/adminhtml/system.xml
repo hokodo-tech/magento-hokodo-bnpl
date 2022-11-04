@@ -113,14 +113,24 @@
                 </group>
                 <group id="marketing" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
                     <label>Marketing</label>
+                    <field id="enable_static" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Enable static promo banners</label>
+                        <comment><![CDATA[Display static promo banners if applicable.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="enable_credit" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Enable credit promo banners</label>
+                        <comment><![CDATA[Display credit promo banners if applicable.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
                     <field id="enable_product" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Product Credit limit Banner enable</label>
-                        <comment><![CDATA[Display credit limit banner on product page]]></comment>
+                        <label>Product banner enable</label>
+                        <comment><![CDATA[Display banner on product details block]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                     <field id="enable_top" translate="label comment" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Top Credit limit Banner enable</label>
-                        <comment><![CDATA[Display top credit limit banner on all the pages.]]></comment>
+                        <comment><![CDATA[Display top banner on all the pages.]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                     <field id="top_theme" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">

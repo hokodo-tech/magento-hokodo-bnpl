@@ -42,6 +42,8 @@ class Config extends DefaultPaymentConfig
     public const MARKETING_PRODUCT_PAGE_ENABLE = 'marketing/enable_product';
     public const MARKETING_TOP_BANNER_ENABLE = 'marketing/enable_top';
     public const MARKETING_TOP_BANNER_THEME = 'marketing/top_theme';
+    public const MARKETING_STATIC_BANNERS_ENABLE = 'marketing/enable_static';
+    public const MARKETING_CREDIT_BANNERS_ENABLE = 'marketing/enable_credit';
     public const PAYMENT_TITLE = 'title';
     public const PAYMENT_SUBTITLE = 'marketing/subtitle';
     public const HOKODO_LOGO = 'marketing/hokodo_logo';
@@ -352,6 +354,26 @@ class Config extends DefaultPaymentConfig
      */
     public function getCustomerGroups(): array
     {
-        return explode(',', $this->getValue(self::CUSTOMER_GROUPS));
+        return explode(',', $this->getValue(self::CUSTOMER_GROUPS) ?? '');
+    }
+
+    /**
+     * Get mar.
+     *
+     * @return bool
+     */
+    public function isMarketingStaticBannersEnabled(): bool
+    {
+        return (bool) $this->getValue(self::MARKETING_STATIC_BANNERS_ENABLE);
+    }
+
+    /**
+     * Get customer groups array.
+     *
+     * @return bool
+     */
+    public function isMarketingCreditBannersEnabled(): bool
+    {
+        return (bool) $this->getValue(self::MARKETING_CREDIT_BANNERS_ENABLE);
     }
 }

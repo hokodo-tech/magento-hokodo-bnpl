@@ -56,4 +56,12 @@
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\CustomerData\Customer">
+        <plugin name="HokodoCustomerGroup" type="Hokodo\BNPL\Plugin\CustomerData\CustomerGroup" sortOrder="100"/>
+    </type>
+    <type name="Hokodo\BNPL\Plugin\CustomerData\CustomerGroup">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
 </config>

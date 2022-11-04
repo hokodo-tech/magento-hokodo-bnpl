@@ -1,0 +1,11 @@
+<!-- ko if: bannerType -->
+<hokodo-marketing
+    data-bind="attr: {
+    'data-element': bannerType,
+    'data-total-amount': totalAmount,
+    'data-theme': getTheme()
+    }, event: {
+        companySelection: selectCompany
+    }"
+></hokodo-marketing>
+<!-- /ko -->
