@@ -180,6 +180,7 @@ define([
         openModal: function () {
             let modalOpener = $("#hokodo-marketing-lightbox");
             modalOpener.modal({
+                modalClass: 'hokodo-modal',
                 buttons: []
             }).modal('openModal');
             modalOpener.show();

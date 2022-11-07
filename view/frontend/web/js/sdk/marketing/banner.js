@@ -14,7 +14,7 @@ define([
             bannerTypeCredit: 'credit-limit-banner',
             customerGroupsEnabled: false,
             customerGroups: [],
-            totalAmount: 100000,
+            advertisedCreditAmount: null,
             topBannerTheme: 'light',
             staticBannersEnabled: false,
             creditBannersEnabled: true
