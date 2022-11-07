@@ -1,3 +1,7 @@
+2.0.8 / November 2022
+==================
+* Credit Advertised Amount for banner config added
+
 2.0.7 / November 2022
 ==================
 * Marketing banners redevelopment

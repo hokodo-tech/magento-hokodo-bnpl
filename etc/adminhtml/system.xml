@@ -17,7 +17,7 @@
                 </field>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enabled</label>
-                    <comment>v2.0.7</comment>
+                    <comment>v2.0.8</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="enable_customer_groups" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
@@ -140,6 +140,10 @@
                         <depends>
                             <field id="enable_top">1</field>
                         </depends>
+                    </field>
+                    <field id="advertised_credit_amount" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Banner advertised credit limit</label>
+                        <comment><![CDATA[The credit limit that will be advertised to the buyers who have not signed in or whose credit limit has not yet been established for other reasons..]]></comment>
                     </field>
                     <field id="faq" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>FAQ link</label>
