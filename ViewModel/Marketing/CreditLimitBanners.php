@@ -68,6 +68,9 @@ class CreditLimitBanners implements ArgumentInterface
             'staticBannersEnabled' => $this->paymentConfig->isMarketingStaticBannersEnabled(),
             'creditBannersEnabled' => $this->paymentConfig->isMarketingCreditBannersEnabled(),
         ];
+        if ($advertisedCreditAmount = $this->paymentConfig->getMarketingAdvertisedCreditAmount()) {
+            $config['advertisedCreditAmount'] = $advertisedCreditAmount * 100;
+        }
         if ($this->bannerTypeStatic) {
             $config['bannerTypeStatic'] = $this->bannerTypeStatic;
         }
