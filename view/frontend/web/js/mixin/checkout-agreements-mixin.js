@@ -8,16 +8,11 @@ define([
     'use strict';
 
     var mixin = {
-        defaults: {
-            template: 'Hokodo_BNPL/checkout/checkout-agreements'
-        },
-
-        isShow: function (element) {
-            if (checkoutData.getSelectedPaymentMethod() == "hokodo_bnpl" && this.isAgreementRequired(element)) {
+        isAgreementRequired: function (element) {
+            if (checkoutData.getSelectedPaymentMethod() == "hokodo_bnpl") {
                 return false;
             }
-
-            return true;
+            return this._super(element);
         }
     };
 
