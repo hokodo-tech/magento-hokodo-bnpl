@@ -97,12 +97,6 @@ define([
             this.companySearch.mount("#hokodoCompanySearch");
         },
 
-        afterRenderMount: function () {
-            if (customer.isLoggedIn()) {
-                this.mountCheckout();
-            }
-        },
-
         mountCheckout: function () {
             if (this.hokodoCheckout().offer()) {
                 console.log('bnpl:mountCheckout:offer: ' + this.hokodoCheckout().offer().id)
