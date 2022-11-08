@@ -17,6 +17,9 @@ config = {
             },
             'Magento_Checkout/js/model/shipping-save-processor/payload-extender': {
                 'Hokodo_BNPL/js/sdk/mixin/shipping-save-payload-extender-mixin': true
+            },
+            'Magento_CheckoutAgreements/js/view/checkout-agreements': {
+                'Hokodo_BNPL/js/mixin/checkout-agreements-mixin': true
             }
         }
     }

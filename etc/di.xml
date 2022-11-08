@@ -1385,4 +1385,14 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\CheckoutAgreements\Model\AgreementsProvider">
+        <plugin name="hokodo_checkout_agreements_agreements_provider"
+                type="Hokodo\BNPL\Plugin\Model\CheckoutAgreements\AgreementsProvider"
+                sortOrder="1" disabled="false"/>
+    </type>
+    <type name="Hokodo\BNPL\Plugin\Model\CheckoutAgreements\AgreementsProvider">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
 </config>

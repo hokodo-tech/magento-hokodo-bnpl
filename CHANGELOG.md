@@ -1,3 +1,11 @@
+2.0.10 / November 2022
+==================
+* Fixed checkout component not loaded when refreshing the page
+
+2.0.9 / November 2022
+==================
+* Added Magento T&Cs to be displayed
+
 2.0.8 / November 2022
 ==================
 * Credit Advertised Amount for banner config added
