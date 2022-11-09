@@ -5,14 +5,7 @@ define([
     return function (config) {
         require([config.url], function () {
             if (!window.hokodoSdk) {
-                let sdkConfig = {
-                    locale: config.locale,
-                    currency: config.currency
-                };
-                if (config.faq) {
-                    sdkConfig.faqLink = config.faq
-                }
-                window.hokodoSdk = Hokodo(config.key, sdkConfig);
+                window.hokodoSdk = Hokodo(config.key, config.sdkConfig);
                 layout([{
                     name: 'hokodo-sdk-marketing',
                     component: 'Hokodo_BNPL/js/sdk/marketing/marketing'
