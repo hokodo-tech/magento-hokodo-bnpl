@@ -13,6 +13,7 @@ use Hokodo\BNPL\Model\Config\Sdk;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Resolver;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -40,33 +41,57 @@ class SdkLoader implements ArgumentInterface
     private Resolver $localeResolver;
 
     /**
+     * @var Json
+     */
+    private Json $json;
+
+    /**
      * @param Sdk                   $sdkConfig
      * @param Config                $paymentConfig
      * @param StoreManagerInterface $store
      * @param Resolver              $localeResolver
+     * @param Json                  $json
      */
     public function __construct(
         Sdk $sdkConfig,
         Config $paymentConfig,
         StoreManagerInterface $store,
-        Resolver $localeResolver
+        Resolver $localeResolver,
+        Json $json
     ) {
         $this->sdkConfig = $sdkConfig;
         $this->paymentConfig = $paymentConfig;
         $this->store = $store;
         $this->localeResolver = $localeResolver;
+        $this->json = $json;
     }
 
     /**
-     * Get Sdk url depending on selected environment.
+     * Get config for UI component.
      *
      * @return string
      *
      * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function getSdkUrl(): string
+    public function getJsConfig(): string
     {
-        return $this->sdkConfig->getSdkUrl();
+        $config = [
+            'url' => $this->sdkConfig->getSdkUrl(),
+            'key' => $this->getSdkKey(),
+            'sdkConfig' => [
+                'locale' => $this->getCurrentLocaleCode(),
+                'currency' => $this->store->getStore()->getCurrentCurrencyCode(),
+            ],
+        ];
+        if ($faqUrl = $this->paymentConfig->getValue(Config::MARKETING_FAQ_LINK)) {
+            $config['sdkConfig']['faqLink'] = $faqUrl;
+        }
+        if ($bannerLink = $this->paymentConfig->getValue(Config::MARKETING_BANNER_LINK)) {
+            $config['sdkConfig']['bannerLink'] = $bannerLink;
+        }
+
+        return $this->json->serialize($config);
     }
 
     /**
@@ -83,13 +108,19 @@ class SdkLoader implements ArgumentInterface
     }
 
     /**
-     * Get Url for faq on Hokodo marketing elements.
+     * Get Current Locale Code.
      *
      * @return string|null
      */
-    public function getMarketingFaqUrl(): ?string
+    public function getCurrentLocaleCode(): ?string
     {
-        return $this->paymentConfig->getMarketingFaqUrl();
+        $code = $this->localeResolver->getLocale();
+        $allowLocaleCodes = $this->getAllowLocaleCodes();
+        if (isset($allowLocaleCodes[$code])) {
+            return $allowLocaleCodes[$code];
+        }
+
+        return $allowLocaleCodes[self::LOCALE_CODE_DEFAULT];
     }
 
     /**
@@ -97,7 +128,7 @@ class SdkLoader implements ArgumentInterface
      *
      * @return array
      */
-    public function getAllowLocaleCodes(): ?array
+    private function getAllowLocaleCodes(): ?array
     {
         return [
             'en_GB' => 'en-GB',
@@ -124,34 +155,6 @@ class SdkLoader implements ArgumentInterface
             'nl_BE' => 'nl',
             'nl_NL' => 'nl',
         ];
-    }
-
-    /**
-     * Get Current Locale Code.
-     *
-     * @return string|null
-     */
-    public function getCurrentLocaleCode(): ?string
-    {
-        $code = $this->localeResolver->getLocale();
-        $allowLocaleCodes = $this->getAllowLocaleCodes();
-        if (isset($allowLocaleCodes[$code])) {
-            return $allowLocaleCodes[$code];
-        }
-
-        return $allowLocaleCodes[self::LOCALE_CODE_DEFAULT];
-    }
-
-    /**
-     * Get Current Currency Code.
-     *
-     * @return string|null
-     *
-     * @throws NoSuchEntityException
-     */
-    public function getCurrentCurrencyCode(): ?string
-    {
-        return $this->store->getStore()->getCurrentCurrencyCode();
     }
 
     /**

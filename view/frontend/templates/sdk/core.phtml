@@ -11,13 +11,7 @@ if ($viewModel->isModuleActive()):
 <script type="text/x-magento-init">
     {
         "*": {
-            "Hokodo_BNPL/js/sdk/core":{
-                "url":"<?= $viewModel->getSdkUrl() ?>",
-                "key":"<?= $viewModel->getSdkKey() ?>",
-                "faq":"<?= $viewModel->getMarketingFaqUrl() ?>",
-                "locale":"<?= $viewModel->getCurrentLocaleCode() ?>",
-                "currency":"<?= $viewModel->getCurrentCurrencyCode() ?>"
-            }
+            "Hokodo_BNPL/js/sdk/core": <?= $viewModel->getJsConfig() ?>
         }
     }
 </script>

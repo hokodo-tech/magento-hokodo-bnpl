@@ -63,8 +63,7 @@
                     <enable_product>1</enable_product>
                     <enable_top>1</enable_top>
                     <top_theme>default</top_theme>
-                    <faq>https://www.hokodo.co/hokodo-for-buyers</faq>
-                    <enable_cart_page>1</enable_cart_page>
+                    <enable_cart_page>0</enable_cart_page>
                     <hokodo_logo>1</hokodo_logo>
                     <label_cart_page>Pay in 30 days with</label_cart_page>
                     <subtitle>No interest. No fees</subtitle>

@@ -144,10 +144,14 @@
                     <field id="advertised_credit_amount" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Banner advertised credit limit</label>
                         <comment><![CDATA[The credit limit that will be advertised to the buyers who have not signed in or whose credit limit has not yet been established for other reasons..]]></comment>
+                        <validate>validate-number validate-greater-than-zero</validate>
                     </field>
-                    <field id="faq" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <field id="faq_link" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>FAQ link</label>
                         <comment><![CDATA[FAQ for buyers link.]]></comment>
+                    </field>
+                    <field id="banner_link" translate="label comment" type="text" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Banner link</label>
                     </field>
                     <field id="enable_cart_page" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Enable button on cart page, minicart</label>
