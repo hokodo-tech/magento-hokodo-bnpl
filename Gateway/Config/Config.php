@@ -38,7 +38,8 @@ class Config extends DefaultPaymentConfig
     public const IS_PAYMENT_DEFAULT_PATH = 'payment/hokodo_bnpl/is_default';
     public const KEY_BTN_CART_PAGE_LABEL = 'marketing/label_cart_page';
     public const KEY_BTN_CART_PAGE_ENABLE = 'marketing/enable_cart_page';
-    public const MARKETING_FAQ = 'marketing/faq';
+    public const MARKETING_FAQ_LINK = 'marketing/faq_link';
+    public const MARKETING_BANNER_LINK = 'marketing/banner_link';
     public const MARKETING_PRODUCT_PAGE_ENABLE = 'marketing/enable_product';
     public const MARKETING_TOP_BANNER_ENABLE = 'marketing/enable_top';
     public const MARKETING_TOP_BANNER_THEME = 'marketing/top_theme';
@@ -296,16 +297,6 @@ class Config extends DefaultPaymentConfig
         return (bool) $this->scopeConfig->getValue(
             self::REPLACE_PLACE_ORDER_HOOKS
         );
-    }
-
-    /**
-     * Provide faq url for Hokodo marketing elements.
-     *
-     * @return string|null
-     */
-    public function getMarketingFaqUrl(): ?string
-    {
-        return $this->getValue(self::MARKETING_FAQ);
     }
 
     /**
