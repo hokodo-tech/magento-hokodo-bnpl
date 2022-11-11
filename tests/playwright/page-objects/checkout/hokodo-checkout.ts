@@ -33,12 +33,19 @@ export default class HokodoCheckout {
         const iframe = this.page.frameLocator(".hokodo-content-wrapper iframe").first();
 
         await iframe
-          .locator("[data-testid='paymentConfirmation.form'] [data-testid='customCheckbox']")
-          .click();
+            .locator("[data-testid='paymentConfirmation.form'] [data-testid='customCheckbox']")
+            .click();
     }
 
     async createDeferredPayment() {
         const iframe = this.page.frameLocator(".hokodo-content-wrapper iframe").first();
-        await iframe.locator("text='Confirm'").click();
-      }
+        return await Promise.all([
+            this.page.waitForResponse("**/v1/payment/deferred_payments"),
+            iframe.locator("text='Confirm'").click(),
+        ]).then(async (result) => {
+            const response = await result[0].json();
+            const requestHeaders = await result[0].request().allHeaders();
+            return { orderId: response.order, deferredPaymentId: response.id, token: requestHeaders.authorization };
+        });
+    }
 }
