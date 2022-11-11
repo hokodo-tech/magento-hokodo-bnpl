@@ -1,12 +1,13 @@
 define([
     'uiComponent',
     'jquery',
+    'ko',
     'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
     'Hokodo_BNPL/js/sdk/action/get-hokodo-customer',
     'Hokodo_BNPL/js/sdk/customer',
     'Magento_Customer/js/customer-data',
     'Hokodo_BNPL/js/sdk/core'
-], function (Component, $, hokodoData, getHokodoCustomerAction, customer, customerData) {
+], function (Component, $, ko, hokodoData, getHokodoCustomerAction, customer, customerData) {
 
     return Component.extend({
 
@@ -26,6 +27,7 @@ define([
                             "organisationId": result.organisation_id,
                             "userId": result.user_id
                         })
+                        $('body').trigger('hokodo-marketing-updated');
                     }).fail((result) => {
                     console.log(result);
                 })

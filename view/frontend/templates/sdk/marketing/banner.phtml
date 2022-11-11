@@ -4,9 +4,7 @@
  * @var $viewModel \Hokodo\BNPL\ViewModel\Marketing\CreditLimitBanners
  */
 $viewModel = $block->getData('viewModel');
-$viewModel
-    ->setBannerTypeCredit($block->getData('bannerTypeCredit'))
-    ->setBannerTypeStatic($block->getData('bannerTypeStatic'));
+$viewModel->setBannerConfig($block->getData('bannerConfig') ?? []);
 ?>
 
 <?php if ($viewModel->isEnabled()): ?>
