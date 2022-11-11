@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\ViewModel\Marketing;
 
 use Hokodo\BNPL\Gateway\Config\Config;
-use Hokodo\BNPL\Service\CustomersGroup;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
@@ -20,37 +19,24 @@ class CreditLimitBanners implements ArgumentInterface
     private Config $paymentConfig;
 
     /**
-     * @var CustomersGroup
-     */
-    private CustomersGroup $customersGroupService;
-
-    /**
      * @var Json
      */
     private Json $json;
 
     /**
-     * @var string|null
+     * @var array
      */
-    private ?string $bannerTypeStatic;
+    private array $bannerConfig;
 
     /**
-     * @var string|null
-     */
-    private ?string $bannerTypeCredit;
-
-    /**
-     * @param Config         $paymentConfig
-     * @param CustomersGroup $customersGroupService
-     * @param Json           $json
+     * @param Config $paymentConfig
+     * @param Json   $json
      */
     public function __construct(
         Config $paymentConfig,
-        CustomersGroup $customersGroupService,
         Json $json
     ) {
         $this->paymentConfig = $paymentConfig;
-        $this->customersGroupService = $customersGroupService;
         $this->json = $json;
     }
 
@@ -71,11 +57,8 @@ class CreditLimitBanners implements ArgumentInterface
         if ($advertisedCreditAmount = $this->paymentConfig->getMarketingAdvertisedCreditAmount()) {
             $config['advertisedCreditAmount'] = $advertisedCreditAmount * 100;
         }
-        if ($this->bannerTypeStatic) {
-            $config['bannerTypeStatic'] = $this->bannerTypeStatic;
-        }
-        if ($this->bannerTypeCredit) {
-            $config['bannerTypeCredit'] = $this->bannerTypeCredit;
+        foreach ($this->bannerConfig as $configName => $configValue) {
+            $config[$configName] = $configValue;
         }
 
         return $this->json->serialize($config);
@@ -104,26 +87,13 @@ class CreditLimitBanners implements ArgumentInterface
     /**
      * Banner static type setter.
      *
-     * @param string|null $bannerTypeStatic
+     * @param array $bannerConfig
      *
      * @return CreditLimitBanners
      */
-    public function setBannerTypeStatic(?string $bannerTypeStatic): self
+    public function setBannerConfig(array $bannerConfig): self
     {
-        $this->bannerTypeStatic = $bannerTypeStatic;
-        return $this;
-    }
-
-    /**
-     * Banner credit type setter.
-     *
-     * @param string|null $bannerTypeCredit
-     *
-     * @return CreditLimitBanners
-     */
-    public function setBannerTypeCredit(?string $bannerTypeCredit): self
-    {
-        $this->bannerTypeCredit = $bannerTypeCredit;
+        $this->bannerConfig = $bannerConfig;
         return $this;
     }
 }
