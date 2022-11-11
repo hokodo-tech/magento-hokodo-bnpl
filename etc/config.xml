@@ -40,7 +40,7 @@
                 <dev_api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <sandbox_api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <allowspecific>1</allowspecific>
+                <allowspecific>0</allowspecific>
                 <specificcountry><![CDATA[GB]]></specificcountry>
                 <sort_order>100</sort_order>
                 <display_only_allowed_countries>1</display_only_allowed_countries>
