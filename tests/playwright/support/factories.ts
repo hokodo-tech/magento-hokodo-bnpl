@@ -1,16 +1,21 @@
 import { Address } from "./types/Address";
-import { Buyer, CompanyType } from "./types/Buyer";
+import { Buyer, BuyerStatus, CompanyType, CreditStatus, FraudStatus } from "./types/Buyer";
 
 export function generateBuyerData({
-    firstName = "Derek",
-    lastName = "Trotter",
-    email = `test+${Date.now().toString().slice(-5)}_paymentplan_offered_dp_fraud_accepted@hokodo.co`,
-    password = "Password1!",
-    companyName = "Hokodo Ltd",
-    companyType = CompanyType.REGISTERED_COMPANY,
-    companyCountry = "GB"
-}: Buyer = {}): Buyer {
-    return {        
+    creditStatus = CreditStatus.OFFERED,
+    fraudStatus = FraudStatus.ACCEPTED,
+}: BuyerStatus = {},
+    {
+        firstName = "Derek",
+        lastName = "Trotter",
+        email = `test+${Date.now().toString().slice(-5)}_paymentplan_offered_dp_fraud_accepted@hokodo.co`,
+        password = "Password1!",
+        companyName = "Hokodo Ltd",
+        companyType = CompanyType.REGISTERED_COMPANY,
+        companyCountry = "GB"
+    }: Buyer = {}): Buyer {
+    email = `test+${Date.now().toString().slice(-5)}_paymentplan_${creditStatus.replace(/-/gi, "_")}_dp_fraud_${fraudStatus.replace(/-/gi, "_")}@hokodo.co`
+    return {
         firstName,
         lastName,
         email,
@@ -29,7 +34,7 @@ export function generateAddress({
     postCode = "E22 8AA",
     countryCode = "GB",
     phoneNumber = "01892 555 3123",
-}: Address = { }): Address {
+}: Address = {}): Address {
     return {
         companyName,
         lineOne,

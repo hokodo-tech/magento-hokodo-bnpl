@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 
 export default class OrderPage {
     readonly page: Page;
@@ -9,6 +9,10 @@ export default class OrderPage {
 
     async navigateToShipOrderPage() {
         await this.page.locator('text="Ship"').click();
+    }
+
+    async checkShipButtonIsNotVisible() {
+        await expect(this.page.locator('text="Ship"')).toHaveCount(0);
     }
 
 }

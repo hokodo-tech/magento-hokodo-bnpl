@@ -14,6 +14,7 @@ import AdminHomePage from "./page-objects/admin/admin-home-page";
 import ListOrdersPage from "./page-objects/admin/list-orders-page";
 import OrderPage from "./page-objects/admin/order-page";
 import ShipOrderPage from "./page-objects/admin/ship-order-page";
+import { Buyer, BuyerStatus, FraudStatus } from "./support/types/Buyer";
 
 export type TestFixtures = {
   page: Page;
@@ -23,7 +24,7 @@ export type TestFixtures = {
   shippingAddressPage: ShippingAddressPage;
   paymentPage: PaymentPage;
   checkoutSuccessPage: CheckoutSuccessPage;
-  orderData: Order;
+  generateOrderData(buyerStatus?: BuyerStatus): Promise<Order>;
   adminLoginPage: AdminLoginPage;
   adminHomePage: AdminHomePage;
   listOrdersPage: ListOrdersPage;
@@ -156,19 +157,23 @@ const test = base.extend<TestFixtures>({
   shipOrderPage: async ({ page }, use) => {
     await use(new ShipOrderPage(page))
   },
-  orderData: ({ }, use) => {
-    return use({
-      buyer: generateBuyerData(),
-      shippingAddress: generateAddress(),
-      billingAddress: generateAddress(),
-      products: [{
-        name: "Hero Hoodie",
-        size: "XS",
-        colour: "Green",
-        quantity: 2,
-      }]
+  generateOrderData: ({ }, use) => {
+    use(async (buyerStatus?: BuyerStatus) => {
+      return {
+        buyer: generateBuyerData(buyerStatus),
+        shippingAddress: generateAddress(),
+        billingAddress: generateAddress(),
+        products: [{
+          name: "Hero Hoodie",
+          size: "XS",
+          colour: "Green",
+          quantity: 2,
+        }]
+      }
     })
   }
 });
 
 export default test;
+
+
