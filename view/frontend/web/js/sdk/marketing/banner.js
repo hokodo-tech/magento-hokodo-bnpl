@@ -12,12 +12,15 @@ define([
             template: 'Hokodo_BNPL/sdk/marketing/banner',
             bannerTypeStatic: 'top-strip',
             bannerTypeCredit: 'credit-limit-banner',
+            bannerForIdentifiedLoggedUser: null,
             customerGroupsEnabled: false,
             customerGroups: [],
             advertisedCreditAmount: null,
             topBannerTheme: 'light',
             staticBannersEnabled: false,
-            creditBannersEnabled: true
+            creditBannersEnabled: true,
+            isMarketingUpdated: false,
+            replaceBannerOnTheFirstCompanySearchRun: true
         },
 
 
@@ -25,6 +28,10 @@ define([
             this._super();
             customerData.get('customer').subscribe((data) => {
                 this.getBannerType(data);
+            })
+            $('body').on('hokodo-marketing-updated', () => {
+                this.isMarketingUpdated = true;
+                this.getBannerType(customerData.get('customer')());
             })
             this.getBannerType(customerData.get('customer')());
         },
@@ -40,8 +47,15 @@ define([
 
         getBannerType(data) {
             if (data.fullname) {
+                if (this.isUserCompanyIdentifiedOnInit === undefined) {
+                    this.isUserCompanyIdentifiedOnInit = !!hokodoData.getCompanyId();
+                }
                 if (this.creditBannersEnabled && this.isAllowedCustomerGroup(data.hokodoCustomerGroup)) {
-                    this.bannerType(this.bannerTypeCredit)
+                    if (this.bannerForIdentifiedLoggedUser && this.isMarketingUpdated && this.isAllowedToReplace()) {
+                        this.bannerType(this.bannerForIdentifiedLoggedUser)
+                    } else {
+                        this.bannerType(this.bannerTypeCredit)
+                    }
                 } else if (this.staticBannersEnabled && this.isAllowedCustomerGroup(data.hokodoCustomerGroup)) {
                     this.bannerType(this.bannerTypeStatic)
                 }
@@ -63,6 +77,13 @@ define([
                 return this.customerGroups.includes(groupId);
             }
             return true;
+        },
+
+        isAllowedToReplace() {
+            if (this.isUserCompanyIdentifiedOnInit) {
+                return true;
+            }
+            return  this.replaceBannerOnTheFirstCompanySearchRun;
         }
     })
 })

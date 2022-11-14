@@ -9,16 +9,26 @@ import ShippingAddressPage from "./page-objects/checkout/shipping-address-page";
 import PaymentPage from "./page-objects/checkout/payment-page";
 import { Order } from "./support/types/Order";
 import CheckoutSuccessPage from "./page-objects/checkout/checkout-success-page";
+import AdminLoginPage from "./page-objects/admin/admin-login-page";
+import AdminHomePage from "./page-objects/admin/admin-home-page";
+import ListOrdersPage from "./page-objects/admin/list-orders-page";
+import OrderPage from "./page-objects/admin/order-page";
+import ShipOrderPage from "./page-objects/admin/ship-order-page";
 
 export type TestFixtures = {
-    page: Page;
-    createAccountPage: CreateAccountPage;
-    homePage: HomePage;
-    productDetailsPage: ProductDetailsPage;
-    shippingAddressPage: ShippingAddressPage;
-    paymentPage: PaymentPage;
-    checkoutSuccessPage: CheckoutSuccessPage;
-    orderData: Order;
+  page: Page;
+  createAccountPage: CreateAccountPage;
+  homePage: HomePage;
+  productDetailsPage: ProductDetailsPage;
+  shippingAddressPage: ShippingAddressPage;
+  paymentPage: PaymentPage;
+  checkoutSuccessPage: CheckoutSuccessPage;
+  orderData: Order;
+  adminLoginPage: AdminLoginPage;
+  adminHomePage: AdminHomePage;
+  listOrdersPage: ListOrdersPage;
+  orderPage: OrderPage;
+  shipOrderPage: ShipOrderPage;
 };
 
 const clientPlaywrightVersion = cp
@@ -106,7 +116,7 @@ const test = base.extend<TestFixtures>({
           // reason: nestedKeyValue(testInfo, ["error", "message"]),
         },
       };
-      await vPage.evaluate(() => {}, `browserstack_executor: ${JSON.stringify(testResult)}`);
+      await vPage.evaluate(() => { }, `browserstack_executor: ${JSON.stringify(testResult)}`);
       await vPage.close();
       await vBrowser.close();
     } else {
@@ -130,6 +140,21 @@ const test = base.extend<TestFixtures>({
   },
   checkoutSuccessPage: async ({ page }, use) => {
     await use(new CheckoutSuccessPage(page));
+  },
+  adminLoginPage: async ({ page }, use) => {
+    await use(new AdminLoginPage(page))
+  },
+  adminHomePage: async ({ page }, use) => {
+    await use(new AdminHomePage(page))
+  },
+  listOrdersPage: async ({ page }, use) => {
+    await use(new ListOrdersPage(page))
+  },
+  orderPage: async ({ page }, use) => {
+    await use(new OrderPage(page))
+  },
+  shipOrderPage: async ({ page }, use) => {
+    await use(new ShipOrderPage(page))
   },
   orderData: ({ }, use) => {
     return use({

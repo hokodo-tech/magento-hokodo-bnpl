@@ -15,7 +15,11 @@
                    ifconfig="payment/hokodo_bnpl/marketing/enable_top" before="-">
                 <arguments>
                     <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\Marketing\CreditLimitBanners</argument>
-                    <argument name="bannerTypeCredit" xsi:type="string">credit-limit-top-strip</argument>
+                    <argument name="bannerConfig" xsi:type="array">
+                        <item name="bannerTypeCredit" xsi:type="string">credit-limit-banner</item>
+                        <item name="bannerForIdentifiedLoggedUser" xsi:type="string">credit-limit-top-strip</item>
+                        <item name="replaceBannerOnTheFirstCompanySearchRun" xsi:type="boolean">false</item>
+                    </argument>
                 </arguments>
             </block>
         </referenceContainer>

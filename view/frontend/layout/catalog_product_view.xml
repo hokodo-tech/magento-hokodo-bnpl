@@ -18,7 +18,9 @@
                    ifconfig="payment/hokodo_bnpl/marketing/enable_product">
                 <arguments>
                     <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\Marketing\CreditLimitBanners</argument>
-                    <argument name="bannerTypeCredit" xsi:type="string">credit-limit-banner</argument>
+                    <argument name="bannerConfig" xsi:type="array">
+                        <item name="bannerTypeCredit" xsi:type="string">credit-limit-banner</item>
+                    </argument>
                 </arguments>
             </block>
         </referenceContainer>
