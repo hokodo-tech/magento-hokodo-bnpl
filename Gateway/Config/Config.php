@@ -274,11 +274,11 @@ class Config extends DefaultPaymentConfig
     /**
      * A function that create invoice automatically config.
      *
-     * @param bool|null $storeId
+     * @param int|null $storeId
      *
      * @return bool
      */
-    public function getCreateInvoiceAutomaticallyConfig(bool $storeId = null): bool
+    public function getCreateInvoiceAutomaticallyConfig(int $storeId = null): bool
     {
         return (bool) $this->scopeConfig->getValue(
             self::INVOICE_ON_PAYMENT,
