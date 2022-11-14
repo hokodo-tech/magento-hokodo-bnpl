@@ -105,4 +105,37 @@ test.describe("Full end-to-end", () => {
     await listOrdersPage.navigateToOrderPage(orderDetails.unique_id);
     await orderPage.checkShipButtonIsNotVisible();
   });
-})
+
+  test("Can't place an order with Hokodo when declined for credit", async ({
+    createAccountPage,
+    homePage,
+    generateOrderData,
+    productDetailsPage,
+    shippingAddressPage,
+    paymentPage,
+    page,
+  }) => {
+    const buyerStatus: BuyerStatus = { creditStatus: CreditStatus.DECLINED, fraudStatus: FraudStatus.ACCEPTED }
+    const orderData = await generateOrderData(buyerStatus)
+    await createAccountPage.navigate();
+    await createAccountPage.createAccount(orderData.buyer);
+
+    for (const product of orderData.products) {
+      await homePage.navigate();
+      await homePage.addItemToBasket(product.name);
+      await productDetailsPage.selectVariant(product.size);
+      await productDetailsPage.selectVariant(product.colour);
+      await productDetailsPage.setQuantity(product.quantity);
+      await productDetailsPage.addToBasket();
+    }
+
+    await shippingAddressPage.navigate();
+    await shippingAddressPage.enterAddress(orderData.shippingAddress);
+    await shippingAddressPage.selectShippingMethod("flatrate_flatrate");
+    await shippingAddressPage.proceedToPaymentPage();
+    await paymentPage.navigate();
+    await paymentPage.selectHokodo();
+    await paymentPage.hokodoCheckout.findCompany(orderData.buyer);
+    await paymentPage.hokodoCheckout.checkIfCreditIsDeclined();
+  })
+});

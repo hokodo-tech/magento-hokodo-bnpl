@@ -21,6 +21,12 @@ export default class HokodoCheckout {
         }
     }
 
+    async checkIfCreditIsDeclined() {
+        const iframe = this.page.frameLocator(".hokodo-content-wrapper iframe").first();
+        await this.page.waitForRequest("https://h.online-metrix.net/**");
+        expect(iframe.locator('text="Trade Credit Declined"')).toHaveCount(1);
+    }
+
     async selectPaymentMethod(paymentMethod: string) {
         const iframe = this.page.frameLocator(".hokodo-content-wrapper iframe").first();
         await this.page.waitForRequest("https://h.online-metrix.net/**");
