@@ -1,3 +1,8 @@
+2.0.11 / November 2022
+==================
+* Refactor Static and Credit limit marketing banners
+* Fix UI issues with marketing banners
+
 2.0.10 / November 2022
 ==================
 * Fixed checkout component not loaded when refreshing the page
