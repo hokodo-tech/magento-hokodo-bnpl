@@ -47,13 +47,14 @@ class OrderSaveCreateInvoicePlugin
      */
     public function afterSave(OrderResourceModel $subject, $result, Order $order)
     {
+        //TODO POST_SALE_V2 review invoice auto creation. If created manually and config enabled the invoice may double
         if ($order->getState() != Order::STATE_PROCESSING ||
             $order->getPayment()->getMethodInstance()->getCode() !== 'hokodo_bnpl'
         ) {
             return;
         }
 
-        if (!$this->config->getCreateInvoiceAutomaticallyConfig((bool) $order->getStore()->getId())) {
+        if (!$this->config->getCreateInvoiceAutomaticallyConfig((int) $order->getStore()->getId())) {
             return;
         }
         $this->invoiceCreatorService->execute($order->getId());
