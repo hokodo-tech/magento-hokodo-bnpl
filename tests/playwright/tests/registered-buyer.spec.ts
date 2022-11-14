@@ -4,12 +4,12 @@ import { HokodoAPI } from "../support/hokodo-api";
 
 test.describe("Full end-to-end", () => {
 
-  test.beforeEach(async ({ page }) => {
-
+  test.beforeEach(async ({ page, createAccountPage, orderData }) => {
+    await createAccountPage.navigate();
+    await createAccountPage.createAccount(orderData.buyer);
   });
 
   test("Placing and fulfilling an Order", async ({
-    createAccountPage,
     homePage,
     orderData,
     productDetailsPage,
@@ -23,9 +23,6 @@ test.describe("Full end-to-end", () => {
     shipOrderPage,
     page,
   }) => {
-    await createAccountPage.navigate();
-    await createAccountPage.createAccount(orderData.buyer);
-
     for (const product of orderData.products) {
       await homePage.navigate();
       await homePage.addItemToBasket(product.name);
@@ -58,7 +55,6 @@ test.describe("Full end-to-end", () => {
   });
 
   test("Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first", async ({
-    createAccountPage,
     homePage,
     orderData,
     productDetailsPage,
@@ -72,9 +68,6 @@ test.describe("Full end-to-end", () => {
     shipOrderPage,
     page,
   }) => {
-    await createAccountPage.navigate();
-    await createAccountPage.createAccount(orderData.buyer);
-
     for (const product of orderData.products) {
       await homePage.navigate();
       await homePage.addItemToBasket(product.name);
