@@ -8,7 +8,6 @@ export default class ShipOrderPage {
     }
 
     async shipOrder() {
-        await this.page.waitForResponse("**/admin/order_shipment/new/order_id/**");
         await this.page.locator('text="Submit Shipment"').click();
     }
 }
