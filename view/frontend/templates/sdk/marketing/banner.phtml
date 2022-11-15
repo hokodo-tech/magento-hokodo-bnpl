@@ -8,7 +8,8 @@ $viewModel->setBannerConfig($block->getData('bannerConfig') ?? []);
 ?>
 
 <?php if ($viewModel->isEnabled()): ?>
-    <div data-bind="scope:'<?= $block->getNameInLayout() ?>'">
+    <div class="hokodo-marketing-banner-wrapper <?= $block->getData('extraClasses') ?? '' ?>"
+         data-bind="scope:'<?= $block->getNameInLayout() ?>'">
         <!-- ko template: getTemplate() --><!-- /ko -->
     </div>
     <script type="text/x-magento-init">
