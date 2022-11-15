@@ -1,4 +1,4 @@
-import { expect, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { Buyer, CompanyType } from "../../support/types/Buyer";
 
 export default class HokodoCheckout {
@@ -6,6 +6,10 @@ export default class HokodoCheckout {
 
     constructor(page: Page) {
         this.page = page;
+    }
+
+    getIframe() {
+        return this.page.frameLocator(".hokodo-content-wrapper iframe").first();
     }
 
     async findCompany(buyer: Buyer) {
@@ -22,23 +26,20 @@ export default class HokodoCheckout {
     }
 
     async checkIfCreditIsDeclined() {
-        const iframe = this.page.frameLocator(".hokodo-content-wrapper iframe").first();
-        await this.page.waitForRequest("https://h.online-metrix.net/**");
-        expect(iframe.locator('text="Trade Credit Declined"')).toHaveCount(1);
+        await this.page.frame(".hokodo-content-wrapper iframe")
+            ?.waitForSelector("text='Trade Credit Declined'", { state: "visible" });
     }
 
     async selectPaymentMethod(paymentMethod: string) {
-        const iframe = this.page.frameLocator(".hokodo-content-wrapper iframe").first();
+        const iframe = this.getIframe();
         await this.page.waitForRequest("https://h.online-metrix.net/**");
+        await this.page.waitForTimeout(2000);
         await iframe.locator(`[for="${paymentMethod}"] [data-testid='customRadio']`).click();
-        await this.page.waitForTimeout(500);
         await iframe.locator("text='Continue'").click();
     }
 
     async acceptTermsAndConditions() {
-        const iframe = this.page.frameLocator(".hokodo-content-wrapper iframe").first();
-
-        await iframe
+        await this.getIframe()
             .locator("[data-testid='paymentConfirmation.form'] [data-testid='customCheckbox']")
             .click();
     }

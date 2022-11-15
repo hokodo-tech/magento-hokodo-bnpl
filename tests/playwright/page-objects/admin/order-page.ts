@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 
 export default class OrderPage {
     readonly page: Page;
@@ -12,7 +12,7 @@ export default class OrderPage {
     }
 
     async checkShipButtonIsNotVisible() {
-        await expect(this.page.locator('text="Ship"')).toHaveCount(0);
+        await this.page.waitForSelector("[text='Ship']", { state: "hidden" });
     }
 
 }

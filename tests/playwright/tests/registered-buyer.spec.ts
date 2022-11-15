@@ -59,7 +59,7 @@ test.describe("Full end-to-end", () => {
     expect(deferredPaymentDetails.status == "fulfilled")
   });
 
-  test("Can't fulfil a pending review DP", async ({
+  test("Can't fulfil a pending review Deferred Payment", async ({
     createAccountPage,
     homePage,
     generateOrderData,
