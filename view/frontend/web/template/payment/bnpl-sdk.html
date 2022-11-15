@@ -30,10 +30,10 @@
                 <!-- /ko -->
 
                 <!-- ko if: getInfo() -->
-                <button class="btn-click" data-bind="click: openModal">
+                <a href="#" class="btn-click" data-bind="clickBubble: false, click: openModal">
                     <span data-bind="text: getInfo()"></span>
                     <hokodo-marketing style="display: none;" id="hokodo-marketing-lightbox" data-element="lightbox"></hokodo-marketing>
-                </button>
+                </a>
                 <!-- /ko -->
             </span>
             <span data-bind="attr: {class: 'payment-logos'}">
