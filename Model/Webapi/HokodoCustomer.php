@@ -119,7 +119,10 @@ class HokodoCustomer implements HokodoCustomerInterface
             if (!$hokodoCustomer->getOrganisationId()) {
                 /** @var OrganisationInterface $organisation */
                 $organisation = $this->organisationService->createOrganisation(
-                    $this->organisationBuilder->build($payload->getCompanyId())
+                    $this->organisationBuilder->build(
+                        $payload->getCompanyId(),
+                        $this->customerSession->getCustomer()->getEmail()
+                    )
                 )->getDataModel();
                 $hokodoCustomer->setOrganisationId($organisation->getId());
             }
