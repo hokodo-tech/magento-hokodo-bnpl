@@ -77,9 +77,11 @@ class CouponManagement
     {
         if ($result) {
             $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
-            $this->hokodoQuoteRepository->save(
-                $hokodoQuote->setPatchType(HokodoQuoteInterface::PATCH_ALL)
-            );
+            if ($hokodoQuote->getQuoteId()) {
+                $this->hokodoQuoteRepository->save(
+                    $hokodoQuote->setPatchType(HokodoQuoteInterface::PATCH_ALL)
+                );
+            }
         }
     }
 }
