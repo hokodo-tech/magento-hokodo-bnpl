@@ -1,3 +1,8 @@
+2.0.12 / November 2022
+==================
+* Fix issue with enetring discount before payment method is selected
+* Fix php8.1 int type rounding issue
+
 2.0.11 / November 2022
 ==================
 * Refactor Static and Credit limit marketing banners
