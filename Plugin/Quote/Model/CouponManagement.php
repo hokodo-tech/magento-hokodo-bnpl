@@ -75,11 +75,10 @@ class CouponManagement
      */
     private function invalidateOffer(bool $result)
     {
-        if ($result) {
-            $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
-            $this->hokodoQuoteRepository->save(
-                $hokodoQuote->setPatchType(HokodoQuoteInterface::PATCH_ALL)
-            );
+        if ($result
+            && ($hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId()))
+        ) {
+            $this->hokodoQuoteRepository->save($hokodoQuote->setPatchType(HokodoQuoteInterface::PATCH_ALL));
         }
     }
 }
