@@ -237,7 +237,7 @@ class OrderBuilder
             ->setUnitPrice((int) round($totalAmount / $item->getQty() * 100))
             ->setTaxRate('0')
             ->setTaxAmount(0)
-            ->setTotalAmount((int) ($totalAmount * 100));
+            ->setTotalAmount((int) round($totalAmount * 100));
     }
 
     /**
