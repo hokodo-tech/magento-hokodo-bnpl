@@ -6,52 +6,37 @@
 
 namespace Hokodo\BNPL\Gateway\Response;
 
+use Hokodo\BNPL\Api\Data\DeferredPaymentInterface;
+use Hokodo\BNPL\Api\OrderAdapterReaderInterface;
 use Hokodo\BNPL\Gateway\DeferredPaymentOrderSubjectReader;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Spi\OrderResourceInterface;
 
-class DeferredPaymentFetchStatusHandler implements HandlerInterface
+class DeferredPaymentFetchStatusHandler implements HandlerInterface, OrderAdapterReaderInterface
 {
     /**
      * @var DeferredPaymentOrderSubjectReader
      */
-    private $subjectReader;
+    private DeferredPaymentOrderSubjectReader $subjectReader;
 
     /**
-     * @var OrderResourceInterface
+     * @var OrderRepositoryInterface
      */
-    private $orderResource;
-
-    /**
-     * @var OrderInterfaceFactory
-     */
-    private $orderFactory;
-
-    /**
-     * @var PaymentLogger
-     */
-    private $paymentLogger;
+    private OrderRepositoryInterface $orderRepository;
 
     /**
      * @param DeferredPaymentOrderSubjectReader $subjectReader
-     * @param OrderResourceInterface            $orderResource
-     * @param OrderInterfaceFactory             $orderFactory
-     * @param PaymentLogger                     $paymentLogger
+     * @param OrderRepositoryInterface          $orderRepository
      */
     public function __construct(
         DeferredPaymentOrderSubjectReader $subjectReader,
-        OrderResourceInterface $orderResource,
-        OrderInterfaceFactory $orderFactory,
-        PaymentLogger $paymentLogger
+        OrderRepositoryInterface $orderRepository
     ) {
         $this->subjectReader = $subjectReader;
-        $this->orderResource = $orderResource;
-        $this->orderFactory = $orderFactory;
-        $this->paymentLogger = $paymentLogger;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -61,52 +46,43 @@ class DeferredPaymentFetchStatusHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
-        if (isset($response['status'])) {
-            $log['response'] = $response;
+        if (isset($response[DeferredPaymentInterface::STATUS])) {
+            /** @var OrderPaymentInterface $payment */
             $payment = $this->subjectReader->readPayment($handlingSubject);
-            $ipnOrder = $this->subjectReader->readOrder($handlingSubject);
-            switch ($response['status']) {
-                case 'accepted':
-                    $payment->setData('transaction_id', $response['number']);
-                    $payment->setData('is_transaction_approved', true);
-                    $incrementId = $ipnOrder->getOrderIncrementId();
-                    $order = $this->getOrder($incrementId);
+            $orderAdapter = $this->getOrderAdapter($handlingSubject);
+            switch ($response[DeferredPaymentInterface::STATUS]) {
+                case DeferredPaymentInterface::STATUS_ACCEPTED:
+                    $payment
+                        ->setTransactionId($response[DeferredPaymentInterface::NUMBER])
+                        ->setData('is_transaction_approved', true);
+                    $order = $this->orderRepository->get($orderAdapter->getId());
                     if ($order->getState() === Order::STATE_PAYMENT_REVIEW) {
                         $order->setState(Order::STATE_PROCESSING);
-                        $order->save();
-                        $log['updated_order_status'] = 'IncrementId: ' .
-                            $incrementId . '. Updated order status to: ' . Order::STATE_PROCESSING;
-                        $data = [
-                            'payment_log_content' => $log,
-                            'action_title' => 'DeferredPaymentFetchStatusHandler::handle',
-                            'status' => 1,
-                        ];
-                        $this->paymentLogger->execute($data);
+                        $this->orderRepository->save($order);
                     }
                     break;
-                case 'pending_review':
-                case 'customer_action_required':
-                    $payment->setData('is_transaction_pending', true);
+                case DeferredPaymentInterface::STATUS_PENDING:
+                case DeferredPaymentInterface::STATUS_ACTION_REQUIRED:
+                    $payment->setIsTransactionPending(true);
                     break;
-                case 'rejected':
-                    $payment->setData('transaction_id', $response['number']);
-                    $payment->setData('is_transaction_denied', true);
+                case DeferredPaymentInterface::STATUS_REJECTED:
+                    $payment
+                        ->setTransactionId($response[DeferredPaymentInterface::NUMBER])
+                        ->setData('is_transaction_denied', true);
                     break;
             }
         }
     }
 
     /**
-     * Get order by increment id.
+     * Get order adapter object.
      *
-     * @param int $incrementId
+     * @param array $subject
      *
-     * @return OrderInterface
+     * @return OrderAdapterInterface
      */
-    private function getOrder($incrementId)
+    public function getOrderAdapter(array $subject): OrderAdapterInterface
     {
-        $order = $this->orderFactory->create();
-        $this->orderResource->load($order, $incrementId, OrderInterface::INCREMENT_ID);
-        return $order;
+        return $this->subjectReader->readOrder($subject);
     }
 }
