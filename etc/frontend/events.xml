@@ -7,7 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="checkout_cart_save_before">
-        <observer name="hokodo_bnpl_clear_api_data" instance="Hokodo\BNPL\Observer\CartSaveBeforeObserver"/>
         <!-- SDK observer -->
         <observer name="hokodo_bnpl_update" instance="Hokodo\BNPL\Observer\UpdateHokodoCheckout"/>
     </event>

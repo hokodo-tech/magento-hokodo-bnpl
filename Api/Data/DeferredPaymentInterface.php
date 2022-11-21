@@ -18,6 +18,11 @@ interface DeferredPaymentInterface
     public const ORDER = 'order';
     public const STATUS = 'status';
 
+    public const STATUS_ACCEPTED = 'accepted';
+    public const STATUS_PENDING = 'pending_review';
+    public const STATUS_ACTION_REQUIRED = 'customer_action_required';
+    public const STATUS_REJECTED = 'rejected';
+
     /**
      * A function that sets url.
      *
