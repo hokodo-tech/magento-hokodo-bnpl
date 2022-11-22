@@ -7,11 +7,9 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Gateway\Command\PostSale;
 
-
 use Hokodo\BNPL\Api\Data\Gateway\DeferredPaymentsPostSaleActionInterface;
 use Hokodo\BNPL\Api\Data\Gateway\DeferredPaymentsPostSaleActionInterfaceFactory;
 use Hokodo\BNPL\Exception\ApiGatewayException;
-use Hokodo\BNPL\Gateway\Service\DeferredPayments;
 use Hokodo\BNPL\Gateway\Service\PostSale;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -19,10 +17,26 @@ use Psr\Log\LoggerInterface;
 
 class VoidPayment implements CommandInterface
 {
+    /**
+     * @var PostSale
+     */
     private PostSale $postSale;
+
+    /**
+     * @var DeferredPaymentsPostSaleActionInterfaceFactory
+     */
     private DeferredPaymentsPostSaleActionInterfaceFactory $postSaleActionInterfaceFactory;
+
+    /**
+     * @var LoggerInterface
+     */
     private LoggerInterface $logger;
 
+    /**
+     * @param DeferredPaymentsPostSaleActionInterfaceFactory $postSaleActionInterfaceFactory
+     * @param PostSale                                       $postSale
+     * @param LoggerInterface                                $logger
+     */
     public function __construct(
         DeferredPaymentsPostSaleActionInterfaceFactory $postSaleActionInterfaceFactory,
         PostSale $postSale,
@@ -35,6 +49,7 @@ class VoidPayment implements CommandInterface
 
     /**
      * @inheritDoc
+     *
      * @throws ApiGatewayException
      */
     public function execute(array $commandSubject)

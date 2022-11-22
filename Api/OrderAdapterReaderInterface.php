@@ -11,5 +11,12 @@ use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 
 interface OrderAdapterReaderInterface
 {
+    /**
+     * Get order from subject.
+     *
+     * @param array $subject
+     *
+     * @return OrderAdapterInterface
+     */
     public function getOrderAdapter(array $subject): OrderAdapterInterface;
 }

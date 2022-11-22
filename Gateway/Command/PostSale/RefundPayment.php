@@ -17,10 +17,26 @@ use Psr\Log\LoggerInterface;
 
 class RefundPayment implements CommandInterface
 {
+    /**
+     * @var PostSale
+     */
     private PostSale $postSale;
+
+    /**
+     * @var DeferredPaymentsPostSaleActionInterfaceFactory
+     */
     private DeferredPaymentsPostSaleActionInterfaceFactory $postSaleActionInterfaceFactory;
+
+    /**
+     * @var LoggerInterface
+     */
     private LoggerInterface $logger;
 
+    /**
+     * @param DeferredPaymentsPostSaleActionInterfaceFactory $postSaleActionInterfaceFactory
+     * @param PostSale                                       $postSale
+     * @param LoggerInterface                                $logger
+     */
     public function __construct(
         DeferredPaymentsPostSaleActionInterfaceFactory $postSaleActionInterfaceFactory,
         PostSale $postSale,
@@ -45,8 +61,7 @@ class RefundPayment implements CommandInterface
                     $postSaleAction = $this->postSaleActionInterfaceFactory->create();
                     $postSaleAction->setPaymentId($hokodoDeferredPaymentId)->setAmount((int) ($amount * 100));
 
-                    $result =  $this->postSale->refund($postSaleAction);
-                    return $result;
+                    return $this->postSale->refund($postSaleAction);
                 }
             }
         } catch (\Exception $e) {

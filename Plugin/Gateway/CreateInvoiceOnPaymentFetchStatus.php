@@ -14,9 +14,20 @@ use Hokodo\BNPL\Service\InvoiceCreatorService;
 
 class CreateInvoiceOnPaymentFetchStatus
 {
+    /**
+     * @var Config
+     */
     private Config $config;
+
+    /**
+     * @var InvoiceCreatorService
+     */
     private InvoiceCreatorService $invoiceCreatorService;
 
+    /**
+     * @param Config                $config
+     * @param InvoiceCreatorService $invoiceCreatorService
+     */
     public function __construct(
         Config $config,
         InvoiceCreatorService $invoiceCreatorService
@@ -26,6 +37,8 @@ class CreateInvoiceOnPaymentFetchStatus
     }
 
     /**
+     * Create invoice if feature is on in config.
+     *
      * @param OrderAdapterReaderInterface $subject
      * @param null                        $result
      * @param array                       $handlingSubject
@@ -33,8 +46,12 @@ class CreateInvoiceOnPaymentFetchStatus
      *
      * @return void
      */
-    public function afterHandle(OrderAdapterReaderInterface $subject, $result, array $handlingSubject, array $response): void
-    {
+    public function afterHandle(
+        OrderAdapterReaderInterface $subject,
+        $result,
+        array $handlingSubject,
+        array $response
+    ): void {
         if ($response[DeferredPaymentInterface::STATUS] === DeferredPaymentInterface::STATUS_ACCEPTED
             && $this->config->getCreateInvoiceAutomaticallyConfig()
             && ($orderId = $subject->getOrderAdapter($handlingSubject)->getId())) {

@@ -13,8 +13,16 @@ use Magento\Framework\Api\DataObjectHelper;
 
 class PostSaleEvent extends Result
 {
+    /**
+     * @var PostSaleEventInterfaceFactory
+     */
     private PostSaleEventInterfaceFactory $dataFactory;
 
+    /**
+     * @param PostSaleEventInterfaceFactory $dataFactory
+     * @param DataObjectHelper              $dataObjectHelper
+     * @param array                         $result
+     */
     public function __construct(
         PostSaleEventInterfaceFactory $dataFactory,
         DataObjectHelper $dataObjectHelper,
@@ -37,7 +45,6 @@ class PostSaleEvent extends Result
         $this->dataModel = $this->dataFactory->create();
 
         $data = $this->get();
-        $data['metadata']['test_key'] = 'test_value';
         if (isset($data['created'])) {
             $this->dataObjectHelper->populateWithArray(
                 $this->dataModel,

@@ -15,8 +15,14 @@ use Magento\Payment\Gateway\Command\ResultInterface;
 class PostSale extends AbstractService
 {
     /**
-     * @throws NotFoundException
+     * Capture payment.
+     *
+     * @param DeferredPaymentsPostSaleActionInterface $postSaleAction
+     *
+     * @return ResultInterface
+     *
      * @throws CommandException
+     * @throws NotFoundException
      */
     public function capture(DeferredPaymentsPostSaleActionInterface $postSaleAction): ResultInterface
     {
@@ -25,8 +31,14 @@ class PostSale extends AbstractService
     }
 
     /**
-     * @throws NotFoundException
+     * Capture remaining amount.
+     *
+     * @param DeferredPaymentsPostSaleActionInterface $postSaleAction
+     *
+     * @return ResultInterface
+     *
      * @throws CommandException
+     * @throws NotFoundException
      */
     public function captureRemaining(DeferredPaymentsPostSaleActionInterface $postSaleAction): ResultInterface
     {
@@ -35,8 +47,14 @@ class PostSale extends AbstractService
     }
 
     /**
-     * @throws NotFoundException
+     * Refund payment.
+     *
+     * @param DeferredPaymentsPostSaleActionInterface $postSaleAction
+     *
+     * @return ResultInterface
+     *
      * @throws CommandException
+     * @throws NotFoundException
      */
     public function refund(DeferredPaymentsPostSaleActionInterface $postSaleAction): ResultInterface
     {
@@ -45,8 +63,14 @@ class PostSale extends AbstractService
     }
 
     /**
-     * @throws NotFoundException
+     * Void payment.
+     *
+     * @param DeferredPaymentsPostSaleActionInterface $postSaleAction
+     *
+     * @return ResultInterface
+     *
      * @throws CommandException
+     * @throws NotFoundException
      */
     public function void(DeferredPaymentsPostSaleActionInterface $postSaleAction): ResultInterface
     {
@@ -55,8 +79,14 @@ class PostSale extends AbstractService
     }
 
     /**
-     * @throws NotFoundException
+     * Void remaining amount.
+     *
+     * @param DeferredPaymentsPostSaleActionInterface $postSaleAction
+     *
+     * @return ResultInterface
+     *
      * @throws CommandException
+     * @throws NotFoundException
      */
     public function voidRemaining(DeferredPaymentsPostSaleActionInterface $postSaleAction): ResultInterface
     {

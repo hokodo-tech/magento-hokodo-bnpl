@@ -61,6 +61,7 @@ class Invoice
     ) {
         if (!empty($invoice->getId())) {
             /* @var Order\Invoice $invoice */
+            $invoice->
             $order = $invoice->getOrder();
             if ($order->getPayment()->getMethod() === Config::CODE) {
                 if ($order->getState() === Order::STATE_PAYMENT_REVIEW && $order->getOrderApiId()) {

@@ -7,19 +7,27 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Plugin\Gateway;
 
-use Hokodo\BNPL\Api\Data\DeferredPaymentInterface;
-use Hokodo\BNPL\Api\OrderAdapterReaderInterface;
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Observer\OrderPlaceSuccessObserver;
-use Hokodo\BNPL\Observer\ProcessOrderPlaceObserver;
 use Hokodo\BNPL\Service\InvoiceCreatorService;
 use Magento\Framework\Event\Observer;
 
 class CreateInvoiceOnSuccessOrderPlacement
 {
+    /**
+     * @var Config
+     */
     private Config $config;
+
+    /**
+     * @var InvoiceCreatorService
+     */
     private InvoiceCreatorService $invoiceCreatorService;
 
+    /**
+     * @param Config                $config
+     * @param InvoiceCreatorService $invoiceCreatorService
+     */
     public function __construct(
         Config $config,
         InvoiceCreatorService $invoiceCreatorService
@@ -29,6 +37,8 @@ class CreateInvoiceOnSuccessOrderPlacement
     }
 
     /**
+     * Create invoice if feature is on in config.
+     *
      * @param OrderPlaceSuccessObserver $subject
      * @param null                      $result
      * @param Observer                  $observer
@@ -42,6 +52,5 @@ class CreateInvoiceOnSuccessOrderPlacement
             && $order->getPayment()->getData('is_transaction_approved')) {
             $this->invoiceCreatorService->execute($order->getEntityId());
         }
-
     }
 }

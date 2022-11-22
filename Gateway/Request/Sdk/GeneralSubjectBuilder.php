@@ -16,8 +16,15 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
  */
 class GeneralSubjectBuilder implements BuilderInterface
 {
+    /**
+     * @var mixed|null
+     */
     private $endpointBuilder;
 
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param mixed|null             $endpointBuilder
+     */
     public function __construct(
         ObjectManagerInterface $objectManager,
         $endpointBuilder = null

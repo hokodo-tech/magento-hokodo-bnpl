@@ -67,6 +67,11 @@ class EndpointBuilder implements BuilderInterface
         return str_replace(array_keys($params), array_values($params), $this->endpoint);
     }
 
+    /**
+     * Get request params.
+     *
+     * @return array
+     */
     public function getParams(): array
     {
         return $this->params;

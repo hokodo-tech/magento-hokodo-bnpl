@@ -11,5 +11,4 @@ use Magento\Framework\Exception\LocalizedException;
 
 class ApiGatewayException extends LocalizedException
 {
-
 }
