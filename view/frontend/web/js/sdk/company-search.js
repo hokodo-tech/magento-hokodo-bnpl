@@ -12,32 +12,45 @@ define([
 
         initialize() {
             this._super();
-            if (hokodoData.getCompanyId()) {
-                this.companySearch = this.getSdk().elements().create("companySearch", {companyId: hokodoData.getCompanyId()});
-            } else {
-                this.companySearch = this.getSdk().elements().create("companySearch");
-            }
-            const self = this;
-            this.companySearch.on("ready", () => {
 
-            });
-            this.companySearch.on("failure", () => {
+            let counter = 0;
+            let timer = setInterval(() => {
+                counter++;
+                if (counter > 10 || typeof Hokodo !== 'undefined'){
+                    let currentCompanyId = this.source.data.hokodo.company_id;
+                    let hokodoSubmitUrl = this.source.data.hokodo.submit_url;
+                    let customerId = this.source.data.customer.entity_id;
 
-            });
-            this.companySearch.on("countryInputChange", (country) => {
+                    if (hokodoData.getCompanyId()) {
+                        this.companySearch = this.getSdk().elements().create("companySearch", {companyId: hokodoData.getCompanyId()});
+                    } else {
+                        this.companySearch = this.getSdk().elements().create("companySearch");
+                    }
+                    const self = this;
+                    this.companySearch.on("ready", () => {
 
-            });
-            this.companySearch.on("companyTypeInputChange", (companyType) => {
+                    });
+                    this.companySearch.on("failure", () => {
 
-            });
-            this.companySearch.on("companySelection", (company) => {
-                if (company !== null) {
-                    hokodoData.clearData();
-                    hokodoData.setCompanyId(company.id);
+                    });
+                    this.companySearch.on("countryInputChange", (country) => {
+
+                    });
+                    this.companySearch.on("companyTypeInputChange", (companyType) => {
+
+                    });
+                    this.companySearch.on("companySelection", (company) => {
+                        if (company !== null) {
+                            hokodoData.clearData();
+                            hokodoData.setCompanyId(company.id);
+                        }
+                    });
+
+                    //this.openModal();
+
+                    clearInterval(timer)
                 }
-            });
-
-            //this.openModal();
+            }, 500);
         },
 
         openModal() {
@@ -51,7 +64,7 @@ define([
         },
 
         getSdk() {
-            return Hokodo(this.sdkKey);
+            return Hokodo();
         }
     })
 })

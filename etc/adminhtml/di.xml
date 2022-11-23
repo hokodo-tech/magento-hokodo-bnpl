@@ -13,4 +13,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses">
+        <plugin name="hokodo_customer_customer_data_provider_plugin"
+                type="Hokodo\BNPL\Plugin\Customer\DataProviderWithDefaultAddressesPlugin"
+                sortOrder="1" disabled="false"/>
+    </type>
 </config>
