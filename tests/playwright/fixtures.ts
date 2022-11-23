@@ -7,14 +7,17 @@ import ProductDetailsPage from "./page-objects/product-details-page";
 import { generateAddress, generateBuyerData } from "./support/factories";
 import ShippingAddressPage from "./page-objects/checkout/shipping-address-page";
 import PaymentPage from "./page-objects/checkout/payment-page";
-import { Order } from "./support/types/Order";
+import { OrderData } from "./support/types/OrderData";
 import CheckoutSuccessPage from "./page-objects/checkout/checkout-success-page";
 import AdminLoginPage from "./page-objects/admin/admin-login-page";
 import AdminHomePage from "./page-objects/admin/admin-home-page";
 import ListOrdersPage from "./page-objects/admin/list-orders-page";
 import OrderPage from "./page-objects/admin/order-page";
 import ShipOrderPage from "./page-objects/admin/ship-order-page";
-import { Buyer, BuyerStatus, FraudStatus } from "./support/types/Buyer";
+import { HokodoAPI } from "./support/hokodo-api";
+import { BuyerStatus, CompanyType, CreditStatus, FraudStatus } from "./support/types/Buyer";
+import { HokodoOrder } from "./support/types/HokodoOrder";
+import { MagentoBasketDetails } from "./support/types/MagentoBasketDetails";
 
 export type TestFixtures = {
   page: Page;
@@ -24,12 +27,13 @@ export type TestFixtures = {
   shippingAddressPage: ShippingAddressPage;
   paymentPage: PaymentPage;
   checkoutSuccessPage: CheckoutSuccessPage;
-  generateOrderData(buyerStatus?: BuyerStatus): Promise<Order>;
+  generateOrderData(companyType?: CompanyType, buyerStatus?: BuyerStatus): Promise<OrderData>;
   adminLoginPage: AdminLoginPage;
   adminHomePage: AdminHomePage;
   listOrdersPage: ListOrdersPage;
   orderPage: OrderPage;
   shipOrderPage: ShipOrderPage;
+  hokodoApi: HokodoAPI;
 };
 
 const clientPlaywrightVersion = cp
@@ -157,10 +161,17 @@ const test = base.extend<TestFixtures>({
   shipOrderPage: async ({ page }, use) => {
     await use(new ShipOrderPage(page))
   },
+  hokodoApi: async ({ page }, use) => {
+    await use(new HokodoAPI())
+  },
   generateOrderData: ({ }, use) => {
-    use(async (buyerStatus?: BuyerStatus) => {
+    use(async (companyType: CompanyType = CompanyType.REGISTERED_COMPANY,
+      buyerStatus: BuyerStatus = {
+        creditStatus: CreditStatus.OFFERED,
+        fraudStatus: FraudStatus.ACCEPTED
+      }) => {
       return {
-        buyer: generateBuyerData(buyerStatus),
+        buyer: generateBuyerData(companyType, buyerStatus),
         shippingAddress: generateAddress(),
         billingAddress: generateAddress(),
         products: [{
@@ -171,7 +182,7 @@ const test = base.extend<TestFixtures>({
         }]
       }
     })
-  }
+  },
 });
 
 export default test;
