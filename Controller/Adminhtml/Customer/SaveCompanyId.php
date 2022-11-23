@@ -12,6 +12,7 @@ namespace Hokodo\BNPL\Controller\Adminhtml\Customer;
 use Hokodo\BNPL\Api\Data\OrganisationInterface;
 use Hokodo\BNPL\Api\Data\UserInterface;
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
+use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Gateway\Service\Organisation;
 use Hokodo\BNPL\Gateway\Service\User;
 use Hokodo\BNPL\Model\RequestBuilder\OrganisationBuilder;
@@ -19,9 +20,11 @@ use Hokodo\BNPL\Model\RequestBuilder\UserBuilder;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
 class SaveCompanyId extends Action implements HttpPostActionInterface
@@ -76,6 +79,9 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
      * @param OrganisationBuilder               $organisationBuilder
      * @param UserBuilder                       $userBuilder
      * @param LoggerInterface                   $logger
+     * @param CartRepositoryInterface           $cartRepository
+     * @param HokodoQuoteRepositoryInterface    $hokodoQuoteRepository
+     * @param SessionCleanerInterface           $sessionCleanerInterface
      */
     public function __construct(
         Context $context,
@@ -86,7 +92,10 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
         User $userService,
         OrganisationBuilder $organisationBuilder,
         UserBuilder $userBuilder,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        CartRepositoryInterface $cartRepository,
+        HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
+        SessionCleanerInterface $sessionCleanerInterface
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -97,6 +106,9 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
         $this->organisationBuilder = $organisationBuilder;
         $this->userBuilder = $userBuilder;
         $this->logger = $logger;
+        $this->cartRepository = $cartRepository;
+        $this->hokodoQuoteRepository = $hokodoQuoteRepository;
+        $this->sessionCleanerInterface = $sessionCleanerInterface;
     }
 
     /**
@@ -111,19 +123,19 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
             'success' => false,
             'message' => __('Company Was Not Updated.'),
         ];
-        $customerId = $this->getRequest()->getParam('customerId');
+        $customerId = (int) $this->getRequest()->getParam('customerId');
         $companyId = $this->getRequest()->getParam('companyId');
 
         if (empty($companyId) || empty($customerId)) {
             return $resultJson->setData($result);
         }
 
-        $hokodoCustomer = $this->hokodoCustomerRepository->getByCustomerId((int) $customerId);
+        $hokodoCustomer = $this->hokodoCustomerRepository->getByCustomerId($customerId);
         $hokodoCustomer->setCompanyId($companyId);
 
         if (!$hokodoCustomer || !$hokodoCustomer->getId()) {
             $hokodoCustomer
-                ->setCustomerId((int) $customerId)
+                ->setCustomerId($customerId)
                 ->setOrganisationId('')
                 ->setUserId('');
         }
@@ -158,6 +170,13 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
                 'success' => true,
                 'message' => __('Company Was Updated.'),
             ];
+
+            /** @var \Magento\Quote\Api\Data\CartInterface $cart */
+            $cart = $this->cartRepository->getActiveForCustomer($customerId);
+            if ($cart->getId()) {
+                $this->hokodoQuoteRepository->deleteByQuoteId($cart->getId());
+            }
+            $this->sessionCleanerInterface->clearFor($customerId);
             return $resultJson->setData($result);
         } catch (\Exception $e) {
             $this->logger->critical(
