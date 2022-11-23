@@ -8,21 +8,61 @@ export default class HokodoCheckout {
         this.page = page;
     }
 
+    async selectBuyerType(buyerType: CompanyType) {
+        await this.page.locator(`[for='${buyerType}']`).click();
+    }
+        
     getIframe() {
         return this.page.frameLocator(".hokodo-content-wrapper iframe").first();
     }
 
-    async findCompany(buyer: Buyer) {
+    async findRegisteredCompany(buyer: Buyer) {
         if (buyer.companyCountry) await this.page.locator("#country").selectOption(buyer.companyCountry);
 
-        if (buyer.companyType === CompanyType.REGISTERED_COMPANY) {
-            await this.page.locator("[for='registered-company']").click();
-            if (buyer.companyName) {
-                await this.page.locator("[aria-controls='companySearchListbox']").fill(buyer.companyName);
-                await this.page.locator("#companySearchListbox").locator(`text="${buyer.companyName}"`).click();
-                await this.page.locator("#hokodoCompanySearch [type='submit']").click();
-            }
+        await this.page.locator("[for='registered-company']").click();
+        
+        if (buyer.companyName) {
+            await this.page.locator("[aria-controls='companySearchListbox']").fill(buyer.companyName);
+            await this.page.locator("#companySearchListbox").locator(`text="${buyer.companyName}"`).click();
         }
+
+        await this.confirmCompany();
+    }
+
+    async selectAPaymentPlan() {
+        const responseBody = await (await this.page.waitForResponse(r => r.url().includes("hokodo-request-offer"))).json();
+
+        // if there's only one offer, it will be auto-selected
+        if (responseBody.offer.offered_payment_plans.length === 1) {
+            return 
+        }
+        
+        const iframe = this.getIframe();
+
+        await iframe.locator("[name='paymentOffers'] + [data-testid='customRadio']").first().click();
+        await iframe.locator("[data-testid='selectedPaymentPlan'] button").click();
+    }
+
+    async confirmCompany() {
+        await this.page.locator("#hokodoCompanySearch [type='submit']").click();
+    }
+
+    async setupSoleTrader(buyer: Buyer) {
+        await this.selectBuyerType(CompanyType.SOLE_TRADER);
+        await this.populateSoleTraderFields(buyer);
+        await this.confirmCompany();
+    }
+
+    async populateSoleTraderFields(buyer: Buyer) {
+        await this.page.locator("#trading_name").fill(buyer.companyName || "");
+        await this.page.locator("#trading_address").fill(buyer.companyAddress?.address_line1 || "");
+        await this.page.locator("#trading_address_city").fill(buyer.companyAddress?.city || "");
+        await this.page.locator("#trading_address_postcode").fill(buyer.companyAddress?.postcode || "");
+        await this.page.locator("#proprietor_name").fill((buyer.firstName + " " + buyer.lastName) || "");
+        await this.page.locator("#date_of_birth").type(buyer.dateOfBirth || "");
+        await this.page.locator("#proprietor_address_line1").fill(buyer.ownerAddress?.address_line1 || "");
+        await this.page.locator("#proprietor_address_city").fill(buyer.ownerAddress?.city || "");
+        await this.page.locator("#proprietor_address_postcode").fill(buyer.ownerAddress?.postcode || "");
     }
 
     async checkIfCreditIsDeclined() {
@@ -32,27 +72,27 @@ export default class HokodoCheckout {
 
     async selectPaymentMethod(paymentMethod: string) {
         const iframe = this.getIframe();
-        await this.page.waitForRequest("https://h.online-metrix.net/**");
-        await this.page.waitForTimeout(2000);
+
+        // horrible wait until the front-end bug is fixed
+        await this.page.waitForTimeout(5000);
         await iframe.locator(`[for="${paymentMethod}"] [data-testid='customRadio']`).click();
         await iframe.locator("text='Continue'").click();
     }
 
     async acceptTermsAndConditions() {
         await this.getIframe()
-            .locator("[data-testid='paymentConfirmation.form'] [data-testid='customCheckbox']")
+            .locator("[data-testid='paymentConfirmation.checkbox.input'] + div")
             .click();
     }
 
-    async createDeferredPayment() {
-        const iframe = this.page.frameLocator(".hokodo-content-wrapper iframe").first();
+    async createDeferredPayment(): Promise<string> {
+        const iframe = this.getIframe();
         return await Promise.all([
             this.page.waitForResponse("**/v1/payment/deferred_payments"),
-            iframe.locator("text='Confirm'").click(),
+            iframe.locator("text='Confirm'").click()
         ]).then(async (result) => {
             const response = await result[0].json();
-            const requestHeaders = await result[0].request().allHeaders();
-            return { orderId: response.order, deferredPaymentId: response.id, token: requestHeaders.authorization };
+            return response.order;
         });
     }
 }

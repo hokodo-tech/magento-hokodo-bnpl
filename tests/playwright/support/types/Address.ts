@@ -1,11 +1,12 @@
 export type Address = {
-    lineOne?: string;
-    lineTwo?: string;
-    lineThree?: string;
-    state?: string;
-    city?: string;
-    countryCode?: string;
-    postCode?: string;
-    phoneNumber?: string;
-    companyName?: string;
+    address_line1: string;
+    address_line2: string;
+    city: string;
+    region: string;
+    country: string;
+    postcode: string;
+    phone: string;
+    company_name: string;
+    name: string;
+    email: string;
 }

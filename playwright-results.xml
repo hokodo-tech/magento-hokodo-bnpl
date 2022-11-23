@@ -1,0 +1,118 @@
+<testsuites id="" name="" tests="3" failures="3" skipped="0" errors="0" time="35.08609500002861">
+<testsuite name="tests/registered-buyer.spec.ts" timestamp="1668444247898" hostname="" tests="1" failures="1" skipped="0" time="0.228" errors="0">
+<testcase name="Full end-to-end Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first" classname="[chromium] › tests/registered-buyer.spec.ts › Full end-to-end › Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first" time="0.228">
+<failure message="registered-buyer.spec.ts:58:8 Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first" type="FAILURE">
+<![CDATA[  [chromium] › tests/registered-buyer.spec.ts:58:8 › Full end-to-end › Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first 
+
+    page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    =========================== logs ===========================
+    navigating to "/customer/account/create", waiting until "load"
+    ============================================================
+
+       at page-objects/create-account-page.ts:14
+
+      12 |
+      13 |     async navigate() {
+    > 14 |         await this.page.goto(this.url);
+         |                         ^
+      15 |     }
+      16 |
+      17 |     async createAccount({ firstName, lastName, email, password }: Buyer) {
+
+        at CreateAccountPage.navigate (/Users/gavinclark/git/magento-hokodo-bnpl/tests/playwright/page-objects/create-account-page.ts:14:25)
+        at /Users/gavinclark/git/magento-hokodo-bnpl/tests/playwright/tests/registered-buyer.spec.ts:9:29
+        at FixtureRunner.resolveParametersAndRunFunction (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/fixtures.js:424:12)
+        at TestInfoImpl._runAsStep (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/testInfo.js:201:22)
+        at WorkerRunner._runEachHooksForSuites (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:682:9)
+        at /Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:408:9
+        at TestInfoImpl._runFn (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/testInfo.js:166:7)
+        at /Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:376:26
+        at TimeoutManager.runWithTimeout (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/timeoutManager.js:73:7)
+        at TestInfoImpl._runWithTimeout (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/testInfo.js:154:26)
+        at WorkerRunner._runTest (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:356:5)
+        at WorkerRunner.runTestGroup (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:218:11)
+        at process.<anonymous> (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/worker.js:88:5)
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="tests/registered-buyer.spec.ts" timestamp="1668444247898" hostname="" tests="1" failures="1" skipped="0" time="1.158" errors="0">
+<testcase name="Full end-to-end Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first" classname="[firefox] › tests/registered-buyer.spec.ts › Full end-to-end › Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first" time="1.158">
+<failure message="registered-buyer.spec.ts:58:8 Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first" type="FAILURE">
+<![CDATA[  [firefox] › tests/registered-buyer.spec.ts:58:8 › Full end-to-end › Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first 
+
+    page.goto: Protocol error (Page.navigate): error in channel "content::page": exception while running method "navigate" in namespace "page": Invalid url: "/customer/account/create" _navigate@chrome://juggler/content/content/PageAgent.js:366:13
+    _onMessage@chrome://juggler/content/SimpleChannel.js:165:37
+    receiveMessage@chrome://juggler/content/SimpleChannel.js:16:42
+     _onMessage@chrome://juggler/content/SimpleChannel.js:149:16
+    receiveMessage@chrome://juggler/content/SimpleChannel.js:16:42
+
+    =========================== logs ===========================
+    navigating to "/customer/account/create", waiting until "load"
+    ============================================================
+
+       at page-objects/create-account-page.ts:14
+
+      12 |
+      13 |     async navigate() {
+    > 14 |         await this.page.goto(this.url);
+         |                         ^
+      15 |     }
+      16 |
+      17 |     async createAccount({ firstName, lastName, email, password }: Buyer) {
+
+        at CreateAccountPage.navigate (/Users/gavinclark/git/magento-hokodo-bnpl/tests/playwright/page-objects/create-account-page.ts:14:25)
+        at /Users/gavinclark/git/magento-hokodo-bnpl/tests/playwright/tests/registered-buyer.spec.ts:9:29
+        at FixtureRunner.resolveParametersAndRunFunction (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/fixtures.js:424:12)
+        at TestInfoImpl._runAsStep (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/testInfo.js:201:22)
+        at WorkerRunner._runEachHooksForSuites (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:682:9)
+        at /Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:408:9
+        at TestInfoImpl._runFn (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/testInfo.js:166:7)
+        at /Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:376:26
+        at TimeoutManager.runWithTimeout (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/timeoutManager.js:73:7)
+        at TestInfoImpl._runWithTimeout (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/testInfo.js:154:26)
+        at WorkerRunner._runTest (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:356:5)
+        at WorkerRunner.runTestGroup (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:218:11)
+        at process.<anonymous> (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/worker.js:88:5)
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="tests/registered-buyer.spec.ts" timestamp="1668444247898" hostname="" tests="1" failures="1" skipped="0" time="0.559" errors="0">
+<testcase name="Full end-to-end Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first" classname="[webkit] › tests/registered-buyer.spec.ts › Full end-to-end › Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first" time="0.559">
+<failure message="registered-buyer.spec.ts:58:8 Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first" type="FAILURE">
+<![CDATA[  [webkit] › tests/registered-buyer.spec.ts:58:8 › Full end-to-end › Placing and fulfilling an Order for a Sole Trader without checking Credit Limit first 
+
+    page.goto: Protocol error (Playwright.navigate): Cannot navigate to invalid URL [{"code":-32000,"message":"Cannot navigate to invalid URL"}]
+    =========================== logs ===========================
+    navigating to "/customer/account/create", waiting until "load"
+    ============================================================
+
+       at page-objects/create-account-page.ts:14
+
+      12 |
+      13 |     async navigate() {
+    > 14 |         await this.page.goto(this.url);
+         |                         ^
+      15 |     }
+      16 |
+      17 |     async createAccount({ firstName, lastName, email, password }: Buyer) {
+
+        at CreateAccountPage.navigate (/Users/gavinclark/git/magento-hokodo-bnpl/tests/playwright/page-objects/create-account-page.ts:14:25)
+        at /Users/gavinclark/git/magento-hokodo-bnpl/tests/playwright/tests/registered-buyer.spec.ts:9:29
+        at FixtureRunner.resolveParametersAndRunFunction (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/fixtures.js:424:12)
+        at TestInfoImpl._runAsStep (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/testInfo.js:201:22)
+        at WorkerRunner._runEachHooksForSuites (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:682:9)
+        at /Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:408:9
+        at TestInfoImpl._runFn (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/testInfo.js:166:7)
+        at /Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:376:26
+        at TimeoutManager.runWithTimeout (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/timeoutManager.js:73:7)
+        at TestInfoImpl._runWithTimeout (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/testInfo.js:154:26)
+        at WorkerRunner._runTest (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:356:5)
+        at WorkerRunner.runTestGroup (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/workerRunner.js:218:11)
+        at process.<anonymous> (/Users/gavinclark/git/magento-hokodo-bnpl/node_modules/@playwright/test/lib/worker.js:88:5)
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

@@ -1,3 +1,5 @@
+import { Address } from "./Address"
+
 export type Buyer = {
     firstName?: string,
     lastName?: string,
@@ -6,11 +8,14 @@ export type Buyer = {
     companyName?: string,
     companyType?: CompanyType,
     companyCountry?: string,
+    dateOfBirth?: string | null,
+    companyAddress?: Address | null,
+    ownerAddress?: Address | null,
 }
 
 export type BuyerStatus = {
-    creditStatus?: CreditStatus,
-    fraudStatus?: FraudStatus
+    creditStatus: CreditStatus,
+    fraudStatus: FraudStatus,
 }
 
 export enum CompanyType {
