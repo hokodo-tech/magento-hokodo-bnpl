@@ -121,6 +121,7 @@
 <!--                <item name="deferred_payment_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentList</item>-->
                 <item name="authorize" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentAuthorize</item>
                 <item name="capture" xsi:type="string">Hokodo\BNPL\Gateway\Command\PostSale\CapturePayment</item>
+                <item name="capture_partial" xsi:type="string">Hokodo\BNPL\Gateway\Command\PostSale\CapturePayment</item>
                 <item name="void" xsi:type="string">Hokodo\BNPL\Gateway\Command\PostSale\VoidPayment</item>
                 <item name="cancel" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentCancelCommand</item>
                 <item name="refund" xsi:type="string">Hokodo\BNPL\Gateway\Command\PostSale\RefundPayment</item>
@@ -1455,5 +1456,12 @@
     <type name="Hokodo\BNPL\Observer\OrderPlaceSuccessObserver">
         <plugin name="hokodo_create_invoice"
                 type="Hokodo\BNPL\Plugin\Gateway\CreateInvoiceOnSuccessOrderPlacement"/>
+    </type>
+
+
+    <!--Order documents -->
+    <type name="Magento\Sales\Model\ResourceModel\Order\Invoice">
+        <plugin name="hokodo_send_invoice"
+                type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice"/>
     </type>
 </config>
