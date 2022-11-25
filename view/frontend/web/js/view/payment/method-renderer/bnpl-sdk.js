@@ -34,7 +34,6 @@ define([
             searchInitialized: false
         },
         isOfferLoading: ko.observable(false),
-        hasCompanyId: ko.observable(false),
         hokodoElements: window.hokodoSdk.elements(),
         getLogos: ko.observableArray(paymentConfig.logos),
 
@@ -58,7 +57,6 @@ define([
             })
 
             if (this.hokodoCheckout().companyId()) {
-                this.hasCompanyId(true);
                 this.companySearch = this.hokodoElements.create("companySearch", {companyId: this.hokodoCheckout().companyId()});
             } else {
                 this.companySearch = this.hokodoElements.create("companySearch");

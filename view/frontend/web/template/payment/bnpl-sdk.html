@@ -45,7 +45,7 @@
     </div>
     <div class="payment-method-content hokodo-content-wrapper">
 
-        <!-- ko ifnot: hasCompanyId -->
+        <!-- ko ifnot: hokodoCheckout().companyId() -->
         <div id="hokodoCompanySearch" data-bind="afterRender: mountSearch"></div>
         <!-- /ko -->
         <div class="hokodo-messages-wrapper">
