@@ -25,6 +25,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Store\Model\App\Emulation;
 use Psr\Log\LoggerInterface;
 
 class SaveCompanyId extends Action implements HttpPostActionInterface
@@ -33,6 +34,11 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
      * @var JsonFactory
      */
     private JsonFactory $resultJsonFactory;
+
+    /**
+     * @var Emulation
+     */
+    private $emulation;
 
     /**
      * @var CustomerRepositoryInterface
@@ -72,6 +78,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
     /**
      * @param Context                           $context
      * @param JsonFactory                       $resultJsonFactory
+     * @param Emulation                         $emulation
      * @param CustomerRepositoryInterface       $customerRepository
      * @param HokodoCustomerRepositoryInterface $hokodoCustomerRepository
      * @param Organisation                      $organisationService
@@ -86,6 +93,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
+        Emulation $emulation,
         CustomerRepositoryInterface $customerRepository,
         HokodoCustomerRepositoryInterface $hokodoCustomerRepository,
         Organisation $organisationService,
@@ -99,6 +107,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->emulation = $emulation;
         $this->customerRepository = $customerRepository;
         $this->hokodoCustomerRepository = $hokodoCustomerRepository;
         $this->organisationService = $organisationService;
@@ -131,12 +140,16 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
         }
 
         $hokodoCustomer = $this->hokodoCustomerRepository->getByCustomerId($customerId);
+        if (!$hokodoCustomer->getId()) {
+            $hokodoCustomer->setCustomerId($customerId);
+        }
         $hokodoCustomer->setCompanyId($companyId);
 
         try {
             /* @todo remove this and similar piec of code from webapi into on service */
             /** @var CustomerRepositoryInterface $customer */
             $customer = $this->customerRepository->getById($customerId);
+            $this->emulation->startEnvironmentEmulation($customer->getStoreId());
             /** @var OrganisationInterface $organisation */
             $organisation = $this->organisationService->createOrganisation(
                 $this->organisationBuilder->build(
@@ -144,6 +157,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
                     $customer->getEmail()
                 )
             )->getDataModel();
+            $this->emulation->stopEnvironmentEmulation();
             $hokodoCustomer->setOrganisationId($organisation->getId());
 
             $user = $this->userService->createUser(
