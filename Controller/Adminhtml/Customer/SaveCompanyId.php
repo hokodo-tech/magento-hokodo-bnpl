@@ -130,7 +130,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
         $resultJson = $this->resultJsonFactory->create();
         $result = [
             'success' => false,
-            'message' => __('Company Was Not Updated.'),
+            'message' => __('Error, the company has not been updated.'),
         ];
         $customerId = (int) $this->getRequest()->getParam('customerId');
         $companyId = $this->getRequest()->getParam('companyId');
@@ -184,7 +184,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
             $this->sessionCleanerInterface->clearFor($customerId);
             $result = [
                 'success' => true,
-                'message' => __('Company Was Updated.'),
+                'message' => __('The company has been updated.'),
             ];
         } catch (\Exception $e) {
             $this->logger->critical(
