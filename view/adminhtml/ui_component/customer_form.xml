@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="hokodo" sortOrder="999" class="Hokodo\BNPL\Ui\Component\Customer\Form\HokodoFieldset">
+        <settings>
+            <label translate="true">Company (Hokodo)</label>
+        </settings>
+        <field name="companyid" component="Hokodo_BNPL/js/sdk/company-search"
+               sortOrder="10"
+               formElement="input"
+               template="Hokodo_BNPL/sdk/company-search">
+            <settings>
+                <dataType>text</dataType>
+                <visible>true</visible>
+            </settings>
+        </field>
+    </fieldset>
+</form>

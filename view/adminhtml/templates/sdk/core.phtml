@@ -1,0 +1,19 @@
+<?php
+/**
+ * @var $block \Magento\Framework\View\Element\Template
+ * @var $viewModel \Hokodo\BNPL\ViewModel\SdkLoader
+ */
+
+$viewModel = $block->getData('viewModel');
+
+if ($viewModel->isModuleActive()):
+    ?>
+
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Hokodo_BNPL/js/sdk/core": <?= $viewModel->getJsConfig() ?>
+        }
+    }
+    </script>
+<?php endif; ?>
