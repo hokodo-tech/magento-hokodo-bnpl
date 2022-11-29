@@ -4,7 +4,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <fieldset name="hokodo" sortOrder="999" class="Hokodo\BNPL\Ui\Component\Customer\Form\HokodoFieldset">
         <settings>
-            <label translate="true">Hokodo</label>
+            <label translate="true">Company (Hokodo)</label>
         </settings>
         <field name="companyid" component="Hokodo_BNPL/js/sdk/company-search"
                sortOrder="10"
