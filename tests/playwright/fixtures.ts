@@ -133,7 +133,7 @@ const test = base.extend<TestFixtures>({
   },
   createAccountPage: async ({ page }, use) => {
     await use(new CreateAccountPage(page));
-  },
+  }, 
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));
   },
