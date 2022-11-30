@@ -34,6 +34,7 @@ export type TestFixtures = {
   orderPage: OrderPage;
   shipOrderPage: ShipOrderPage;
   hokodoApi: HokodoAPI;
+  abortSegmentApiCalls: Function;
 };
 
 const clientPlaywrightVersion = cp
@@ -126,12 +127,7 @@ const test = base.extend<TestFixtures>({
       await vPage.close();
       await vBrowser.close();
     } else {
-      await page.route("http*://**.segment.io/**", (route) => {
-        void route.fulfill({
-          status: 200
-        });
-      });
-
+      await page.route("https://api.segment.io/**", route => route.fulfill({ status: 200 }));
       void use(page);
     }
   },
