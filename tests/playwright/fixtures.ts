@@ -34,6 +34,7 @@ export type TestFixtures = {
   orderPage: OrderPage;
   shipOrderPage: ShipOrderPage;
   hokodoApi: HokodoAPI;
+  abortSegmentApiCalls: Function;
 };
 
 const clientPlaywrightVersion = cp
@@ -107,6 +108,7 @@ const evaluateSessionStatus = (status: string) => {
 const test = base.extend<TestFixtures>({
   page: async ({ page, playwright }, use, testInfo: TestInfo) => {
     if (testInfo.project.name.match(/browserstack/)) {
+      // when we get to browserstack, remember to mock the Segment API to avoid costs. https://gitlab.com/hokodo/engineering/plugins/magento-hokodo-bnpl/-/issues/218
       patchCaps(testInfo.project.name, `${testInfo.titlePath[1]} - ${testInfo.title}`);
       const vBrowser = await playwright.chromium.connect(
         `wss://cdp.browserstack.com/playwright?caps=${encodeURIComponent(JSON.stringify(caps))}`
@@ -125,12 +127,13 @@ const test = base.extend<TestFixtures>({
       await vPage.close();
       await vBrowser.close();
     } else {
+      await page.route("https://api.segment.io/**", route => route.fulfill({ status: 200 }));
       void use(page);
     }
   },
   createAccountPage: async ({ page }, use) => {
     await use(new CreateAccountPage(page));
-  },
+  }, 
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));
   },
