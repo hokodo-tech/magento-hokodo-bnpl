@@ -18,18 +18,21 @@ class OrderDocumentsService extends AbstractService
      *
      * @param string                  $orderApiId
      * @param OrderDocumentsInterface $orderDocument
+     * @param string                  $storeId
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderDocumentsInterface
+     * @return OrderDocumentsInterface
      */
     public function create(
         string $orderApiId,
-        OrderDocumentsInterface $orderDocument
+        OrderDocumentsInterface $orderDocument,
+        string $storeId
     ) {
         return $this->executeCommand(
             'create_order_documents',
             [
                 'order_id' => $orderApiId,
                 'document' => $orderDocument,
+                'store_id' => $storeId,
             ]
         )->getDataModel();
     }

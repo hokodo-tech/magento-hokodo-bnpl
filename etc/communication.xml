@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic name="hokodo.order.documents" request="Hokodo\BNPL\Api\Data\OrderDocumentInterface" response="string" is_synchronous="false">
+        <handler name="hokodo.order.documents.handler" type="Hokodo\BNPL\Model\Queue\Handler\Documents" method="execute"/>
+    </topic>
+</config>

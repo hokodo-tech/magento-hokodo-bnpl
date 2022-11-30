@@ -6,7 +6,9 @@
 
 namespace Hokodo\BNPL\Api;
 
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\ShipmentInterface;
 
 /**
  * Interface Hokodo\BNPL\Api\OrderDocumentsManagementInterface.
@@ -14,25 +16,13 @@ use Magento\Sales\Model\Order;
 interface OrderDocumentsManagementInterface
 {
     /**
-     * A function that set order.
+     * Set document to Hokodo.
      *
-     * @param Order  $order
-     * @param string $docType
+     * @param CreditmemoInterface|InvoiceInterface|ShipmentInterface $document
+     * @param string                                                 $doctype
+     * @param string                                                 $hokodoOrderId
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderDocumentsInterface
+     * @return void
      */
-    public function setDocuments(
-        Order $order,
-        $docType = 'invoice'
-    );
-
-    /**
-     * A function that gets payment offer.
-     *
-     * @param string $docId
-     * @param string $orderApiId
-     *
-     * @return \Hokodo\BNPL\Api\Data\OrderDocumentsInterface
-     */
-    public function getDocuments($docId, $orderApiId);
+    public function setDocument($document, string $doctype, string $hokodoOrderId): void;
 }

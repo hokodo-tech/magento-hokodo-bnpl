@@ -1464,4 +1464,6 @@
         <plugin name="hokodo_send_invoice"
                 type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice"/>
     </type>
+    <preference for="Hokodo\BNPL\Api\Data\OrderDocumentInterface" type="Hokodo\BNPL\Model\Data\OrderDocument"/>
+    <preference for="Hokodo\BNPL\Api\OrderDocumentsRepositoryInterface" type="Hokodo\BNPL\Model\OrderDocumentsRepository"/>
 </config>

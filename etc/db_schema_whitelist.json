@@ -104,5 +104,18 @@
             "PRIMARY": true,
             "HOKODO_CUSTOMER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
         }
+    },
+    "hokodo_order_documents": {
+        "column": {
+            "id": true,
+            "order_id": true,
+            "document_id": true,
+            "document_type": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "HOKODO_ORDER_DOCUMENTS_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
+            "HOKODO_ORDER_DOCUMENTS_ORDER_ID_DOCUMENT_ID_DOCUMENT_TYPE": true
+        }
     }
 }
