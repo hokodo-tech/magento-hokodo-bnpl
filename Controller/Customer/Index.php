@@ -32,7 +32,7 @@ class Index implements HttpGetActionInterface
      */
     public function __construct(
         ResultFactory $resultFactory,
-        CustomerSession $customerSession = null,
+        CustomerSession $customerSession = null
     ) {
         $this->resultFactory = $resultFactory;
         $this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(CustomerSession::class);
