@@ -7,50 +7,54 @@ define([
 ], function ($, _, Component, hokodoData) {
     return Component.extend({
         defaults: {
-            template: 'Hokodo_BNPL/sdk/company-search'
+            template: 'Hokodo_BNPL/sdk/company-search',
+            rendered: false
         },
 
         initialize() {
             this._super();
+            if (window.hokodoSdk) {
+                this.initComponent();
+            } else {
+                $('body').on('hokodoSdkResolved', () => {
+                    this.initComponent();
+                })
+            }
+        },
 
-            let counter = 0;
-            let timer = setInterval(() => {
-                counter++;
-                if (counter > 10 || typeof Hokodo !== 'undefined'){
-                    let currentCompanyId = this.source.data.hokodo.company_id;
-                    let hokodoSubmitUrl = this.source.data.hokodo.submit_url;
-                    let customerId = this.source.data.customer.entity_id;
+        initComponent(){
+            if (hokodoData.getCompanyId()) {
+                this.companySearch = window.hokodoSdk.elements().create("companySearch", {companyId: hokodoData.getCompanyId()});
+            } else {
+                this.companySearch = window.hokodoSdk.elements().create("companySearch");
+            }
+            const self = this;
+            this.companySearch.on("ready", () => {
 
-                    if (hokodoData.getCompanyId()) {
-                        this.companySearch = this.getSdk().elements().create("companySearch", {companyId: hokodoData.getCompanyId()});
-                    } else {
-                        this.companySearch = this.getSdk().elements().create("companySearch");
-                    }
-                    const self = this;
-                    this.companySearch.on("ready", () => {
+            });
+            this.companySearch.on("failure", () => {
 
-                    });
-                    this.companySearch.on("failure", () => {
+            });
+            this.companySearch.on("countryInputChange", (country) => {
 
-                    });
-                    this.companySearch.on("countryInputChange", (country) => {
+            });
+            this.companySearch.on("companyTypeInputChange", (companyType) => {
 
-                    });
-                    this.companySearch.on("companyTypeInputChange", (companyType) => {
-
-                    });
-                    this.companySearch.on("companySelection", (company) => {
-                        if (company !== null) {
-                            hokodoData.clearData();
-                            hokodoData.setCompanyId(company.id);
-                        }
-                    });
-
-                    //this.openModal();
-
-                    clearInterval(timer)
+            });
+            this.companySearch.on("companySelection", (company) => {
+                if (company !== null) {
+                    hokodoData.clearData();
+                    hokodoData.setCompanyId(company.id);
                 }
-            }, 500);
+            });
+            this.mountSearch();
+            //this.openModal();
+        },
+
+        mountSearch() {
+            if (this.rendered && window.hokodoSdk) {
+                this.companySearch.mount("#hokodoCompanySearch");
+            }
         },
 
         openModal() {
@@ -60,11 +64,12 @@ define([
         },
 
         onAfterRender() {
-            this.companySearch.mount("#hokodoCompanySearch");
+            this.rendered = true;
+            this.mountSearch();
         },
 
         getSdk() {
-            return Hokodo();
+            return Hokodo(this.sdkKey);
         }
     })
 })
