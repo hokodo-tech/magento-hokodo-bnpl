@@ -10,9 +10,7 @@ namespace Hokodo\BNPL\Model;
 use Hokodo\BNPL\Api\Data\OrderDocumentInterface;
 use Hokodo\BNPL\Api\Data\OrderDocumentsInterfaceFactory;
 use Hokodo\BNPL\Api\OrderDocumentsManagementInterface;
-use Hokodo\BNPL\Model\Pdf\Creditmemo as PdfCreditmemo;
 use Hokodo\BNPL\Model\Pdf\Invoice as PdfInvoice;
-use Hokodo\BNPL\Model\Pdf\Shipment as PdfShipment;
 use Hokodo\BNPL\Service\OrderDocumentsService;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -60,24 +58,12 @@ class OrderDocumentsManagement implements OrderDocumentsManagementInterface
     private PdfInvoice $pdfInvoice;
 
     /**
-     * @var PdfShipment
-     */
-    private PdfShipment $pdfShipment;
-
-    /**
-     * @var PdfCreditmemo
-     */
-    private PdfCreditmemo $pdfCreditmemo;
-
-    /**
      * @param OrderDocumentsInterfaceFactory $orderDocumentsInterfaceFactory
      * @param OrderDocumentsService          $orderDocumentService
      * @param DirectoryList                  $dir
      * @param Filesystem                     $fileSystem
      * @param DateTime                       $dateTime
      * @param PdfInvoice                     $pdfInvoice
-     * @param PdfShipment                    $pdfShipment
-     * @param PdfCreditmemo                  $pdfCreditmemo
      *
      * @throws FileSystemException
      */
@@ -87,9 +73,7 @@ class OrderDocumentsManagement implements OrderDocumentsManagementInterface
         DirectoryList $dir,
         Filesystem $fileSystem,
         DateTime $dateTime,
-        PdfInvoice $pdfInvoice,
-        PdfShipment $pdfShipment,
-        PdfCreditmemo $pdfCreditmemo
+        PdfInvoice $pdfInvoice
     ) {
         $this->orderDocumentsInterfaceFactory = $orderDocumentsInterfaceFactory;
         $this->orderDocumentService = $orderDocumentService;
@@ -97,8 +81,6 @@ class OrderDocumentsManagement implements OrderDocumentsManagementInterface
         $this->outputDirectory = $fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->dateTime = $dateTime;
         $this->pdfInvoice = $pdfInvoice;
-        $this->pdfShipment = $pdfShipment;
-        $this->pdfCreditmemo = $pdfCreditmemo;
     }
 
     /**
