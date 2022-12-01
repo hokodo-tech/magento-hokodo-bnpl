@@ -31,7 +31,8 @@ define([
                 hokodoCheckout: 'checkout.steps.shipping-methods-step.hokodo-checkout'
             },
             //temp SDK search event fix
-            searchInitialized: false
+            searchInitialized: false,
+            isCompanyIdAssignedByComponent: false
         },
         isOfferLoading: ko.observable(false),
         hokodoElements: window.hokodoSdk.elements(),
@@ -58,6 +59,7 @@ define([
 
             if (this.hokodoCheckout().companyId()) {
                 this.companySearch = this.hokodoElements.create("companySearch", {companyId: this.hokodoCheckout().companyId()});
+                this.isCompanyIdAssignedByComponent = true;
             } else {
                 this.companySearch = this.hokodoElements.create("companySearch");
             }
@@ -68,12 +70,27 @@ define([
                     return;
                 }
                 if (company !== null && company.id !== self.hokodoCheckout().companyId()) {
+                    self.isCompanyIdAssignedByComponent = true;
                     hokodoData.setCompanyId(company.id);
                     self.destroyCheckout();
                 }
+
             });
 
+            self.hokodoCheckout().companyId.subscribe((companyId) => {
+                self.onCompanyChange(companyId);
+            })
+
             return this;
+        },
+
+        onCompanyChange: function(companyId) {
+            if(!this.isCompanyIdAssignedByComponent) {
+                this.companySearch.destroy();
+                this.companySearch = this.hokodoElements.create("companySearch", {companyId: companyId});
+                this.mountSearch();
+                this.isCompanyIdAssignedByComponent = true;
+            }
         },
 
         getCode: function () {

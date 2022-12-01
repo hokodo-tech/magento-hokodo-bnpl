@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { Buyer, CompanyType } from "../../support/types/Buyer";
+import { MagentoBasketDetails } from "../../support/types/MagentoBasketDetails";
 import HokodoCheckout from "./hokodo-checkout";
 
 export default class PaymentPage {
@@ -17,5 +17,10 @@ export default class PaymentPage {
 
     async selectHokodo() {
         await this.page.locator("#hokodo_bnpl").click({ timeout: 60000 });
+    }
+
+    async getBasketDetails(): Promise<MagentoBasketDetails> {
+        const response = await this.page.waitForResponse("**/payment-information**");
+        return await response.json();
     }
 }
