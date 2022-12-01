@@ -10,7 +10,7 @@ namespace Hokodo\BNPL\Model;
 use Hokodo\BNPL\Api\Data\OrderDocumentInterface;
 use Hokodo\BNPL\Api\OrderDocumentsRepositoryInterface;
 use Hokodo\BNPL\Model\ResourceModel\OrderDocument as OrderDocumentResource;
-use Hokodo\BNPL\Model\ResourceModel\OrderDocument\Collection;
+use Hokodo\BNPL\Model\ResourceModel\OrderDocument\CollectionFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResults;
@@ -20,9 +20,9 @@ use Magento\Framework\Exception\AlreadyExistsException;
 class OrderDocumentsRepository implements OrderDocumentsRepositoryInterface
 {
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
-    private Collection $orderDocumentCollection;
+    private CollectionFactory $orderDocumentCollectionFactory;
 
     /**
      * @var CollectionProcessorInterface
@@ -47,22 +47,22 @@ class OrderDocumentsRepository implements OrderDocumentsRepositoryInterface
     /**
      * @param OrderDocumentFactory         $orderDocumentFactory
      * @param OrderDocumentResource        $orderDocumentResource
-     * @param Collection                   $orderDocumentCollection
+     * @param CollectionFactory            $orderDocumentCollectionFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param SearchResultsFactory         $searchResultsFactory
      */
     public function __construct(
         OrderDocumentFactory $orderDocumentFactory,
         OrderDocumentResource $orderDocumentResource,
-        Collection $orderDocumentCollection,
+        CollectionFactory $orderDocumentCollectionFactory,
         CollectionProcessorInterface $collectionProcessor,
         SearchResultsFactory $searchResultsFactory
     ) {
-        $this->orderDocumentCollection = $orderDocumentCollection;
+        $this->orderDocumentFactory = $orderDocumentFactory;
+        $this->orderDocumentResource = $orderDocumentResource;
+        $this->orderDocumentCollectionFactory = $orderDocumentCollectionFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
-        $this->orderDocumentResource = $orderDocumentResource;
-        $this->orderDocumentFactory = $orderDocumentFactory;
     }
 
     /**
@@ -70,7 +70,7 @@ class OrderDocumentsRepository implements OrderDocumentsRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria): SearchResults
     {
-        $collection = $this->orderDocumentCollection->create();
+        $collection = $this->orderDocumentCollectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
 
         $searchResults = $this->searchResultsFactory->create();

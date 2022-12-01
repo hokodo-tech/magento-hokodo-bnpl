@@ -10,10 +10,8 @@ namespace Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order;
 
 use Hokodo\BNPL\Api\Data\OrderDocumentInterface;
 use Hokodo\BNPL\Api\Data\OrderDocumentInterfaceFactory;
-use Hokodo\BNPL\Api\OrderDocumentsRepositoryInterface;
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Queue\Handler\Documents;
-use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Sales\Model\Order;
@@ -33,11 +31,6 @@ class Invoice
     private OrderDocumentInterfaceFactory $orderDocumentInterfaceFactory;
 
     /**
-     * @var OrderDocumentsRepositoryInterface
-     */
-    private OrderDocumentsRepositoryInterface $orderDocumentsRepository;
-
-    /**
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
@@ -45,20 +38,17 @@ class Invoice
     /**
      * Constructor For Plugin ResourceModel Invoice.
      *
-     * @param PublisherInterface                $publisher
-     * @param OrderDocumentInterfaceFactory     $orderDocumentInterfaceFactory
-     * @param OrderDocumentsRepositoryInterface $orderDocumentsRepository
-     * @param LoggerInterface                   $logger
+     * @param PublisherInterface            $publisher
+     * @param OrderDocumentInterfaceFactory $orderDocumentInterfaceFactory
+     * @param LoggerInterface               $logger
      */
     public function __construct(
         PublisherInterface $publisher,
         OrderDocumentInterfaceFactory $orderDocumentInterfaceFactory,
-        OrderDocumentsRepositoryInterface $orderDocumentsRepository,
         LoggerInterface $logger
     ) {
         $this->publisher = $publisher;
         $this->orderDocumentInterfaceFactory = $orderDocumentInterfaceFactory;
-        $this->orderDocumentsRepository = $orderDocumentsRepository;
         $this->logger = $logger;
     }
 
@@ -87,9 +77,7 @@ class Invoice
                         ->setOrderId((int) $order->getEntityId())
                         ->setDocumentType('invoice')
                         ->setDocumentId($invoice->getEntityId());
-                    $this->orderDocumentsRepository->save($orderDocument);
                     $this->publisher->publish(Documents::TOPIC_NAME, $orderDocument);
-                } catch (AlreadyExistsException $e) { // @codingStandardsIgnoreLine
                 } catch (\Exception $e) {
                     $this->logger->error(
                         __('Hokodo_BNPL: Error publishing invoice to queue - %1', $e->getMessage())
