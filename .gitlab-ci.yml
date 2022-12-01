@@ -120,11 +120,11 @@ review:create:
           --admin-email='tech@hokodo.co'
           --admin-user='$MAGENTO_ADMIN_USER'
           --admin-password='$MAGENTO_ADMIN_PASSWORD'
-          --amqp-host="localhost"
-          --amqp-port="5672"
-          --amqp-user="guest"
-          --amqp-password="guest"
-          --amqp-virtualhost="/" &&
+          --amqp-host='127.0.0.1'
+          --amqp-port='5672'
+          --amqp-user='guest'
+          --amqp-password='guest'
+          --amqp-virtualhost='/' &&
         $PHP_CLI bin/magento deploy:mode:set developer &&
         $PHP_CLI bin/magento config:set catalog/search/elasticsearch7_index_prefix '${REVIEW_INSTANCE}_' &&
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/active 1 &&
@@ -155,6 +155,14 @@ review:detach:
       "rm -rf $SSH_PATH &&
       mysql -umagento -pmagento -e 'DROP DATABASE IF EXISTS $REVIEW_INSTANCE' &&
       curl -XDELETE 'http://localhost:9200/${REVIEW_INSTANCE}_*'"
+
+review:queue:
+  extends: .review
+  needs:
+    - review:create
+  when: manual
+  script:
+    - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento queue:consumers:start hokodo.order.documents"
 
 # Magento 2.3.7
 review:create [2.3.7]:
