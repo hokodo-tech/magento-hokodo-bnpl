@@ -115,7 +115,12 @@ review:create:
           --admin-lastname='BNPL'
           --admin-email='tech@hokodo.co'
           --admin-user='$MAGENTO_ADMIN_USER'
-          --admin-password='$MAGENTO_ADMIN_PASSWORD' &&
+          --admin-password='$MAGENTO_ADMIN_PASSWORD'
+          --amqp-host="localhost"
+          --amqp-port="5672"
+          --amqp-user="guest"
+          --amqp-password="guest"
+          --amqp-virtualhost="/" &&
         $PHP_CLI bin/magento deploy:mode:set developer &&
         $PHP_CLI bin/magento config:set catalog/search/elasticsearch7_index_prefix '${REVIEW_INSTANCE}_' &&
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/active 1 &&
