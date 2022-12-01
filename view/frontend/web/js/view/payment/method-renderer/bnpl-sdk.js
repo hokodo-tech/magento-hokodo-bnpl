@@ -32,7 +32,7 @@ define([
             },
             //temp SDK search event fix
             searchInitialized: false,
-            selectedCompanyId: false
+            companyIdselected: false
         },
         isOfferLoading: ko.observable(false),
         hokodoElements: window.hokodoSdk.elements(),
@@ -59,7 +59,7 @@ define([
 
             if (this.hokodoCheckout().companyId()) {
                 this.companySearch = this.hokodoElements.create("companySearch", {companyId: this.hokodoCheckout().companyId()});
-                this.selectedCompanyId = this.hokodoCheckout().companyId();
+                this.companyIdselected = true;
             } else {
                 this.companySearch = this.hokodoElements.create("companySearch");
             }
@@ -70,7 +70,7 @@ define([
                     return;
                 }
                 if (company !== null && company.id !== self.hokodoCheckout().companyId()) {
-                    self.selectedCompanyId = company.id;
+                    self.companyIdselected = true;
                     hokodoData.setCompanyId(company.id);
                     self.destroyCheckout();
                 }
@@ -85,11 +85,11 @@ define([
         },
 
         onCompanyChange: function(companyId) {
-            if(!this.selectedCompanyId) {
+            if(!this.companyIdselected) {
                 this.companySearch.destroy();
                 this.companySearch = this.hokodoElements.create("companySearch", {companyId: companyId});
                 this.mountSearch();
-                this.selectedCompanyId = companyId;
+                this.companyIdselected = true;
             }
         },
 
