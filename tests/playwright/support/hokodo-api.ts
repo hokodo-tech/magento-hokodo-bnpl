@@ -1,4 +1,4 @@
-import { APIRequestContext, request } from "@playwright/test";
+import { APIRequestContext, expect, request } from "@playwright/test";
 import { DeferredPayment } from "./types/DeferredPayment";
 import { HokodoOrder } from "./types/HokodoOrder";
 import { HokodoOrganisation } from "./types/HokodoOrganisation";
@@ -26,6 +26,8 @@ export class HokodoAPI {
 
         try {
             return await context.get(path).then(async (response) => {
+                expect(response.status(), `Get ${path}`).toBe(200);
+                
                 return await response.json();
             });
         } finally {
