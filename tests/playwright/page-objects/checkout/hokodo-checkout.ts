@@ -76,6 +76,7 @@ export default class HokodoCheckout {
         // horrible wait until the front-end bug is fixed
         await this.page.waitForTimeout(5000);
         await iframe.locator(`[for="${paymentMethod}"] [data-testid='customRadio']`).click();
+        await this.page.waitForTimeout(500);
         await iframe.locator("text='Continue'").click();
     }
 

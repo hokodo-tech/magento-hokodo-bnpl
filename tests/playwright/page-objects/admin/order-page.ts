@@ -7,7 +7,7 @@ export default class OrderPage {
         this.page = page
     }
 
-    async navigateToShipOrderPage() {
+    async waitForDeferredPaymentToBeAccepted() {
         let attemptsRemaining = 150;
 
         // wait for the admin notifications. This allows the page time to load
@@ -21,12 +21,19 @@ export default class OrderPage {
             await this.page.waitForTimeout(2000);
             attemptsRemaining--;
         }
+    }
 
+    async navigateToShipOrderPage() {
+        await this.waitForDeferredPaymentToBeAccepted();
         await this.page.locator("#order_ship").click();
     }
+
+    async navigateToInvoicePage() {
+        await this.waitForDeferredPaymentToBeAccepted();
+        await this.page.locator("#order_invoice").click();
+      }
 
     async checkShipButtonIsNotVisible() {
         await this.page.waitForSelector("#order_ship", { state: "hidden" });
     }
-
 }
