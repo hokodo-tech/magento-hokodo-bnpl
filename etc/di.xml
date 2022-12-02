@@ -216,11 +216,6 @@
             <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Ipn\Logger</argument>
         </arguments>
     </type>
-    <type name="Hokodo\BNPL\Model\DeferredPaymentIpnProcessor">
-        <arguments>
-            <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Ipn\Logger</argument>
-        </arguments>
-    </type>
     <virtualType name="Hokodo\BNPL\Model\Ipn\Logger" type="Magento\Payment\Model\Method\Logger">
         <arguments>
             <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Ipn\Logger\DefaultLogger</argument>
