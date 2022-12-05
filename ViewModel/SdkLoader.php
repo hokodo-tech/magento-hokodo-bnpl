@@ -108,6 +108,19 @@ class SdkLoader implements ArgumentInterface
     }
 
     /**
+     * Get SDK url for Search Component.
+     *
+     * @return string
+     *
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function getSdkUrl(): string
+    {
+        return $this->sdkConfig->getSdkUrl();
+    }
+
+    /**
      * Get Current Locale Code.
      *
      * @return string|null
