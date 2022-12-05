@@ -76,6 +76,21 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
     private LoggerInterface $logger;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private CartRepositoryInterface $cartRepository;
+
+    /**
+     * @var HokodoQuoteRepositoryInterface
+     */
+    private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
+
+    /**
+     * @var SessionCleanerInterface
+     */
+    private SessionCleanerInterface $sessionCleanerInterface;
+
+    /**
      * @param Context                           $context
      * @param JsonFactory                       $resultJsonFactory
      * @param Emulation                         $emulation
