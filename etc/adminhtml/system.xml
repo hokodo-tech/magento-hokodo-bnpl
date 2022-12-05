@@ -173,6 +173,14 @@
                         <source_model>Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos</source_model>
                     </field>
                 </group>
+                <group id="advanced" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
+                    <label>Advanced</label>
+                    <field id="enable_thirdparty_totals_compatibility" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Enable thirdparty extensions compatibility fix</label>
+                        <comment><![CDATA[Enables fix when using thirdparty modules for tax calculateions and discount providers.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
             </group>
         </section>
     </system>
