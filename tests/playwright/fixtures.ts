@@ -17,6 +17,7 @@ import ShipOrderPage from "./page-objects/admin/ship-order-page";
 import { HokodoAPI } from "./support/hokodo-api";
 import { BuyerStatus, CompanyType, CreditStatus, FraudStatus } from "./support/types/Buyer";
 import InvoicePage from "./page-objects/admin/invoice-page";
+import { MagentoApi } from "./support/magento-api";
 
 export type TestFixtures = {
   page: Page;
@@ -35,6 +36,7 @@ export type TestFixtures = {
   hokodoApi: HokodoAPI;
   abortSegmentApiCalls: Function;
   invoicePage: InvoicePage;
+  magentoApi: MagentoApi;
 };
 
 const clientPlaywrightVersion = cp
@@ -168,7 +170,13 @@ const test = base.extend<TestFixtures>({
     await use(new InvoicePage(page))
   },
   hokodoApi: async ({ page }, use) => {
-    await use(new HokodoAPI())
+    await use(new HokodoAPI(page))
+  },
+  magentoApi: async({}, use) => {
+    const api = new MagentoApi();
+    await api.getBearerToken();
+    await api.setupContext();
+    return use(api);
   },
   generateOrderData: ({ }, use) => {
     use(async (companyType: CompanyType = CompanyType.REGISTERED_COMPANY,
