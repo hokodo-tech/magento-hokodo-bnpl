@@ -26,6 +26,12 @@
         </arguments>
     </type> -->
 
+    <type name="Hokodo\BNPL\Controller\Customer\Index">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">

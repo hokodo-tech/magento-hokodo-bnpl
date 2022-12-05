@@ -34,6 +34,7 @@ define([
             searchInitialized: false,
             isCompanyIdAssignedByComponent: false
         },
+        isReadyToShow: ko.observable(false),
         isOfferLoading: ko.observable(false),
         hokodoElements: window.hokodoSdk.elements(),
         getLogos: ko.observableArray(paymentConfig.logos),
@@ -56,6 +57,17 @@ define([
                     this.mountCheckout();
                 }
             })
+
+            if (typeof hokodoData.getOffer() === 'undefined' || hokodoData.getOffer() === '') {
+                this.isReadyToShow(true);
+            } else {
+                let self = this
+                hokodoData.getOffer().offered_payment_plans.forEach(function (item, index) {
+                    if (item.status === 'offered') {
+                        self.isReadyToShow(true);
+                    }
+                })
+            }
 
             if (this.hokodoCheckout().companyId()) {
                 this.companySearch = this.hokodoElements.create("companySearch", {companyId: this.hokodoCheckout().companyId()});
