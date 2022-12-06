@@ -19,6 +19,7 @@ use Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterfaceFactory;
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\OfferInterface;
+use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order as OrderGatewayService;
 use Hokodo\BNPL\Gateway\Service\Organisation as OrganisationService;
@@ -120,6 +121,11 @@ class Offer implements OfferInterface
     private HokodoCustomerRepositoryInterface $hokodoCustomerRepository;
 
     /**
+     * @var Config
+     */
+    private Config $config;
+
+    /**
      * @param OfferResponseInterfaceFactory     $responseInterfaceFactory
      * @param CartRepositoryInterface           $cartRepository
      * @param OrderGatewayService               $orderGatewayService
@@ -134,6 +140,7 @@ class Offer implements OfferInterface
      * @param UserService                       $userService
      * @param OfferBuilder                      $offerBuilder
      * @param HokodoCustomerRepositoryInterface $hokodoCustomerRepository
+     * @param Config                            $config
      */
     public function __construct(
         OfferResponseInterfaceFactory $responseInterfaceFactory,
@@ -149,7 +156,8 @@ class Offer implements OfferInterface
         UserBuilder $userBuilder,
         UserService $userService,
         OfferBuilder $offerBuilder,
-        HokodoCustomerRepositoryInterface $hokodoCustomerRepository
+        HokodoCustomerRepositoryInterface $hokodoCustomerRepository,
+        Config $config
     ) {
         $this->responseInterfaceFactory = $responseInterfaceFactory;
         $this->cartRepository = $cartRepository;
@@ -166,6 +174,7 @@ class Offer implements OfferInterface
         $this->offerBuilder = $offerBuilder;
         $this->hokodoCustomerRepository = $hokodoCustomerRepository;
         $this->hokodoCustomer = null;
+        $this->config = $config;
     }
 
     /**
@@ -426,7 +435,12 @@ class Offer implements OfferInterface
                     ->setUser($this->hokodoQuote->getUserId())
                     ->setOrganisation($this->hokodoQuote->getOrganisationId())
             );
-            $orderRequest->setItems($this->orderBuilder->buildOrderItems($this->checkoutSession->getQuote()));
+            if ($this->config->getValue(Config::TOTALS_FIX)) {
+                $items[] = $this->orderBuilder->buildTotalItem($this->checkoutSession->getQuote());
+            } else {
+                $items = $this->orderBuilder->buildOrderItems($this->checkoutSession->getQuote());
+            }
+            $orderRequest->setItems($items);
             if ($dataModel = $this->orderGatewayService->createOrder($orderRequest)->getDataModel()) {
                 $this->hokodoQuote->setOrderId($dataModel->getId());
                 $this->hokodoQuote->setOfferId('');
@@ -477,7 +491,12 @@ class Offer implements OfferInterface
                 $patchRequest
                     ->setTotalAmount((int) ($quote->getGrandTotal() * 100))
                     ->setTaxAmount(0);
-                $patchRequest->setItems($this->orderBuilder->buildOrderItems($quote));
+                if ($this->config->getValue(Config::TOTALS_FIX)) {
+                    $items = $this->orderBuilder->buildTotalItem($this->checkoutSession->getQuote());
+                } else {
+                    $items = $this->orderBuilder->buildOrderItems($this->checkoutSession->getQuote());
+                }
+                $patchRequest->setItems($items);
             }
             $this->orderGatewayService->patchOrder($patchRequest);
             $this->hokodoQuote->setOfferId('');
