@@ -1,0 +1,78 @@
+<?php
+/**
+ * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+declare(strict_types=1);
+
+namespace Hokodo\BNPL\Plugin\Model\SalesRule;
+
+use Hokodo\BNPL\Api\Data\HokodoQuoteInterface;
+use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
+use Hokodo\BNPL\Gateway\Config\Config;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
+use Magento\SalesRule\Model\RulesApplier as MagentoRulesApplier;
+
+class RulesApplier
+{
+    /**
+     * @var HokodoQuoteRepositoryInterface
+     */
+    private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
+
+    /**
+     * @param HokodoQuoteRepositoryInterface $hokodoQuoteRepository
+     */
+    public function __construct(
+        HokodoQuoteRepositoryInterface $hokodoQuoteRepository
+    ) {
+        $this->hokodoQuoteRepository = $hokodoQuoteRepository;
+    }
+
+    /**
+     * After Apply rules plugin.
+     *
+     * @param MagentoRulesApplier $subject
+     * @param array               $result
+     * @param AbstractItem        $item
+     * @param Collection          $rules
+     * @param bool                $skipValidation
+     * @param mixed               $couponCode
+     *
+     * @return void
+     */
+    public function afterApplyRules(
+        MagentoRulesApplier $subject,
+        ?array $result,
+        AbstractItem $item,
+        Collection $rules,
+        bool $skipValidation,
+        $couponCode
+    ) {
+        if ($this->isAppliedRulesChanged($item, $result)
+            && $item->getQuote()->getPayment()->getMethod() === Config::CODE) {
+            $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($item->getQuote()->getId());
+            $hokodoQuote
+                ->setOfferId('')
+                ->setPatchType(HokodoQuoteInterface::PATCH_ITEMS);
+            $this->hokodoQuoteRepository->save($hokodoQuote);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Check if the applied rules have changed.
+     *
+     * @param AbstractItem $item
+     * @param array        $result
+     *
+     * @return bool
+     */
+    private function isAppliedRulesChanged(AbstractItem $item, array $result)
+    {
+        $quoteRuleIds = explode(',', $item->getAppliedRuleIds()) ?: [];
+        return array_values($result) !== array_values($quoteRuleIds);
+    }
+}
