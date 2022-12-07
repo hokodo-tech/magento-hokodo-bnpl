@@ -53,10 +53,12 @@ class RulesApplier
         if ($this->isAppliedRulesChanged($item, $result)
             && $item->getQuote()->getPayment()->getMethod() === Config::CODE) {
             $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($item->getQuote()->getId());
-            $hokodoQuote
-                ->setOfferId('')
-                ->setPatchType(HokodoQuoteInterface::PATCH_ITEMS);
-            $this->hokodoQuoteRepository->save($hokodoQuote);
+            if ($hokodoQuote->getId()) {
+                $hokodoQuote
+                    ->setOfferId('')
+                    ->setPatchType(HokodoQuoteInterface::PATCH_ITEMS);
+                $this->hokodoQuoteRepository->save($hokodoQuote);
+            }
         }
 
         return $result;
@@ -72,7 +74,7 @@ class RulesApplier
      */
     private function isAppliedRulesChanged(AbstractItem $item, array $result)
     {
-        $quoteRuleIds = explode(',', $item->getAppliedRuleIds()) ?: [];
+        $quoteRuleIds = explode(',', $item->getAppliedRuleIds() ?? '');
         return array_values($result) !== array_values($quoteRuleIds);
     }
 }
