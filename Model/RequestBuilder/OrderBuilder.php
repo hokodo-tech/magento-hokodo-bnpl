@@ -218,7 +218,7 @@ class OrderBuilder
      *
      * @return array
      */
-    public function buildTotalItem(CartInterface $quote): array
+    public function buildTotalItem(CartInterface $quote): OrderItemInterface
     {
         return $this->orderItemFactory->create()
             ->setItemId('totals')

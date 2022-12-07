@@ -492,7 +492,7 @@ class Offer implements OfferInterface
                     ->setTotalAmount((int) ($quote->getGrandTotal() * 100))
                     ->setTaxAmount(0);
                 if ($this->config->getValue(Config::TOTALS_FIX)) {
-                    $items = $this->orderBuilder->buildTotalItem($this->checkoutSession->getQuote());
+                    $items[] = $this->orderBuilder->buildTotalItem($this->checkoutSession->getQuote());
                 } else {
                     $items = $this->orderBuilder->buildOrderItems($this->checkoutSession->getQuote());
                 }
