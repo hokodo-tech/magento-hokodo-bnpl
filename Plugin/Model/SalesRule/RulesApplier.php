@@ -42,14 +42,8 @@ class RulesApplier
      *
      * @return void
      */
-    public function afterApplyRules(
-        MagentoRulesApplier $subject,
-        ?array $result,
-        AbstractItem $item,
-        Collection $rules,
-        bool $skipValidation,
-        $couponCode
-    ) {
+    public function afterApplyRules($subject, $result, $item, $rules, $skipValidation, $couponCode)
+    {
         if ($this->isAppliedRulesChanged($item, $result)
             && $item->getQuote()->getPayment()->getMethod() === Config::CODE) {
             $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($item->getQuote()->getId());
