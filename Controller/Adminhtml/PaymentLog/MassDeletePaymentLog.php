@@ -8,44 +8,53 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Controller\Adminhtml\PaymentLog;
 
+use Hokodo\BNPL\Api\Data\PaymentLogInterface;
+use Hokodo\BNPL\Api\PaymentLogRepositoryInterface;
 use Hokodo\BNPL\Model\ResourceModel\PaymentLog\CollectionFactory;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 
-class MassDeletePaymentLog extends Action
+class MassDeletePaymentLog extends Action implements HttpPostActionInterface
 {
     /**
      * Filter variable.
      *
      * @var Filter
      */
-    protected $filter;
+    private Filter $filter;
 
     /**
-     * CollectionFactory.
-     *
      * @var CollectionFactory
      */
-    protected $paymentLogCollectionFactory;
+    private CollectionFactory $paymentLogCollectionFactory;
 
     /**
-     * Constructor.
-     *
-     * @param Context           $context
-     * @param Filter            $filter
-     * @param CollectionFactory $paymentLogCollectionFactory
+     * @var PaymentLogRepositoryInterface
+     */
+    private PaymentLogRepositoryInterface $paymentLogRepository;
+
+    /**
+     * @param Context                       $context
+     * @param Filter                        $filter
+     * @param CollectionFactory             $paymentLogCollectionFactory
+     * @param PaymentLogRepositoryInterface $paymentLogRepository
      */
     public function __construct(
         Context $context,
         Filter $filter,
-        CollectionFactory $paymentLogCollectionFactory
+        CollectionFactory $paymentLogCollectionFactory,
+        PaymentLogRepositoryInterface $paymentLogRepository
     ) {
         parent::__construct($context);
         $this->filter = $filter;
         $this->paymentLogCollectionFactory = $paymentLogCollectionFactory;
+        $this->paymentLogRepository = $paymentLogRepository;
     }
 
     /**
@@ -61,21 +70,39 @@ class MassDeletePaymentLog extends Action
     /**
      * Execute.
      *
-     * @return mixed
+     * @return ResultInterface
      *
      * @throws LocalizedException
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $collection = $this->filter->getCollection(
             $this->paymentLogCollectionFactory->create()
         );
         $collectionSize = $collection->getSize();
-
+        $error = 0;
+        /** @var PaymentLogInterface $item */
         foreach ($collection as $item) {
-            $item->delete();
+            try {
+                $this->paymentLogRepository->delete($item);
+            } catch (CouldNotDeleteException $exception) {
+                /* @todo add logger here */
+                ++$error;
+            }
         }
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $collectionSize));
+        $deleted = $collectionSize - $error;
+
+        if ($deleted > 0) {
+            $this->messageManager->addSuccessMessage(
+                __('A total of %1 record(s) have been deleted.', $deleted)
+            );
+        }
+
+        if ($error > 0) {
+            $this->messageManager->addErrorMessage(
+                __('A total of %1 record(s) have not been deleted.', $error)
+            );
+        }
 
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('hokodo/paymentlog/index');
