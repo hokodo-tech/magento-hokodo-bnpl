@@ -1,5 +1,6 @@
 import { Page } from "@playwright/test";
 import { Buyer, CompanyType } from "../../support/types/Buyer";
+import CheckoutSuccessPage from "./checkout-success-page";
 
 export default class HokodoCheckout {
     readonly page: Page;
@@ -87,13 +88,7 @@ export default class HokodoCheckout {
     }
 
     async createDeferredPayment(): Promise<string> {
-        const iframe = this.getIframe();
-        return await Promise.all([
-            this.page.waitForResponse("**/v1/payment/deferred_payments"),
-            iframe.locator("text='Confirm'").click()
-        ]).then(async (result) => {
-            const response = await result[0].json();
-            return response.order;
-        });
+        await this.getIframe().locator("text='Confirm'").click();
+        return await new CheckoutSuccessPage(this.page).extractOrderNumber();
     }
 }
