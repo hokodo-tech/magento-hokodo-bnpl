@@ -23,7 +23,7 @@ export class HokodoAPI {
     }
 
     async waitForDeferredPaymentToReachStatus(deferredPaymentId: string, desiredStatus: string): Promise<DeferredPayment> {
-        let attemptsRemaining = 60;
+        let attemptsRemaining = 3;
         let deferredPayment = await this.viewDeferredPayment(deferredPaymentId);
 
         while (attemptsRemaining > 0) {
