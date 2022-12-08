@@ -40,7 +40,7 @@ class RulesApplier
      * @param bool                $skipValidation
      * @param mixed               $couponCode
      *
-     * @return void
+     * @return array
      */
     public function afterApplyRules($subject, $result, $item, $rules, $skipValidation, $couponCode)
     {
@@ -68,7 +68,10 @@ class RulesApplier
      */
     private function isAppliedRulesChanged(AbstractItem $item, array $result)
     {
-        $quoteRuleIds = explode(',', $item->getAppliedRuleIds() ?? '');
-        return array_values($result) !== array_values($quoteRuleIds);
+        $quoteRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
+        if (count($quoteRuleIds) === count($result)) {
+            return count(array_diff($quoteRuleIds, $result)) > 0;
+        }
+        return true;
     }
 }
