@@ -1,6 +1,8 @@
 import { Page } from "@playwright/test";
+import { isLoggedIn } from "../../support/playwright-test-helpers";
 import { Address } from "../../support/types/Address";
 import { Buyer } from "../../support/types/Buyer";
+import { OrderData } from "../../support/types/OrderData";
 
 export default class ShippingAddressPage {
     readonly page: Page;
@@ -14,9 +16,14 @@ export default class ShippingAddressPage {
         await this.page.goto("/checkout/#shipping");
     }
 
-    async setupNewShippingAddress(shippingAddress: Address, shippingMethod: string) {
+    async setupNewShippingAddress(testOrderData: OrderData, shippingMethod: string) {
         await this.navigate();
-        await this.enterAddress(shippingAddress);
+
+        if (await isLoggedIn(this.page) === false) {
+            await this.enterBuyerDetails(testOrderData.buyer);
+        }
+
+        await this.enterAddress(testOrderData.shippingAddress);
         await this.selectShippingMethod(shippingMethod);
         await this.saveShippingDetails();
       }

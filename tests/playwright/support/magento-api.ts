@@ -1,5 +1,6 @@
 import { APIRequestContext, request } from "@playwright/test";
 import { MagentoComments } from "./types/MagentoComment";
+import { MagentoOrder } from "./types/MagentoOrder";
 
 export class MagentoApi {
     context: APIRequestContext;
@@ -30,6 +31,10 @@ export class MagentoApi {
             this.token = await response.json();
         })
         context.dispose();
+    }
+
+    async getOrder(magentoOrderId: string): Promise<MagentoOrder> {
+        return await this.context.get(`${this.baseUrl}/orders/${magentoOrderId}`).then(async (response) => await response.json());
     }
 
     async dispose() {
