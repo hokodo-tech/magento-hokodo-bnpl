@@ -37,7 +37,7 @@ const config: PlaywrightTestConfig = {
     actionTimeout: process.env.CI ? 60000 : 15000,
     navigationTimeout: 85000,
     screenshot: "only-on-failure",
-    headless: !!process.env.CI,
+    headless: !!process.env.CI, 
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: process.env.BASE_URL,
 
