@@ -49,9 +49,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Checkout\CustomerData\Cart">
-        <plugin name="hokodoAddDataToCustomerCart" type="Hokodo\BNPL\Plugin\CustomerData\Cart"/>
-    </type>
     <type name="Hokodo\BNPL\CustomerData\HokodoCheckout">
         <arguments>
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>

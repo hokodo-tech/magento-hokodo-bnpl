@@ -212,6 +212,26 @@ class OrderBuilder
     }
 
     /**
+     * Builds one total item instead of real products.
+     *
+     * @param CartInterface $quote
+     *
+     * @return array
+     */
+    public function buildTotalItem(CartInterface $quote): OrderItemInterface
+    {
+        return $this->orderItemFactory->create()
+            ->setItemId('totals')
+            ->setType('product')
+            ->setDescription('Combined totals item')
+            ->setQuantity('1')
+            ->setUnitPrice((int) round($quote->getGrandTotal() * 100))
+            ->setTaxRate('0')
+            ->setTaxAmount(0)
+            ->setTotalAmount((int) round($quote->getGrandTotal() * 100));
+    }
+
+    /**
      * Build Order product item.
      *
      * @param Item $item

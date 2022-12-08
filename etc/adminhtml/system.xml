@@ -153,15 +153,6 @@
                     <field id="banner_link" translate="label comment" type="text" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Banner link</label>
                     </field>
-                    <field id="enable_cart_page" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Enable button on cart page, minicart</label>
-                        <comment><![CDATA[Display button on cart page and minicart]]></comment>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    </field>
-                    <field id="label_cart_page" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                        <label>Label button on cart page, minicart</label>
-                        <comment><![CDATA[Label text for button on cart page and minicart.]]></comment>
-                    </field>
                     <field id="hokodo_logo" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Show Hokodo logo</label>
                         <comment><![CDATA[Display Hokodo logo in checkout page with checkout payment method title.]]></comment>
@@ -180,6 +171,14 @@
                     <field id="payment_method_logos" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Credit Card logo</label>
                         <source_model>Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos</source_model>
+                    </field>
+                </group>
+                <group id="advanced" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
+                    <label>Advanced</label>
+                    <field id="enable_thirdparty_totals_compatibility" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Enable thirdparty extensions compatibility fix</label>
+                        <comment><![CDATA[Enables fix when using thirdparty modules for tax calculations and discount providers.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                 </group>
             </group>
