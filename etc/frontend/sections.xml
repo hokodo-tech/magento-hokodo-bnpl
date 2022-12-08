@@ -25,4 +25,10 @@
     <action name="checkout/sidebar/updateItemQty">
         <section name="hokodo-checkout"/>
     </action>
+    <action name="rest/*/V1/carts/*/set-payment-information">
+        <section name="hokodo-checkout"/>
+    </action>
+    <action name="rest/*/V1/guest-carts/*/set-payment-information">
+        <section name="hokodo-checkout"/>
+    </action>
 </config>
