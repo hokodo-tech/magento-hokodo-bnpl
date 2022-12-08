@@ -10,6 +10,7 @@ export function getHokodoIdsFromMagentoOrder(magentoOrder: MagentoOrder): Hokodo
 }
 
 export function getCaptureStatus(magentoOrder: MagentoOrder): MagentoOrderCaptureStatus {
+    console.log(magentoOrder);
     if (magentoOrder.base_total_invoiced === undefined) {
         return MagentoOrderCaptureStatus.NotInvoiced;
     }

@@ -6,7 +6,7 @@ import { BuyerStatus, CompanyType, CreditStatus, FraudStatus } from "../support/
 import { MagentoOrderCaptureStatus } from "../support/types/MagentoOrder";
 
 test.describe("Full end to end for Registered Buyers", () => {
-  test("Placing and fulfilling a Registered Company's first Order", async ({
+  test.only("Placing and fulfilling a Registered Company's first Order", async ({
     homePage,
     productDetailsPage,
     shippingAddressPage,
@@ -93,93 +93,93 @@ test.describe("Full end to end for Registered Buyers", () => {
     await shipOrderPage.shipOrder();
   });
 
-  test("Placing and fulfilling a Sole Trader's first Order", async ({
-    homePage,
-    productDetailsPage,
-    shippingAddressPage,
-    paymentPage,
-    adminLoginPage,
-    orderPage,
-    shipOrderPage,
-    hokodoApi,
-    generateOrderData,
-    createAccountPage,
-    magentoApi
-  }) => {
-    const testOrderData = await generateOrderData(CompanyType.SOLE_TRADER);
+  // test("Placing and fulfilling a Sole Trader's first Order", async ({
+  //   homePage,
+  //   productDetailsPage,
+  //   shippingAddressPage,
+  //   paymentPage,
+  //   adminLoginPage,
+  //   orderPage,
+  //   shipOrderPage,
+  //   hokodoApi,
+  //   generateOrderData,
+  //   createAccountPage,
+  //   magentoApi
+  // }) => {
+  //   const testOrderData = await generateOrderData(CompanyType.SOLE_TRADER);
 
-    await createAccountPage.navigate();
-    await createAccountPage.createAccount(testOrderData.buyer);
+  //   await createAccountPage.navigate();
+  //   await createAccountPage.createAccount(testOrderData.buyer);
 
-    // add products to the basket
-    for (const product of testOrderData.products) {
-      await homePage.navigate();
-      await homePage.addItemToBasket(product.name);
-      await productDetailsPage.selectVariant(product.size);
-      await productDetailsPage.selectVariant(product.colour);
-      await productDetailsPage.setQuantity(product.quantity);
-      await productDetailsPage.addToBasket();
-    }
+  //   // add products to the basket
+  //   for (const product of testOrderData.products) {
+  //     await homePage.navigate();
+  //     await homePage.addItemToBasket(product.name);
+  //     await productDetailsPage.selectVariant(product.size);
+  //     await productDetailsPage.selectVariant(product.colour);
+  //     await productDetailsPage.setQuantity(product.quantity);
+  //     await productDetailsPage.addToBasket();
+  //   }
 
-    // enter shipping details
-    await shippingAddressPage.setupNewShippingAddress(testOrderData, "flatrate_flatrate");
+  //   // enter shipping details
+  //   await shippingAddressPage.setupNewShippingAddress(testOrderData, "flatrate_flatrate");
     
-    // load payment page
-    await paymentPage.navigate();
-    const basketDetails = await paymentPage.getBasketDetails();
+  //   // load payment page
+  //   await paymentPage.navigate();
+  //   const basketDetails = await paymentPage.getBasketDetails();
 
-    // setup sole trader
-    await paymentPage.selectHokodo();
-    await paymentPage.hokodoCheckout.setupSoleTrader(testOrderData.buyer);
+  //   // setup sole trader
+  //   await paymentPage.selectHokodo();
+  //   await paymentPage.hokodoCheckout.setupSoleTrader(testOrderData.buyer);
 
-    // pay with Hokodo
-    await paymentPage.hokodoCheckout.selectAPaymentPlan();
-    await paymentPage.hokodoCheckout.selectPaymentMethod("invoice");
-    await paymentPage.hokodoCheckout.acceptTermsAndConditions();
-    const magentoOrderId = await paymentPage.hokodoCheckout.createDeferredPayment();
+  //   // pay with Hokodo
+  //   await paymentPage.hokodoCheckout.selectAPaymentPlan();
+  //   await paymentPage.hokodoCheckout.selectPaymentMethod("invoice");
+  //   await paymentPage.hokodoCheckout.acceptTermsAndConditions();
+  //   const magentoOrderId = await paymentPage.hokodoCheckout.createDeferredPayment();
 
-    const magentoOrder = await magentoApi.getOrder(magentoOrderId);
-    const hokodoIds = getHokodoIdsFromMagentoOrder(magentoOrder);
+  //   const magentoOrder = await magentoApi.getOrder(magentoOrderId);
+  //   const hokodoIds = getHokodoIdsFromMagentoOrder(magentoOrder);
     
-    // fetch order from Hokodo
-    let order = await hokodoApi.getOrder(hokodoIds.order);
+  //   // fetch order from Hokodo
+  //   let order = await hokodoApi.getOrder(hokodoIds.order);
 
-    // ensure the order items at Hokodo match the items that were in the basket
-    verifyHokodoOrder(order, basketDetails.totals);
+  //   // ensure the order items at Hokodo match the items that were in the basket
+  //   verifyHokodoOrder(order, basketDetails.totals);
 
-    verifyAddressDetails(testOrderData.billingAddress, order.customer.invoice_address);
-    verifyAddressDetails(testOrderData.shippingAddress, order.customer.delivery_address);
+  //   verifyAddressDetails(testOrderData.billingAddress, order.customer.invoice_address);
+  //   verifyAddressDetails(testOrderData.shippingAddress, order.customer.delivery_address);
 
-    // ensure that one Organisation and One user was created for this Order
-    const organisation = await hokodoApi.viewOrganisation(order.customer.organisation);
+  //   // ensure that one Organisation and One user was created for this Order
+  //   const organisation = await hokodoApi.viewOrganisation(order.customer.organisation);
 
-    expect(organisation.users, "Make sure that only one user is linked to the Organisation").toHaveLength(1);
-    expect(organisation.users[0].email, "Ensure the correct user is added to the Organisation").toBe(testOrderData.buyer.email);
-    expect(organisation.users[0].role, "Ensure the user has the correct role").toBe("member");
+  //   expect(organisation.users, "Make sure that only one user is linked to the Organisation").toHaveLength(1);
+  //   expect(organisation.users[0].email, "Ensure the correct user is added to the Organisation").toBe(testOrderData.buyer.email);
+  //   expect(organisation.users[0].role, "Ensure the user has the correct role").toBe("member");
     
-    // ship the order in Magento
-    await adminLoginPage.navigate();
-    await adminLoginPage.loginToAdmin();
+  //   // ship the order in Magento
+  //   await adminLoginPage.navigate();
+  //   await adminLoginPage.loginToAdmin();
 
-    // capture the Magento order if it hasn't already been captured
-    if (getCaptureStatus(magentoOrder) === MagentoOrderCaptureStatus.NotInvoiced) {
-      await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");
-      await orderPage.navigate(magentoOrder.entity_id);
-      await orderPage.captureInvoice();
-    }
+  //   // capture the Magento order if it hasn't already been captured
+  //   if (getCaptureStatus(magentoOrder) === MagentoOrderCaptureStatus.NotInvoiced) {
+  //     await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");
+  //     await orderPage.navigate(magentoOrder.entity_id);
+  //     await orderPage.captureInvoice();
+  //   }
 
-    // fetch the Hokodo Deferred Payment
-    const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "captured")
+  //   // fetch the Hokodo Deferred Payment
+  //   const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "captured")
     
-    // expect(deferred_payment.status, "Deferred Payment Status").toBe("captured");
-    expect(deferredPayment.authorisation, "Deferred Payment authorisation").toBe(0);
-    expect(deferredPayment.protected_captures, "Deferred Payment protected_captures").toBe(basketDetails.totals.grand_total * 100);
-    expect(deferredPayment.unprotected_captures, "Deferred Payment unprotected_captures").toBe(0);
-    expect(deferredPayment.refunds, "Deferred Payment refunds").toBe(0);
-    expect(deferredPayment.voided_authorisation, "Deferred Payment voided_authorisation").toBe(0);
-    expect(deferredPayment.expired_authorisation, "Deferred Payment expired_authorisation").toBe(0);
+  //   // expect(deferred_payment.status, "Deferred Payment Status").toBe("captured");
+  //   expect(deferredPayment.authorisation, "Deferred Payment authorisation").toBe(0);
+  //   expect(deferredPayment.protected_captures, "Deferred Payment protected_captures").toBe(basketDetails.totals.grand_total * 100);
+  //   expect(deferredPayment.unprotected_captures, "Deferred Payment unprotected_captures").toBe(0);
+  //   expect(deferredPayment.refunds, "Deferred Payment refunds").toBe(0);
+  //   expect(deferredPayment.voided_authorisation, "Deferred Payment voided_authorisation").toBe(0);
+  //   expect(deferredPayment.expired_authorisation, "Deferred Payment expired_authorisation").toBe(0);
 
-    await orderPage.navigateToShipOrderPage();
-    await shipOrderPage.shipOrder();
-  });
+  //   await orderPage.navigateToShipOrderPage();
+  //   await shipOrderPage.shipOrder();
+  // });
 });
