@@ -8,38 +8,48 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order;
 
-use Hokodo\BNPL\Api\OrderDocumentsManagementInterface;
+use Hokodo\BNPL\Api\Data\OrderDocumentInterface;
+use Hokodo\BNPL\Api\Data\OrderDocumentInterfaceFactory;
 use Hokodo\BNPL\Gateway\Config\Config;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
-use Magento\Framework\Exception\LocalizedException;
+use Hokodo\BNPL\Model\Queue\Handler\Documents;
+use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as InvoiceResource;
+use Psr\Log\LoggerInterface;
 
 class Invoice
 {
     /**
-     * @var PaymentLogger
+     * @var PublisherInterface
      */
-    private $paymentLogger;
+    private PublisherInterface $publisher;
 
     /**
-     * @var OrderDocumentsManagementInterface
+     * @var OrderDocumentInterfaceFactory
      */
-    private $orderDocumentManagement;
+    private OrderDocumentInterfaceFactory $orderDocumentInterfaceFactory;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
 
     /**
      * Constructor For Plugin ResourceModel Invoice.
      *
-     * @param PaymentLogger                     $paymentLogger
-     * @param OrderDocumentsManagementInterface $orderDocumentManagement
+     * @param PublisherInterface            $publisher
+     * @param OrderDocumentInterfaceFactory $orderDocumentInterfaceFactory
+     * @param LoggerInterface               $logger
      */
     public function __construct(
-        PaymentLogger $paymentLogger,
-        OrderDocumentsManagementInterface $orderDocumentManagement
+        PublisherInterface $publisher,
+        OrderDocumentInterfaceFactory $orderDocumentInterfaceFactory,
+        LoggerInterface $logger
     ) {
-        $this->paymentLogger = $paymentLogger;
-        $this->orderDocumentManagement = $orderDocumentManagement;
+        $this->publisher = $publisher;
+        $this->orderDocumentInterfaceFactory = $orderDocumentInterfaceFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -50,9 +60,6 @@ class Invoice
      * @param AbstractModel   $invoice
      *
      * @return InvoiceResource
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
-     * @throws LocalizedException
      */
     public function afterSave(
         InvoiceResource $subject,
@@ -63,22 +70,19 @@ class Invoice
             /* @var Order\Invoice $invoice */
             $order = $invoice->getOrder();
             if ($order->getPayment()->getMethod() === Config::CODE) {
-                if ($order->getState() === Order::STATE_PAYMENT_REVIEW && $order->getOrderApiId()) {
-                    $order->getPayment()->update(true);
-                    $order->setState(Order::STATE_PROCESSING);
-                    $order->setStatus(Order::STATE_PROCESSING);
-                    $order->save();
-                    $incrementId = $invoice->getIncrementId();
-                    $log['updated_order_status'] = 'Created invoice IncrementId: ' .
-                        $incrementId . '. Updated order status to: ' . Order::STATE_PROCESSING;
-                    $data = [
-                        'payment_log_content' => $log,
-                        'action_title' => 'After save invoice plugin',
-                        'status' => 1,
-                    ];
-                    $this->paymentLogger->execute($data);
+                try {
+                    /** @var OrderDocumentInterface $orderDocument */
+                    $orderDocument = $this->orderDocumentInterfaceFactory->create();
+                    $orderDocument
+                        ->setOrderId((int) $order->getEntityId())
+                        ->setDocumentType('invoice')
+                        ->setDocumentId($invoice->getEntityId());
+                    $this->publisher->publish(Documents::TOPIC_NAME, $orderDocument);
+                } catch (\Exception $e) {
+                    $this->logger->error(
+                        __('Hokodo_BNPL: Error publishing invoice to queue - %1', $e->getMessage())
+                    );
                 }
-                $this->orderDocumentManagement->setDocuments($order, 'invoice');
             }
         }
 

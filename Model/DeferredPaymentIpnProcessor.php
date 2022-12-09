@@ -8,16 +8,15 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model;
 
-use Exception;
 use Hokodo\BNPL\Api\Data\DeferredPaymentIpnPayloadInterface;
 use Hokodo\BNPL\Api\Data\OrderIpnInterface;
 use Hokodo\BNPL\Api\DeferredPaymentIpnProcessorInterface;
 use Hokodo\BNPL\Model\Data\OrderIpnFactory;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
+use Psr\Log\LoggerInterface;
 
 class DeferredPaymentIpnProcessor implements DeferredPaymentIpnProcessorInterface
 {
@@ -25,16 +24,6 @@ class DeferredPaymentIpnProcessor implements DeferredPaymentIpnProcessorInterfac
      * @var OrderFactory
      */
     private $orderFactory;
-
-    /**
-     * @var PaymentLogger
-     */
-    private $paymentLogger;
-
-    /**
-     * @var array
-     */
-    private $debugData = [];
 
     /**
      * @var DataObjectHelper
@@ -47,23 +36,28 @@ class DeferredPaymentIpnProcessor implements DeferredPaymentIpnProcessorInterfac
     private $orderIpnFactory;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * A construct form deferred payment ipl processor.
      *
      * @param OrderFactory     $orderFactory
      * @param OrderIpnFactory  $orderIpnFactory
      * @param DataObjectHelper $dataObjectHelper
-     * @param SaveLog          $paymentLogger
+     * @param LoggerInterface  $logger
      */
     public function __construct(
         OrderFactory $orderFactory,
         OrderIpnFactory $orderIpnFactory,
         DataObjectHelper $dataObjectHelper,
-        PaymentLogger $paymentLogger
+        LoggerInterface $logger
     ) {
         $this->orderFactory = $orderFactory;
-        $this->paymentLogger = $paymentLogger;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->orderIpnFactory = $orderIpnFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -73,19 +67,23 @@ class DeferredPaymentIpnProcessor implements DeferredPaymentIpnProcessorInterfac
      */
     public function process($created, DeferredPaymentIpnPayloadInterface $data)
     {
-        $result = false;
-        $ipnOrder = $this->orderIpnFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $ipnOrder,
-            $data->getOrder(),
-            \Hokodo\BNPL\Api\Data\OrderIpnInterface::class
-        );
-        $this->addDebugData('ipn', $data);
-        if ($ipnOrder && $ipnOrder->getDeferredPayment()) {
-            $result = $this->processIpnOrder($ipnOrder);
+        try {
+            $result = false;
+            $ipnOrder = $this->orderIpnFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $ipnOrder,
+                $data->getOrder(),
+                \Hokodo\BNPL\Api\Data\OrderIpnInterface::class
+            );
+            if ($ipnOrder && $ipnOrder->getDeferredPayment()) {
+                $result = $this->processIpnOrder($ipnOrder);
+            }
+            return $result;
+        } catch (\Exception $e) {
+            $this->logger->error(
+                __('Hokodo_BNPL: Webhook error with order %1 - %1', $ipnOrder->getId(), $e->getMessage())
+            );
         }
-        $this->debug();
-        return $result;
     }
 
     /**
@@ -93,14 +91,15 @@ class DeferredPaymentIpnProcessor implements DeferredPaymentIpnProcessorInterfac
      *
      * @param OrderIpnInterface $ipnOrder
      *
+     * @return bool
+     *
      * @throws LocalizedException
-     * @throws Exception
      */
     private function processIpnOrder(OrderIpnInterface $ipnOrder)
     {
-        $this->addDebugData('ipn-webhook', json_encode($ipnOrder->getDeferredPayment(), JSON_THROW_ON_ERROR));
-        $order = $this->orderFactory->create()->loadByAttribute('order_api_id', $ipnOrder->getId());
-        if ($order->getId()) {
+        $order = $this->orderFactory->create()->loadByAttribute('increment_id', $ipnOrder->getUniqueId());
+        if ($order->getId()
+            && $order->getPayment()->getAdditionalInformation()['hokodo_order_id'] === $ipnOrder->getId()) {
             $deferredPayment = $ipnOrder->getDeferredPayment();
             $payment = $order->getPayment();
             switch ($deferredPayment->getStatus()) {
@@ -122,7 +121,6 @@ class DeferredPaymentIpnProcessor implements DeferredPaymentIpnProcessorInterfac
                     if ($order->getState() === Order::STATE_PENDING_PAYMENT) {
                         $order->setState(Order::STATE_PROCESSING);
                     }
-                    $this->addDebugData('fulfilled_payment', $deferredPayment->getNumber());
                     break;
             }
             $order->save();
@@ -130,37 +128,5 @@ class DeferredPaymentIpnProcessor implements DeferredPaymentIpnProcessorInterfac
         }
 
         return false;
-    }
-
-    /**
-     * A function that adds debug data.
-     *
-     * @param string $key
-     * @param string $value
-     *
-     * @return $this
-     */
-    private function addDebugData($key, $value)
-    {
-        $this->debugData[$key] = $value;
-        return $this;
-    }
-
-    /**
-     * A function that debugs.
-     *
-     * @return DeferredPaymentIpnProcessor
-     *
-     * @throws LocalizedException
-     */
-    private function debug()
-    {
-        $data = [
-            'payment_log_content' => $this->debugData,
-            'action_title' => 'DeferredPaymentIpnProcessor',
-            'status' => 1,
-        ];
-        $this->paymentLogger->execute($data);
-        return $this;
     }
 }

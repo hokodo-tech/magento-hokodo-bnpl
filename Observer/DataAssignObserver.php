@@ -110,53 +110,6 @@ class DataAssignObserver extends AbstractDataAssignObserver
                 $additionalData['hokodo_deferred_payment_id'] = $hokodoOrder->getDeferredPayment();
                 $quote->getPayment()->setAdditionalInformation($additionalData)->save();
             }
-
-            $paymentQuote = $this->getPaymentQuote($quote->getId());
-            if ($paymentQuote && $paymentQuote->getId()) {
-                foreach ($this->additionalInformationMap as $key => $map) {
-                    if ($paymentInfo->getAdditionalInformation($key)) {
-                        $paymentQuote->setData($map, $paymentInfo->getAdditionalInformation($key));
-                    } else {
-                        $paymentQuote->setData($map, null);
-                    }
-                }
-
-                try {
-                    $this->paymentQuoteRepository->save($paymentQuote);
-                } catch (\Exception $e) {
-                    $data = [
-                        'payment_log_content' => $e->getMessage(),
-                        'action_title' => 'DataAssignObserver::execute Exception',
-                        'status' => 0,
-                        'quote_id' => $quote->getId(),
-                    ];
-                    $this->logger->execute($data);
-                    return;
-                }
-            }
-        }
-    }
-
-    /**
-     * A function that catch exception.
-     *
-     * @param int $quoteId
-     *
-     * @return \Hokodo\BNPL\Api\Data\PaymentQuoteInterface|null
-     */
-    private function getPaymentQuote($quoteId)
-    {
-        try {
-            return $this->paymentQuoteRepository->getByQuoteId($quoteId);
-        } catch (\Exception $e) {
-            $data = [
-                'payment_log_content' => $e->getMessage(),
-                'action_title' => 'DataAssignObserver::getPaymentQuote Exception',
-                'status' => 0,
-                'quote_id' => $quoteId,
-            ];
-            $this->logger->execute($data);
-            return null;
         }
     }
 }

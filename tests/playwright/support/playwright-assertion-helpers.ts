@@ -1,4 +1,4 @@
-import { expect } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import { Address } from "./types/Address";
 import { HokodoOrder } from "./types/HokodoOrder";
 import { MagentoBasketTotals } from "./types/MagentoBasketDetails";
@@ -38,4 +38,10 @@ export function verifyAddressDetails(magentoAddress: Address, hokodoAddress: Add
   expect(hokodoAddress.city).toBe(magentoAddress.city);
   expect(hokodoAddress.postcode).toBe(magentoAddress.postcode);
   expect(hokodoAddress.country).toBe(magentoAddress.country);
+}
+
+export async function elementExists(page: Page, locator: string) {
+  const locators = await page.$$(locator);
+  
+  return locators.length > 0;
 }

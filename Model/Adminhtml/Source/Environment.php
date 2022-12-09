@@ -21,6 +21,10 @@ class Environment implements OptionSourceInterface
     {
         return [
             [
+                'value' => Config::ENV_DEV,
+                'label' => __('Dev'),
+            ],
+            [
                 'value' => Config::ENV_SANDBOX,
                 'label' => __('Sandbox'),
             ],

@@ -6,6 +6,7 @@
 
 namespace Hokodo\BNPL\Gateway\Response;
 
+use Hokodo\BNPL\Api\Data\DeferredPaymentInterface;
 use Hokodo\BNPL\Gateway\DeferredPaymentOrderSubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 
@@ -34,27 +35,28 @@ class DeferredPaymentOrderHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
-        if (isset($response['status'])) {
+        if (isset($response[DeferredPaymentInterface::STATUS])) {
             /**
              * @var \Magento\Payment\Model\InfoInterface $payment
              */
             $payment = $this->subjectReader->readPayment($handlingSubject);
 
-            $payment->setTransactionId($response['number']);
+            $payment->setTransactionId($response[DeferredPaymentInterface::NUMBER]);
             $payment->setIsTransactionClosed(false);
 
-            switch ($response['status']) {
-                case 'accepted':
+            switch ($response[DeferredPaymentInterface::STATUS]) {
+                case DeferredPaymentInterface::STATUS_ACCEPTED:
                     $payment->setIsTransactionPending(false);
                     $payment->setIsFraudDetected(false);
+                    $payment->setIsTransactionApproved(true);
                     break;
-                case 'pending_review':
-                case 'customer_action_required':
+                case DeferredPaymentInterface::STATUS_PENDING:
+                case DeferredPaymentInterface::STATUS_ACTION_REQUIRED:
                     /* @var $payment Payment */
                     $payment->setIsTransactionPending(true);
                     $payment->setIsFraudDetected(false);
                     break;
-                case 'rejected':
+                case DeferredPaymentInterface::STATUS_REJECTED:
                     $payment->setIsTransactionPending(false);
                     $payment->setIsFraudDetected(true);
                     break;

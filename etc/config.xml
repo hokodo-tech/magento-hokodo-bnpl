@@ -16,8 +16,8 @@
                 <can_order>0</can_order>
                 <can_authorize>1</can_authorize>
                 <can_capture>1</can_capture>
-                <can_capture_partial>0</can_capture_partial>
-                <can_capture_once>0</can_capture_once>
+                <can_capture_partial>1</can_capture_partial>
+                <can_capture_once>1</can_capture_once>
                 <can_refund>1</can_refund>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <can_void>1</can_void>
@@ -69,6 +69,9 @@
                     <payment_method_logos>credit</payment_method_logos>
                     <payment_method_direct_logos>direct_uk</payment_method_direct_logos>
                 </marketing>
+                <advanced>
+                    <enable_thirdparty_totals_compatibility>0</enable_thirdparty_totals_compatibility>
+                </advanced>
             </hokodo_bnpl>
         </payment>
         <csp>

@@ -93,37 +93,38 @@
     <virtualType name="Hokodo\BNPL\Gateway\Command\CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="company_search" xsi:type="string">Hokodo\BNPL\Gateway\Command\CompanySearch</item>
-                <item name="company_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\CompanyView</item>
-                <item name="user_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\UserCreate</item>
-                <item name="user_delete" xsi:type="string">Hokodo\BNPL\Gateway\Command\UserDelete</item>
-                <item name="user_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\UserList</item>
-                <item name="organisation_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationCreate</item>
-                <item name="organisation_delete" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationDelete</item>
-                <item name="organisation_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationList</item>
-                <item name="organisation_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationView</item>
-                <item name="organisation_add_user" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationAddUser</item>
-                <item name="organisation_remove_user" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationRemoveUser</item>
-                <item name="order_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderCreate</item>
-                <item name="order_update" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderUpdate</item>
-                <item name="order_delete" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderDelete</item>
-                <item name="order_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderList</item>
-                <item name="order_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderView</item>
-                <item name="order_fulfill" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderFulfill</item>
-                <item name="order_cancel" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderCancel</item>
-                <item name="order_return" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderReturn</item>
-                <item name="order_discount" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderDiscount</item>
-                <item name="payment_offers_delete" xsi:type="string">Hokodo\BNPL\Gateway\Command\PaymentOffersDelete</item>
-                <item name="payment_offers_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\PaymentOffersList</item>
-                <item name="payment_offers_request_new" xsi:type="string">Hokodo\BNPL\Gateway\Command\PaymentOffersRequestNew</item>
-                <item name="payment_offers_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\PaymentOffersView</item>
-                <item name="deferred_payment_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentView</item>
-                <item name="deferred_payment_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentList</item>
+<!--                <item name="company_search" xsi:type="string">Hokodo\BNPL\Gateway\Command\CompanySearch</item>-->
+<!--                <item name="company_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\CompanyView</item>-->
+<!--                <item name="user_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\UserCreate</item>-->
+<!--                <item name="user_delete" xsi:type="string">Hokodo\BNPL\Gateway\Command\UserDelete</item>-->
+<!--                <item name="user_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\UserList</item>-->
+<!--                <item name="organisation_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationCreate</item>-->
+<!--                <item name="organisation_delete" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationDelete</item>-->
+<!--                <item name="organisation_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationList</item>-->
+<!--                <item name="organisation_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationView</item>-->
+<!--                <item name="organisation_add_user" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationAddUser</item>-->
+<!--                <item name="organisation_remove_user" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrganisationRemoveUser</item>-->
+<!--                <item name="order_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderCreate</item>-->
+<!--                <item name="order_update" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderUpdate</item>-->
+<!--                <item name="order_delete" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderDelete</item>-->
+<!--                <item name="order_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderList</item>-->
+<!--                <item name="order_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderView</item>-->
+<!--                <item name="order_fulfill" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderFulfill</item>-->
+<!--                <item name="order_cancel" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderCancel</item>-->
+<!--                <item name="order_return" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderReturn</item>-->
+<!--                <item name="order_discount" xsi:type="string">Hokodo\BNPL\Gateway\Command\OrderDiscount</item>-->
+<!--                <item name="payment_offers_delete" xsi:type="string">Hokodo\BNPL\Gateway\Command\PaymentOffersDelete</item>-->
+<!--                <item name="payment_offers_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\PaymentOffersList</item>-->
+<!--                <item name="payment_offers_request_new" xsi:type="string">Hokodo\BNPL\Gateway\Command\PaymentOffersRequestNew</item>-->
+<!--                <item name="payment_offers_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\PaymentOffersView</item>-->
+<!--                <item name="deferred_payment_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentView</item>-->
+<!--                <item name="deferred_payment_list" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentList</item>-->
                 <item name="authorize" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentAuthorize</item>
-                <item name="capture" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentCapture</item>
-                <item name="void" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentCancelCommand</item>
-                <item name="cancel" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentCancelCommand</item>
-                <item name="refund" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentRefundCommand</item>
+                <item name="capture" xsi:type="string">Hokodo\BNPL\Gateway\Command\PostSale\CapturePayment</item>
+                <item name="capture_partial" xsi:type="string">Hokodo\BNPL\Gateway\Command\PostSale\CapturePayment</item>
+                <item name="void" xsi:type="string">Hokodo\BNPL\Gateway\Command\PostSale\VoidPayment</item>
+                <item name="cancel" xsi:type="string">Hokodo\BNPL\Gateway\Command\PostSale\VoidPayment</item>
+                <item name="refund" xsi:type="string">Hokodo\BNPL\Gateway\Command\PostSale\RefundPayment</item>
                 <item name="fetch_transaction_information" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentFetchStatus</item>
                 <item name="create_order_documents" xsi:type="string">Hokodo\BNPL\Gateway\Command\CreateOrderDocuments</item>
                 <item name="view_order_documents" xsi:type="string">Hokodo\BNPL\Gateway\Command\ViewOrderDocuments</item>
@@ -211,11 +212,6 @@
         </arguments>
     </type>
     <type name="Hokodo\BNPL\Model\PostSaleProcessor">
-        <arguments>
-            <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Ipn\Logger</argument>
-        </arguments>
-    </type>
-    <type name="Hokodo\BNPL\Model\DeferredPaymentIpnProcessor">
         <arguments>
             <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Ipn\Logger</argument>
         </arguments>
@@ -1062,21 +1058,21 @@
         </arguments>
     </type>
 
-    <type name="Magento\Sales\Model\ResourceModel\Order\Shipment">
-        <plugin name="hokodo_sales_resource_shipment" type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Shipment"/>
-    </type>
+<!--    <type name="Magento\Sales\Model\ResourceModel\Order\Shipment">-->
+<!--        <plugin name="hokodo_sales_resource_shipment" type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Shipment"/>-->
+<!--    </type>-->
 
-    <type name="Magento\Sales\Model\ResourceModel\Order\Invoice">
-        <plugin name="hokodo_sales_resource_invoice" type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice"/>
-    </type>
+<!--    <type name="Magento\Sales\Model\ResourceModel\Order\Invoice">-->
+<!--        <plugin name="hokodo_sales_resource_invoice" type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice"/>-->
+<!--    </type>-->
 
-    <type name="Magento\Sales\Model\ResourceModel\Order\Creditmemo">
-        <plugin name="hokodo_sales_resource_creditmemo" type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Creditmemo"/>
-    </type>
+<!--    <type name="Magento\Sales\Model\ResourceModel\Order\Creditmemo">-->
+<!--        <plugin name="hokodo_sales_resource_creditmemo" type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Creditmemo"/>-->
+<!--    </type>-->
 
-    <type name="Magento\Sales\Model\ResourceModel\Order">
-        <plugin name="hokodo_sales_order" type="Hokodo\BNPL\Plugin\OrderSaveCreateInvoicePlugin"/>
-    </type>
+<!--    <type name="Magento\Sales\Model\ResourceModel\Order">-->
+<!--        <plugin name="hokodo_sales_order" type="Hokodo\BNPL\Plugin\OrderSaveCreateInvoicePlugin"/>-->
+<!--    </type>-->
 
     <type name="Hokodo\BNPL\Service\LoggerService">
         <arguments>
@@ -1398,4 +1394,74 @@
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
         </arguments>
     </type>
+
+
+    <!-- Post Sale Actions v2 -->
+    <preference for="\Hokodo\BNPL\Api\Data\Gateway\DeferredPaymentsPostSaleActionInterface" type="\Hokodo\BNPL\Model\Data\Gateway\DeferredPaymentsPostSaleAction" />
+    <preference for="\Hokodo\BNPL\Api\Data\PostSaleEventInterface" type="\Hokodo\BNPL\Model\Data\PostSaleEvent" />
+    <preference for="\Hokodo\BNPL\Api\Data\PostSaleEventChangesInterface" type="\Hokodo\BNPL\Model\Data\PostSaleEventChanges" />
+
+    <!-- Commands infrastructure -->
+    <virtualType name="Hokodo\BNPL\Gateway\Command\CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="hokodo_post_sale" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentsPostSale</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Hokodo\BNPL\Gateway\Command\DeferredPaymentsPostSale" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\DeferredPaymentsPostSale\BuilderComposite</argument>
+            <argument name="resultFactory" xsi:type="object">Hokodo\BNPL\Gateway\Command\DeferredPaymentsPostSale\ResultInterfaceFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\DeferredPaymentsPostSale\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\DeferredPaymentsPostSale</item>
+                <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostMethodBuilder</item>
+                <item name="body" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostSaleEventBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\DeferredPaymentsPostSale" type="Hokodo\BNPL\Gateway\Request\Sdk\EndpointBuilder">
+        <arguments>
+            <argument name="endpoint" xsi:type="string">payment/deferred_payments/:payment_id/:type</argument>
+            <argument name="params" xsi:type="array">
+                <item name=":payment_id" xsi:type="string">payment_id</item>
+                <item name=":type" xsi:type="string">type</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\PostSaleEventBuilder" type="Hokodo\BNPL\Gateway\Request\Sdk\GeneralSubjectBuilder">
+        <arguments>
+            <argument name="endpointBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\DeferredPaymentsPostSale</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Command\DeferredPaymentsPostSale\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Hokodo\BNPL\Gateway\Command\Result\PostSaleEvent</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Invoice automatic creation -->
+    <type name="Hokodo\BNPL\Gateway\Response\DeferredPaymentFetchStatusHandler">
+        <plugin name="hokodo_create_invoice"
+                type="Hokodo\BNPL\Plugin\Gateway\CreateInvoiceOnPaymentFetchStatus"/>
+    </type>
+    <type name="Hokodo\BNPL\Observer\OrderPlaceSuccessObserver">
+        <plugin name="hokodo_create_invoice"
+                type="Hokodo\BNPL\Plugin\Gateway\CreateInvoiceOnSuccessOrderPlacement"/>
+    </type>
+
+
+    <!--Order documents -->
+    <type name="Magento\Sales\Model\ResourceModel\Order\Invoice">
+        <plugin name="hokodo_send_invoice"
+                type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice"/>
+    </type>
+    <preference for="Hokodo\BNPL\Api\Data\OrderDocumentInterface" type="Hokodo\BNPL\Model\Data\OrderDocument"/>
+    <preference for="Hokodo\BNPL\Api\OrderDocumentsRepositoryInterface" type="Hokodo\BNPL\Model\OrderDocumentsRepository"/>
 </config>

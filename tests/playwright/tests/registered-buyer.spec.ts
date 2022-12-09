@@ -17,6 +17,7 @@ test.describe("Full end to end for Registered Buyers", () => {
     hokodoApi,
     generateOrderData,
     createAccountPage,
+    magentoApi,
   }) => {
     const testOrderData = await generateOrderData(CompanyType.REGISTERED_COMPANY);
 
@@ -28,7 +29,7 @@ test.describe("Full end to end for Registered Buyers", () => {
       await homePage.navigate();
       await homePage.addItemToBasket(product.name);
       await productDetailsPage.selectVariant(product.size);
-      await productDetailsPage.selectVariant(product.colour);
+      await productDetailsPage.selectVariant(product.colour); 
       await productDetailsPage.setQuantity(product.quantity);
       await productDetailsPage.addToBasket();
     }
@@ -59,13 +60,6 @@ test.describe("Full end to end for Registered Buyers", () => {
     verifyAddressDetails(testOrderData.billingAddress, order.customer.invoice_address);
     verifyAddressDetails(testOrderData.shippingAddress, order.customer.delivery_address);
 
-    // verify that the Hokodo order has not been fulfilled yet
-    order.items.forEach(orderItem => {
-      expect(orderItem.fulfilled_quantity, "Check fulfilled quantity").toBe("0");
-      expect(orderItem.cancelled_quantity, "Check cancelled quantity").toBe("0");
-      expect(orderItem.returned_quantity, "Check returned quantity").toBe("0");
-    });
-
     // ensure that one Organisation and One user was created for this Order
     const organisation = await hokodoApi.viewOrganisation(order.customer.organisation);
 
@@ -82,22 +76,23 @@ test.describe("Full end to end for Registered Buyers", () => {
     order = await hokodoApi.viewOrder(orderId);
 
     await listOrdersPage.navigateToOrderPage(order.unique_id);
-    await orderPage.navigateToShipOrderPage();
-    await shipOrderPage.shipOrder();
+    await orderPage.captureInvoice(order.unique_id, magentoApi);
 
     // fetch the updated Hokodo Order
     order = await hokodoApi.viewOrder(orderId);
 
-    // verify that the Order items have been fulfilled as expected
-    order.items.filter(i => i.type === "product").forEach(orderItem => {
-      const basketItem = basketDetails.totals.items.find(item => item.item_id == parseInt(orderItem.item_id) && orderItem);
+    const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(order.deferred_payment.id, "captured")
+    
+    // expect(deferred_payment.status, "Deferred Payment Status").toBe("captured");
+    expect(deferredPayment.authorisation, "Deferred Payment authorisation").toBe(0);
+    expect(deferredPayment.protected_captures, "Deferred Payment protected_captures").toBe(basketDetails.totals.grand_total * 100);
+    expect(deferredPayment.unprotected_captures, "Deferred Payment unprotected_captures").toBe(0);
+    expect(deferredPayment.refunds, "Deferred Payment refunds").toBe(0);
+    expect(deferredPayment.voided_authorisation, "Deferred Payment voided_authorisation").toBe(0);
+    expect(deferredPayment.expired_authorisation, "Deferred Payment expired_authorisation").toBe(0);
 
-      expect(parseFloat(orderItem.fulfilled_quantity), "Check fulfilled quantity").toBe(basketItem?.qty);
-      expect(orderItem.cancelled_quantity, "Check cancelled quantity").toBe("0");
-      expect(orderItem.returned_quantity, "Check returned quantity").toBe("0");
-    });
-
-    expect(order.deferred_payment.status, "Make sure the Deferred Payment is fulfilled").toBe("fulfilled");
+    await orderPage.navigateToShipOrderPage();
+    await shipOrderPage.shipOrder();
   });
 
   test("Placing and fulfilling a Sole Trader's first Order", async ({
@@ -113,6 +108,7 @@ test.describe("Full end to end for Registered Buyers", () => {
     hokodoApi,
     generateOrderData,
     createAccountPage,
+    magentoApi
   }) => {
     const testOrderData = await generateOrderData(CompanyType.SOLE_TRADER);
 
@@ -155,13 +151,6 @@ test.describe("Full end to end for Registered Buyers", () => {
     verifyAddressDetails(testOrderData.billingAddress, order.customer.invoice_address);
     verifyAddressDetails(testOrderData.shippingAddress, order.customer.delivery_address);
 
-    // verify that the Hokodo order has not been fulfilled yet
-    order.items.forEach(orderItem => {
-      expect(orderItem.fulfilled_quantity, "Check fulfilled quantity").toBe("0");
-      expect(orderItem.cancelled_quantity, "Check cancelled quantity").toBe("0");
-      expect(orderItem.returned_quantity, "Check returned quantity").toBe("0");
-    });
-
     // ensure that one Organisation and One user was created for this Order
     const organisation = await hokodoApi.viewOrganisation(order.customer.organisation);
 
@@ -173,27 +162,28 @@ test.describe("Full end to end for Registered Buyers", () => {
     await adminLoginPage.navigate();
     await adminLoginPage.loginToAdmin();
     await adminHomePage.navigateToListOrdersPage();
-    
+
     // Order ID are updated async after DP is created in Magento. Delaying this call as late as possible to factor this in.
     order = await hokodoApi.viewOrder(orderId);
-    
-    await listOrdersPage.navigateToOrderPage(order.unique_id);
 
-    await orderPage.navigateToShipOrderPage();
-    await shipOrderPage.shipOrder();
+    await listOrdersPage.navigateToOrderPage(order.unique_id);
+    await orderPage.captureInvoice(order.unique_id, magentoApi);
 
     // fetch the updated Hokodo Order
     order = await hokodoApi.viewOrder(orderId);
 
-    // verify that the Order items have been fulfilled as expected
-    order.items.filter(i => i.type === "product").forEach(orderItem => {
-      const basketItem = basketDetails.totals.items.find(item => item.item_id == parseInt(orderItem.item_id) && orderItem);
+    // fetch the Hokodo Deferred Payment
+    const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(order.deferred_payment.id, "captured")
+    
+    // expect(deferred_payment.status, "Deferred Payment Status").toBe("captured");
+    expect(deferredPayment.authorisation, "Deferred Payment authorisation").toBe(0);
+    expect(deferredPayment.protected_captures, "Deferred Payment protected_captures").toBe(basketDetails.totals.grand_total * 100);
+    expect(deferredPayment.unprotected_captures, "Deferred Payment unprotected_captures").toBe(0);
+    expect(deferredPayment.refunds, "Deferred Payment refunds").toBe(0);
+    expect(deferredPayment.voided_authorisation, "Deferred Payment voided_authorisation").toBe(0);
+    expect(deferredPayment.expired_authorisation, "Deferred Payment expired_authorisation").toBe(0);
 
-      expect(parseFloat(orderItem.fulfilled_quantity), "Check fulfilled quantity").toBe(basketItem?.qty);
-      expect(orderItem.cancelled_quantity, "Check cancelled quantity").toBe("0");
-      expect(orderItem.returned_quantity, "Check returned quantity").toBe("0");
-    });
-
-    expect(order.deferred_payment.status, "Ensure Deferred Payment is fulfilled").toBe("fulfilled");
+    await orderPage.navigateToShipOrderPage();
+    await shipOrderPage.shipOrder();
   });
 });

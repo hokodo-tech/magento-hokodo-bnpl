@@ -53,6 +53,7 @@ class Config extends DefaultPaymentConfig
     public const ENABLE_CUSTOMER_GROUPS = 'enable_customer_groups';
     public const CUSTOMER_GROUPS = 'customer_groups';
     public const CAPTURE_ONLINE = 'capture_online';
+    public const TOTALS_FIX = 'advanced/enable_thirdparty_totals_compatibility';
 
     /**
      * @var ScopeConfigInterface
@@ -272,11 +273,11 @@ class Config extends DefaultPaymentConfig
     /**
      * A function that create invoice automatically config.
      *
-     * @param bool|null $storeId
+     * @param int|null $storeId
      *
      * @return bool
      */
-    public function getCreateInvoiceAutomaticallyConfig(bool $storeId = null): bool
+    public function getCreateInvoiceAutomaticallyConfig(int $storeId = null): bool
     {
         return (bool) $this->scopeConfig->getValue(
             self::INVOICE_ON_PAYMENT,
