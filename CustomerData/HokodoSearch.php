@@ -10,6 +10,7 @@ namespace Hokodo\BNPL\CustomerData;
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Customer\Model\Session;
+use Psr\Log\LoggerInterface;
 
 class HokodoSearch implements SectionSourceInterface
 {
@@ -31,10 +32,12 @@ class HokodoSearch implements SectionSourceInterface
      */
     public function __construct(
         Session $customerSession,
-        HokodoCustomerRepositoryInterface $hokodoCustomerRepository
+        HokodoCustomerRepositoryInterface $hokodoCustomerRepository,
+        LoggerInterface $logger
     ) {
         $this->customerSession = $customerSession;
         $this->hokodoCustomerRepository = $hokodoCustomerRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -45,6 +48,10 @@ class HokodoSearch implements SectionSourceInterface
         $hokodoCustomer = $this->hokodoCustomerRepository->getByCustomerId(
             (int) $this->customerSession->getCustomerId()
         );
+        $this->logger->alert('WAKE UP!');
+        $this->logger->debug('Next step');
+        $this->logger->notice('Take a look at this');
+        $this->logger->error('Something went wrong', ['param1' => 'value1']);
 
         return [
             self::COMPANY_ID => $hokodoCustomer->getCompanyId() ?: '',

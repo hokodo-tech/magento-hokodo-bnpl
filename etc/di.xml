@@ -182,7 +182,34 @@
     </virtualType>
 
     <!-- Logger -->
-    <virtualType name="Hokodo\BNPL\Model\Logger" type="Magento\Payment\Model\Method\Logger">
+    <!-- inject HokodoLogger where you need -->
+    <type name="Hokodo\BNPL\CustomerData\HokodoSearch">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="HokodoLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">Hokodo\BNPL\Model\Logger\Handler\Error</item>
+                <item name="debug" xsi:type="object">Hokodo\BNPL\Model\Logger\Handler\Debug</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Hokodo\BNPL\Model\Logger\Handler\Error">
+        <arguments>
+            <argument name="fileName" xsi:type="string">var/log/hokodo_error.log</argument>
+        </arguments>
+    </type>
+    <type name="Hokodo\BNPL\Model\Logger\Handler\Debug">
+        <arguments>
+            <argument name="fileName" xsi:type="string">var/log/hokodo_debug.log</argument>
+        </arguments>
+    </type>
+
+    <!--<virtualType name="Hokodo\BNPL\Model\Logger" type="Magento\Payment\Model\Method\Logger">
         <arguments>
             <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Logger\DefaultLogger</argument>
             <argument name="config" xsi:type="object">Hokodo\BNPL\Gateway\Config\Config</argument>
@@ -199,9 +226,9 @@
         <arguments>
             <argument name="fileName" xsi:type="string">/var/log/hokodo-bnpl.log</argument>
         </arguments>
-    </virtualType>
+    </virtualType>-->
     <!-- IPN Logger -->
-    <type name="Hokodo\BNPL\Controller\OnAuthorization\Index">
+    <!--<type name="Hokodo\BNPL\Controller\OnAuthorization\Index">
         <arguments>
             <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Ipn\Logger</argument>
         </arguments>
@@ -233,7 +260,7 @@
         <arguments>
             <argument name="fileName" xsi:type="string">/var/log/hokodo-deferred-payment-ipn.log</argument>
         </arguments>
-    </virtualType>
+    </virtualType>-->
     <!-- End Logger -->
 
     <!-- Methods builders -->
@@ -1107,7 +1134,7 @@
             </argument>
         </arguments>
     </virtualType>
-
+    <!-- remove this-->
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
@@ -1121,6 +1148,7 @@
             <argument name="resourceModel" xsi:type="string">Hokodo\BNPL\Model\ResourceModel\PaymentLog</argument>
         </arguments>
     </virtualType>
+    <!-- remove this-->
 
     <!-- Reduce PDF file size -->
     <preference for="Magento\Sales\Model\Order\Pdf\Invoice" type="Hokodo\BNPL\Model\Pdf\Invoice" />

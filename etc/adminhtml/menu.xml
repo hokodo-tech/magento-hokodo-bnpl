@@ -9,13 +9,21 @@
              parent="Magento_Backend::system"
              resource="Hokodo_BNPL::hokodo"
         />
-        <add id="Hokodo_BNPL::hokodo_paymentlog_index"
+<!--        <add id="Hokodo_BNPL::hokodo_paymentlog_index"
              title="Logs"
              module="Hokodo_BNPL"
              sortOrder="20"
              parent="Hokodo_BNPL::hokodo"
              action="hokodo/paymentlog"
              resource="Hokodo_BNPL::hokodo"
+        />-->
+        <add id="Hokodo_BNPL::hokodo_logs"
+             title="Logs"
+             module="Hokodo_BNPL"
+             sortOrder="30"
+             parent="Hokodo_BNPL::hokodo"
+             action="hokodo/logs"
+             resource="Hokodo_BNPL::view"
         />
     </menu>
 </config>

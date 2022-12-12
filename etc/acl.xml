@@ -4,7 +4,7 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::system">
-                    <resource id="Hokodo_BNPL::hokodo" title="Hokodo Payment logs" sortOrder="100" >
+                    <resource id="Hokodo_BNPL::hokodo" title="Hokodo logs" sortOrder="100" >
                         <resource id="Hokodo_BNPL::view" title="View" sortOrder="50" />
                         <resource id="Hokodo_BNPL::delete" title="Delete" sortOrder="100" />
                     </resource>
