@@ -98,6 +98,10 @@
                     <comment><![CDATA[Sets method on the first place on checkout and makes it selected]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="allow_customer_to_change_company" translate="label comment" type="select" sortOrder="120" showInDefault="1" showInWebsite="1">
+                    <label>Allow User to change company</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <group id="segment" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
                     <label>Analytics</label>
                     <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
