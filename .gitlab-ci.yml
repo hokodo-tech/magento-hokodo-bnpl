@@ -20,6 +20,8 @@ workflow:
 php:lint:
   stage: lint
   image: composer:latest
+  variables:
+    PHP_CS_FIXER_IGNORE_ENV: 1
   script:
     - mkdir src && ls -A | grep -v src | xargs mv -t src
     - git clone https://github.com/magento/magento-coding-standard.git && cd magento-coding-standard
@@ -31,6 +33,8 @@ php:lint:
 php:compat:
   stage: lint
   image: registry.gitlab.com/pipeline-components/php-codesniffer:latest
+  variables:
+    PHP_CS_FIXER_IGNORE_ENV: 1
   parallel:
     matrix:
       - PHP_VERSION: ["7.4", "8.1"]
