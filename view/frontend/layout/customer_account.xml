@@ -4,7 +4,8 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="customer_account_navigation">
-            <block name="hokodo_customer_account_link" class="Magento\Customer\Block\Account\SortLinkInterface">
+            <block name="hokodo_customer_account_link" class="Magento\Customer\Block\Account\SortLinkInterface"
+                   ifconfig="payment/hokodo_bnpl/allow_customer_to_change_company">
                 <arguments>
                     <argument translate="true" name="label" xsi:type="string">My Company</argument>
                     <argument name="sortOrder" xsi:type="number">250</argument>
