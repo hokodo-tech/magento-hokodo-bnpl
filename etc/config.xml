@@ -52,6 +52,7 @@
                 <replace_place_order_hooks>0</replace_place_order_hooks>
                 <enable_customer_groups>0</enable_customer_groups>
                 <is_default>0</is_default>
+                <allow_customer_to_change_company>1</allow_customer_to_change_company>
                 <segment>
                     <active>1</active>
                     <sandbox_key>1sTpGIGYD3zs1NnZ7VrP6AwqCsSnD8EA</sandbox_key>
@@ -63,14 +64,15 @@
                     <enable_product>1</enable_product>
                     <enable_top>1</enable_top>
                     <top_theme>default</top_theme>
-                    <enable_cart_page>0</enable_cart_page>
                     <hokodo_logo>1</hokodo_logo>
-                    <label_cart_page>Pay in 30 days with</label_cart_page>
                     <subtitle>No interest. No fees</subtitle>
                     <payment_more_info>More info</payment_more_info>
                     <payment_method_logos>credit</payment_method_logos>
                     <payment_method_direct_logos>direct_uk</payment_method_direct_logos>
                 </marketing>
+                <advanced>
+                    <enable_thirdparty_totals_compatibility>0</enable_thirdparty_totals_compatibility>
+                </advanced>
             </hokodo_bnpl>
         </payment>
         <csp>

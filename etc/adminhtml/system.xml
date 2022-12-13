@@ -17,7 +17,7 @@
                 </field>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enabled</label>
-                    <comment>v2.0.12</comment>
+                    <comment>v2.1</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="enable_customer_groups" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
@@ -98,6 +98,10 @@
                     <comment><![CDATA[Sets method on the first place on checkout and makes it selected]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="allow_customer_to_change_company" translate="label comment" type="select" sortOrder="120" showInDefault="1" showInWebsite="1">
+                    <label>Allow User to change company</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="debug" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Enable Debug</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -157,15 +161,6 @@
                     <field id="banner_link" translate="label comment" type="text" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Banner link</label>
                     </field>
-                    <field id="enable_cart_page" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Enable button on cart page, minicart</label>
-                        <comment><![CDATA[Display button on cart page and minicart]]></comment>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    </field>
-                    <field id="label_cart_page" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                        <label>Label button on cart page, minicart</label>
-                        <comment><![CDATA[Label text for button on cart page and minicart.]]></comment>
-                    </field>
                     <field id="hokodo_logo" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Show Hokodo logo</label>
                         <comment><![CDATA[Display Hokodo logo in checkout page with checkout payment method title.]]></comment>
@@ -184,6 +179,14 @@
                     <field id="payment_method_logos" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Credit Card logo</label>
                         <source_model>Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos</source_model>
+                    </field>
+                </group>
+                <group id="advanced" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
+                    <label>Advanced</label>
+                    <field id="enable_thirdparty_totals_compatibility" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Enable thirdparty extensions compatibility fix</label>
+                        <comment><![CDATA[Enables fix when using thirdparty modules for tax calculations and discount providers.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                 </group>
             </group>

@@ -1,3 +1,14 @@
+2.1 / December 2022
+==================
+* Released Post Sale API V2
+* Added partial Invoicing
+
+2.0.13 / December 2022
+==================
+* Added company search to the customer edit page in the Admin
+* Added company search to the customer account
+* Refactored module and fixed bugs
+
 2.0.12 / November 2022
 ==================
 * Fix issue with enetring discount before payment method is selected

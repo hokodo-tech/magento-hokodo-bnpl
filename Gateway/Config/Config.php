@@ -37,8 +37,7 @@ class Config extends DefaultPaymentConfig
     public const INVOICE_ON_PAYMENT = 'payment/hokodo_bnpl/create_invoice_on_payment_accepted';
     public const REPLACE_PLACE_ORDER_HOOKS = 'payment/hokodo_bnpl/replace_place_order_hooks';
     public const IS_PAYMENT_DEFAULT_PATH = 'payment/hokodo_bnpl/is_default';
-    public const KEY_BTN_CART_PAGE_LABEL = 'marketing/label_cart_page';
-    public const KEY_BTN_CART_PAGE_ENABLE = 'marketing/enable_cart_page';
+    public const ALLOW_CUSTOMER_TO_CHANGE_COMPANY = 'payment/hokodo_bnpl/allow_customer_to_change_company';
     public const MARKETING_FAQ_LINK = 'marketing/faq_link';
     public const MARKETING_BANNER_LINK = 'marketing/banner_link';
     public const MARKETING_PRODUCT_PAGE_ENABLE = 'marketing/enable_product';
@@ -56,6 +55,7 @@ class Config extends DefaultPaymentConfig
     public const ENABLE_CUSTOMER_GROUPS = 'enable_customer_groups';
     public const CUSTOMER_GROUPS = 'customer_groups';
     public const CAPTURE_ONLINE = 'capture_online';
+    public const TOTALS_FIX = 'advanced/enable_thirdparty_totals_compatibility';
 
     /**
      * @var ScopeConfigInterface
@@ -102,6 +102,22 @@ class Config extends DefaultPaymentConfig
             return 0;
         }
         return parent::getValue($field, $storeId);
+    }
+
+    /**
+     * Allow customer to change company in customer backend.
+     *
+     * @param int $storeId
+     *
+     * @return bool
+     */
+    public function isAllowCustomerToChangeCompany(int $storeId = 0): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::ALLOW_CUSTOMER_TO_CHANGE_COMPANY,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     /**
