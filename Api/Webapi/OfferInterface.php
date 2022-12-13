@@ -16,18 +16,18 @@ interface OfferInterface
     /**
      * Create order request webapi handler.
      *
-     * @param OfferRequestInterface $payload
+     * @param \Hokodo\BNPL\Api\Data\Webapi\OfferRequestInterface $payload
      *
-     * @return OfferResponseInterface
+     * @return \Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterface
      */
     public function requestNew(OfferRequestInterface $payload): OfferResponseInterface;
 
     /**
      * Request new offer method for guest user.
      *
-     * @param OfferRequestInterface $payload
+     * @param \Hokodo\BNPL\Api\Data\Webapi\OfferRequestInterface $payload
      *
-     * @return OfferResponseInterface
+     * @return \Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterface
      */
     public function guestRequestNew(OfferRequestInterface $payload): OfferResponseInterface;
 }

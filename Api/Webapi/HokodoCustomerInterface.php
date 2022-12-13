@@ -15,9 +15,9 @@ interface HokodoCustomerInterface
     /**
      * Assign Hokodo(companyId, organisationId, userId) to a magento customer.
      *
-     * @param HokodoCustomerRequestInterface $payload
+     * @param \Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerRequestInterface $payload
      *
-     * @return HokodoCustomerResponseInterface
+     * @return \Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterface
      */
     public function assignCompany(HokodoCustomerRequestInterface $payload): HokodoCustomerResponseInterface;
 }
