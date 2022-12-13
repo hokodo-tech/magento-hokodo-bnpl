@@ -1,5 +1,4 @@
 import { Page } from "@playwright/test";
-import { MagentoApi } from "../../support/magento-api";
 import { elementExists } from "../../support/playwright-assertion-helpers";
 import InvoicePage from "./invoice-page";
 
@@ -26,24 +25,27 @@ export default class OrderPage {
         }
     }
 
-    async captureInvoice(orderId: string, magentoApi: MagentoApi) {
-        await this.waitForDeferredPaymentToBeAccepted();
+    async captureInvoice() {
+        await this.page.locator("#order_invoice").click();
+        new InvoicePage(this.page).captureInvoice();
+    }
 
-        const comments = await magentoApi.getComments(orderId);
-
-        if(comments.items.find(x => x.comment.includes("Captured amount"))) {
-            return; // the invoice has already been captured
-        } else {
-            await this.page.locator("#order_invoice").click();
-            new InvoicePage(this.page).captureInvoice();
-        }
+    async cancelOrder() {
+        await this.page.locator("#order-view-cancel-button").click();
+        await this.page.locator(".action-accept").click();
+        await this.page.locator("text='You canceled the order.'");
     }
 
     async navigateToShipOrderPage() {
         await this.page.locator("#order_ship").click();
     }
 
-    async checkShipButtonIsNotVisible() {
-        await this.page.waitForSelector("#order_ship", { state: "hidden" });
+    async canShipOrder() {
+        await this.page.locator(".page-actions-buttons").waitFor();
+        return await this.page.locator("#order_ship").count() > 0;
+    }
+
+    async navigate(orderId: number) {
+        await this.page.goto(`/admin/sales/order/view/order_id/${orderId}`);
     }
 }
