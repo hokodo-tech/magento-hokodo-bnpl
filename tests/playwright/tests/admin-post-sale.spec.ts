@@ -57,7 +57,7 @@ test.describe("Post Sale Admin Actions", () => {
     expect(await orderPage.canShipOrder(), "The Order can be shipped").toBe(false);
   });
 
-  test.only("Cancel an Order in the Admin Portal", async ({
+  test("Cancel an Order in the Admin Portal", async ({
     homePage,
     generateOrderData,
     productDetailsPage,
