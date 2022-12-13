@@ -52,6 +52,7 @@
                 <replace_place_order_hooks>0</replace_place_order_hooks>
                 <enable_customer_groups>0</enable_customer_groups>
                 <is_default>0</is_default>
+                <allow_customer_to_change_company>1</allow_customer_to_change_company>
                 <segment>
                     <active>1</active>
                     <sandbox_key>1sTpGIGYD3zs1NnZ7VrP6AwqCsSnD8EA</sandbox_key>
