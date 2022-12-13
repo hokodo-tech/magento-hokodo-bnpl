@@ -3,7 +3,6 @@ import { BuyerStatus, CompanyType, CreditStatus, FraudStatus } from "../support/
 
 test.describe("Credit is declined", () => {
   test("Can't place an order with Hokodo when declined for credit", async ({
-    createAccountPage,
     homePage,
     generateOrderData,
     productDetailsPage,
@@ -17,9 +16,6 @@ test.describe("Credit is declined", () => {
 
     const testOrderData = await generateOrderData(CompanyType.REGISTERED_COMPANY, buyerStatus);
 
-    await createAccountPage.navigate();
-    await createAccountPage.createAccount(testOrderData.buyer);
-
     // add products to the basket
     for (const product of testOrderData.products) {
       await homePage.navigate();
@@ -31,7 +27,7 @@ test.describe("Credit is declined", () => {
     }
     
     // enter shipping details
-    await shippingAddressPage.setupNewShippingAddress(testOrderData.shippingAddress, "flatrate_flatrate");
+    await shippingAddressPage.setupNewShippingAddress(testOrderData, "flatrate_flatrate");
 
     // verify that the order doesn't qualify for BNPL
     await paymentPage.navigate();

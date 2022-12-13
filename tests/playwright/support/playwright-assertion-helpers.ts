@@ -1,9 +1,9 @@
 import { expect, Page } from "@playwright/test";
 import { Address } from "./types/Address";
 import { HokodoOrder } from "./types/HokodoOrder";
-import { MagentoBasketTotals } from "./types/MagentoBasketDetails";
+import { MagentoOrder } from "./types/MagentoOrder";
 
-export function verifyHokodoOrder (hokodoOrder: HokodoOrder, basketTotals: MagentoBasketTotals) {
+export function verifyHokodoOrder (hokodoOrder: HokodoOrder, basketTotals: MagentoOrder) {
     expect(basketTotals.grand_total).toBe(hokodoOrder.total_amount / 100);
     expect(basketTotals.base_currency_code).toBe(hokodoOrder.currency);
     expect(basketTotals.tax_amount).toBe(hokodoOrder.tax_amount / 100);
