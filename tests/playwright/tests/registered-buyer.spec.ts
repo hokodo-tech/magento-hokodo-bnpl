@@ -2,7 +2,7 @@ import { expect } from "@playwright/test";
 import test from "../fixtures";
 import { verifyAddressDetails, verifyHokodoOrder } from "../support/playwright-assertion-helpers";
 import { getCaptureStatus, getHokodoIdsFromMagentoOrder } from "../support/playwright-test-helpers";
-import { BuyerStatus, CompanyType, CreditStatus, FraudStatus } from "../support/types/Buyer";
+import { CompanyType } from "../support/types/Buyer";
 import { MagentoOrderCaptureStatus } from "../support/types/MagentoOrder";
 
 test.describe("Full end to end for Registered Buyers", () => {
@@ -73,10 +73,11 @@ test.describe("Full end to end for Registered Buyers", () => {
     await adminLoginPage.navigate();
     await adminLoginPage.loginToAdmin();
 
+    await orderPage.navigate(magentoOrder.entity_id);
+
     // capture the Magento order if it hasn't already been captured
     if (getCaptureStatus(magentoOrder) === MagentoOrderCaptureStatus.NotInvoiced) {
-      await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");
-      await orderPage.navigate(magentoOrder.entity_id);
+      await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");  
       await orderPage.captureInvoice();
     }
 
@@ -161,10 +162,11 @@ test.describe("Full end to end for Registered Buyers", () => {
     await adminLoginPage.navigate();
     await adminLoginPage.loginToAdmin();
 
+    await orderPage.navigate(magentoOrder.entity_id);
+
     // capture the Magento order if it hasn't already been captured
     if (getCaptureStatus(magentoOrder) === MagentoOrderCaptureStatus.NotInvoiced) {
       await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");
-      await orderPage.navigate(magentoOrder.entity_id);
       await orderPage.captureInvoice();
     }
 
