@@ -8,6 +8,7 @@ define([
 ], function ($, _, Component) {
     return Component.extend({
         defaults: {
+            entityIdSelector: 'customer.entity_id'
         },
 
         initialize() {
@@ -20,7 +21,7 @@ define([
                 if (counter > 10 || typeof Hokodo !== 'undefined'){
                     let currentCompanyId = this.source.data.hokodo.company_id;
                     let hokodoSubmitUrl = this.source.data.hokodo.submit_url;
-                    let customerId = this.source.data.customer.entity_id;
+                    let customerId = this.source.data[this.entityIdSelector];
 
                     if (currentCompanyId) {
                         this.companySearch = this.getSdk().elements().create("companySearch", {companyId: currentCompanyId});
