@@ -1,3 +1,8 @@
+2.1.1 / December 2022
+==================
+* Fix CSS for Payment Method title
+* SOAP fix
+
 2.1 / December 2022
 ==================
 * Released Post Sale API V2
