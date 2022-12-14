@@ -33,7 +33,7 @@ class Index extends Action implements HttpGetActionInterface
     public function execute(): ResultInterface
     {
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Hokodo_BNPL::PaymentLog');
+        $resultPage->setActiveMenu('Hokodo_BNPL::hokodo_logs');
         $resultPage->addBreadcrumb(__('System'), __('Hokodo'));
         $resultPage->addBreadcrumb(__('Logs'), __('Logs'));
         $resultPage->getConfig()->getTitle()->prepend(__('Hokodo BNPL Logs'));

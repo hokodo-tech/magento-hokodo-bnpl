@@ -8,10 +8,9 @@ namespace Hokodo\BNPL\Observer;
 
 use Hokodo\BNPL\Gateway\Service\Order;
 use Hokodo\BNPL\Model\RequestBuilder\OrderBuilder;
-use Hokodo\BNPL\Model\SaveLog as Logger;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Observer\OrderPlaceSuccessObserver.
@@ -21,7 +20,7 @@ class OrderPlaceSuccessObserver implements ObserverInterface
     /**
      * @var Logger
      */
-    private $logger;
+    private Logger $logger;
 
     /**
      * @var OrderBuilder
@@ -34,14 +33,14 @@ class OrderPlaceSuccessObserver implements ObserverInterface
     private Order $orderService;
 
     /**
-     * @param OrderBuilder    $orderBuilder
-     * @param Order           $orderService
-     * @param LoggerInterface $logger
+     * @param OrderBuilder $orderBuilder
+     * @param Order        $orderService
+     * @param Logger       $logger
      */
     public function __construct(
         OrderBuilder $orderBuilder,
         Order $orderService,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         $this->orderBuilder = $orderBuilder;
         $this->orderService = $orderService;
@@ -63,9 +62,11 @@ class OrderPlaceSuccessObserver implements ObserverInterface
             try {
                 $this->orderService->patchOrder($orderRequest);
             } catch (\Exception $e) {
-                $this->logger->critical(
-                    __('Hokodo_BNPL: There was an error when patching an order: %1', $e->getMessage())
-                );
+                $data = [
+                    'message' => 'Hokodo_BNPL: There was an error when patching an order: %1',
+                    'error' => $e->getMessage(),
+                ];
+                $this->logger->error(__METHOD__, $data);
             }
         }
     }

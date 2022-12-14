@@ -9,7 +9,6 @@ namespace Hokodo\BNPL\Gateway\Http\Client;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use Hokodo\BNPL\Api\Data\OrderDocumentsInterface;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Hokodo\BNPL\Service\LogObfuscatorService;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Http\ClientException;
@@ -18,6 +17,7 @@ use Magento\Payment\Gateway\Http\ConverterException;
 use Magento\Payment\Gateway\Http\ConverterInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Gateway\Http\Client\GuzzleHttpClient.
@@ -27,37 +27,37 @@ class GuzzleHttpClient implements ClientInterface
     /**
      * @var Client
      */
-    private $client;
+    private Client $client;
 
     /**
      * @var ConverterInterface|null
      */
-    private $converter;
+    private ?ConverterInterface $converter;
 
     /**
-     * @var PaymentLogger
+     * @var Logger
      */
-    private $paymentLogger;
+    private Logger $logger;
 
     /**
      * @var LogObfuscatorService
      */
-    private $logObfuscatorService;
+    private LogObfuscatorService $logObfuscatorService;
 
     /**
      * @param LogObfuscatorService    $logObfuscatorService
-     * @param PaymentLogger           $paymentLogger
+     * @param Logger                  $logger
      * @param ConverterInterface|null $converter
      */
     public function __construct(
         LogObfuscatorService $logObfuscatorService,
-        PaymentLogger $paymentLogger,
+        Logger $logger,
         ConverterInterface $converter = null
     ) {
         $this->logObfuscatorService = $logObfuscatorService;
         $this->client = new Client();
         $this->converter = $converter;
-        $this->paymentLogger = $paymentLogger;
+        $this->logger = $logger;
     }
 
     /**
@@ -147,20 +147,28 @@ class GuzzleHttpClient implements ClientInterface
                 );
             }
         } catch (ConverterException|LocalizedException $e) {
-            $this->paymentLogger->execute([
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
+            $this->logger->error(
+                __METHOD__,
+                [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ]
+            );
         } finally {
             if (isset($arraySearch) && $arraySearch >= 0) {
                 unset($log['request'][$arraySearch]);
             }
+            unset($data);
             $data = [
                 'payment_log_content' => $log,
                 'action_title' => 'Gateway\Http\Client::class',
                 'status' => $status,
             ];
-            $this->paymentLogger->execute($data);
+            if ($status == 0) {
+                $this->logger->error(__METHOD__, $data);
+            } else {
+                $this->logger->debug(__METHOD__, $data);
+            }
         }
 
         return $result;

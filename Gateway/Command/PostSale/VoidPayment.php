@@ -68,9 +68,11 @@ class VoidPayment implements CommandInterface
                 }
             }
         } catch (\Exception $e) {
-            $this->logger->error(
-                __('Hokodo_BNPL: Error voiding the payment - %1', $e->getMessage())
-            );
+            $data = [
+                'message' => 'Hokodo_BNPL: Error voiding the payment.',
+                'error' => $e->getMessage(),
+            ];
+            $this->logger->error(__METHOD__, $data);
         }
 
         throw new ApiGatewayException(__('Void order payment error. See logs for details.'));

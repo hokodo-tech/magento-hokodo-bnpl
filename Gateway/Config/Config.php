@@ -185,7 +185,7 @@ class Config extends DefaultPaymentConfig
      *
      * @param int|null $storeId
      *
-     * @return boolean
+     * @return bool
      */
     public function isDebugEnabled(int $storeId = null): bool
     {

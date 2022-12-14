@@ -13,6 +13,7 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\Data\Collection\Filesystem as FilesystemCollection;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Io\File as IoFilesystem;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 
 class Collection extends FilesystemCollection
@@ -33,30 +34,40 @@ class Collection extends FilesystemCollection
     private ReadInterface $logDirectory;
 
     /**
+     * @var IoFilesystem
+     */
+    private IoFilesystem $ioFilesystem;
+
+    /**
      * @param EntityFactoryInterface $entityFactory
-     * @param Filesystem $filesystem
-     * @param DateTimeFactory $dateTimeFactory
+     * @param Filesystem             $filesystem
+     * @param IoFilesystem           $ioFilesystem
+     * @param DateTimeFactory        $dateTimeFactory
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
         Filesystem $filesystem,
+        IoFilesystem $ioFilesystem,
         DateTimeFactory $dateTimeFactory
     ) {
         parent::__construct($entityFactory, $filesystem);
         $this->filesystem = $filesystem;
+        $this->ioFilesystem = $ioFilesystem;
         $this->dateTimeFactory = $dateTimeFactory;
     }
 
     /**
      * Generate Row.
      *
-     * @param $filename
+     * @param string $filename
+     *
      * @return array
      */
     protected function _generateRow($filename): array
     {
         $this->getLogDirectory();
-        $row['file_name'] = basename($filename);
+        $fileInfo = $this->ioFilesystem->getPathInfo($filename);
+        $row['file_name'] = $fileInfo['basename'];
         $row['size'] = $this->logDirectory->stat($this->logDirectory->getRelativePath($filename))['size'];
         $mtime = $this->logDirectory->stat($this->logDirectory->getRelativePath($filename))['mtime'];
         $row['updated_at'] = $this->dateTimeFactory->create()->gmtDate(null, $mtime);
@@ -74,11 +85,14 @@ class Collection extends FilesystemCollection
     }
 
     /**
-     * @param $field
-     * @param $direction
+     * Add Order.
+     *
+     * @param string $field
+     * @param string $direction
+     *
      * @return self
      */
-    public function addOrder($field, $direction): self
+    public function addOrder(string $field, string $direction): self
     {
         return $this->setOrder($field, $direction);
     }

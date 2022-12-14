@@ -142,7 +142,11 @@ class HokodoCustomer implements HokodoCustomerInterface
 
             return $hokodoCustomerResponse;
         } catch (\Exception $e) {
-            $this->logger->critical(__('Hokodo_BNPL: set company to user failed with error - %1', $e->getMessage()));
+            $data = [
+                'message' => 'Hokodo_BNPL: set company to user failed with error',
+                'error' => $e->getMessage(),
+            ];
+            $this->logger->critical(__METHOD__, $data);
         }
 
         throw new RuntimeException(__('There was an error. Please try again.'));

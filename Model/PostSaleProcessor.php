@@ -11,15 +11,14 @@ use Hokodo\BNPL\Api\Data\OrderInformationInterface;
 use Hokodo\BNPL\Api\Data\OrderInformationInterfaceFactory;
 use Hokodo\BNPL\Api\Data\OrderItemInterface;
 use Hokodo\BNPL\Api\Data\OrderItemInterfaceFactory;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Hokodo\BNPL\Service\OrderPostSaleService;
 use Hokodo\BNPL\Service\OrderService;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Payment\Model\Method\Logger;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Model\Config as TaxConfig;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Model\PostSaleProcessor.
@@ -29,12 +28,12 @@ class PostSaleProcessor
     /**
      * @var OrderPostSaleService
      */
-    private $orderPostSaleService;
+    private OrderPostSaleService $orderPostSaleService;
 
     /**
      * @var OrderService
      */
-    private $orderService;
+    private OrderService $orderService;
 
     /**
      * @var OrderInformationInterfaceFactory
@@ -44,22 +43,17 @@ class PostSaleProcessor
     /**
      * @var OrderItemInterfaceFactory
      */
-    private $orderItemFactory;
+    private OrderItemInterfaceFactory $orderItemFactory;
 
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfiguration;
+    private ScopeConfigInterface $scopeConfiguration;
 
     /**
      * @var Logger
      */
-    private $logger;
-
-    /**
-     * @var PaymentLogger
-     */
-    private $paymentLogger;
+    private Logger $logger;
 
     /**
      * A constructor.
@@ -70,7 +64,6 @@ class PostSaleProcessor
      * @param OrderItemInterfaceFactory        $orderItemFactory
      * @param ScopeConfigInterface             $scopeConfiguration
      * @param Logger                           $logger
-     * @param SaveLog                          $paymentLogger
      */
     public function __construct(
         OrderPostSaleService $orderPostSaleService,
@@ -78,8 +71,7 @@ class PostSaleProcessor
         OrderInformationInterfaceFactory $orderInformationFactory,
         OrderItemInterfaceFactory $orderItemFactory,
         ScopeConfigInterface $scopeConfiguration,
-        Logger $logger,
-        PaymentLogger $paymentLogger
+        Logger $logger
     ) {
         $this->orderPostSaleService = $orderPostSaleService;
         $this->orderService = $orderService;
@@ -87,7 +79,6 @@ class PostSaleProcessor
         $this->orderItemFactory = $orderItemFactory;
         $this->scopeConfiguration = $scopeConfiguration;
         $this->logger = $logger;
-        $this->paymentLogger = $paymentLogger;
     }
 
     /**
@@ -143,7 +134,7 @@ class PostSaleProcessor
                     'status' => 1,
                     'quote_id' => $order->getQuoteId(),
                 ];
-                $this->paymentLogger->execute($data);
+                $this->logger->debug(__METHOD__, $data);
                 if (count($orderItems)) {
                     /**
                      * @var OrderInformationInterface $orderInformation
@@ -190,7 +181,7 @@ class PostSaleProcessor
                 'status' => 1,
                 'quote_id' => $orderItem->getQuoteItemId(),
             ];
-            $this->paymentLogger->execute($data);
+            $this->logger->debug(__METHOD__, $data);
 
             /**
              * @var \Magento\Sales\Model\Order\Item $orderItem
@@ -313,7 +304,7 @@ class PostSaleProcessor
                 'action_title' => 'PostSaleProcessor::requestFulfill',
                 'status' => 0,
             ];
-            $this->paymentLogger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             throw new LocalizedException(__('Unable to create shipping right now. Please try again later.'));
         }
     }

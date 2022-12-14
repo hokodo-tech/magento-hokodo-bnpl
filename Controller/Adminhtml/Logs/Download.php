@@ -12,12 +12,12 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\Response\Http\FileFactory;
 
 class Download extends Action implements HttpGetActionInterface
 {
@@ -32,9 +32,9 @@ class Download extends Action implements HttpGetActionInterface
     private Filesystem $filesystem;
 
     /**
-     * @param Context $context
+     * @param Context     $context
      * @param FileFactory $fileFactory
-     * @param Filesystem $filesystem
+     * @param Filesystem  $filesystem
      */
     public function __construct(
         Context $context,
@@ -60,6 +60,7 @@ class Download extends Action implements HttpGetActionInterface
      * Prepare And Download.
      *
      * @return ResultInterface
+     *
      * @throws FileSystemException
      */
     public function execute(): ResultInterface

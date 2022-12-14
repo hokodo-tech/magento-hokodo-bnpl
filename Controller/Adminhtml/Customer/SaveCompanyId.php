@@ -192,9 +192,11 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
                     }
                 }
             } catch (NoSuchEntityException $exception) {
-                $this->logger->notice(
-                    __('Hokodo_BNPL: try get active quote. ', $exception->getMessage())
-                );
+                $data = [
+                    'message' => 'Hokodo_BNPL: try get active quote.',
+                    'error' => $exception->getMessage(),
+                ];
+                $this->logger->notice(__METHOD__, $data);
             }
             $this->sessionCleanerInterface->clearFor($customerId);
             $result = [
@@ -202,9 +204,11 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
                 'message' => __('The company has been updated.'),
             ];
         } catch (\Exception $e) {
-            $this->logger->critical(
-                __('Hokodo_BNPL: set company to user failed with error - %1', $e->getMessage())
-            );
+            $data = [
+                'message' => 'Hokodo_BNPL: set company to user failed with error.',
+                'error' => $exception->getMessage(),
+            ];
+            $this->logger->critical(__METHOD__, $data);
         }
         return $resultJson->setData($result);
     }

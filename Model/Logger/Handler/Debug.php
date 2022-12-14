@@ -26,10 +26,10 @@ class Debug extends Base
     private Config $config;
 
     /**
-     * @param Config $config
+     * @param Config          $config
      * @param DriverInterface $filesystem
-     * @param string|null $filePath
-     * @param string|null $fileName
+     * @param string|null     $filePath
+     * @param string|null     $fileName
      */
     public function __construct(
         Config $config,
@@ -45,6 +45,7 @@ class Debug extends Base
      * Write log.
      *
      * @param array $record
+     *
      * @return void
      */
     public function write(array $record): void

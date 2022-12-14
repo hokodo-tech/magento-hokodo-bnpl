@@ -6,23 +6,6 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="hokodo_payment_logs" resource="default" engine="innodb" comment="Hokodo Payment Logs">
-        <column xsi:type="int" name="payment_log_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Payment log Id"/>
-        <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" comment="Quote ID"/>
-        <column xsi:type="text" name="payment_log_content" nullable="true" comment="Payment log content"/>
-        <column xsi:type="varchar" name="action_title" nullable="false" length="255" default="" comment="Action title"/>
-        <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="true" identity="false" comment="Log Status"/>
-        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Log Creation Time"/>
-        <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="payment_log_id"/>
-        </constraint>
-        <index referenceId="HOKODO_BNPL_STATUS" indexType="btree">
-            <column name="status"/>
-        </index>
-        <index referenceId="HOKODO_BNPL_ACTION_TITLE" indexType="btree">
-            <column name="action_title"/>
-        </index>
-    </table>
     <table name="hokodo_quote" resource="default" engine="innodb" comment="Hokodo Quote">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Hokodo Quote Id"/>
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" comment="Magento Quote ID"/>

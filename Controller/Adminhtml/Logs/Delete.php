@@ -25,7 +25,7 @@ class Delete extends Action implements HttpPostActionInterface
     private Filesystem $filesystem;
 
     /**
-     * @param Context $context
+     * @param Context    $context
      * @param Filesystem $filesystem
      */
     public function __construct(
@@ -50,6 +50,7 @@ class Delete extends Action implements HttpPostActionInterface
      * Delete file.
      *
      * @return ResultInterface
+     *
      * @throws FileSystemException
      */
     public function execute(): ResultInterface

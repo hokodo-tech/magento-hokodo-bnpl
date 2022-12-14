@@ -6,10 +6,7 @@
 
 namespace Hokodo\BNPL\Observer;
 
-use Hokodo\BNPL\Api\Data\PaymentQuoteInterface;
-use Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface;
 use Hokodo\BNPL\Gateway\Service\Order;
-use Hokodo\BNPL\Model\SaveLog as Logger;
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
@@ -28,7 +25,7 @@ class DataAssignObserver extends AbstractDataAssignObserver
     /**
      * @var array
      */
-    private $additionalInformationList = [
+    private array $additionalInformationList = [
         self::HOKODO_USER_ID,
         self::HOKODO_ORGANISATION_ID,
         self::HOKODO_ORDER_ID,
@@ -37,43 +34,16 @@ class DataAssignObserver extends AbstractDataAssignObserver
     ];
 
     /**
-     * @var array
-     */
-    private $additionalInformationMap = [
-        self::HOKODO_USER_ID => PaymentQuoteInterface::USER_ID,
-        self::HOKODO_ORGANISATION_ID => PaymentQuoteInterface::ORGANISATION_ID,
-        self::HOKODO_ORDER_ID => PaymentQuoteInterface::ORDER_ID,
-        self::HOKODO_PAYMENT_OFFER_ID => PaymentQuoteInterface::OFFER_ID,
-        self::HOKODO_DEFERRED_PAYMENT_ID => PaymentQuoteInterface::DEFERRED_PAYMENT_ID,
-    ];
-
-    /**
-     * @var PaymentQuoteRepositoryInterface
-     */
-    private $paymentQuoteRepository;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var Order
      */
-    private $orderService;
+    private Order $orderService;
 
     /**
-     * @param PaymentQuoteRepositoryInterface $paymentQuoteRepository
-     * @param Order                           $orderService
-     * @param Logger                          $logger
+     * @param Order $orderService
      */
     public function __construct(
-        PaymentQuoteRepositoryInterface $paymentQuoteRepository,
         Order $orderService,
-        Logger $logger
     ) {
-        $this->paymentQuoteRepository = $paymentQuoteRepository;
-        $this->logger = $logger;
         $this->orderService = $orderService;
     }
 

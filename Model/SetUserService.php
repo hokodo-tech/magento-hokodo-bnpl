@@ -13,9 +13,9 @@ use Hokodo\BNPL\Api\Data\UserOrganisationResultInterfaceFactory;
 use Hokodo\BNPL\Api\HokodoOrganisationManagementInterface;
 use Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\SetUserServiceInterface;
-use Hokodo\BNPL\Model\SaveLog as Logger;
 use Hokodo\BNPL\Service\UserService;
 use Magento\Framework\Exception\LocalizedException;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Model\SetUserService.
@@ -25,32 +25,32 @@ class SetUserService implements SetUserServiceInterface
     /**
      * @var PaymentQuoteInterfaceFactory
      */
-    private $paymentQuoteFactory;
+    private PaymentQuoteInterfaceFactory $paymentQuoteFactory;
 
     /**
      * @var UserOrganisationResultInterfaceFactory
      */
-    private $resultFactory;
+    private UserOrganisationResultInterfaceFactory $resultFactory;
 
     /**
      * @var HokodoOrganisationManagementInterface
      */
-    private $organisationManagement;
+    private HokodoOrganisationManagementInterface $organisationManagement;
 
     /**
      * @var PaymentQuoteRepositoryInterface
      */
-    private $paymentQuoteRepository;
+    private PaymentQuoteRepositoryInterface $paymentQuoteRepository;
 
     /**
      * @var UserService
      */
-    private $userService;
+    private UserService $userService;
 
     /**
      * @var Logger
      */
-    private $logger;
+    private Logger $logger;
 
     /**
      * @param PaymentQuoteInterfaceFactory           $paymentQuoteFactory
@@ -114,7 +114,7 @@ class SetUserService implements SetUserServiceInterface
                 'status' => 0,
                 'quote_id' => $cartId,
             ];
-            $this->logger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             throw new LocalizedException(
                 //__('An error occurred on the server. Please try to place the order again.'),
                 __($e->getMessage()),
@@ -170,7 +170,7 @@ class SetUserService implements SetUserServiceInterface
                 'status' => 0,
                 'quote_id' => $quoteId,
             ];
-            $this->logger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             $paymentQuote = $this->paymentQuoteFactory->create();
             $paymentQuote->setQuoteId($quoteId);
         }

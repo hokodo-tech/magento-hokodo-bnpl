@@ -19,7 +19,6 @@ use Hokodo\BNPL\Api\Data\UserInterface;
 use Hokodo\BNPL\Api\HokodoOrganisationRepositoryInterface;
 use Hokodo\BNPL\Api\OrderInformationManagementInterface;
 use Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Hokodo\BNPL\Service\OrderService;
 use Hokodo\BNPL\Service\OrganisationServiceFactory;
 use Hokodo\BNPL\Service\PaymentOffersService;
@@ -28,6 +27,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Model\OrderInformationManagement.
@@ -35,58 +35,58 @@ use Magento\Quote\Api\CartRepositoryInterface;
 class OrderInformationManagement implements OrderInformationManagementInterface
 {
     /**
-     * @var PaymentLogger
+     * @var Logger
      */
-    protected $paymentLogger;
+    protected Logger $logger;
     /**
      * @var PaymentOffersInterfaceFactory
      */
-    private $paymentOffersFactory;
+    private PaymentOffersInterfaceFactory $paymentOffersFactory;
     /**
      * @var PaymentQuoteInterfaceFactory
      */
-    private $paymentQuoteFactory;
+    private PaymentQuoteInterfaceFactory $paymentQuoteFactory;
     /**
      * @var PaymentQuoteRepositoryInterface
      */
-    private $paymentQuoteRepository;
+    private PaymentQuoteRepositoryInterface $paymentQuoteRepository;
     /**
      * @var OrderService
      */
-    private $orderService;
+    private OrderService $orderService;
     /**
      * @var PaymentOffersService
      */
-    private $paymentOffersService;
+    private PaymentOffersService $paymentOffersService;
     /**
      * @var CartRepositoryInterface
      */
-    private $cartRepository;
+    private CartRepositoryInterface $cartRepository;
 
     /**
      * @var OrganisationServiceFactory
      */
-    private $organisationServiceFactory;
+    private OrganisationServiceFactory $organisationServiceFactory;
 
     /**
      * @var OrganisationUserInterface
      */
-    private $organisationUserInterface;
+    private OrganisationUserInterface $organisationUserInterface;
 
     /**
      * @var OrganisationInterface
      */
-    private $organisationInterface;
+    private OrganisationInterface $organisationInterface;
 
     /**
      * @var HokodoOrganisationRepositoryInterface
      */
-    private $organisationRepository;
+    private HokodoOrganisationRepositoryInterface $organisationRepository;
 
     /**
      * @var ResourceConnection
      */
-    private $resourceConnection;
+    private ResourceConnection $resourceConnection;
 
     /**
      * @param PaymentOffersInterfaceFactory         $paymentOffersFactory
@@ -99,7 +99,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
      * @param OrganisationUserInterface             $organisationUserInterface
      * @param OrganisationInterface                 $organisationInterface
      * @param HokodoOrganisationRepositoryInterface $organisationRepository
-     * @param PaymentLogger                         $paymentLogger
+     * @param Logger                                $logger
      * @param ResourceConnection                    $resourceConnection
      */
     public function __construct(
@@ -113,7 +113,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         OrganisationUserInterface $organisationUserInterface,
         OrganisationInterface $organisationInterface,
         HokodoOrganisationRepositoryInterface $organisationRepository,
-        PaymentLogger $paymentLogger,
+        Logger $logger,
         ResourceConnection $resourceConnection
     ) {
         $this->paymentOffersFactory = $paymentOffersFactory;
@@ -126,7 +126,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         $this->organisationUserInterface = $organisationUserInterface;
         $this->organisationInterface = $organisationInterface;
         $this->organisationRepository = $organisationRepository;
-        $this->paymentLogger = $paymentLogger;
+        $this->logger = $logger;
         $this->resourceConnection = $resourceConnection;
     }
 
@@ -175,7 +175,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'status' => 0,
                 'quote_id' => $cartId,
             ];
-            $this->paymentLogger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             throw new CouldNotSaveException(
                 __($e->getMessage()),
                 $e
@@ -187,7 +187,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'status' => 0,
                 'quote_id' => $cartId,
             ];
-            $this->paymentLogger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             throw new CouldNotSaveException(
                 __($e->getMessage()),
                 $e
@@ -216,7 +216,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'status' => 0,
                 'quote_id' => $quoteId,
             ];
-            $this->paymentLogger->execute($data);
+            $this->logger->error(__METHOD__, $data);
         }
 
         return $paymentQuote;
@@ -241,6 +241,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         } catch (LocalizedException $e) {
             $log = [];
             $log[] = 'A' . $cartId;
+            /* @todo refactor this */
             $s = 'UPDATE hokodo_payment_quote set order_id=NULL,' // @codingStandardsIgnoreLine
                 . "organisation_id=NULL where order_id='" . $order->getId() . "'";
             $log[] = 'Order ID: ' . $cartId;
@@ -252,7 +253,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'status' => 0,
                 'quote_id' => $cartId,
             ];
-            $this->paymentLogger->execute($data);
+            $this->logger->error(__METHOD__, $data);
 
             $this->resourceConnection->getConnection()->query($s); // @codingStandardsIgnoreLine
             throw new CouldNotSaveException(
@@ -266,7 +267,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'status' => 0,
                 'quote_id' => $cartId,
             ];
-            $this->paymentLogger->execute($data);
+            $this->logger->error(__METHOD__, $data);
 
             throw new CouldNotSaveException(
                 __($e->getMessage()),
@@ -345,7 +346,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'status' => 0,
                 'quote_id' => $cartId,
             ];
-            $this->paymentLogger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             throw new CouldNotSaveException(
                 __($e->getMessage()),
                 $e
@@ -357,7 +358,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'status' => 0,
                 'quote_id' => $cartId,
             ];
-            $this->paymentLogger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             throw new CouldNotSaveException(
                 __($e->getMessage()),
                 $e

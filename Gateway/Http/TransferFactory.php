@@ -8,10 +8,10 @@ namespace Hokodo\BNPL\Gateway\Http;
 
 use Hokodo\BNPL\Api\Data\OrderDocumentsInterface;
 use Hokodo\BNPL\Gateway\Config\Config;
-use Hokodo\BNPL\Model\SaveLog as Logger;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Gateway\Http\TransferFactory.
@@ -21,17 +21,17 @@ class TransferFactory implements TransferFactoryInterface
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     /**
      * @var TransferBuilder
      */
-    private $transferBuilder;
+    private TransferBuilder $transferBuilder;
 
     /**
      * @var Logger
      */
-    private $logger;
+    private Logger $logger;
 
     /**
      * @param Config          $config
@@ -68,7 +68,6 @@ class TransferFactory implements TransferFactoryInterface
         }
         $log = [];
         $log['setClientConfig'] = $request['client_config'] ?? [];
-        $log['setHeaders'] = array_merge($this->getHeaders($isDocument), ($request['header'] ?? []));
         $log['setBody'] = $logBody;
         $log['setMethod'] = $method;
         $log['setUri'] = $this->getUri($request['uri'] ?? '');
@@ -78,7 +77,7 @@ class TransferFactory implements TransferFactoryInterface
             'status' => 0,
             'quote_id' => '',
         ];
-        $this->logger->execute($data);
+        $this->logger->debug(__METHOD__, $data);
         return $this->transferBuilder
             ->setClientConfig($request['client_config'] ?? [])
             ->setHeaders(array_merge($this->getHeaders($isDocument), ($request['header'] ?? [])))

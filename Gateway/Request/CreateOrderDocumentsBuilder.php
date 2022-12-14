@@ -9,63 +9,49 @@ namespace Hokodo\BNPL\Gateway\Request;
 use GuzzleHttp\Psr7;
 use Hokodo\BNPL\Api\Data\OrderDocumentsInterface;
 use Hokodo\BNPL\Gateway\OrderDocumentsSubjectReader;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 class CreateOrderDocumentsBuilder implements BuilderInterface
 {
     /**
-     * @const string Cache tag
-     */
-    private const MODULE_VERSION = '1.1.36';
-
-    /**
      * @var OrderDocumentsSubjectReader
      */
-    private $orderDocumentsSubjectReader;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfiguration;
+    private OrderDocumentsSubjectReader $orderDocumentsSubjectReader;
 
     /**
      * @var ProductMetadataInterface
      */
-    private $productMetadata;
+    private ProductMetadataInterface $productMetadata;
 
     /**
-     * @var PaymentLogger
+     * @var Logger
      */
-    protected $paymentLogger;
+    protected Logger $logger;
 
     /**
      * @var ReadFactory
      */
-    private $readFactory;
+    private ReadFactory $readFactory;
 
     /**
      * @param OrderDocumentsSubjectReader $orderDocumentsSubjectReader
-     * @param ScopeConfigInterface        $scopeConfiguration
      * @param ProductMetadataInterface    $productMetadata
-     * @param PaymentLogger               $paymentLogger
+     * @param Logger                      $logger
      * @param ReadFactory                 $readFactory
      */
     public function __construct(
         OrderDocumentsSubjectReader $orderDocumentsSubjectReader,
-        ScopeConfigInterface $scopeConfiguration,
         ProductMetadataInterface $productMetadata,
-        PaymentLogger $paymentLogger,
+        Logger $logger,
         ReadFactory $readFactory
     ) {
         $this->orderDocumentsSubjectReader = $orderDocumentsSubjectReader;
-        $this->scopeConfiguration = $scopeConfiguration;
         $this->productMetadata = $productMetadata;
-        $this->paymentLogger = $paymentLogger;
+        $this->logger = $logger;
         $this->readFactory = $readFactory;
     }
 
@@ -123,13 +109,12 @@ class CreateOrderDocumentsBuilder implements BuilderInterface
                 OrderDocumentsInterface::DOCUMENT_DESCRIPTION => $document->getDescription(),
                 OrderDocumentsInterface::DOCUMENT_AMOUNT => $document->getAmount(),
                 OrderDocumentsInterface::DOCUMENT_METADATA => 'Magento Version: ' . $this->productMetadata->getVersion()
-                    . ', ' . 'Hokodo Module Version: ' . self::MODULE_VERSION . ', '
-                    . 'PHP version: ' . phpversion(),
+                    . ', ' . 'PHP version: ' . phpversion(),
             ],
             'action_title' => 'CreateOrderDocumentsBuilder: createOrderDocumentRequest',
             'status' => 1,
         ];
-        $this->paymentLogger->execute($data);
+        $this->logger->debug(__METHOD__, $data);
 
         return $request;
     }

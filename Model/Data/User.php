@@ -7,9 +7,9 @@
 namespace Hokodo\BNPL\Model\Data;
 
 use Hokodo\BNPL\Api\Data\UserInterface;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Magento\Framework\Api\AbstractSimpleObject;
 use Magento\Framework\HTTP\Header;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Model\Data\User.
@@ -22,22 +22,20 @@ class User extends AbstractSimpleObject implements UserInterface
     protected $header;
 
     /**
-     * @var PaymentLogger
+     * @var Logger
      */
-    protected $paymentLogger;
+    protected $logger;
 
     /**
-     * A constructor.
-     *
-     * @param Header        $header
-     * @param PaymentLogger $paymentLogger
+     * @param Header $header
+     * @param Logger $logger
      */
     public function __construct(
         Header $header,
-        PaymentLogger $paymentLogger
+        Logger $logger
     ) {
         $this->header = $header;
-        $this->paymentLogger = $paymentLogger;
+        $this->logger = $logger;
     }
 
     /**
@@ -79,7 +77,7 @@ class User extends AbstractSimpleObject implements UserInterface
                 'action_title' => 'Hokodo\BNPL\Model\Data\User::setData()',
                 'status' => 1,
             ];
-            $this->paymentLogger->execute($data);
+            $this->logger->debug(__METHOD__, $data);
         }
 
         return parent::setData($field, $value);

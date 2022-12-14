@@ -7,8 +7,8 @@
 namespace Hokodo\BNPL\Gateway\Request;
 
 use Hokodo\BNPL\Gateway\UserOrganisationSubjectReader;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Gateway\Request\UserOrganisationBuilder.
@@ -18,23 +18,23 @@ class UserOrganisationBuilder implements BuilderInterface
     /**
      * @var UserOrganisationSubjectReader
      */
-    private $subjectReader;
+    private UserOrganisationSubjectReader $subjectReader;
 
     /**
-     * @var PaymentLogger
+     * @var Logger
      */
-    private $paymentLogger;
+    private Logger $logger;
 
     /**
      * @param UserOrganisationSubjectReader $subjectReader
-     * @param PaymentLogger                 $paymentLogger
+     * @param logger                        $logger
      */
     public function __construct(
         UserOrganisationSubjectReader $subjectReader,
-        PaymentLogger $paymentLogger
+        Logger $logger
     ) {
         $this->subjectReader = $subjectReader;
-        $this->paymentLogger = $paymentLogger;
+        $this->logger = $logger;
     }
 
     /**
@@ -67,7 +67,7 @@ class UserOrganisationBuilder implements BuilderInterface
             'action_title' => 'UserOrganisationBuilder: buildUserBody',
             'status' => 1,
         ];
-        $this->paymentLogger->execute($data);
+        $this->logger->debug(__METHOD__, $data);
         return $user->__toArray();
     }
 }

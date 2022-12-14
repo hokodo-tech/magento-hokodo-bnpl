@@ -6,8 +6,6 @@
 
 namespace Hokodo\BNPL\Observer;
 
-use Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface;
-use Hokodo\BNPL\Model\SaveLog as Logger;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -19,28 +17,6 @@ use Magento\Sales\Model\Order;
  */
 class ProcessOrderPlaceObserver implements ObserverInterface
 {
-    /**
-     * @var PaymentQuoteRepositoryInterface
-     */
-    private $paymentQuoteRepository;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
-     * @param PaymentQuoteRepositoryInterface $paymentQuoteRepository
-     * @param Logger                          $logger
-     */
-    public function __construct(
-        PaymentQuoteRepositoryInterface $paymentQuoteRepository,
-        Logger $logger
-    ) {
-        $this->paymentQuoteRepository = $paymentQuoteRepository;
-        $this->logger = $logger;
-    }
-
     /**
      * A function that executes payments quote.
      *

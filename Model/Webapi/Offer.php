@@ -330,7 +330,11 @@ class Offer implements OfferInterface
 
             throw new NotFoundException(__('No organisation found in API response'));
         } catch (\Exception $e) {
-            $this->logger->error(__('Hokodo_BNPL: createOrganisation call failed with error - %1', $e->getMessage()));
+            $data = [
+                'message' => 'Hokodo_BNPL: createOrganisation call failed with error',
+                'error' => $e->getMessage(),
+            ];
+            $this->logger->error(__METHOD__, $data);
             throw new Exception(
                 __('There was an error during payment method set up. Please reload the page or try again later.')
             );
@@ -390,7 +394,11 @@ class Offer implements OfferInterface
 
             throw new NotFoundException(__('No user found in API response'));
         } catch (\Exception $e) {
-            $this->logger->error(__('Hokodo_BNPL: createUser call failed with error - %1', $e->getMessage()));
+            $data = [
+                'message' => 'Hokodo_BNPL: createUser call failed with error',
+                'error' => $e->getMessage(),
+            ];
+            $this->logger->error(__METHOD__, $data);
             throw new Exception(
                 __('There was an error during payment method set up. Please reload the page or try again later.')
             );
@@ -449,7 +457,11 @@ class Offer implements OfferInterface
                 throw new NotFoundException(__('No order found in API response'));
             }
         } catch (\Exception $e) {
-            $this->logger->error(__('Hokodo_BNPL: createOrder call failed with error - %1', $e->getMessage()));
+            $data = [
+                'message' => 'Hokodo_BNPL: createOrder call failed with error',
+                'error' => $e->getMessage(),
+            ];
+            $this->logger->error(__METHOD__, $data);
             throw new Exception(
                 __('There was an error during payment method set up. Please reload the page or try again later.')
             );
@@ -502,7 +514,11 @@ class Offer implements OfferInterface
             $this->hokodoQuote->setOfferId('');
             return true;
         } catch (\Exception $e) {
-            $this->logger->error(__('Hokodo_BNPL: createUser call failed with error - %1', $e->getMessage()));
+            $data = [
+                'message' => 'Hokodo_BNPL: createUser call failed with error',
+                'error' => $e->getMessage(),
+            ];
+            $this->logger->error(__METHOD__, $data);
             return false;
         }
     }

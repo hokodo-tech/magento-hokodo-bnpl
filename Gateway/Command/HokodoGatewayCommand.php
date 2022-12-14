@@ -7,7 +7,6 @@
 
 namespace Hokodo\BNPL\Gateway\Command;
 
-use Hokodo\BNPL\Model\SaveLog as Logger;
 use Hokodo\BNPL\Service\ArrayToStringService;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Command\CommandException;
@@ -20,6 +19,7 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand.
@@ -29,47 +29,47 @@ class HokodoGatewayCommand implements CommandInterface
     /**
      * @var ArrayToStringService
      */
-    private $arrayToStringService;
+    private ArrayToStringService $arrayToStringService;
 
     /**
      * @var BuilderInterface
      */
-    private $requestBuilder;
+    private BuilderInterface $requestBuilder;
 
     /**
      * @var TransferFactoryInterface
      */
-    private $transferFactory;
+    private TransferFactoryInterface $transferFactory;
 
     /**
      * @var ClientInterface
      */
-    private $client;
+    private ClientInterface $client;
 
     /**
      * @var Logger
      */
-    private $logger;
+    private Logger $logger;
 
     /**
      * @var ResultInterfaceFactory
      */
-    private $resultFactory;
+    private ResultInterfaceFactory $resultFactory;
 
     /**
      * @var HandlerInterface
      */
-    private $handler;
+    private ?HandlerInterface $handler;
 
     /**
      * @var ValidatorInterface
      */
-    private $validator;
+    private ?ValidatorInterface $validator;
 
     /**
      * @var ErrorMessageMapperInterface
      */
-    private $errorMessageMapper;
+    private ?ErrorMessageMapperInterface $errorMessageMapper;
 
     /**
      * @param ArrayToStringService        $arrayToStringService
@@ -190,7 +190,7 @@ class HokodoGatewayCommand implements CommandInterface
             'action_title' => 'Payment Error',
             'status' => 0,
         ];
-        $this->logger->execute($data);
+        $this->logger->error(__METHOD__, $data);
         $messagesString = $this->arrayToStringService->errorArrayToString($messages);
 
         throw new CommandException(

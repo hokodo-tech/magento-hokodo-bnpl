@@ -10,7 +10,6 @@ use Hokodo\BNPL\Api\Data\OrderInformationInterface;
 use Hokodo\BNPL\Api\Data\OrderInformationInterfaceFactory;
 use Hokodo\BNPL\Api\Data\OrderItemInterface;
 use Hokodo\BNPL\Api\Data\OrderItemInterfaceFactory;
-use Hokodo\BNPL\Model\SaveLog as Logger;
 use Hokodo\BNPL\Service\OrderPostSaleService;
 use Hokodo\BNPL\Service\OrderService;
 use Magento\Framework\Exception\LocalizedException;
@@ -19,6 +18,7 @@ use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Item;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Gateway\Command\DeferredPaymentCancelCommand.
@@ -28,27 +28,27 @@ class DeferredPaymentCancelCommand implements CommandInterface
     /**
      * @var OrderPostSaleService
      */
-    private $orderPostSaleService;
+    private OrderPostSaleService $orderPostSaleService;
 
     /**
      * @var OrderService
      */
-    private $orderService;
+    private OrderService $orderService;
 
     /**
      * @var OrderInformationInterfaceFactory
      */
-    private $orderInformationFactory;
+    private OrderInformationInterfaceFactory $orderInformationFactory;
 
     /**
      * @var OrderItemInterfaceFactory
      */
-    private $orderItemFactory;
+    private OrderItemInterfaceFactory $orderItemFactory;
 
     /**
      * @var Logger
      */
-    private $logger;
+    private Logger $logger;
 
     /**
      * @param OrderPostSaleService             $orderPostSaleService
@@ -88,12 +88,12 @@ class DeferredPaymentCancelCommand implements CommandInterface
 
                 ContextHelper::assertOrderPayment($paymentInfo);
                 $data = [
-                    'payment_log_content' => __('Cancel order id: %1', $paymentInfo->getOrder()->getIncrementId()),
+                    'payment_log_content' => "Cancel order id: {$paymentInfo->getOrder()->getIncrementId()}",
                     'action_title' => 'DeferredPaymentCancelCommand',
                     'status' => 1,
                     'quote_id' => $paymentInfo->getOrder()->getQuoteId(),
                 ];
-                $this->logger->execute($data);
+                $this->logger->debug(__METHOD__, $data);
                 if ($paymentInfo->getOrder()->getOrderApiId()) {
                     $this->executeCancelCommand($paymentInfo);
                 }
@@ -112,7 +112,7 @@ class DeferredPaymentCancelCommand implements CommandInterface
             if ($paymentInfo->getOrder()->getQuoteId()) {
                 $data['quote_id'] = $paymentInfo->getOrder()->getQuoteId();
             }
-            $this->logger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             throw $e;
         }
     }

@@ -25,12 +25,12 @@ class LogsDataProvider extends AbstractDataProvider
     protected $collection;
 
     /**
-     * @param $name
-     * @param $primaryFieldName
-     * @param $requestFieldName
+     * @param string            $name
+     * @param string            $primaryFieldName
+     * @param string            $requestFieldName
      * @param CollectionFactory $collectionFactory
-     * @param array $meta
-     * @param array $data
+     * @param array             $meta
+     * @param array             $data
      */
     public function __construct(
         $name,
@@ -48,6 +48,7 @@ class LogsDataProvider extends AbstractDataProvider
      * Get Logs Collection.
      *
      * @return Collection
+     *
      * @throws \Exception
      */
     public function getCollection(): Collection
@@ -64,6 +65,7 @@ class LogsDataProvider extends AbstractDataProvider
      * Get Data Array.
      *
      * @return array
+     *
      * @throws \Exception
      */
     public function getData(): array

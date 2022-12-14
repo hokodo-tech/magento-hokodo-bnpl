@@ -22,16 +22,16 @@ class Actions extends Column
     public const URL_PATH_LOG_DELETE = 'hokodo/logs/delete';
 
     /**
-     * @var UrlInterface $urlBuilder
+     * @var UrlInterface
      */
     public UrlInterface $urlBuilder;
 
     /**
-     * @param UrlInterface $urlBuilder
-     * @param ContextInterface $context
+     * @param UrlInterface       $urlBuilder
+     * @param ContextInterface   $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param array $components
-     * @param array $data
+     * @param array              $components
+     * @param array              $data
      */
     public function __construct(
         UrlInterface $urlBuilder,
@@ -45,7 +45,7 @@ class Actions extends Column
     }
 
     /**
-     * Prepare Data Source
+     * Prepare Data Source.
      *
      * @param array $dataSource
      *
@@ -54,7 +54,7 @@ class Actions extends Column
     public function prepareDataSource(array $dataSource): array
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 if (isset($item['file_name'])) {
                     $item[$this->getData('name')] = [
                         'download' => [
@@ -65,13 +65,13 @@ class Actions extends Column
                                     'size' => $item['size'],
                                 ]
                             ),
-                            'label' => __('Download')
+                            'label' => __('Download'),
                         ],
                         'delete' => [
                             'href' => $this->urlBuilder->getUrl(
                                 self::URL_PATH_LOG_DELETE,
                                 [
-                                    'file_name' => $item['file_name']
+                                    'file_name' => $item['file_name'],
                                 ]
                             ),
                             'label' => __('Delete'),
