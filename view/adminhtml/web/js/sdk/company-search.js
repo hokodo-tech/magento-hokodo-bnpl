@@ -8,7 +8,7 @@ define([
 ], function ($, _, Component) {
     return Component.extend({
         defaults: {
-            entityIdSelector: 'customer.entity_id',
+            entityIdSelector: 'customer_id',
             isCompanySearchMounted: false,
             isRendered: false,
             isSearchElementCreated: false
