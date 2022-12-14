@@ -6,6 +6,7 @@ define([
         require([config.url], function () {
             if (!window.hokodoSdk) {
                 window.hokodoSdk = Hokodo(config.key, config.sdkConfig);
+                $('body').triggerHandler('hokodoSdkResolved');
             }
         })
     }
