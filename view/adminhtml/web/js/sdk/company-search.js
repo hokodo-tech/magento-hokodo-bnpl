@@ -8,55 +8,75 @@ define([
 ], function ($, _, Component) {
     return Component.extend({
         defaults: {
+            entityIdSelector: 'customer_id',
+            isCompanySearchMounted: false,
+            isRendered: false,
+            isSearchElementCreated: false
         },
 
         initialize() {
             this._super();
             const self = this;
+            if (!window.hokodoSdk) {
+                $('body').on('hokodoSdkResolved', () => {
+                    self.initComponent();
+                })
+            } else {
+                this.initComponent();
+            }
+        },
 
-            let counter = 0;
-            let timer = setInterval(() => {
-                counter++;
-                if (counter > 10 || typeof Hokodo !== 'undefined'){
-                    let currentCompanyId = this.source.data.hokodo.company_id;
-                    let hokodoSubmitUrl = this.source.data.hokodo.submit_url;
-                    let customerId = this.source.data.customer.entity_id;
+        initComponent() {
+            let self = this;
+            let currentCompanyId = this.source.data.hokodo.company_id;
+            let entityId = this.source.data[this.entityIdSelector];
 
-                    if (currentCompanyId) {
-                        this.companySearch = this.getSdk().elements().create("companySearch", {companyId: currentCompanyId});
-                    } else {
-                        this.companySearch = this.getSdk().elements().create("companySearch");
-                    }
+            let payload = {};
+            if (currentCompanyId) {
+                payload.companyId = currentCompanyId;
+            }
+            this.companySearch = this.getSdk().elements().create("companySearch", payload);
 
-                    this.companySearch.on("companySelection", (company) => {
-                        if (company !== null && company.id !== currentCompanyId) {
-                            currentCompanyId = company.id;
-                            $.ajax({
-                                'url' : hokodoSubmitUrl,
-                                'type' : 'POST',
-                                'data' : {
-                                    'customerId' : customerId,
-                                    'companyId' : company.id,
-                                    'form_key': window.FORM_KEY
-                                },
-                                dataType:'json'
-                            }).done(function (data) {
-                                self.addNotification(data.message, !data.success)
-                            });
-                        }
+            this.companySearch.on("companySelection", (company) => {
+                if (company !== null && company.id !== currentCompanyId) {
+                    currentCompanyId = company.id;
+                    $.ajax({
+                        'url' : self.source.data.hokodo.submit_url,
+                        'type' : 'POST',
+                        'data' : {
+                            'entityId' : entityId,
+                            'companyId' : company.id,
+                            'form_key': window.FORM_KEY
+                        },
+                        dataType:'json'
+                    }).done(function (data) {
+                        self.addNotification(data.message, !data.success)
                     });
-
-                    clearInterval(timer)
                 }
-            }, 500);
+            });
+
+            this.isSearchElementCreated = true;
+            this.mountCompanySearch();
         },
 
         onAfterRender() {
-            this.companySearch.mount("#hokodoCompanySearch");
+            this.isRendered = true;
+            this.mountCompanySearch();
         },
 
         getSdk() {
-            return Hokodo();
+            return window.hokodoSdk;
+        },
+
+        mountCompanySearch() {
+            if (this.isReadyToMount()) {
+                this.companySearch.mount("#hokodoCompanySearch");
+                this.isCompanySearchMounted = true;
+            }
+        },
+
+        isReadyToMount() {
+            return this.isSearchElementCreated && this.isRendered && !this.isCompanySearchMounted;
         },
 
         addNotification(text, isError) {
