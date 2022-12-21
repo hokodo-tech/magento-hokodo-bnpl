@@ -1122,11 +1122,6 @@
         </arguments>
     </virtualType>
 
-    <!-- Reduce PDF file size -->
-    <preference for="Magento\Sales\Model\Order\Pdf\Invoice" type="Hokodo\BNPL\Model\Pdf\Invoice" />
-    <preference for="Magento\Sales\Model\Order\Pdf\Shipment" type="Hokodo\BNPL\Model\Pdf\Shipment" />
-
-
     <!-- SDK UPGRADE -->
 
     <preference for="Hokodo\BNPL\Api\Data\HokodoQuoteInterface" type="Hokodo\BNPL\Model\HokodoQuote" />
