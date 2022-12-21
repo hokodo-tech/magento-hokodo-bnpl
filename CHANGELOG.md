@@ -1,3 +1,7 @@
+2.1.2 / December 2022
+==================
+* Change handling PDF
+
 2.1.1 / December 2022
 ==================
 * Fix CSS for Payment Method title
