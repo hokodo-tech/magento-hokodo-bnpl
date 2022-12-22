@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data;
 
-interface HokodoCustomerInterface
+interface HokodoCustomerInterface extends HokodoEntityInterface
 {
     public const ID = 'id';
     public const CUSTOMER_ID = 'customer_id';

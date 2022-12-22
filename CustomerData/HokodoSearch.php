@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\CustomerData;
 
-use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
+use Hokodo\BNPL\Model\HokodoCompanyProvider;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Customer\Model\Session;
 
@@ -21,20 +21,20 @@ class HokodoSearch implements SectionSourceInterface
     private Session $customerSession;
 
     /**
-     * @var HokodoCustomerRepositoryInterface
+     * @var HokodoCompanyProvider
      */
-    private HokodoCustomerRepositoryInterface $hokodoCustomerRepository;
+    private HokodoCompanyProvider $hokodoCompanyProvider;
 
     /**
-     * @param Session                           $customerSession
-     * @param HokodoCustomerRepositoryInterface $hokodoCustomerRepository
+     * @param Session               $customerSession
+     * @param HokodoCompanyProvider $hokodoCompanyProvider
      */
     public function __construct(
         Session $customerSession,
-        HokodoCustomerRepositoryInterface $hokodoCustomerRepository
+        HokodoCompanyProvider $hokodoCompanyProvider
     ) {
         $this->customerSession = $customerSession;
-        $this->hokodoCustomerRepository = $hokodoCustomerRepository;
+        $this->hokodoCompanyProvider = $hokodoCompanyProvider;
     }
 
     /**
@@ -42,7 +42,7 @@ class HokodoSearch implements SectionSourceInterface
      */
     public function getSectionData()
     {
-        $hokodoCustomer = $this->hokodoCustomerRepository->getByCustomerId(
+        $hokodoCustomer = $this->hokodoCompanyProvider->getHokodoEntity()->getById(
             (int) $this->customerSession->getCustomerId()
         );
 

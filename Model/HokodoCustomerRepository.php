@@ -10,6 +10,7 @@ namespace Hokodo\BNPL\Model;
 
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterfaceFactory;
+use Hokodo\BNPL\Api\Data\HokodoEntityInterface;
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer as Resource;
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -44,7 +45,7 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
      *
      * @throws CouldNotSaveException
      */
-    public function save(HokodoCustomerInterface $hokodoCustomer): HokodoCustomerInterface
+    public function save(HokodoEntityInterface|HokodoCustomerInterface $hokodoCustomer): HokodoEntityInterface
     {
         try {
             $this->resource->save($hokodoCustomer);
@@ -59,7 +60,7 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
      *
      * @throws CouldNotDeleteException
      */
-    public function delete(HokodoCustomerInterface $hokodoCustomer): bool
+    public function delete(HokodoEntityInterface|HokodoCustomerInterface $hokodoCustomer): bool
     {
         try {
             $this->resource->delete($hokodoCustomer);
@@ -80,5 +81,16 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
         $this->resource->load($hokodoCustomer, $customerId, HokodoCustomerInterface::CUSTOMER_ID);
 
         return $hokodoCustomer;
+    }
+
+    /**
+     * Alias for getByCustomerId
+     *
+     * @param int $entityId
+     * @return HokodoEntityInterface
+     */
+    public function getById(int $entityId): HokodoEntityInterface
+    {
+        return $this->getByCustomerId($entityId);
     }
 }
