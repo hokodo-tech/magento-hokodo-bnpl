@@ -15,7 +15,7 @@ use Hokodo\Bnpl\Gateway\Config\Config;
 class HokodoEntityResolver implements HokodoEntityResolverInterface
 {
     /**
-     * Get Entity Type
+     * Get Entity Type.
      *
      * @return string
      */

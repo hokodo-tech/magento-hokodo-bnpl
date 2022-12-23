@@ -10,7 +10,7 @@ namespace Hokodo\BNPL\Api;
 interface HokodoEntityResolverInterface
 {
     /**
-     * Get Entity Type
+     * Get Entity Type.
      *
      * @return string
      */

@@ -424,7 +424,7 @@ class Config extends DefaultPaymentConfig
      */
     public function getEntityLevel(int $storeId = 0): string
     {
-        return $this->scopeConfig->getValue(
+        return (string) $this->scopeConfig->getValue(
             self::HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL,
             ScopeInterface::SCOPE_STORE,
             $storeId

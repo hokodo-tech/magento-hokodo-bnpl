@@ -9,5 +9,4 @@ namespace Hokodo\BNPL\Api\Data;
 
 interface HokodoEntityInterface
 {
-
 }
