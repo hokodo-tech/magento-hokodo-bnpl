@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Ui\DataProvider;
 
-use Hokodo\BNPL\Model\Logger\Fs\Collection;
-use Hokodo\BNPL\Model\Logger\Fs\CollectionFactory;
+use Hokodo\BNPL\Model\Logger\Filesystem\Collection;
+use Hokodo\BNPL\Model\Logger\Filesystem\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
 class LogsDataProvider extends AbstractDataProvider

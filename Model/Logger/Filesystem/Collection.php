@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Hokodo\BNPL\Model\Logger\Fs;
+namespace Hokodo\BNPL\Model\Logger\Filesystem;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
@@ -50,7 +50,7 @@ class Collection extends FilesystemCollection
         IoFilesystem $ioFilesystem,
         DateTimeFactory $dateTimeFactory
     ) {
-        parent::__construct($entityFactory, $filesystem);
+        parent::__construct($entityFactory);
         $this->filesystem = $filesystem;
         $this->ioFilesystem = $ioFilesystem;
         $this->dateTimeFactory = $dateTimeFactory;
