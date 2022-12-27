@@ -1198,10 +1198,6 @@
 <!--        <plugin name="hokodo_sales_order" type="Hokodo\BNPL\Plugin\OrderSaveCreateInvoicePlugin"/>-->
 <!--    </type>-->
 
-    <!-- Reduce PDF file size -->
-    <preference for="Magento\Sales\Model\Order\Pdf\Invoice" type="Hokodo\BNPL\Model\Pdf\Invoice" />
-    <preference for="Magento\Sales\Model\Order\Pdf\Shipment" type="Hokodo\BNPL\Model\Pdf\Shipment" />
-
 
     <!-- SDK UPGRADE -->
 

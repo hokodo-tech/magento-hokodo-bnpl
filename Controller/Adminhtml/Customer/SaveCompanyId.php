@@ -147,7 +147,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
             'success' => false,
             'message' => __('Error, the company has not been updated.'),
         ];
-        $customerId = (int) $this->getRequest()->getParam('customerId');
+        $customerId = (int) $this->getRequest()->getParam('entityId');
         $companyId = $this->getRequest()->getParam('companyId');
 
         if (empty($companyId) || empty($customerId)) {

@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { MagentoBasketDetails } from "../../support/types/MagentoBasketDetails";
+import { MagentoBasketDetails } from "../../support/types/MagentoOrder";
 import HokodoCheckout from "./hokodo-checkout";
 
 export default class PaymentPage {
@@ -16,7 +16,7 @@ export default class PaymentPage {
     }
 
     async selectHokodo() {
-        await this.page.locator("#hokodo_bnpl").click({ timeout: 60000 });
+        await this.page.locator("#hokodo_bnpl").click();
     }
 
     async getBasketDetails(): Promise<MagentoBasketDetails> {

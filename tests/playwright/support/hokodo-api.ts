@@ -14,7 +14,7 @@ export class HokodoAPI {
         return this.fetchItem(`/v1/organisations/${organisationId}`);
     }
 
-    async viewOrder(orderId: string): Promise<HokodoOrder> {
+    async getOrder(orderId: string): Promise<HokodoOrder> {
         return this.fetchItem(`/v1/payment/orders/${orderId}?expand=deferred_payment`);
     }
 
@@ -23,7 +23,7 @@ export class HokodoAPI {
     }
 
     async waitForDeferredPaymentToReachStatus(deferredPaymentId: string, desiredStatus: string): Promise<DeferredPayment> {
-        let attemptsRemaining = 60;
+        let attemptsRemaining = 3;
         let deferredPayment = await this.viewDeferredPayment(deferredPaymentId);
 
         while (attemptsRemaining > 0) {
