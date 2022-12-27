@@ -42,7 +42,7 @@ class DataAssignObserver extends AbstractDataAssignObserver
      * @param Order $orderService
      */
     public function __construct(
-        Order $orderService,
+        Order $orderService
     ) {
         $this->orderService = $orderService;
     }
