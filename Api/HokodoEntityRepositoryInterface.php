@@ -12,15 +12,6 @@ use Hokodo\BNPL\Api\Data\HokodoEntityInterface;
 interface HokodoEntityRepositoryInterface
 {
     /**
-     * Save entity.
-     *
-     * @param HokodoEntityInterface $hokodoEntity
-     *
-     * @return HokodoEntityInterface
-     */
-    public function save(HokodoEntityInterface $hokodoEntity): HokodoEntityInterface;
-
-    /**
      * Retrieve Hokodo Data Webapi by magento customer id.
      *
      * @param int $entityId

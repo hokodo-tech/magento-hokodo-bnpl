@@ -45,7 +45,7 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
      *
      * @throws CouldNotSaveException
      */
-    public function save(HokodoEntityInterface|HokodoCustomerInterface $hokodoCustomer): HokodoEntityInterface
+    public function save(HokodoCustomerInterface $hokodoCustomer): HokodoCustomerInterface
     {
         try {
             $this->resource->save($hokodoCustomer);
@@ -60,7 +60,7 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
      *
      * @throws CouldNotDeleteException
      */
-    public function delete(HokodoEntityInterface|HokodoCustomerInterface $hokodoCustomer): bool
+    public function delete(HokodoCustomerInterface $hokodoCustomer): bool
     {
         try {
             $this->resource->delete($hokodoCustomer);

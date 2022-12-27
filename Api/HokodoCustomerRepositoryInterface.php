@@ -12,6 +12,15 @@ use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
 interface HokodoCustomerRepositoryInterface extends HokodoEntityRepositoryInterface
 {
     /**
+     * Save entity.
+     *
+     * @param HokodoCustomerInterface $hokodoCustomer
+     *
+     * @return HokodoCustomerInterface
+     */
+    public function save(HokodoCustomerInterface $hokodoCustomer): HokodoCustomerInterface;
+
+    /**
      * Delete entity.
      *
      * @param HokodoCustomerInterface $hokodoCustomer
