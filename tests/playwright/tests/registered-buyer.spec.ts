@@ -76,7 +76,7 @@ test.describe("Full end to end for Registered Buyers", () => {
     await orderPage.navigate(magentoOrder.entity_id);
 
     // capture the Magento order if it hasn't already been captured
-    if (getCaptureStatus(magentoOrder) === MagentoOrderCaptureStatus.NotInvoiced) {
+    if (getCaptureStatus(await magentoApi.getOrder(magentoOrderId)) === MagentoOrderCaptureStatus.NotInvoiced) {
       await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");  
       await orderPage.captureInvoice();
     }
