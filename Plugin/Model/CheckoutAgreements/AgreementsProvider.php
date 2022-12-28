@@ -53,7 +53,11 @@ class AgreementsProvider
                 return [];
             }
         } catch (LocalizedException|NoSuchEntityException $e) {
-            $this->logger->error(__('Hokodo_BNPL: payment method is not defined  - %1', $e->getMessage()));
+            $data = [
+                'message' => 'Hokodo_BNPL: payment method is not defined.',
+                'error' => $e->getMessage(),
+            ];
+            $this->logger->error(__METHOD__, $data);
         }
         return $result;
     }

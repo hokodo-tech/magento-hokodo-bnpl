@@ -145,7 +145,7 @@
     <type name="Hokodo\BNPL\Gateway\Http\Client\GuzzleHttpClient">
         <arguments>
             <argument name="converter" xsi:type="object">Hokodo\BNPL\Gateway\Http\Converter\JsonToArrayConverter</argument>
-            <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Logger</argument>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
 
@@ -182,58 +182,182 @@
     </virtualType>
 
     <!-- Logger -->
-    <virtualType name="Hokodo\BNPL\Model\Logger" type="Magento\Payment\Model\Method\Logger">
+    <!-- inject HokodoLogger where you need -->
+    <type name="Hokodo\BNPL\Gateway\Command\DeferredPaymentCancelCommand">
         <arguments>
-            <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Logger\DefaultLogger</argument>
-            <argument name="config" xsi:type="object">Hokodo\BNPL\Gateway\Config\Config</argument>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
-    </virtualType>
-    <virtualType name="Hokodo\BNPL\Model\Logger\DefaultLogger" type="Magento\Framework\Logger\Monolog">
+    </type>
+
+    <type name="Hokodo\BNPL\Gateway\Request\CreateOrderDocumentsBuilder">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Gateway\Command\DeferredPaymentRefundCommand">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Gateway\Request\OrderBuilder">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Gateway\Request\UserOrganisationBuilder">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Model\GuestSetOrganisationService">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Model\HokodoOrganisationManagement">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Model\OrderInformationManagement">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Model\PostSaleProcessor">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Model\SetOrganisationService">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Model\SetUserService">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Model\Data\User">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Observer\OrderPlaceSuccessObserver">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Controller\Adminhtml\Customer\SaveCompanyId">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\CustomerData\HokodoCheckout">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Gateway\Command\PostSale\CapturePayment">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Gateway\Command\PostSale\RefundPayment">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Gateway\Command\PostSale\VoidPayment">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Model\DeferredPaymentIpnProcessor">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Model\Queue\Handler\Documents">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Model\Webapi\HokodoCustomer">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Model\Webapi\Offer">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Plugin\Model\CheckoutAgreements\AgreementsProvider">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="HokodoLogger" type="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">Hokodo\BNPL\Model\Logger\Handler\Error</item>
                 <item name="debug" xsi:type="object">Hokodo\BNPL\Model\Logger\Handler\Debug</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Hokodo\BNPL\Model\Logger\Handler\Debug" type="Magento\Framework\Logger\Handler\Base">
+
+    <type name="Hokodo\BNPL\Model\Logger\Handler\Error">
         <arguments>
-            <argument name="fileName" xsi:type="string">/var/log/hokodo-bnpl.log</argument>
-        </arguments>
-    </virtualType>
-    <!-- IPN Logger -->
-    <type name="Hokodo\BNPL\Controller\OnAuthorization\Index">
-        <arguments>
-            <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Ipn\Logger</argument>
+            <argument name="fileName" xsi:type="string">var/log/hokodo_error.log</argument>
         </arguments>
     </type>
-    <type name="Hokodo\BNPL\Controller\OnAuthorization\Success">
+    <type name="Hokodo\BNPL\Model\Logger\Handler\Debug">
         <arguments>
-            <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Ipn\Logger</argument>
+            <argument name="fileName" xsi:type="string">var/log/hokodo_debug.log</argument>
         </arguments>
     </type>
-    <type name="Hokodo\BNPL\Model\PostSaleProcessor">
-        <arguments>
-            <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Ipn\Logger</argument>
-        </arguments>
-    </type>
-    <virtualType name="Hokodo\BNPL\Model\Ipn\Logger" type="Magento\Payment\Model\Method\Logger">
-        <arguments>
-            <argument name="logger" xsi:type="object">Hokodo\BNPL\Model\Ipn\Logger\DefaultLogger</argument>
-            <argument name="config" xsi:type="object">Hokodo\BNPL\Gateway\Config\Config</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Hokodo\BNPL\Model\Ipn\Logger\DefaultLogger" type="Magento\Framework\Logger\Monolog">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="debug" xsi:type="object">Hokodo\BNPL\Model\Ipn\Logger\Handler\Debug</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Hokodo\BNPL\Model\Ipn\Logger\Handler\Debug" type="Magento\Framework\Logger\Handler\Base">
-        <arguments>
-            <argument name="fileName" xsi:type="string">/var/log/hokodo-deferred-payment-ipn.log</argument>
-        </arguments>
-    </virtualType>
     <!-- End Logger -->
 
     <!-- Methods builders -->
@@ -1074,53 +1198,6 @@
 <!--        <plugin name="hokodo_sales_order" type="Hokodo\BNPL\Plugin\OrderSaveCreateInvoicePlugin"/>-->
 <!--    </type>-->
 
-    <type name="Hokodo\BNPL\Service\LoggerService">
-        <arguments>
-            <argument name="name" xsi:type="string">hokodoLogger</argument>
-            <argument name="handlers"  xsi:type="array">
-                <item name="system" xsi:type="object">Hokodo\BNPL\Service\LoggerHandler</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <!-- Payment Logs -->
-    <preference for="Hokodo\BNPL\Api\Data\PaymentLogSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Hokodo\BNPL\Api\PaymentLogRepositoryInterface" type="Hokodo\BNPL\Model\PaymentLogRepository" />
-    <preference for="Hokodo\BNPL\Api\Data\PaymentLogInterface" type="Hokodo\BNPL\Model\PaymentLog" />
-
-    <type name="Hokodo\BNPL\Model\PaymentLogRepository">
-        <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Hokodo\BNPL\Model\Api\SearchCriteria\PaymentLogCollectionProcessor</argument>
-        </arguments>
-    </type>
-    <virtualType name="Hokodo\BNPL\Model\Api\SearchCriteria\CollectionProcessor\PaymentLogFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
-        <arguments>
-            <argument name="fieldMapping" xsi:type="array">
-                <item name="payment_log_id" xsi:type="string">payment_log_id</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Hokodo\BNPL\Model\Api\SearchCriteria\PaymentLogCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
-        <arguments>
-            <argument name="processors" xsi:type="array">
-                <item name="filters" xsi:type="object">Hokodo\BNPL\Model\Api\SearchCriteria\CollectionProcessor\PaymentLogFilterProcessor</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="hokodo_bnpl_log_listing_data_source" xsi:type="string">Hokodo\BNPL\Model\ResourceModel\PaymentLog\Grid\Collection</item>
-            </argument>
-        </arguments>
-    </type>
-    <virtualType name="Hokodo\BNPL\Model\ResourceModel\PaymentLog\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">hokodo_payment_logs</argument>
-            <argument name="resourceModel" xsi:type="string">Hokodo\BNPL\Model\ResourceModel\PaymentLog</argument>
-        </arguments>
-    </virtualType>
 
     <!-- SDK UPGRADE -->
 

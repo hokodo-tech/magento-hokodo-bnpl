@@ -10,8 +10,8 @@ use Hokodo\BNPL\Api\Data\HokodoOrganisationInterface;
 use Hokodo\BNPL\Api\Data\UserInterface;
 use Hokodo\BNPL\Api\GuestSetOrganisationServiceInterface;
 use Hokodo\BNPL\Api\SetOrganisationServiceInterface;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Model\GuestSetOrganisationService.
@@ -21,31 +21,31 @@ class GuestSetOrganisationService implements GuestSetOrganisationServiceInterfac
     /**
      * @var SetOrganisationServiceInterface
      */
-    private $setOrganisationService;
+    private SetOrganisationServiceInterface $setOrganisationService;
 
     /**
      * @var QuoteIdMaskFactory
      */
-    private $quoteIdMaskFactory;
+    private QuoteIdMaskFactory $quoteIdMaskFactory;
 
     /**
-     * @var PaymentLogger
+     * @var Logger
      */
-    protected $paymentLogger;
+    protected Logger $logger;
 
     /**
      * @param SetOrganisationServiceInterface $setOrganisationService
      * @param QuoteIdMaskFactory              $quoteIdMaskFactory
-     * @param PaymentLogger                   $paymentLogger
+     * @param Logger                          $logger
      */
     public function __construct(
         SetOrganisationServiceInterface $setOrganisationService,
         QuoteIdMaskFactory $quoteIdMaskFactory,
-        PaymentLogger $paymentLogger
+        Logger $logger
     ) {
         $this->setOrganisationService = $setOrganisationService;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        $this->paymentLogger = $paymentLogger;
+        $this->logger = $logger;
     }
 
     /**
@@ -63,7 +63,7 @@ class GuestSetOrganisationService implements GuestSetOrganisationServiceInterfac
             'action_title' => 'GuestSetOrganisationService::setOrganisation()',
             'status' => 1,
         ];
-        $this->paymentLogger->execute($data);
+        $this->logger->debug(__METHOD__, $data);
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->setOrganisationService->setOrganisation($quoteIdMask->getQuoteId(), $organisation, $user);
     }

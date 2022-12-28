@@ -126,16 +126,17 @@ class Documents
                     $order->getPayment()->getAdditionalInformation()['hokodo_order_id']
                 );
                 $this->orderDocumentsRepository->save($orderDocument);
-                $this->logger->info(__('Hokodo_BNPL: Invoice %1 was processed.', $document->getIncrementId()));
+                $data = [
+                    'message' => "Hokodo_BNPL: Invoice {$document->getIncrementId()} was processed.",
+                ];
+                $this->logger->info(__METHOD__, $data);
             }
         } catch (\Exception $e) {
-            $this->logger->error(
-                __(
-                    'Hokodo_BNPL: Error processing %1 document - %2',
-                    $orderDocument->getDocumentType(),
-                    $e->getMessage()
-                )
-            );
+            $data = [
+                'message' => "Hokodo_BNPL: Error processing {$orderDocument->getDocumentType()} document.",
+                'error' => $e->getMessage(),
+            ];
+            $this->logger->error(__METHOD__, $data);
         }
     }
 

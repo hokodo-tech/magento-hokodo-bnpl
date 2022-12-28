@@ -11,7 +11,6 @@ use Hokodo\BNPL\Api\Data\UserInterface;
 use Hokodo\BNPL\Gateway\OrderSubjectReader;
 use Hokodo\BNPL\Gateway\OrganisationSubjectReader;
 use Hokodo\BNPL\Gateway\UserSubjectReader;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Component\ComponentRegistrar;
@@ -27,28 +26,29 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Model\Config as TaxConfig;
+use Psr\Log\LoggerInterface as Logger;
 
 class OrderBuilder implements BuilderInterface
 {
     /**
      * @var OrderSubjectReader
      */
-    private $orderSubjectReader;
+    private OrderSubjectReader $orderSubjectReader;
 
     /**
      * @var OrganisationSubjectReader
      */
-    private $organisationSubjectReader;
+    private OrganisationSubjectReader $organisationSubjectReader;
 
     /**
      * @var UserSubjectReader
      */
-    private $userSubjectReader;
+    private UserSubjectReader $userSubjectReader;
 
     /**
      * @var DateTimeFactory
      */
-    private $dateTimeFactory;
+    private DateTimeFactory $dateTimeFactory;
 
     /**
      * @var currentTaxRate
@@ -58,32 +58,32 @@ class OrderBuilder implements BuilderInterface
     /**
      * @var currentTax
      */
-    private $currentTax;
+    private currentTax $currentTax;
 
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfiguration;
+    private ScopeConfigInterface $scopeConfiguration;
 
     /**
      * @var ProductMetadataInterface
      */
-    private $productMetadata;
+    private ProductMetadataInterface $productMetadata;
 
     /**
      * @var ComponentRegistrarInterface
      */
-    private $componentRegistrar;
+    private ComponentRegistrarInterface $componentRegistrar;
 
     /**
      * @var ReadFactory
      */
-    private $readFactory;
+    private ReadFactory $readFactory;
 
     /**
-     * @var PaymentLogger
+     * @var Logger
      */
-    protected $paymentLogger;
+    protected Logger $logger;
 
     /**
      * @param OrderSubjectReader          $orderSubjectReader
@@ -94,7 +94,7 @@ class OrderBuilder implements BuilderInterface
      * @param ProductMetadataInterface    $productMetadata
      * @param ComponentRegistrarInterface $componentRegistrar
      * @param ReadFactory                 $readFactory
-     * @param PaymentLogger               $paymentLogger
+     * @param Logger                      $logger
      */
     public function __construct(
         OrderSubjectReader $orderSubjectReader,
@@ -105,7 +105,7 @@ class OrderBuilder implements BuilderInterface
         ProductMetadataInterface $productMetadata,
         ComponentRegistrarInterface $componentRegistrar,
         ReadFactory $readFactory,
-        PaymentLogger $paymentLogger
+        Logger $logger
     ) {
         $this->orderSubjectReader = $orderSubjectReader;
         $this->organisationSubjectReader = $organisationSubjectReader;
@@ -115,7 +115,7 @@ class OrderBuilder implements BuilderInterface
         $this->productMetadata = $productMetadata;
         $this->componentRegistrar = $componentRegistrar;
         $this->readFactory = $readFactory;
-        $this->paymentLogger = $paymentLogger;
+        $this->logger = $logger;
     }
 
     /**
@@ -164,7 +164,7 @@ class OrderBuilder implements BuilderInterface
             'action_title' => 'OrderBuilder: createOrderRequest',
             'status' => 1,
         ];
-        $this->paymentLogger->execute($data);
+        $this->logger->debug(__METHOD__, $data);
 
         return $request;
     }

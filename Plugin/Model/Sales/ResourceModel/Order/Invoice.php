@@ -79,9 +79,11 @@ class Invoice
                         ->setDocumentId($invoice->getEntityId());
                     $this->publisher->publish(Documents::TOPIC_NAME, $orderDocument);
                 } catch (\Exception $e) {
-                    $this->logger->error(
-                        __('Hokodo_BNPL: Error publishing invoice to queue - %1', $e->getMessage())
-                    );
+                    $data = [
+                        'message' => 'Hokodo_BNPL: Error publishing invoice to queue.',
+                        'error' => $e->getMessage(),
+                    ];
+                    $this->logger->error(__METHOD__, $data);
                 }
             }
         }

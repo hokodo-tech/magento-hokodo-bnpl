@@ -25,6 +25,7 @@ class Config extends DefaultPaymentConfig
     public const KEY_DEV_URI = 'dev_uri';
     public const KEY_SANDBOX_URI = 'sandbox_uri';
     public const KEY_URI = 'uri';
+    public const KEY_DEBUG = 'debug';
     public const KEY_DEV_API_KEY = 'dev_api_key';
     public const KEY_SANDBOX_API_KEY = 'sandbox_api_key';
     public const KEY_API_KEY = 'api_key';
@@ -177,6 +178,18 @@ class Config extends DefaultPaymentConfig
     public function getUri(int $storeId = null): string
     {
         return $this->getValue(self::KEY_URI, $storeId);
+    }
+
+    /**
+     * Returns is Debug Mode Enabled.
+     *
+     * @param int|null $storeId
+     *
+     * @return bool
+     */
+    public function isDebugEnabled(int $storeId = null): bool
+    {
+        return (bool) $this->getValue(self::KEY_DEBUG, $storeId);
     }
 
     /**

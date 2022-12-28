@@ -10,7 +10,6 @@ namespace Hokodo\BNPL\Model;
 
 use Hokodo\BNPL\Api\Data\HokodoOrganisationInterface;
 use Hokodo\BNPL\Api\Data\OrganisationInterface;
-use Hokodo\BNPL\Api\Data\OrganisationInterfaceFactory;
 use Hokodo\BNPL\Api\Data\OrganisationUserInterface;
 use Hokodo\BNPL\Api\Data\OrganisationUserInterfaceFactory;
 use Hokodo\BNPL\Api\Data\PaymentQuoteInterface;
@@ -22,11 +21,11 @@ use Hokodo\BNPL\Api\Data\UserOrganisationResultInterfaceFactory;
 use Hokodo\BNPL\Api\HokodoOrganisationManagementInterface;
 use Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface;
 use Hokodo\BNPL\Api\SetOrganisationServiceInterface;
-use Hokodo\BNPL\Model\SaveLog as PaymentLogger;
 use Hokodo\BNPL\Service\OrganisationService;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Header;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Hokodo\BNPL\Model\SetOrganisationService.
@@ -36,52 +35,47 @@ class SetOrganisationService implements SetOrganisationServiceInterface
     /**
      * @var Header
      */
-    protected $header;
+    protected Header $header;
 
     /**
-     * @var PaymentLogger
+     * @var Logger
      */
-    protected $paymentLogger;
-
-    /**
-     * @var OrganisationInterfaceFactory
-     */
-    private $organisationFactory;
+    private Logger $logger;
 
     /**
      * @var OrganisationUserInterfaceFactory
      */
-    private $organisationUserFactory;
+    private OrganisationUserInterfaceFactory $organisationUserFactory;
 
     /**
      * @var PaymentQuoteInterfaceFactory
      */
-    private $paymentQuoteFactory;
+    private PaymentQuoteInterfaceFactory $paymentQuoteFactory;
 
     /**
      * @var UserOrganisationInterfaceFactory
      */
-    private $userOrganisationFactory;
+    private UserOrganisationInterfaceFactory $userOrganisationFactory;
 
     /**
      * @var UserOrganisationResultInterfaceFactory
      */
-    private $resultFactory;
+    private UserOrganisationResultInterfaceFactory $resultFactory;
 
     /**
      * @var HokodoOrganisationManagementInterface
      */
-    private $organisationManagement;
+    private HokodoOrganisationManagementInterface $organisationManagement;
 
     /**
      * @var PaymentQuoteRepositoryInterface
      */
-    private $paymentQuoteRepository;
+    private PaymentQuoteRepositoryInterface $paymentQuoteRepository;
 
     /**
      * @var OrganisationService
      */
-    private $organisationService;
+    private OrganisationService $organisationService;
 
     /**
      * @var DataObjectHelper
@@ -90,7 +84,6 @@ class SetOrganisationService implements SetOrganisationServiceInterface
 
     /**
      * @param Header                                 $header
-     * @param OrganisationInterfaceFactory           $organisationFactory
      * @param OrganisationUserInterfaceFactory       $organisationUserFactory
      * @param PaymentQuoteInterfaceFactory           $paymentQuoteFactory
      * @param UserOrganisationInterfaceFactory       $userOrganisationFactory
@@ -98,12 +91,10 @@ class SetOrganisationService implements SetOrganisationServiceInterface
      * @param HokodoOrganisationManagementInterface  $organisationManagement
      * @param PaymentQuoteRepositoryInterface        $paymentQuoteRepository
      * @param OrganisationService                    $organisationService
-     * @param DataObjectHelper                       $dataObjectHelper
-     * @param SaveLog                                $paymentLogger
+     * @param Logger                                 $logger
      */
     public function __construct(
         Header $header,
-        OrganisationInterfaceFactory $organisationFactory,
         OrganisationUserInterfaceFactory $organisationUserFactory,
         PaymentQuoteInterfaceFactory $paymentQuoteFactory,
         UserOrganisationInterfaceFactory $userOrganisationFactory,
@@ -111,11 +102,9 @@ class SetOrganisationService implements SetOrganisationServiceInterface
         HokodoOrganisationManagementInterface $organisationManagement,
         PaymentQuoteRepositoryInterface $paymentQuoteRepository,
         OrganisationService $organisationService,
-        DataObjectHelper $dataObjectHelper,
-        PaymentLogger $paymentLogger
+        Logger $logger
     ) {
         $this->header = $header;
-        $this->organisationFactory = $organisationFactory;
         $this->organisationUserFactory = $organisationUserFactory;
         $this->paymentQuoteFactory = $paymentQuoteFactory;
         $this->userOrganisationFactory = $userOrganisationFactory;
@@ -123,8 +112,7 @@ class SetOrganisationService implements SetOrganisationServiceInterface
         $this->organisationManagement = $organisationManagement;
         $this->paymentQuoteRepository = $paymentQuoteRepository;
         $this->organisationService = $organisationService;
-        $this->dataObjectHelper = $dataObjectHelper;
-        $this->paymentLogger = $paymentLogger;
+        $this->logger = $logger;
     }
 
     /**
@@ -158,6 +146,14 @@ class SetOrganisationService implements SetOrganisationServiceInterface
 
             $this->paymentQuoteRepository->save($paymentQuote);
         } catch (\Exception $e) {
+            $data = [
+                'payment_log_content' => $log,
+                'action_title' => 'SetOrganisationService::setOrganisation()',
+                'status' => 0,
+                'quote_id' => $cartId,
+                'error' => $e->getMessage(),
+            ];
+            $this->logger->error(__METHOD__, $data);
             throw new LocalizedException(
                 __($e->getMessage()),
                 $e
@@ -169,7 +165,7 @@ class SetOrganisationService implements SetOrganisationServiceInterface
             'status' => 1,
             'quote_id' => $cartId,
         ];
-        $this->paymentLogger->execute($data);
+        $this->logger->debug(__METHOD__, $data);
         return $result;
     }
 
@@ -233,7 +229,7 @@ class SetOrganisationService implements SetOrganisationServiceInterface
             'action_title' => 'SetOrganisationService::addUserToOrganisation()',
             'status' => 1,
         ];
-        $this->paymentLogger->execute($data);
+        $this->logger->debug(__METHOD__, $data);
         $organisationUser = $this->organisationService->addUser(
             $createdOrganisation,
             $addOrganisationUser

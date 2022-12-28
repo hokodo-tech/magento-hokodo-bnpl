@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Hokodo\BNPL\Controller\Adminhtml\PaymentLog;
+namespace Hokodo\BNPL\Controller\Adminhtml\Logs;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -22,7 +22,7 @@ class Index extends Action implements HttpGetActionInterface
      */
     protected function _isAllowed(): bool
     {
-        return $this->_authorization->isAllowed('Hokodo_BNPL::payment');
+        return $this->_authorization->isAllowed('Hokodo_BNPL::view');
     }
 
     /**
@@ -33,7 +33,7 @@ class Index extends Action implements HttpGetActionInterface
     public function execute(): ResultInterface
     {
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Hokodo_BNPL::PaymentLog');
+        $resultPage->setActiveMenu('Hokodo_BNPL::hokodo_logs');
         $resultPage->addBreadcrumb(__('System'), __('Hokodo'));
         $resultPage->addBreadcrumb(__('Logs'), __('Logs'));
         $resultPage->getConfig()->getTitle()->prepend(__('Hokodo BNPL Logs'));

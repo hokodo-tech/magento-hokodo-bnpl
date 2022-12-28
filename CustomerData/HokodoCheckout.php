@@ -71,7 +71,11 @@ class HokodoCheckout implements SectionSourceInterface
             try {
                 $offer = $this->offerService->getOffer(['id' => $hokodoQuote->getOfferId()])->getDataModel();
             } catch (\Exception $e) {
-                $this->logger->error(__('Hokodo_BNPL: getOffer call failed with error - %1', $e->getMessage()));
+                $data = [
+                    'message' => 'Hokodo_BNPL: getOffer call failed with error.',
+                    'error' => $e->getMessage(),
+                ];
+                $this->logger->error(__METHOD__, $data);
                 $hokodoQuote->setOfferId('');
             }
         }

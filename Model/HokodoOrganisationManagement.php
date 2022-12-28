@@ -18,7 +18,6 @@ use Hokodo\BNPL\Api\Data\OrganisationInterfaceFactory;
 use Hokodo\BNPL\Api\HokodoOrganisationCheckingInterface;
 use Hokodo\BNPL\Api\HokodoOrganisationManagementInterface;
 use Hokodo\BNPL\Api\HokodoOrganisationRepositoryInterface;
-use Hokodo\BNPL\Model\SaveLog as Logger;
 use Hokodo\BNPL\Service\CompanyServiceFactory;
 use Hokodo\BNPL\Service\OrganisationService;
 use Hokodo\BNPL\Service\OrganisationServiceFactory;
@@ -26,13 +25,14 @@ use Magento\Framework\DataObject\Mapper;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface as Logger;
 
 class HokodoOrganisationManagement implements HokodoOrganisationManagementInterface
 {
     /**
      * @var array
      */
-    private $companyMap = [
+    private array $companyMap = [
         CompanyInterface::COUNTRY => HokodoOrganisationInterface::COUNTRY,
         CompanyInterface::ADDRESS => HokodoOrganisationInterface::ADDRESS,
         CompanyInterface::CITY => HokodoOrganisationInterface::CITY,
@@ -45,47 +45,47 @@ class HokodoOrganisationManagement implements HokodoOrganisationManagementInterf
     /**
      * @var HokodoOrganisationRepositoryInterface
      */
-    private $organisationRepository;
+    private HokodoOrganisationRepositoryInterface $organisationRepository;
 
     /**
      * @var HokodoOrganisationInterfaceFactory
      */
-    private $hokodoOrganisationFactory;
+    private HokodoOrganisationInterfaceFactory $hokodoOrganisationFactory;
 
     /**
      * @var OrganizationService
      */
-    private $organisationService;
+    private OrganizationService $organisationService;
 
     /**
      * @var OrganisationServiceFactory
      */
-    private $organisationServiceFactory;
+    private OrganisationServiceFactory $organisationServiceFactory;
 
     /**
      * @var OrganisationInterfaceFactory
      */
-    private $organisationFactory;
+    private OrganisationInterfaceFactory $organisationFactory;
 
     /**
      * @var CompanyServiceFactory
      */
-    private $companyServiceFactory;
+    private CompanyServiceFactory $companyServiceFactory;
 
     /**
      * @var CompanyInterfaceFactory
      */
-    private $companyFactory;
+    private CompanyInterfaceFactory $companyFactory;
 
     /**
      * @var HokodoOrganisationCheckingInterface
      */
-    private $orgChecking;
+    private HokodoOrganisationCheckingInterface $orgChecking;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
-    private $logger;
+    private Logger $logger;
 
     /**
      * A constructor.
@@ -97,7 +97,7 @@ class HokodoOrganisationManagement implements HokodoOrganisationManagementInterf
      * @param CompanyServiceFactory                 $companyServiceFactory
      * @param CompanyInterfaceFactory               $companyFactory
      * @param HokodoOrganisationCheckingInterface   $orgChecking
-     * @param SaveLog                               $logger
+     * @param Logger                                $logger
      */
     public function __construct(
         HokodoOrganisationRepositoryInterface $organisationRepository,
@@ -141,7 +141,7 @@ class HokodoOrganisationManagement implements HokodoOrganisationManagementInterf
                 'action_title' => 'HokodoOrganisationManagement::getUserOrganisation LocalizedException',
                 'status' => 0,
             ];
-            $this->logger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             return null;
         } catch (Exception $e) {
             $data = [
@@ -149,7 +149,7 @@ class HokodoOrganisationManagement implements HokodoOrganisationManagementInterf
                 'action_title' => 'HokodoOrganisationManagement::getUserOrganisation Exception',
                 'status' => 0,
             ];
-            $this->logger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             return null;
         }
         return $organisation;
@@ -176,7 +176,7 @@ class HokodoOrganisationManagement implements HokodoOrganisationManagementInterf
                 'action_title' => 'HokodoOrganisationManagement::getCreatedOrganisation LocalizedException',
                 'status' => 0,
             ];
-            $this->logger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             return null;
         } catch (Exception $e) {
             $data = [
@@ -184,7 +184,7 @@ class HokodoOrganisationManagement implements HokodoOrganisationManagementInterf
                 'action_title' => 'HokodoOrganisationManagement::getCreatedOrganisation Exception',
                 'status' => 0,
             ];
-            $this->logger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             return null;
         }
         return $createdOrganisation;
@@ -207,7 +207,7 @@ class HokodoOrganisationManagement implements HokodoOrganisationManagementInterf
                 'action_title' => 'HokodoOrganisationManagement::createOrganization CouldNotSaveException',
                 'status' => 0,
             ];
-            $this->logger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             return null;
         } catch (LocalizedException $e) {
             $data = [
@@ -215,7 +215,7 @@ class HokodoOrganisationManagement implements HokodoOrganisationManagementInterf
                 'action_title' => 'HokodoOrganisationManagement::createOrganization LocalizedException',
                 'status' => 0,
             ];
-            $this->logger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             return null;
         } catch (Exception $e) {
             $data = [
@@ -223,7 +223,7 @@ class HokodoOrganisationManagement implements HokodoOrganisationManagementInterf
                 'action_title' => 'HokodoOrganisationManagement::createOrganization Exception',
                 'status' => 0,
             ];
-            $this->logger->execute($data);
+            $this->logger->error(__METHOD__, $data);
             return null;
         }
         return $organisation;
@@ -308,7 +308,7 @@ class HokodoOrganisationManagement implements HokodoOrganisationManagementInterf
                 'action_title' => 'HokodoOrganisationManagement::createApiOrganisation Exception',
                 'status' => 0,
             ];
-            $this->logger->execute($data);
+            $this->logger->error(__METHOD__, $data);
         }
     }
 
