@@ -9,7 +9,7 @@ namespace Hokodo\BNPL\Api;
 
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
 
-interface HokodoCustomerRepositoryInterface
+interface HokodoCustomerRepositoryInterface extends HokodoEntityRepositoryInterface
 {
     /**
      * Save entity.

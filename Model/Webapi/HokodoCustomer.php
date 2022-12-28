@@ -16,6 +16,7 @@ use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\HokodoCustomerInterface;
 use Hokodo\BNPL\Gateway\Service\Organisation;
 use Hokodo\BNPL\Gateway\Service\User;
+use Hokodo\BNPL\Model\HokodoCompanyProvider;
 use Hokodo\BNPL\Model\RequestBuilder\OrganisationBuilder;
 use Hokodo\BNPL\Model\RequestBuilder\UserBuilder;
 use Magento\Customer\Model\Session;
@@ -65,9 +66,15 @@ class HokodoCustomer implements HokodoCustomerInterface
     private LoggerInterface $logger;
 
     /**
+     * @var HokodoCompanyProvider
+     */
+    private HokodoCompanyProvider $hokodoCompanyProvider;
+
+    /**
      * @param HokodoCustomerResponseInterfaceFactory $hokodoCustomerResponseFactory
      * @param Session                                $customerSession
      * @param HokodoCustomerRepositoryInterface      $hokodoCustomerRepository
+     * @param HokodoCompanyProvider                  $hokodoCompanyProvider
      * @param OrganisationBuilder                    $organisationBuilder
      * @param UserBuilder                            $userBuilder
      * @param Organisation                           $organisationService
@@ -78,6 +85,7 @@ class HokodoCustomer implements HokodoCustomerInterface
         HokodoCustomerResponseInterfaceFactory $hokodoCustomerResponseFactory,
         Session $customerSession,
         HokodoCustomerRepositoryInterface $hokodoCustomerRepository,
+        HokodoCompanyProvider $hokodoCompanyProvider,
         OrganisationBuilder $organisationBuilder,
         UserBuilder $userBuilder,
         Organisation $organisationService,
@@ -87,6 +95,7 @@ class HokodoCustomer implements HokodoCustomerInterface
         $this->hokodoCustomerResponseFactory = $hokodoCustomerResponseFactory;
         $this->customerSession = $customerSession;
         $this->hokodoCustomerRepository = $hokodoCustomerRepository;
+        $this->hokodoCompanyProvider = $hokodoCompanyProvider;
         $this->organisationBuilder = $organisationBuilder;
         $this->userBuilder = $userBuilder;
         $this->organisationService = $organisationService;
@@ -107,7 +116,6 @@ class HokodoCustomer implements HokodoCustomerInterface
     {
         $hokodoCustomerResponse = $this->hokodoCustomerResponseFactory->create();
         $hokodoCustomer = $this->getHokodoCustomer($payload);
-
         if ($hokodoCustomer->getCompanyId() !== $payload->getCompanyId()) {
             $hokodoCustomer
                 ->setCompanyId($payload->getCompanyId())

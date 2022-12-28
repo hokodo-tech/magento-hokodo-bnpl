@@ -56,6 +56,9 @@ class Config extends DefaultPaymentConfig
     public const CUSTOMER_GROUPS = 'customer_groups';
     public const CAPTURE_ONLINE = 'capture_online';
     public const TOTALS_FIX = 'advanced/enable_thirdparty_totals_compatibility';
+    public const HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL = 'payment/hokodo_bnpl/advanced/entity_level';
+    public const HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL_IN_CUSTOMER = 'customer';
+    public const HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL_IN_COMPANY = 'company';
 
     /**
      * @var ScopeConfigInterface
@@ -410,5 +413,21 @@ class Config extends DefaultPaymentConfig
         }
 
         return null;
+    }
+
+    /**
+     * Returns the current data source for company id.
+     *
+     * @param int $storeId
+     *
+     * @return string
+     */
+    public function getEntityLevel(int $storeId = 0): string
+    {
+        return (string) $this->scopeConfig->getValue(
+            self::HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 }
