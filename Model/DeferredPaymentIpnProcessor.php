@@ -14,7 +14,6 @@ use Hokodo\BNPL\Api\DeferredPaymentIpnProcessorInterface;
 use Hokodo\BNPL\Model\Data\OrderIpnFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Webapi\Exception;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
 use Psr\Log\LoggerInterface;
@@ -68,18 +67,12 @@ class DeferredPaymentIpnProcessor implements DeferredPaymentIpnProcessorInterfac
      */
     public function process($created, DeferredPaymentIpnPayloadInterface $data)
     {
-        $orderData = $data->getOrder();
         try {
             $result = false;
             $ipnOrder = $this->orderIpnFactory->create();
-            if (empty($orderData['payment_offer'])) {
-                throw new Exception(
-                    __('Payment Offer does not provided.')
-                );
-            }
             $this->dataObjectHelper->populateWithArray(
                 $ipnOrder,
-                $orderData,
+                $data->getOrder(),
                 \Hokodo\BNPL\Api\Data\OrderIpnInterface::class
             );
             if ($ipnOrder && $ipnOrder->getDeferredPayment()) {
@@ -90,11 +83,9 @@ class DeferredPaymentIpnProcessor implements DeferredPaymentIpnProcessorInterfac
             $data = [
                 'message' => 'Hokodo_BNPL: Webhook error with order - ' . $ipnOrder->getId(),
                 'error' => $e->getMessage(),
-                'order_data' => $orderData,
             ];
             $this->logger->error(__METHOD__, $data);
         }
-        return false;
     }
 
     /**

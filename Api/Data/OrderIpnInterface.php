@@ -241,7 +241,7 @@ interface OrderIpnInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * A function that sets items.
      *
-     * @param \Hokodo\BNPL\Api\Data\OrderItemInterface[] $items
+     * @param OrderItemInterface[] $items
      *
      * @return $this
      */
@@ -250,23 +250,23 @@ interface OrderIpnInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * A function that gets items.
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderItemInterface[]
+     * @return OrderItemInterface[]
      */
     public function getItems();
 
     /**
      * A function that sets payment offer.
      *
-     * @param \Hokodo\BNPL\Api\Data\PaymentOffersInterface $paymentOffer
+     * @param PaymentOffersInterface|null $paymentOffer
      *
      * @return $this
      */
-    public function setPaymentOffer(PaymentOffersInterface $paymentOffer);
+    public function setPaymentOffer(?PaymentOffersInterface $paymentOffer);
 
     /**
      * A function that gets payment offer.
      *
-     * @return \Hokodo\BNPL\Api\Data\PaymentOffersInterface
+     * @return PaymentOffersInterface
      */
     public function getPaymentOffer();
 

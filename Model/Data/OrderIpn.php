@@ -8,6 +8,7 @@ namespace Hokodo\BNPL\Model\Data;
 
 use Hokodo\BNPL\Api\Data\DeferredPaymentIpnInterface;
 use Hokodo\BNPL\Api\Data\OrderIpnInterface;
+use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
@@ -300,7 +301,7 @@ class OrderIpn extends AbstractSimpleObject implements OrderIpnInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrderIpnInterface::setPaymentOffer()
      */
-    public function setPaymentOffer(\Hokodo\BNPL\Api\Data\PaymentOffersInterface $paymentOffer)
+    public function setPaymentOffer(?PaymentOffersInterface $paymentOffer)
     {
         return $this->setData(self::PAYMENT_OFFER, $paymentOffer);
     }
