@@ -59,6 +59,7 @@ define([
                 });
 
                 this.isSearchElementCreated = true;
+                this.componentUnavailable(false);
                 this.mountCompanySearch();
             } else {
                 this.componentUnavailable(true);
