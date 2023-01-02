@@ -32,19 +32,12 @@
     <preference for="Hokodo\BNPL\Api\Data\UserInterface" type="Hokodo\BNPL\Model\Data\User" />
     <preference for="Hokodo\BNPL\Api\Data\UserOrganisationInterface" type="Hokodo\BNPL\Model\Data\UserOrganisation" />
     <preference for="Hokodo\BNPL\Api\Data\UserOrganisationResultInterface" type="Hokodo\BNPL\Model\Data\UserOrganisationResult" />
-    <preference for="Hokodo\BNPL\Api\CompanySearchServiceInterface" type="Hokodo\BNPL\Model\CompanySearchService" />
     <preference for="Hokodo\BNPL\Api\DeferredPaymentIpnProcessorInterface" type="Hokodo\BNPL\Model\DeferredPaymentIpnProcessor" />
-    <preference for="Hokodo\BNPL\Api\GuestOrderInformationManagementInterface" type="Hokodo\BNPL\Model\GuestOrderInformationManagement" />
-    <preference for="Hokodo\BNPL\Api\GuestSetOrganisationServiceInterface" type="Hokodo\BNPL\Model\GuestSetOrganisationService" />
-    <preference for="Hokodo\BNPL\Api\GuestSetUserServiceInterface" type="Hokodo\BNPL\Model\GuestSetUserService" />
     <preference for="Hokodo\BNPL\Api\HokodoOrganisationManagementInterface" type="Hokodo\BNPL\Model\HokodoOrganisationManagement" />
     <preference for="Hokodo\BNPL\Api\HokodoOrganisationCheckingInterface" type="Hokodo\BNPL\Model\HokodoOrganisationChecking" />
     <preference for="Hokodo\BNPL\Api\HokodoOrganisationRepositoryInterface" type="Hokodo\BNPL\Model\HokodoOrganisationRepository" />
-    <preference for="Hokodo\BNPL\Api\OrderInformationManagementInterface" type="Hokodo\BNPL\Model\OrderInformationManagement" />
     <preference for="Hokodo\BNPL\Api\OrderDocumentsManagementInterface" type="Hokodo\BNPL\Model\OrderDocumentsManagement" />
     <preference for="Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface" type="Hokodo\BNPL\Model\PaymentQuoteRepository" />
-    <preference for="Hokodo\BNPL\Api\SetOrganisationServiceInterface" type="Hokodo\BNPL\Model\SetOrganisationService" />
-    <preference for="Hokodo\BNPL\Api\SetUserServiceInterface" type="Hokodo\BNPL\Model\SetUserService" />
     <preference for="Hokodo\BNPL\Gateway\SubjectReaderInterface" type="Hokodo\BNPL\Gateway\SubjectReader" />
 
     <!-- Payment Method Facade configuration -->
@@ -225,37 +218,13 @@
         </arguments>
     </type>
 
-    <type name="Hokodo\BNPL\Model\GuestSetOrganisationService">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
-
     <type name="Hokodo\BNPL\Model\HokodoOrganisationManagement">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
 
-    <type name="Hokodo\BNPL\Model\OrderInformationManagement">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
-
     <type name="Hokodo\BNPL\Model\PostSaleProcessor">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
-
-    <type name="Hokodo\BNPL\Model\SetOrganisationService">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
-
-    <type name="Hokodo\BNPL\Model\SetUserService">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
@@ -316,12 +285,6 @@
     </type>
 
     <type name="Hokodo\BNPL\Model\Webapi\HokodoCustomer">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
-
-    <type name="Hokodo\BNPL\Model\Webapi\Offer">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
@@ -1229,29 +1192,17 @@
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
         </arguments>
     </type>
-    <type name="Hokodo\BNPL\Model\Webapi\User">
-        <arguments>
-            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Hokodo\BNPL\Model\Webapi\Organisation">
-        <arguments>
-            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Hokodo\BNPL\Model\Webapi\Offer">
         <arguments>
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
 
     <!-- js SDK API backend-frontend communication config -->
-    <preference for="Hokodo\BNPL\Api\Webapi\OrganisationInterface" type="Hokodo\BNPL\Model\Webapi\Organisation" />
     <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrganisationRequest" />
     <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrganisationResponse" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOrganisationRequestInterface" type="Hokodo\BNPL\Model\Data\Gateway\CreateOrganisationRequest" />
-
-    <preference for="Hokodo\BNPL\Api\Webapi\UserInterface" type="Hokodo\BNPL\Model\Webapi\User" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\UserOrganisationInterface" type="Hokodo\BNPL\Model\Data\Gateway\UserOrganisation" />
     <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateUserRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateUserRequest" />
     <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateUserResponse" />
