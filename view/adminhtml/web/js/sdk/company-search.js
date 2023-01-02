@@ -1,18 +1,20 @@
 define([
     'jquery',
+    'ko',
     'underscore',
     'uiComponent',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/notification'
-], function ($, _, Component) {
+], function ($, ko, _, Component) {
     return Component.extend({
         defaults: {
             entityIdSelector: 'customer_id',
             isCompanySearchMounted: false,
             isRendered: false,
-            isSearchElementCreated: false
+            isSearchElementCreated: false,
         },
+        componentUnavailable: ko.observable(false),
 
         initialize() {
             this._super();
@@ -28,35 +30,39 @@ define([
 
         initComponent() {
             let self = this;
-            let currentCompanyId = this.source.data.hokodo.company_id;
-            let entityId = this.source.data[this.entityIdSelector];
+            if (this.source.data) {
+                let currentCompanyId = this.source.data.hokodo.company_id;
+                let entityId = this.source.data[this.entityIdSelector];
 
-            let payload = {};
-            if (currentCompanyId) {
-                payload.companyId = currentCompanyId;
-            }
-            this.companySearch = this.getSdk().elements().create("companySearch", payload);
-
-            this.companySearch.on("companySelection", (company) => {
-                if (company !== null && company.id !== currentCompanyId) {
-                    currentCompanyId = company.id;
-                    $.ajax({
-                        'url' : self.source.data.hokodo.submit_url,
-                        'type' : 'POST',
-                        'data' : {
-                            'entityId' : entityId,
-                            'companyId' : company.id,
-                            'form_key': window.FORM_KEY
-                        },
-                        dataType:'json'
-                    }).done(function (data) {
-                        self.addNotification(data.message, !data.success)
-                    });
+                let payload = {};
+                if (currentCompanyId) {
+                    payload.companyId = currentCompanyId;
                 }
-            });
+                this.companySearch = this.getSdk().elements().create("companySearch", payload);
 
-            this.isSearchElementCreated = true;
-            this.mountCompanySearch();
+                this.companySearch.on("companySelection", (company) => {
+                    if (company !== null && company.id !== currentCompanyId) {
+                        currentCompanyId = company.id;
+                        $.ajax({
+                            'url' : self.source.data.hokodo.submit_url,
+                            'type' : 'POST',
+                            'data' : {
+                                'entityId' : entityId,
+                                'companyId' : company.id,
+                                'form_key': window.FORM_KEY
+                            },
+                            dataType:'json'
+                        }).done(function (data) {
+                            self.addNotification(data.message, !data.success)
+                        });
+                    }
+                });
+
+                this.isSearchElementCreated = true;
+                this.mountCompanySearch();
+            } else {
+                this.componentUnavailable(true);
+            }
         },
 
         onAfterRender() {
