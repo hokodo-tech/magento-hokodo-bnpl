@@ -82,8 +82,8 @@ define([
             return window.hokodoSdk;
         },
 
-        mountCompanySearch(force = false) {
-            if (this.isReadyToMount() || force) {
+        mountCompanySearch() {
+            if (this.isReadyToMount()) {
                 this.companySearch.mount("#hokodoCompanySearch");
                 this.isCompanySearchMounted = true;
             }
