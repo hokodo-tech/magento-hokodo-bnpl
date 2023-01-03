@@ -42,6 +42,7 @@ define([
 
                 this.companySearch.on("companySelection", (company) => {
                     if (company !== null && company.id !== currentCompanyId) {
+                        let oldCompanyId = self.source.data.hokodo.company_id;
                         currentCompanyId = company.id;
                         $.ajax({
                             'url' : self.source.data.hokodo.submit_url,
@@ -51,9 +52,15 @@ define([
                                 'companyId' : company.id,
                                 'form_key': window.FORM_KEY
                             },
-                            dataType:'json'
+                            dataType:'json',
+                            showLoader: true
                         }).done(function (data) {
                             self.addNotification(data.message, !data.success)
+                            if (!data.success) {
+                                self.companySearch.unmount();
+                                self.companySearch.update({companyId: oldCompanyId});
+                                self.companySearch.mount("#hokodoCompanySearch");
+                            }
                         });
                     }
                 });
@@ -75,8 +82,8 @@ define([
             return window.hokodoSdk;
         },
 
-        mountCompanySearch() {
-            if (this.isReadyToMount()) {
+        mountCompanySearch(force = false) {
+            if (this.isReadyToMount() || force) {
                 this.companySearch.mount("#hokodoCompanySearch");
                 this.isCompanySearchMounted = true;
             }
