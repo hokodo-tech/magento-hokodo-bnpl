@@ -27,3 +27,8 @@
 "Error, the company has not been updated.","Fout, het bedrijf is niet bijgewerkt."
 "The company has been updated.","Het bedrijf is bijgewerkt."
 "Allow User to change company","Gebruiker toestaan om van bedrijf te veranderen"
+"due_date","Vervaldatum"
+"payment_method","Betaalmethode"
+"direct_debit","Automatische incasso SEPA"
+"invoice","Factuur"
+"card","Debetkaart/Creditcard"

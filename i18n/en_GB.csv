@@ -27,3 +27,8 @@
 "The company has been updated.","The company has been updated."
 "My Company","My Company"
 "Allow User to change company","Allow User to change company"
+"due_date","Due Date"
+"payment_method","Payment method"
+"direct_debit","Direct Debit SEPA"
+"invoice","Invoice"
+"card","Debit/Credit Card"

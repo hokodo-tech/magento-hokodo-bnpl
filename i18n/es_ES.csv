@@ -27,3 +27,8 @@
 "The company has been updated.","La empresa ha sido actualizada."
 "My Company","Mi empresa"
 "Allow User to change company","Permitir a la usuario cambiar de compañía"
+"due_date","Fecha de vencimiento"
+"payment_method","Método de pago"
+"direct_debit","Débito Directo SEPA"
+"invoice","Factura"
+"card","Tarjeta de Débito/Crédito"

@@ -22,7 +22,6 @@ class DataAssignObserver extends AbstractDataAssignObserver
     public const HOKODO_ORDER_ID = 'hokodo_order_id';
     public const HOKODO_PAYMENT_OFFER_ID = 'hokodo_payment_offer_id';
     public const HOKODO_DEFERRED_PAYMENT_ID = 'hokodo_deferred_payment_id';
-    public const HOKODO_PAYMENT_PLAN_NAME = 'name';
     public const HOKODO_PAYMENT_PLAN_DUE_DATE = 'due_date';
     public const HOKODO_PAYMENT_METHOD = 'payment_method';
 
@@ -96,7 +95,6 @@ class DataAssignObserver extends AbstractDataAssignObserver
                     if ($paymentPlan->getStatus() != \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::STATUS_ACCEPTED) {
                         continue;
                     }
-                    $additionalData[self::HOKODO_PAYMENT_PLAN_NAME] = $paymentPlan->getName();
                     $scheduledPayments = $paymentPlan->getScheduledPayments();
                     foreach ($scheduledPayments as $scheduledPayment) {
                         list($year, $month, $day) = explode('-', $scheduledPayment->getDate());
