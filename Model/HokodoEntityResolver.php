@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Model;
 
 use Hokodo\BNPL\Api\HokodoEntityResolverInterface;
-use Hokodo\Bnpl\Gateway\Config\Config;
+use Hokodo\BNPL\Model\Config\Source\EntityLevelForSave;
 
 class HokodoEntityResolver implements HokodoEntityResolverInterface
 {
@@ -21,6 +21,6 @@ class HokodoEntityResolver implements HokodoEntityResolverInterface
      */
     public function getEntityType(): string
     {
-        return Config::HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL_IN_CUSTOMER;
+        return EntityLevelForSave::CUSTOMER;
     }
 }
