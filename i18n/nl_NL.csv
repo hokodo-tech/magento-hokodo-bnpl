@@ -32,3 +32,8 @@
 "direct_debit","Automatische incasso SEPA"
 "invoice","Factuur"
 "card","Debetkaart/Creditcard"
+"payment_terms","Betalingsvoorwaarde"
+"%1 days end of month after delivery","%1 dagen einde maand na levering"
+"%1 days end of month","%1 dagen einde maand"
+"%1 days after delivery","%1 dagen na levering"
+"%1 days","%1 dagen"

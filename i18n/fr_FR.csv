@@ -32,3 +32,8 @@
 "direct_debit","Prélèvement SEPA"
 "invoice","Facture"
 "card","Carte de Débit/Crédit"
+"payment_terms","Conditions de paiement"
+"%1 days end of month after delivery","%1 jours fin de mois après livraison"
+"%1 days end of month","%1 jours fin de mois"
+"%1 days after delivery","%1 jours après la livraison"
+"%1 days","%1 jours"

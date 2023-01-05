@@ -48,7 +48,7 @@
                 <sandbox_uri>https://api-sandbox.hokodo.co/v1/</sandbox_uri>
                 <uri>https://api.hokodo.co/v1/</uri>
                 <debug>1</debug>
-                <paymentInfoKeys>due_date,payment_method</paymentInfoKeys>
+                <paymentInfoKeys>due_date,payment_method,payment_terms</paymentInfoKeys>
                 <replace_place_order_hooks>0</replace_place_order_hooks>
                 <enable_customer_groups>0</enable_customer_groups>
                 <is_default>0</is_default>

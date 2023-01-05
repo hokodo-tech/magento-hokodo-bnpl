@@ -32,3 +32,8 @@
 "direct_debit","Débito Directo SEPA"
 "invoice","Factura"
 "card","Tarjeta de Débito/Crédito"
+"payment_terms","Términos de pago"
+"%1 days end of month after delivery","%1 días fin de mes después de la entrega"
+"%1 days end of month","%1 días fin de mes"
+"%1 days after delivery","%1 días después del parto"
+"%1 days","%1 días"
