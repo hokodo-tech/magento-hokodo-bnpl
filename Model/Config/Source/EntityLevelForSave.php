@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Config\Source;
 
-use Magento\Framework\Data\OptionSourceInterface;
-
 class EntityLevelForSave
 {
     public const CUSTOMER = 'customer';
