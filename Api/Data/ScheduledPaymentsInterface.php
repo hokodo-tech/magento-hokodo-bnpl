@@ -55,7 +55,7 @@ interface ScheduledPaymentsInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @return $this
      */
-    public function setPaymentMethod(array $paymentMethod);
+    public function setPaymentMethod($paymentMethod);
 
     /**
      * A function that gets payment method.

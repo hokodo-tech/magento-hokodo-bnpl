@@ -6,6 +6,7 @@
 
 namespace Hokodo\BNPL\Observer;
 
+use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order;
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
@@ -21,6 +22,9 @@ class DataAssignObserver extends AbstractDataAssignObserver
     public const HOKODO_ORDER_ID = 'hokodo_order_id';
     public const HOKODO_PAYMENT_OFFER_ID = 'hokodo_payment_offer_id';
     public const HOKODO_DEFERRED_PAYMENT_ID = 'hokodo_deferred_payment_id';
+    public const HOKODO_PAYMENT_PLAN_NAME = 'name';
+    public const HOKODO_PAYMENT_PLAN_DUE_DATE = 'due_date';
+    public const HOKODO_PAYMENT_METHOD = 'payment_method';
 
     /**
      * @var array
@@ -39,12 +43,20 @@ class DataAssignObserver extends AbstractDataAssignObserver
     private Order $orderService;
 
     /**
-     * @param Order $orderService
+     * @var OfferGatewayService
+     */
+    private OfferGatewayService $offerGatewayService;
+
+    /**
+     * @param Order               $orderService
+     * @param OfferGatewayService $offerGatewayService
      */
     public function __construct(
-        Order $orderService
+        Order $orderService,
+        OfferGatewayService $offerGatewayService
     ) {
         $this->orderService = $orderService;
+        $this->offerGatewayService = $offerGatewayService;
     }
 
     /**
@@ -77,7 +89,25 @@ class DataAssignObserver extends AbstractDataAssignObserver
                 $hokodoOrder = $this->orderService->getOrder(
                     ['id' => $additionalData['hokodo_order_id']]
                 )->getDataModel();
+                $hokodoOffer = $this->offerGatewayService
+                    ->getOffer(['id' => $hokodoOrder->getPaymentOffer()])
+                    ->getDataModel();
+                foreach ($hokodoOffer->getOfferedPaymentPlans() as $paymentPlan) {
+                    if ($paymentPlan->getStatus() != \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::STATUS_ACCEPTED) {
+                        continue;
+                    }
+                    $additionalData[self::HOKODO_PAYMENT_PLAN_NAME] = $paymentPlan->getName();
+                    $scheduledPayments = $paymentPlan->getScheduledPayments();
+                    foreach ($scheduledPayments as $scheduledPayment) {
+                        list($year, $month, $day) = explode('-', $scheduledPayment->getDate());
+                        $date = $day . '/' . $month . '/' . $year;
+                        $additionalData[self::HOKODO_PAYMENT_PLAN_DUE_DATE] = $date;
+                        $paymentMethod = $scheduledPayment->getPaymentMethod()->getType();
+                        $additionalData[self::HOKODO_PAYMENT_METHOD] = $paymentMethod;
+                    }
+                }
                 $additionalData['hokodo_deferred_payment_id'] = $hokodoOrder->getDeferredPayment();
+
                 $quote->getPayment()->setAdditionalInformation($additionalData)->save();
             }
         }
