@@ -114,9 +114,13 @@ class DataAssignObserver extends AbstractDataAssignObserver
 
                     $scheduledPayments = $paymentPlan->getScheduledPayments();
                     foreach ($scheduledPayments as $scheduledPayment) {
-                        list($year, $month, $day) = explode('-', $scheduledPayment->getDate());
-                        $date = $day . '/' . $month . '/' . $year;
-                        $additionalData[self::HOKODO_PAYMENT_PLAN_DUE_DATE] = $date;
+                        if ($additionalData[self::HOKODO_PAYMENT_TERMS_RELATIVE_TO] != 'first_capture'
+                            && $additionalData[self::HOKODO_PAYMENT_TERMS_RELATIVE_TO] != 'every_capture'
+                        ) {
+                            list($year, $month, $day) = explode('-', $scheduledPayment->getDate());
+                            $date = $day . '/' . $month . '/' . $year;
+                            $additionalData[self::HOKODO_PAYMENT_PLAN_DUE_DATE] = $date;
+                        }
                         $paymentMethod = $scheduledPayment->getPaymentMethod()->getType();
                         $additionalData[self::HOKODO_PAYMENT_METHOD] = $paymentMethod;
                     }
