@@ -108,7 +108,9 @@ class DataAssignObserver extends AbstractDataAssignObserver
                     ->getDataModel();
 
                 foreach ($hokodoOffer->getOfferedPaymentPlans() as $paymentPlan) {
-                    $additionalData = $this->addDataFromPaymentPlan($paymentPlan, $additionalData);
+                    if ($paymentPlan->getStatus() == \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::STATUS_ACCEPTED) {
+                        $additionalData = $this->addDataFromPaymentPlan($paymentPlan, $additionalData);
+                    }
                 }
 
                 $additionalData['hokodo_deferred_payment_id'] = $hokodoOrder->getDeferredPayment();
@@ -127,16 +129,14 @@ class DataAssignObserver extends AbstractDataAssignObserver
      */
     private function addDataFromPaymentPlan(PaymentPlanInterface $paymentPlan, array $data): array
     {
-        if ($paymentPlan->getStatus() == \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::STATUS_ACCEPTED) {
-            $data[self::HOKODO_PAYMENT_PLAN_NAME] = $paymentPlan->getName();
-            $data[self::HOKODO_PAYMENT_TERMS_RELATIVE_TO] = $paymentPlan->getPaymentTermsRelativeTo();
-            $data[self::HOKODO_PAYMENT_TERMS] = $this->paymentTerms
-                ->getPaymentTerms($paymentPlan->getName(), $paymentPlan->getPaymentTermsRelativeTo());
+        $data[self::HOKODO_PAYMENT_PLAN_NAME] = $paymentPlan->getName();
+        $data[self::HOKODO_PAYMENT_TERMS_RELATIVE_TO] = $paymentPlan->getPaymentTermsRelativeTo();
+        $data[self::HOKODO_PAYMENT_TERMS] = $this->paymentTerms
+            ->getPaymentTerms($paymentPlan->getName(), $paymentPlan->getPaymentTermsRelativeTo());
 
-            $scheduledPayments = $paymentPlan->getScheduledPayments();
-            foreach ($scheduledPayments as $scheduledPayment) {
-                $data = $this->addDataFromScheduledPayment($scheduledPayment, $data);
-            }
+        $scheduledPayments = $paymentPlan->getScheduledPayments();
+        foreach ($scheduledPayments as $scheduledPayment) {
+            $data = $this->addDataFromScheduledPayment($scheduledPayment, $data);
         }
         return $data;
     }
