@@ -25,7 +25,7 @@ class PaymentTerms
         $name = trim(strtolower($name));
         $paymentTermsRelativeTo = trim(strtolower($paymentTermsRelativeTo));
 
-        if (!str_contains($name, 'd')) {
+        if (strpos($name,'d') === false) {
             return null;
         }
         $numberOfDays = (int) $name;
@@ -34,7 +34,7 @@ class PaymentTerms
             $afterDelivery = true;
         }
 
-        if (str_contains($name, 'eo')) {
+        if (strpos($name, 'eo') !== false) {
             $endOfMonth = true;
         }
 
