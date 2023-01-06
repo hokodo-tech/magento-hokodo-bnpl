@@ -25,7 +25,7 @@ class PaymentTerms
         $name = trim(strtolower($name));
         $paymentTermsRelativeTo = trim(strtolower($paymentTermsRelativeTo));
 
-        if (strpos($name,'d') === false) {
+        if (strpos($name, 'd') === false) {
             return null;
         }
         $numberOfDays = (int) $name;
