@@ -6,6 +6,8 @@
 
 namespace Hokodo\BNPL\Observer;
 
+use Hokodo\BNPL\Api\Data\PaymentPlanInterface;
+use Hokodo\BNPL\Api\Data\ScheduledPaymentsInterface;
 use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order;
 use Hokodo\BNPL\Service\PaymentTerms;
@@ -100,35 +102,64 @@ class DataAssignObserver extends AbstractDataAssignObserver
                 $hokodoOrder = $this->orderService->getOrder(
                     ['id' => $additionalData['hokodo_order_id']]
                 )->getDataModel();
+
                 $hokodoOffer = $this->offerGatewayService
                     ->getOffer(['id' => $hokodoOrder->getPaymentOffer()])
                     ->getDataModel();
+
                 foreach ($hokodoOffer->getOfferedPaymentPlans() as $paymentPlan) {
-                    if ($paymentPlan->getStatus() != \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::STATUS_ACCEPTED) {
-                        continue;
-                    }
-                    $additionalData[self::HOKODO_PAYMENT_PLAN_NAME] = $paymentPlan->getName();
-                    $additionalData[self::HOKODO_PAYMENT_TERMS_RELATIVE_TO] = $paymentPlan->getPaymentTermsRelativeTo();
-                    $additionalData[self::HOKODO_PAYMENT_TERMS] = $this->paymentTerms
-                        ->getPaymentTerms($paymentPlan->getName(), $paymentPlan->getPaymentTermsRelativeTo());
-
-                    $scheduledPayments = $paymentPlan->getScheduledPayments();
-                    foreach ($scheduledPayments as $scheduledPayment) {
-                        if ($additionalData[self::HOKODO_PAYMENT_TERMS_RELATIVE_TO] != 'first_capture'
-                            && $additionalData[self::HOKODO_PAYMENT_TERMS_RELATIVE_TO] != 'every_capture'
-                        ) {
-                            list($year, $month, $day) = explode('-', $scheduledPayment->getDate());
-                            $date = $day . '/' . $month . '/' . $year;
-                            $additionalData[self::HOKODO_PAYMENT_PLAN_DUE_DATE] = $date;
-                        }
-                        $paymentMethod = $scheduledPayment->getPaymentMethod()->getType();
-                        $additionalData[self::HOKODO_PAYMENT_METHOD] = $paymentMethod;
-                    }
+                    $additionalData = $this->addDataFromPaymentPlan($paymentPlan, $additionalData);
                 }
-                $additionalData['hokodo_deferred_payment_id'] = $hokodoOrder->getDeferredPayment();
 
+                $additionalData['hokodo_deferred_payment_id'] = $hokodoOrder->getDeferredPayment();
                 $quote->getPayment()->setAdditionalInformation($additionalData)->save();
             }
         }
+    }
+
+    /**
+     * Add data from Payment Plan.
+     *
+     * @param PaymentPlanInterface $paymentPlan
+     * @param array                $data
+     *
+     * @return array
+     */
+    private function addDataFromPaymentPlan(PaymentPlanInterface $paymentPlan, array $data): array
+    {
+        if ($paymentPlan->getStatus() == \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::STATUS_ACCEPTED) {
+            $data[self::HOKODO_PAYMENT_PLAN_NAME] = $paymentPlan->getName();
+            $data[self::HOKODO_PAYMENT_TERMS_RELATIVE_TO] = $paymentPlan->getPaymentTermsRelativeTo();
+            $data[self::HOKODO_PAYMENT_TERMS] = $this->paymentTerms
+                ->getPaymentTerms($paymentPlan->getName(), $paymentPlan->getPaymentTermsRelativeTo());
+
+            $scheduledPayments = $paymentPlan->getScheduledPayments();
+            foreach ($scheduledPayments as $scheduledPayment) {
+                $data = $this->addDataFromScheduledPayment($scheduledPayment, $data);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Add data from Scheduled Payment.
+     *
+     * @param ScheduledPaymentsInterface $scheduledPayment
+     * @param array                      $data
+     *
+     * @return array
+     */
+    private function addDataFromScheduledPayment(ScheduledPaymentsInterface $scheduledPayment, array $data): array
+    {
+        if ($data[self::HOKODO_PAYMENT_TERMS_RELATIVE_TO] != PaymentTerms::PAYMENT_TERMS_RELATIVE_TO_FIRST_CAPTURE
+            && $data[self::HOKODO_PAYMENT_TERMS_RELATIVE_TO] != PaymentTerms::PAYMENT_TERMS_RELATIVE_TO_EVERY_CAPTURE
+        ) {
+            list($year, $month, $day) = explode('-', $scheduledPayment->getDate());
+            $date = $day . '/' . $month . '/' . $year;
+            $data[self::HOKODO_PAYMENT_PLAN_DUE_DATE] = $date;
+        }
+        $paymentMethod = $scheduledPayment->getPaymentMethod()->getType();
+        $data[self::HOKODO_PAYMENT_METHOD] = $paymentMethod;
+        return $data;
     }
 }
