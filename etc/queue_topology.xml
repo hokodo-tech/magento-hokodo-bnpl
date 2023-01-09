@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <!--
+    /**
+     * Copyright © 2018-2023 Hokodo. All Rights Reserved.
+     * See LICENSE for license details.
+     */
+    -->
     <exchange name="HokodoAsync" type="topic" connection="amqp">
         <binding id="DocumentsBinding" topic="hokodo.order.documents" destinationType="queue" destination="hokodo.order.documents"/>
     </exchange>

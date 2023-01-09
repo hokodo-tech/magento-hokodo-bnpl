@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright © 2018-2022 Hokodo. All Rights Reserved.
+ * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
 

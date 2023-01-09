@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+<!--
+/**
+ * Copyright © 2018-2023 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+-->
     <consumer name="hokodo.order.documents" queue="hokodo.order.documents" connection="amqp"
               handler="Hokodo\BNPL\Model\Queue\Handler\Documents::execute"/>
 </config>
