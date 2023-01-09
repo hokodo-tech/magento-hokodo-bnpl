@@ -234,4 +234,24 @@ class PaymentPlan extends AbstractSimpleObject implements PaymentPlanInterface
     {
         return $this->setData(self::VALID_UNTIL, $validUntil);
     }
+
+    /**
+     * @inheritDoc
+     *
+     * @see \Hokodo\BNPL\Api\Data\PaymentPlanInterface::setPaymentTermsRelativeTo()
+     */
+    public function setPaymentTermsRelativeTo(string $paymentTermsRelativeTo)
+    {
+        return $this->setData(self::PAYMENT_TERMS_RELATIVE_TO, $paymentTermsRelativeTo);
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @see \Hokodo\BNPL\Api\Data\PaymentPlanInterface::getStatus()
+     */
+    public function getPaymentTermsRelativeTo(): string
+    {
+        return $this->_get(self::PAYMENT_TERMS_RELATIVE_TO);
+    }
 }

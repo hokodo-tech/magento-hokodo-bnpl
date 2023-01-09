@@ -9,7 +9,7 @@ namespace Hokodo\BNPL\Api\Data;
 /**
  * Interface Hokodo\BNPL\Api\Data\PaymentMethodInterface.
  */
-interface PaymentMethodInterface
+interface PaymentMethodInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     public const TYPE = 'type';
 

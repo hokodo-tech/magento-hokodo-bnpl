@@ -15,6 +15,11 @@ use Magento\Payment\Block\ConfigurableInfo;
 class Info extends ConfigurableInfo
 {
     /**
+     * @var string
+     */
+    protected $_template = 'Hokodo_BNPL::info/default.phtml';
+
+    /**
      * Returns label.
      *
      * @param string $field

@@ -22,6 +22,7 @@ interface PaymentPlanInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public const PAYMENT_URL = 'payment_url';
     public const STATUS = 'status';
     public const REJECTION_REASON = 'rejection_reason';
+    public const PAYMENT_TERMS_RELATIVE_TO = 'payment_terms_relative_to';
 
     /**
      * A function that sets id.
@@ -200,4 +201,20 @@ interface PaymentPlanInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return \Hokodo\BNPL\Api\Data\RejectionReasonInterface|null
      */
     public function getRejectionReason();
+
+    /**
+     * A function that sets Payment Terms Relative To.
+     *
+     * @param string $paymentTermsRelativeTo
+     *
+     * @return $this
+     */
+    public function setPaymentTermsRelativeTo(string $paymentTermsRelativeTo);
+
+    /**
+     * A function that gets Payment Terms Relative To.
+     *
+     * @return string
+     */
+    public function getPaymentTermsRelativeTo(): string;
 }
