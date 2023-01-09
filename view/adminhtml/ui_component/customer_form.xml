@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!--
+/**
+ * Copyright © 2018-2023 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+-->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <fieldset name="hokodo" sortOrder="999" class="Hokodo\BNPL\Ui\Component\Customer\Form\HokodoFieldset">

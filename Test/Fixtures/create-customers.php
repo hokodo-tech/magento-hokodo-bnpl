@@ -3,7 +3,7 @@
 // phpcs:ignoreFile
 
 /*
- * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
 declare(strict_types=1);
