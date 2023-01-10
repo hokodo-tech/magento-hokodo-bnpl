@@ -93,18 +93,21 @@
                         <field id="create_invoice_on_payment_accepted">1</field>
                     </depends>
                 </field>
-                <field id="is_default" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="1">
-                    <label>Set as Default</label>
-                    <comment><![CDATA[Sets method on the first place on checkout and makes it selected]]></comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="allow_customer_to_change_company" translate="label comment" type="select" sortOrder="120" showInDefault="1" showInWebsite="1">
+                <field id="allow_customer_to_change_company" translate="label comment" type="select" sortOrder="90" showInDefault="1" showInWebsite="1">
                     <label>Allow User to change company</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="debug" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="debug" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Enable Debug</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="is_default" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1">
+                    <label>Set as Default</label>
+                    <source_model>Hokodo\BNPL\Model\Config\Source\PaymentMethodBehaviour</source_model>
+                </field>
+                <field id="sort_order" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1">
+                    <label>Sort Order</label>
+                    <frontend_class>validate-number</frontend_class>
                 </field>
                 <group id="segment" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
                     <label>Analytics</label>

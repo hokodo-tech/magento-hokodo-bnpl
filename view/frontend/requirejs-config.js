@@ -17,6 +17,9 @@ config = {
             },
             'Magento_CheckoutAgreements/js/view/checkout-agreements': {
                 'Hokodo_BNPL/js/mixin/checkout-agreements-mixin': true
+            },
+            'Magento_Checkout/js/model/checkout-data-resolver': {
+                'Hokodo_BNPL/js/sdk/mixin/checkout-data-resolver': true
             }
         }
     }
