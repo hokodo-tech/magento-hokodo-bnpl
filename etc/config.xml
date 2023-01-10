@@ -42,7 +42,7 @@
                 <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <allowspecific>0</allowspecific>
                 <specificcountry><![CDATA[GB]]></specificcountry>
-                <sort_order>100</sort_order>
+                <sort_order>1</sort_order>
                 <display_only_allowed_countries>1</display_only_allowed_countries>
                 <dev_uri>https://api-dev.hokodo.co/v1/</dev_uri>
                 <sandbox_uri>https://api-sandbox.hokodo.co/v1/</sandbox_uri>
@@ -51,7 +51,7 @@
                 <paymentInfoKeys>payment_terms,due_date,payment_method</paymentInfoKeys>
                 <replace_place_order_hooks>0</replace_place_order_hooks>
                 <enable_customer_groups>0</enable_customer_groups>
-                <is_default>0</is_default>
+                <is_default>2</is_default>
                 <allow_customer_to_change_company>1</allow_customer_to_change_company>
                 <segment>
                     <active>1</active>
