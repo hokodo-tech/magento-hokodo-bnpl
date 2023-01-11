@@ -10,6 +10,7 @@ namespace Hokodo\BNPL\Model\Ui;
 
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos;
+use Hokodo\BNPL\Model\Config\Source\HideHokodoIfOptions;
 use Hokodo\BNPL\Model\Config\Source\PaymentMethodBehaviour;
 use Hokodo\BNPL\Service\CustomersGroup;
 use Magento\Checkout\Model\ConfigProviderInterface;
@@ -22,7 +23,7 @@ class ConfigProvider implements ConfigProviderInterface
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     /**
      * @var CustomersGroup
@@ -61,6 +62,7 @@ class ConfigProvider implements ConfigProviderInterface
                         $this->customersGroupService->isEnabledForCustomerGroup(),
                     'isDefault' => $this->isDefault(),
                     'isForEligibleOrderOnly' => $this->isForEligibleOrderOnly(),
+                    'hideHokodoPaymentType' => $this->getHideHokodoPaymentType(),
                     'title' => $this->config->getValue(Config::PAYMENT_TITLE),
                     'subtitle' => $this->config->getValue(Config::PAYMENT_SUBTITLE),
                     'hokodoLogo' => (bool) $this->config->getValue(Config::HOKODO_LOGO),
@@ -76,7 +78,7 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      */
-    public function isDefault(): bool
+    private function isDefault(): bool
     {
         $result = false;
         $value = $this->config->getValue(Config::IS_PAYMENT_DEFAULT_PATH);
@@ -91,12 +93,36 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      */
-    public function isForEligibleOrderOnly(): bool
+    private function isForEligibleOrderOnly(): bool
     {
         $result = false;
         $value = $this->config->getValue(Config::IS_PAYMENT_DEFAULT_PATH);
         if ($value == PaymentMethodBehaviour::IF_ORDER_ELIGIBLE) {
             $result = true;
+        }
+        return $result;
+    }
+
+    /**
+     * Get Hide Hokodo Payment Type.
+     *
+     * @return string
+     */
+    private function getHideHokodoPaymentType(): string
+    {
+        $result = HideHokodoIfOptions::DONT_HIDE_CODE;
+        if ($this->config->getValue(Config::IS_NEED_TO_HIDE_HOKODO_PATH)) {
+            $hideHocodoIfConfigValue = $this->config->getValue(Config::HIDE_HOKODO_IF_PATH);
+            if (!empty($hideHocodoIfConfigValue)) {
+                $values = explode(',', $hideHocodoIfConfigValue);
+                if (count($values) > 1) {
+                    $result = HideHokodoIfOptions::BOTH_CODE;
+                } elseif ($values[0] == HideHokodoIfOptions::IF_ORDER_ELIGIBLE) {
+                    $result = HideHokodoIfOptions::IF_ORDER_ELIGIBLE_CODE;
+                } elseif ($values[0] == HideHokodoIfOptions::COMPANY_IS_NOT_ATTACHED) {
+                    $result = HideHokodoIfOptions::COMPANY_IS_NOT_ATTACHED_CODE;
+                }
+            }
         }
         return $result;
     }

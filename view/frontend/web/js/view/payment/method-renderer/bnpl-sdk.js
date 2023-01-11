@@ -58,16 +58,7 @@ define([
                 }
             })
 
-            if (typeof hokodoData.getOffer() === 'undefined' || hokodoData.getOffer() === '') {
-                this.isReadyToShow(true);
-            } else {
-                let self = this
-                hokodoData.getOffer().offered_payment_plans.forEach(function (item, index) {
-                    if (item.status === 'offered') {
-                        self.isReadyToShow(true);
-                    }
-                })
-            }
+            this.showBNPLPaymentMethodIfPossible();
 
             if (this.hokodoCheckout().companyId()) {
                 this.companySearch = this.hokodoElements.create("companySearch", {companyId: this.hokodoCheckout().companyId()});
@@ -94,6 +85,40 @@ define([
             })
 
             return this;
+        },
+
+        showBNPLPaymentMethodIfPossible: function() {
+
+            let hasOfferedPaymentPlan = this.hasOfferedPlan();
+
+            if (paymentConfig.hideHokodoPaymentType == 'dont_hide') {
+                this.isReadyToShow(true);
+            } else if (paymentConfig.hideHokodoPaymentType == 'company_is_not_attached'
+                && this.hokodoCheckout().companyId()
+            ) {
+                this.isReadyToShow(true);
+            } else if (paymentConfig.hideHokodoPaymentType == 'order_is_not_eligible'
+                && hasOfferedPaymentPlan == true
+            ) {
+                this.isReadyToShow(true);
+            } else if (paymentConfig.hideHokodoPaymentType == 'order_is_not_eligible_or_company_is_not_attached'
+                && this.hokodoCheckout().companyId() && hasOfferedPaymentPlan == true
+            ) {
+                this.isReadyToShow(true);
+            }
+        },
+
+        hasOfferedPlan: function()
+        {
+            let isOffered = false;
+            if (typeof hokodoData.getOffer() !== 'undefined' && hokodoData.getOffer() !== '') {
+                hokodoData.getOffer().offered_payment_plans.forEach(function (item, index) {
+                    if (item.status === 'offered') {
+                        isOffered = true;
+                    }
+                })
+            }
+            return isOffered;
         },
 
         onCompanyChange: function(companyId) {
