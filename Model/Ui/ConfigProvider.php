@@ -117,8 +117,8 @@ class ConfigProvider implements ConfigProviderInterface
                 $values = explode(',', $hideHocodoIfConfigValue);
                 if (count($values) > 1) {
                     $result = HideHokodoIfOptions::BOTH_CODE;
-                } elseif ($values[0] == HideHokodoIfOptions::IF_ORDER_ELIGIBLE) {
-                    $result = HideHokodoIfOptions::IF_ORDER_ELIGIBLE_CODE;
+                } elseif ($values[0] == HideHokodoIfOptions::ORDER_IS_NOT_ELIGIBLE) {
+                    $result = HideHokodoIfOptions::ORDER_IS_NOT_ELIGIBLE_CODE;
                 } elseif ($values[0] == HideHokodoIfOptions::COMPANY_IS_NOT_ATTACHED) {
                     $result = HideHokodoIfOptions::COMPANY_IS_NOT_ATTACHED_CODE;
                 }
