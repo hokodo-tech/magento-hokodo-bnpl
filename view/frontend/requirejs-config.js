@@ -1,5 +1,5 @@
 /**
- * Copyright © 2018-2021 Hokodo. All Rights Reserved.
+ * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
 
@@ -17,6 +17,9 @@ config = {
             },
             'Magento_CheckoutAgreements/js/view/checkout-agreements': {
                 'Hokodo_BNPL/js/mixin/checkout-agreements-mixin': true
+            },
+            'Magento_Checkout/js/model/checkout-data-resolver': {
+                'Hokodo_BNPL/js/sdk/mixin/checkout-data-resolver': true
             }
         }
     }
