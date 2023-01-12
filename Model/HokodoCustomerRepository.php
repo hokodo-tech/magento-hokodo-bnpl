@@ -82,16 +82,4 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
 
         return $hokodoCustomer;
     }
-
-    /**
-     * Alias for getByCustomerId.
-     *
-     * @param int $entityId
-     *
-     * @return HokodoEntityInterface
-     */
-    public function getById(int $entityId): HokodoEntityInterface
-    {
-        return $this->getByCustomerId($entityId);
-    }
 }

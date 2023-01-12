@@ -1488,7 +1488,7 @@
     <preference for="Hokodo\BNPL\Api\Data\OrderDocumentInterface" type="Hokodo\BNPL\Model\Data\OrderDocument"/>
     <preference for="Hokodo\BNPL\Api\OrderDocumentsRepositoryInterface" type="Hokodo\BNPL\Model\OrderDocumentsRepository"/>
 
-    <preference for="Hokodo\BNPL\Api\HokodoEntityResolverInterface" type="Hokodo\BNPL\Model\HokodoEntityResolver"/>
+    <preference for="Hokodo\BNPL\Api\HokodoEntityTypeResolverInterface" type="Hokodo\BNPL\Model\HokodoEntityTypeResolver"/>
     <type name="Hokodo\BNPL\Model\HokodoCompanyProvider">
         <arguments>
             <argument name="companyProviderTypes" xsi:type="array">

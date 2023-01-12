@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api;
 
-interface HokodoEntityResolverInterface
+interface HokodoEntityTypeResolverInterface
 {
     /**
      * Get Entity Type.
      *
      * @return string
      */
-    public function getEntityType(): string;
+    public function resolve(): string;
 }

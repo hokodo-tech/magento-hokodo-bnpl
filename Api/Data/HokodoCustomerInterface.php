@@ -32,22 +32,6 @@ interface HokodoCustomerInterface extends HokodoEntityInterface
     public function setCustomerId(int $customerId): self;
 
     /**
-     * Company Id getter.
-     *
-     * @return string|null
-     */
-    public function getCompanyId(): ?string;
-
-    /**
-     * Company Id setter.
-     *
-     * @param string $companyId
-     *
-     * @return $this
-     */
-    public function setCompanyId(string $companyId): self;
-
-    /**
      * User Id getter.
      *
      * @return string|null

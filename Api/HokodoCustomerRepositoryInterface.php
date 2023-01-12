@@ -28,13 +28,4 @@ interface HokodoCustomerRepositoryInterface extends HokodoEntityRepositoryInterf
      * @return bool
      */
     public function delete(HokodoCustomerInterface $hokodoCustomer): bool;
-
-    /**
-     * Retrieve Hokodo Data Webapi by magento customer id.
-     *
-     * @param int $customerId
-     *
-     * @return HokodoCustomerInterface
-     */
-    public function getByCustomerId(int $customerId): HokodoCustomerInterface;
 }

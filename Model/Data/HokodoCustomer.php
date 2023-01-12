@@ -57,7 +57,7 @@ class HokodoCustomer extends AbstractModel implements HokodoCustomerInterface
     /**
      * @inheritdoc
      */
-    public function setCompanyId(string $companyId): self
+    public function setCompanyId(?string $companyId): self
     {
         $this->setData(self::COMPANY_ID, $companyId);
         return $this;

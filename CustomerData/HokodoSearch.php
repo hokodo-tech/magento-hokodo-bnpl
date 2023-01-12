@@ -42,12 +42,12 @@ class HokodoSearch implements SectionSourceInterface
      */
     public function getSectionData()
     {
-        $hokodoCustomer = $this->hokodoCompanyProvider->getHokodoEntity()->getById(
+        $hokodoEntity = $this->hokodoCompanyProvider->getEntityRepository()->getByCustomerId(
             (int) $this->customerSession->getCustomerId()
         );
 
         return [
-            self::COMPANY_ID => $hokodoCustomer->getCompanyId() ?: '',
+            self::COMPANY_ID => $hokodoEntity->getCompanyId() ?: '',
         ];
     }
 }
