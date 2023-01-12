@@ -17,11 +17,11 @@ $title = $block->escapeHtml($block->getMethod()->getTitle());
 </div>
 <dl class="payment-method">
     <dt class="title"><?= /* @noEscape */ $title ?></dt>
-<?php if ($specificInfo) : ?>
+<?php if ($specificInfo): ?>
     <dd class="content">
         <table class="data table">
             <caption class="table-caption"><?= /* @noEscape */ $title ?></caption>
-            <?php foreach ($specificInfo as $label => $value) : ?>
+            <?php foreach ($specificInfo as $label => $value): ?>
                 <tr>
                     <th><?= $block->escapeHtml(__($label)) ?>:</th>
                     <td>

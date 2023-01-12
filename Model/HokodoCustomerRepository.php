@@ -10,7 +10,6 @@ namespace Hokodo\BNPL\Model;
 
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterfaceFactory;
-use Hokodo\BNPL\Api\Data\HokodoEntityInterface;
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer as Resource;
 use Magento\Framework\Exception\CouldNotDeleteException;

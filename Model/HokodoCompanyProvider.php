@@ -25,7 +25,7 @@ class HokodoCompanyProvider
 
     /**
      * @param HokodoEntityTypeResolverInterface $entityResolver
-     * @param array                         $companyProviderTypes
+     * @param array                             $companyProviderTypes
      */
     public function __construct(
         HokodoEntityTypeResolverInterface $entityResolver,
