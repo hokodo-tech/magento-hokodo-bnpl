@@ -49,7 +49,7 @@ class HokodoSearch implements SectionSourceInterface
         }
 
         return [
-            self::COMPANY_ID => $companyId
+            self::COMPANY_ID => $companyId,
         ];
     }
 }
