@@ -9,14 +9,14 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model;
 
-use Hokodo\BNPL\Api\HokodoEntityResolverInterface;
+use Hokodo\BNPL\Api\HokodoEntityTypeResolverInterface;
 
 class HokodoCompanyProvider
 {
     /**
-     * @var HokodoEntityResolverInterface
+     * @var HokodoEntityTypeResolverInterface
      */
-    private HokodoEntityResolverInterface $entityResolver;
+    private HokodoEntityTypeResolverInterface $entityResolver;
 
     /**
      * @var array
@@ -24,26 +24,26 @@ class HokodoCompanyProvider
     private array $companyProviderTypes;
 
     /**
-     * @param HokodoEntityResolverInterface $entityResolver
-     * @param array                         $companyProviderTypes
+     * @param HokodoEntityTypeResolverInterface $entityResolver
+     * @param array                             $companyProviderTypes
      */
     public function __construct(
-        HokodoEntityResolverInterface $entityResolver,
+        HokodoEntityTypeResolverInterface $entityResolver,
         array $companyProviderTypes
     ) {
-        $this->entityResolver = $entityResolver;
+        $this->entityTypeResolver = $entityResolver;
         $this->companyProviderTypes = $companyProviderTypes;
     }
 
     /**
-     * Get Entity where we store Company Id.
+     * Get Entity's (where we store Company Id) Repository.
      *
      * @return mixed
      */
-    public function getHokodoEntity()
+    public function getEntityRepository()
     {
-        $entityType = $this->entityResolver->getEntityType();
-        return $this->getEntityClass($entityType);
+        $entityType = $this->entityTypeResolver->resolve();
+        return $this->getEntityRepositoryClass($entityType);
     }
 
     /**
@@ -53,7 +53,7 @@ class HokodoCompanyProvider
      *
      * @return mixed
      */
-    public function getEntityClass($type)
+    public function getEntityRepositoryClass($type)
     {
         try {
             return $this->companyProviderTypes[$type];

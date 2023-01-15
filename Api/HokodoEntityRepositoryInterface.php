@@ -14,9 +14,9 @@ interface HokodoEntityRepositoryInterface
     /**
      * Retrieve Hokodo Data Webapi by magento customer id.
      *
-     * @param int $entityId
+     * @param int $customerId
      *
      * @return HokodoEntityInterface
      */
-    public function getById(int $entityId): HokodoEntityInterface;
+    public function getByCustomerId(int $customerId): HokodoEntityInterface;
 }
