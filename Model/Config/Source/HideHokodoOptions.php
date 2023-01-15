@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Config\Source;
 
-class HideHokodoIfOptions implements \Magento\Framework\Data\OptionSourceInterface
+class HideHokodoOptions implements \Magento\Framework\Data\OptionSourceInterface
 {
     public const ORDER_IS_NOT_ELIGIBLE = 1;
     public const COMPANY_IS_NOT_ATTACHED = 2;

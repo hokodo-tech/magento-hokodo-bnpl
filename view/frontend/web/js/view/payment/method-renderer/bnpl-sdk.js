@@ -88,27 +88,51 @@ define([
         },
 
         showBNPLPaymentMethodIfPossible: function() {
-
-            let hasOfferedPaymentPlan = this.hasOfferedPlan();
-
-            if (paymentConfig.hideHokodoPaymentType == 'dont_hide') {
-                this.isReadyToShow(true);
-            } else if (paymentConfig.hideHokodoPaymentType == 'company_is_not_attached'
-                && this.hokodoCheckout().companyId()
-            ) {
-                this.isReadyToShow(true);
-            } else if (paymentConfig.hideHokodoPaymentType == 'order_is_not_eligible'
-                && hasOfferedPaymentPlan == true
-            ) {
-                this.isReadyToShow(true);
-            } else if (paymentConfig.hideHokodoPaymentType == 'order_is_not_eligible_or_company_is_not_attached'
-                && this.hokodoCheckout().companyId() && hasOfferedPaymentPlan == true
+            if (this.isMustShow()
+                || this.isCompanyAttached()
+                || this.isOrderEligible()
+                || this.isBothCompanyAttachedAndOrderEligible()
             ) {
                 this.isReadyToShow(true);
             }
         },
 
-        hasOfferedPlan: function()
+        isMustShow: function () {
+            let isMustShow = false;
+            if (paymentConfig.hideHokodoPaymentType === 'dont_hide') {
+                isMustShow = true;
+            }
+            return isMustShow;
+        },
+
+        isCompanyAttached: function () {
+            let isCompanyAttached = false;
+            if (paymentConfig.hideHokodoPaymentType === 'company_is_not_attached' && this.hokodoCheckout().companyId()) {
+                isCompanyAttached = true;
+            }
+            return isCompanyAttached;
+        },
+
+        isOrderEligible: function () {
+            let isOrderEligible = false;
+            if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible' &&
+                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn())
+            ) {
+                isOrderEligible = true;
+            }
+            return isOrderEligible;
+        },
+
+        isBothCompanyAttachedAndOrderEligible: function () {
+            let isBothCompanyAttachedAndOrderEligible = false;
+            if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible_or_company_is_not_attached'
+                && this.hokodoCheckout().companyId() && this.hasOfferedPlan() === true) {
+                isBothCompanyAttachedAndOrderEligible = true;
+            }
+            return isBothCompanyAttachedAndOrderEligible;
+        },
+
+        hasOfferedPlan: function ()
         {
             let isOffered = false;
             if (typeof hokodoData.getOffer() !== 'undefined' && hokodoData.getOffer() !== '') {
@@ -119,6 +143,14 @@ define([
                 })
             }
             return isOffered;
+        },
+
+        isCustomerLoggedIn: function () {
+            let isLoggedIn = false
+            if (customer.isLoggedIn()) {
+                isLoggedIn = true;
+            }
+            return isLoggedIn;
         },
 
         onCompanyChange: function(companyId) {

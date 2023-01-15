@@ -36,8 +36,8 @@ class Config extends DefaultPaymentConfig
     public const INVOICE_ON_PAYMENT = 'payment/hokodo_bnpl/create_invoice_on_payment_accepted';
     public const REPLACE_PLACE_ORDER_HOOKS = 'payment/hokodo_bnpl/replace_place_order_hooks';
     public const IS_PAYMENT_DEFAULT_PATH = 'is_default';
-    public const IS_NEED_TO_HIDE_HOKODO_PATH = 'hide_hokodo';
-    public const HIDE_HOKODO_IF_PATH = 'hide_hokodo_if';
+    public const IS_NEED_TO_HIDE_HOKODO = 'advanced/hide_hokodo';
+    public const HIDE_HOKODO_OPTIONS = 'advanced/hide_hokodo_options';
     public const ALLOW_CUSTOMER_TO_CHANGE_COMPANY = 'payment/hokodo_bnpl/allow_customer_to_change_company';
     public const MARKETING_FAQ_LINK = 'marketing/faq_link';
     public const MARKETING_BANNER_LINK = 'marketing/banner_link';

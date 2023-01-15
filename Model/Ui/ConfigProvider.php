@@ -10,7 +10,7 @@ namespace Hokodo\BNPL\Model\Ui;
 
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos;
-use Hokodo\BNPL\Model\Config\Source\HideHokodoIfOptions;
+use Hokodo\BNPL\Model\Config\Source\HideHokodoOptions;
 use Hokodo\BNPL\Model\Config\Source\PaymentMethodBehaviour;
 use Hokodo\BNPL\Service\CustomersGroup;
 use Magento\Checkout\Model\ConfigProviderInterface;
@@ -110,17 +110,17 @@ class ConfigProvider implements ConfigProviderInterface
      */
     private function getHideHokodoPaymentType(): string
     {
-        $result = HideHokodoIfOptions::DONT_HIDE_CODE;
-        if ($this->config->getValue(Config::IS_NEED_TO_HIDE_HOKODO_PATH)) {
-            $hideHocodoIfConfigValue = $this->config->getValue(Config::HIDE_HOKODO_IF_PATH);
-            if (!empty($hideHocodoIfConfigValue)) {
-                $values = explode(',', $hideHocodoIfConfigValue);
+        $result = HideHokodoOptions::DONT_HIDE_CODE;
+        if ($this->config->getValue(Config::IS_NEED_TO_HIDE_HOKODO)) {
+            $hideHokodoConfigValue = $this->config->getValue(Config::HIDE_HOKODO_OPTIONS);
+            if (!empty($hideHokodoConfigValue)) {
+                $values = explode(',', $hideHokodoConfigValue);
                 if (count($values) > 1) {
-                    $result = HideHokodoIfOptions::BOTH_CODE;
-                } elseif ($values[0] == HideHokodoIfOptions::ORDER_IS_NOT_ELIGIBLE) {
-                    $result = HideHokodoIfOptions::ORDER_IS_NOT_ELIGIBLE_CODE;
-                } elseif ($values[0] == HideHokodoIfOptions::COMPANY_IS_NOT_ATTACHED) {
-                    $result = HideHokodoIfOptions::COMPANY_IS_NOT_ATTACHED_CODE;
+                    $result = HideHokodoOptions::BOTH_CODE;
+                } elseif ($values[0] == HideHokodoOptions::ORDER_IS_NOT_ELIGIBLE) {
+                    $result = HideHokodoOptions::ORDER_IS_NOT_ELIGIBLE_CODE;
+                } elseif ($values[0] == HideHokodoOptions::COMPANY_IS_NOT_ATTACHED) {
+                    $result = HideHokodoOptions::COMPANY_IS_NOT_ATTACHED_CODE;
                 }
             }
         }

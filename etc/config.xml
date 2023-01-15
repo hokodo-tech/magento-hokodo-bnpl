@@ -43,7 +43,6 @@
                 <allowspecific>0</allowspecific>
                 <specificcountry><![CDATA[GB]]></specificcountry>
                 <sort_order>1</sort_order>
-                <hide_hokodo>0</hide_hokodo>
                 <display_only_allowed_countries>1</display_only_allowed_countries>
                 <dev_uri>https://api-dev.hokodo.co/v1/</dev_uri>
                 <sandbox_uri>https://api-sandbox.hokodo.co/v1/</sandbox_uri>
@@ -73,6 +72,8 @@
                 </marketing>
                 <advanced>
                     <enable_thirdparty_totals_compatibility>0</enable_thirdparty_totals_compatibility>
+                    <hide_hokodo>1</hide_hokodo>
+                    <hide_hokodo_options>1</hide_hokodo_options>
                 </advanced>
             </hokodo_bnpl>
         </payment>
