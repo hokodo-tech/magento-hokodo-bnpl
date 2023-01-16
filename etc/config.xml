@@ -72,6 +72,8 @@
                 </marketing>
                 <advanced>
                     <enable_thirdparty_totals_compatibility>0</enable_thirdparty_totals_compatibility>
+                    <hide_hokodo>1</hide_hokodo>
+                    <hide_hokodo_options>1</hide_hokodo_options>
                 </advanced>
             </hokodo_bnpl>
         </payment>

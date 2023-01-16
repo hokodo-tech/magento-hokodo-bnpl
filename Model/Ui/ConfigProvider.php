@@ -10,6 +10,7 @@ namespace Hokodo\BNPL\Model\Ui;
 
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos;
+use Hokodo\BNPL\Model\Config\Source\HideHokodoOptions;
 use Hokodo\BNPL\Model\Config\Source\PaymentMethodBehaviour;
 use Hokodo\BNPL\Service\CustomersGroup;
 use Magento\Checkout\Model\ConfigProviderInterface;
@@ -22,7 +23,7 @@ class ConfigProvider implements ConfigProviderInterface
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     /**
      * @var CustomersGroup
@@ -61,6 +62,7 @@ class ConfigProvider implements ConfigProviderInterface
                         $this->customersGroupService->isEnabledForCustomerGroup(),
                     'isDefault' => $this->isDefault(),
                     'isForEligibleOrderOnly' => $this->isForEligibleOrderOnly(),
+                    'hideHokodoPaymentType' => $this->getHideHokodoPaymentType(),
                     'title' => $this->config->getValue(Config::PAYMENT_TITLE),
                     'subtitle' => $this->config->getValue(Config::PAYMENT_SUBTITLE),
                     'hokodoLogo' => (bool) $this->config->getValue(Config::HOKODO_LOGO),
@@ -76,10 +78,10 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      */
-    public function isDefault(): bool
+    private function isDefault(): bool
     {
         $result = false;
-        $value = $this->config->getValue(Config::IS_PAYMENT_DEFAULT_PATH);
+        $value = $this->config->getValue(Config::PAYMENT_DEFAULT);
         if ($value == PaymentMethodBehaviour::IS_DEFAULT_YES) {
             $result = true;
         }
@@ -91,12 +93,36 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      */
-    public function isForEligibleOrderOnly(): bool
+    private function isForEligibleOrderOnly(): bool
     {
         $result = false;
-        $value = $this->config->getValue(Config::IS_PAYMENT_DEFAULT_PATH);
+        $value = $this->config->getValue(Config::PAYMENT_DEFAULT);
         if ($value == PaymentMethodBehaviour::IF_ORDER_ELIGIBLE) {
             $result = true;
+        }
+        return $result;
+    }
+
+    /**
+     * Get Hide Hokodo Payment Type.
+     *
+     * @return string
+     */
+    private function getHideHokodoPaymentType(): string
+    {
+        $result = HideHokodoOptions::DONT_HIDE_CODE;
+        if ($this->config->getValue(Config::HIDE_HOKODO)) {
+            $hideHokodoConfigValue = $this->config->getValue(Config::HIDE_HOKODO_OPTIONS);
+            if (!empty($hideHokodoConfigValue)) {
+                $values = explode(',', $hideHokodoConfigValue);
+                if (count($values) > 1) {
+                    $result = HideHokodoOptions::BOTH_CODE;
+                } elseif ($values[0] == HideHokodoOptions::ORDER_IS_NOT_ELIGIBLE) {
+                    $result = HideHokodoOptions::ORDER_IS_NOT_ELIGIBLE_CODE;
+                } elseif ($values[0] == HideHokodoOptions::COMPANY_IS_NOT_ATTACHED) {
+                    $result = HideHokodoOptions::COMPANY_IS_NOT_ATTACHED_CODE;
+                }
+            }
         }
         return $result;
     }

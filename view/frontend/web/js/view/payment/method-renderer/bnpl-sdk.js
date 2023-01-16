@@ -58,16 +58,7 @@ define([
                 }
             })
 
-            if (typeof hokodoData.getOffer() === 'undefined' || hokodoData.getOffer() === '') {
-                this.isReadyToShow(true);
-            } else {
-                let self = this
-                hokodoData.getOffer().offered_payment_plans.forEach(function (item, index) {
-                    if (item.status === 'offered') {
-                        self.isReadyToShow(true);
-                    }
-                })
-            }
+            this.showBNPLPaymentMethodIfPossible();
 
             if (this.hokodoCheckout().companyId()) {
                 this.companySearch = this.hokodoElements.create("companySearch", {companyId: this.hokodoCheckout().companyId()});
@@ -94,6 +85,71 @@ define([
             })
 
             return this;
+        },
+
+        showBNPLPaymentMethodIfPossible: function() {
+            if (this.isMustShow()
+                || this.isCompanyAttached()
+                || this.isOrderEligible()
+                || this.isBothCompanyAttachedAndOrderEligible()
+            ) {
+                this.isReadyToShow(true);
+            }
+        },
+
+        isMustShow: function () {
+            return paymentConfig.hideHokodoPaymentType === 'dont_hide';
+        },
+
+        isCompanyAttached: function () {
+            let isCompanyAttached = false;
+            if (paymentConfig.hideHokodoPaymentType === 'company_is_not_attached' && this.hokodoCheckout().companyId()) {
+                isCompanyAttached = true;
+            }
+            return isCompanyAttached;
+        },
+
+        isOrderEligible: function () {
+            let isOrderEligible = false;
+            if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible' &&
+                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || !this.hasOffer())
+            ) {
+                isOrderEligible = true;
+            }
+            return isOrderEligible;
+        },
+
+        isBothCompanyAttachedAndOrderEligible: function () {
+            let isBothCompanyAttachedAndOrderEligible = false;
+            if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible_or_company_is_not_attached'
+                && this.hokodoCheckout().companyId() &&
+                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || !this.hasOffer())
+            ) {
+                isBothCompanyAttachedAndOrderEligible = true;
+            }
+            return isBothCompanyAttachedAndOrderEligible;
+        },
+
+        hasOffer: function ()
+        {
+            return typeof hokodoData.getOffer() !== 'undefined' && hokodoData.getOffer() !== '';
+        },
+
+        hasOfferedPlan: function ()
+        {
+            let isOffered = false;
+            if (typeof hokodoData.getOffer() !== 'undefined' && hokodoData.getOffer() !== '') {
+                hokodoData.getOffer().offered_payment_plans.forEach(function (item, index) {
+                    if (item.status === 'offered') {
+                        isOffered = true;
+                    }
+                })
+            }
+            return isOffered;
+        },
+
+        isCustomerLoggedIn: function () {
+            return customer.isLoggedIn();
         },
 
         onCompanyChange: function(companyId) {
