@@ -116,7 +116,7 @@ define([
         isOrderEligible: function () {
             let isOrderEligible = false;
             if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible' &&
-                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn())
+                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || !this.hasOffer())
             ) {
                 isOrderEligible = true;
             }
@@ -126,10 +126,21 @@ define([
         isBothCompanyAttachedAndOrderEligible: function () {
             let isBothCompanyAttachedAndOrderEligible = false;
             if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible_or_company_is_not_attached'
-                && this.hokodoCheckout().companyId() && this.hasOfferedPlan() === true) {
+                && this.hokodoCheckout().companyId() &&
+                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || !this.hasOffer())
+            ) {
                 isBothCompanyAttachedAndOrderEligible = true;
             }
             return isBothCompanyAttachedAndOrderEligible;
+        },
+
+        hasOffer: function ()
+        {
+            let hasOffer = false;
+            if (typeof hokodoData.getOffer() !== 'undefined' && hokodoData.getOffer() !== '') {
+                hasOffer = true;
+            }
+            return hasOffer;
         },
 
         hasOfferedPlan: function ()
