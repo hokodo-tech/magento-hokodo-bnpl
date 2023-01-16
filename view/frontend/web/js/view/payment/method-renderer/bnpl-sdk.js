@@ -98,11 +98,7 @@ define([
         },
 
         isMustShow: function () {
-            let isMustShow = false;
-            if (paymentConfig.hideHokodoPaymentType === 'dont_hide') {
-                isMustShow = true;
-            }
-            return isMustShow;
+            return paymentConfig.hideHokodoPaymentType === 'dont_hide';
         },
 
         isCompanyAttached: function () {
@@ -136,11 +132,7 @@ define([
 
         hasOffer: function ()
         {
-            let hasOffer = false;
-            if (typeof hokodoData.getOffer() !== 'undefined' && hokodoData.getOffer() !== '') {
-                hasOffer = true;
-            }
-            return hasOffer;
+            return typeof hokodoData.getOffer() !== 'undefined' && hokodoData.getOffer() !== '';
         },
 
         hasOfferedPlan: function ()
@@ -157,11 +149,7 @@ define([
         },
 
         isCustomerLoggedIn: function () {
-            let isLoggedIn = false
-            if (customer.isLoggedIn()) {
-                isLoggedIn = true;
-            }
-            return isLoggedIn;
+            return customer.isLoggedIn();
         },
 
         onCompanyChange: function(companyId) {
