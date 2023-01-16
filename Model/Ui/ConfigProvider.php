@@ -81,7 +81,7 @@ class ConfigProvider implements ConfigProviderInterface
     private function isDefault(): bool
     {
         $result = false;
-        $value = $this->config->getValue(Config::IS_PAYMENT_DEFAULT_PATH);
+        $value = $this->config->getValue(Config::PAYMENT_DEFAULT);
         if ($value == PaymentMethodBehaviour::IS_DEFAULT_YES) {
             $result = true;
         }
@@ -96,7 +96,7 @@ class ConfigProvider implements ConfigProviderInterface
     private function isForEligibleOrderOnly(): bool
     {
         $result = false;
-        $value = $this->config->getValue(Config::IS_PAYMENT_DEFAULT_PATH);
+        $value = $this->config->getValue(Config::PAYMENT_DEFAULT);
         if ($value == PaymentMethodBehaviour::IF_ORDER_ELIGIBLE) {
             $result = true;
         }
@@ -111,7 +111,7 @@ class ConfigProvider implements ConfigProviderInterface
     private function getHideHokodoPaymentType(): string
     {
         $result = HideHokodoOptions::DONT_HIDE_CODE;
-        if ($this->config->getValue(Config::IS_NEED_TO_HIDE_HOKODO)) {
+        if ($this->config->getValue(Config::HIDE_HOKODO)) {
             $hideHokodoConfigValue = $this->config->getValue(Config::HIDE_HOKODO_OPTIONS);
             if (!empty($hideHokodoConfigValue)) {
                 $values = explode(',', $hideHokodoConfigValue);
