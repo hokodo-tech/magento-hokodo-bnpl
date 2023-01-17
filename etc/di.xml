@@ -83,6 +83,19 @@
     <!-- END Validators infrastructure -->
 
     <!-- Commands infrastructure -->
+    <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
+        <arguments>
+            <argument name="executors" xsi:type="array">
+                <item name="hokodo" xsi:type="string">HokodoCommandManager</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="HokodoCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">Hokodo\BNPL\Gateway\Command\CommandPool</argument>
+        </arguments>
+    </virtualType>
+
     <virtualType name="Hokodo\BNPL\Gateway\Command\CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
