@@ -59,6 +59,7 @@ class VoidPayment implements CommandInterface
                 $paymentDO = $commandSubject['payment'];
                 /* @var OrderPaymentInterface $paymentInfo */
                 $paymentInfo = $paymentDO->getPayment();
+                $paymentInfo->setTransactionId($paymentInfo->getTransactionId() . '-' . time());
                 if ($hokodoDeferredPaymentId = $paymentInfo->getAdditionalInformation()['hokodo_deferred_payment_id']) {
                     /** @var $postSaleAction DeferredPaymentsPostSaleActionInterface */
                     $postSaleAction = $this->postSaleActionInterfaceFactory->create();
