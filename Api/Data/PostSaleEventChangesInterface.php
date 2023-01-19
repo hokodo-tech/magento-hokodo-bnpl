@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data;
 
-interface PostSaleEventChangesInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface PostSaleEventChangesInterface extends ExtensibleDataInterface
 {
     public const AUTHORISATION = 'authorisation';
     public const PROTECTED_CAPTURES = 'protected_captures';

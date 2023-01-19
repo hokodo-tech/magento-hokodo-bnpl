@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data;
 
-interface PostSaleEventInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface PostSaleEventInterface extends ExtensibleDataInterface
 {
     public const CREATED = 'created';
     public const TYPE = 'type';
@@ -66,14 +68,14 @@ interface PostSaleEventInterface
     /**
      * Changes getter.
      *
-     * @return PostSaleEventChangesInterface
+     * @return \Hokodo\BNPL\Api\Data\PostSaleEventChangesInterface
      */
     public function getChanges(): PostSaleEventChangesInterface;
 
     /**
      * Changes setter.
      *
-     * @param PostSaleEventChangesInterface $changes
+     * @param \Hokodo\BNPL\Api\Data\PostSaleEventChangesInterface $changes
      *
      * @return $this
      */
