@@ -9,4 +9,6 @@
 -->
     <consumer name="hokodo.order.documents" queue="hokodo.order.documents" connection="amqp"
               handler="Hokodo\BNPL\Model\Queue\Handler\Documents::execute"/>
+    <consumer name="hokodo.customer.import" queue="hokodo.customer.import" connection="amqp"
+              handler="Hokodo\BNPL\Model\Queue\Handler\CustomerImport::execute"/>
 </config>
