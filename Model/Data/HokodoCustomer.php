@@ -110,7 +110,7 @@ class HokodoCustomer extends DataObject implements HokodoCustomerInterface
     /**
      * @inheritdoc
      */
-    public function setCreditLimit(CreditLimitInterface $credit): self
+    public function setCreditLimit(?CreditLimitInterface $credit): self
     {
         $this->setData(self::CREDIT_LIMIT, $credit);
         return $this;

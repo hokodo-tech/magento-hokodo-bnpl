@@ -37,9 +37,9 @@ interface HokodoEntityInterface
     /**
      * CreditLimit setter.
      *
-     * @param \Hokodo\BNPL\Api\Data\Company\CreditLimitInterface $credit
+     * @param CreditLimitInterface|null $credit
      *
      * @return $this
      */
-    public function setCreditLimit(CreditLimitInterface $credit): self;
+    public function setCreditLimit(?CreditLimitInterface $credit): self;
 }
