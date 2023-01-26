@@ -133,7 +133,8 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
         $customerDO = $this->hokodoCustomerFactory->create();
         if ($creditLimitJson = $customerModel->getData(HokodoCustomerInterface::CREDIT_LIMIT)) {
             $customerModel->setData(
-                HokodoCustomerInterface::CREDIT_LIMIT, $this->serializer->unserialize($creditLimitJson)
+                HokodoCustomerInterface::CREDIT_LIMIT,
+                $this->serializer->unserialize($creditLimitJson)
             );
         }
         $this->dataObjectHelper->populateWithArray(
