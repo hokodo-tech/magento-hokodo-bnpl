@@ -41,3 +41,13 @@
 "Hide Hokodo if","Verberg Hokodo als"
 "Order isn't Eligible","Bestelling komt niet in aanmerking"
 "Company isn't attached","Bedrijf is niet aangesloten"
+"Add","Toevoegen"
+"Add/Replace","Toevoegen/vervangen"
+'Add new Companies','Nieuwe bedrijven toevoegen'
+'Add new Companies and Replace Existed Companies.','Voeg nieuwe bedrijven toe en vervang bestaande bedrijven.'
+"The email is not valid.","De email is niet geldig."
+"The countrycode is not valid.","De countrycode is niet geldig."
+"The regnumber cannot be empty.","Het regnummer kan niet leeg zijn."
+"The customer is not found.","De klant is niet gevonden."
+"Some errors occurred during Hokodo Company Import.","Er zijn enkele fouten opgetreden tijdens het importeren van Hokodo Company."
+"Please check hokodo_import_error.log","Controleer alstublieft hokodo_import_error.log"

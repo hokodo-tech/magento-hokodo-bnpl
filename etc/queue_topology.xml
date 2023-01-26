@@ -9,6 +9,6 @@
     -->
     <exchange name="HokodoAsync" type="topic" connection="amqp">
         <binding id="DocumentsBinding" topic="hokodo.order.documents" destinationType="queue" destination="hokodo.order.documents"/>
-        <binding id="CustomerImportBinding" topic="hokodo.customer.import" destinationType="queue" destination="hokodo.customer.import"/>
+        <binding id="CompanyImportBinding" topic="hokodo.company.import" destinationType="queue" destination="hokodo.company.import"/>
     </exchange>
 </config>

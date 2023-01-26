@@ -316,7 +316,7 @@
         </arguments>
     </type>
 
-    <type name="Hokodo\BNPL\Model\Queue\Handler\CustomerImport">
+    <type name="Hokodo\BNPL\Model\Queue\Handler\CompanyImport">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoImportLogger</argument>
         </arguments>
@@ -1558,7 +1558,7 @@
                 type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice"/>
     </type>
     <preference for="Hokodo\BNPL\Api\Data\OrderDocumentInterface" type="Hokodo\BNPL\Model\Data\OrderDocument"/>
-    <preference for="Hokodo\BNPL\Api\Data\CustomerImportInterface" type="Hokodo\BNPL\Model\Data\CustomerImport"/>
+    <preference for="Hokodo\BNPL\Api\Data\CompanyImportInterface" type="Hokodo\BNPL\Model\Data\CompanyImport"/>
     <preference for="Hokodo\BNPL\Api\OrderDocumentsRepositoryInterface" type="Hokodo\BNPL\Model\OrderDocumentsRepository"/>
 
     <preference for="Hokodo\BNPL\Api\HokodoEntityTypeResolverInterface" type="Hokodo\BNPL\Model\HokodoEntityTypeResolver"/>
@@ -1573,13 +1573,6 @@
         <arguments>
             <argument name="samples" xsi:type="array">
                 <item name="hokodo_companies" xsi:type="string">Hokodo_BNPL</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Notification\MessageList">
-        <arguments>
-            <argument name="messages" xsi:type="array">
-                <item name="companyImportSystemMessage" xsi:type="string">Hokodo\BNPL\Model\System\Message\CompanyImportSystemMessage</item>
             </argument>
         </arguments>
     </type>

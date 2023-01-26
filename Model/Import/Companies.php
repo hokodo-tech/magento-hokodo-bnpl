@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Import;
 
-use Hokodo\BNPL\Api\Data\CustomerImportInterface;
-use Hokodo\BNPL\Api\Data\CustomerImportInterfaceFactory;
+use Hokodo\BNPL\Api\Data\CompanyImportInterface;
+use Hokodo\BNPL\Api\Data\CompanyImportInterfaceFactory;
 use Hokodo\BNPL\Model\HokodoCompanyProvider;
-use Hokodo\BNPL\Model\Queue\Handler\CustomerImport as CustomerImportHandler;
+use Hokodo\BNPL\Model\Queue\Handler\CompanyImport as CompanyImportHandler;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Directory\Api\CountryInformationAcquirerInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -27,37 +27,37 @@ use Magento\ImportExport\Model\ResourceModel\Import\Data;
 
 class Companies extends AbstractEntity
 {
-    const ENTITY_CODE = 'hokodo_companies';
-    const EMAIL_COLUMN = 'email';
-    const REG_NUMBER_COLUMN = 'regnumber';
-    const COUNTRY_CODE_COLUMN = 'countrycode';
+    public const ENTITY_CODE = 'hokodo_companies';
+    public const EMAIL_COLUMN = 'email';
+    public const REG_NUMBER_COLUMN = 'regnumber';
+    public const COUNTRY_CODE_COLUMN = 'countrycode';
 
     /**
-     * Is need to check column names.
+     * @var bool
      */
     protected $needColumnCheck = true;
 
     /**
-     * Is need to log in import history.
+     * @var bool
      */
     protected $logInHistory = true;
 
     /**
-     * Permanent entity columns.
+     * @var string[]
      */
     protected $_permanentAttributes = [
         self::EMAIL_COLUMN,
         self::REG_NUMBER_COLUMN,
-        self::COUNTRY_CODE_COLUMN
+        self::COUNTRY_CODE_COLUMN,
     ];
 
     /**
-     * Valid column names
+     * @var string[]
      */
     protected $validColumnNames = [
         self::EMAIL_COLUMN,
         self::REG_NUMBER_COLUMN,
-        self::COUNTRY_CODE_COLUMN
+        self::COUNTRY_CODE_COLUMN,
     ];
 
     /**
@@ -86,21 +86,21 @@ class Companies extends AbstractEntity
     private PublisherInterface $publisher;
 
     /**
-     * @var CustomerImportInterfaceFactory
+     * @var CompanyImportInterfaceFactory
      */
-    private CustomerImportInterfaceFactory $customerImportInterfaceFactory;
+    private CompanyImportInterfaceFactory $companyImportInterfaceFactory;
 
     /**
-     * @param JsonHelper $jsonHelper
-     * @param ImportHelper $importExportData
-     * @param Data $importData
-     * @param Helper $resourceHelper
-     * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param JsonHelper                          $jsonHelper
+     * @param ImportHelper                        $importExportData
+     * @param Data                                $importData
+     * @param Helper                              $resourceHelper
+     * @param ProcessingErrorAggregatorInterface  $errorAggregator
      * @param CountryInformationAcquirerInterface $countryInformationAcquirer
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param HokodoCompanyProvider $hokodoCompanyProvider
-     * @param PublisherInterface $publisher
-     * @param CustomerImportInterfaceFactory $customerImportInterfaceFactory
+     * @param CustomerRepositoryInterface         $customerRepository
+     * @param HokodoCompanyProvider               $hokodoCompanyProvider
+     * @param PublisherInterface                  $publisher
+     * @param CompanyImportInterfaceFactory       $companyImportInterfaceFactory
      */
     public function __construct(
         JsonHelper $jsonHelper,
@@ -112,7 +112,7 @@ class Companies extends AbstractEntity
         CustomerRepositoryInterface $customerRepository,
         HokodoCompanyProvider $hokodoCompanyProvider,
         PublisherInterface $publisher,
-        CustomerImportInterfaceFactory $customerImportInterfaceFactory
+        CompanyImportInterfaceFactory $companyImportInterfaceFactory
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
@@ -123,7 +123,7 @@ class Companies extends AbstractEntity
         $this->customerRepository = $customerRepository;
         $this->hokodoCompanyProvider = $hokodoCompanyProvider;
         $this->publisher = $publisher;
-        $this->customerImportInterfaceFactory = $customerImportInterfaceFactory;
+        $this->companyImportInterfaceFactory = $companyImportInterfaceFactory;
         $this->initMessageTemplates();
     }
 
@@ -174,13 +174,13 @@ class Companies extends AbstractEntity
                     continue;
                 }
 
-                /** @var CustomerImportInterface $customerImport */
-                $customerImport = $this->customerImportInterfaceFactory->create();
-                $customerImport->setEmail($row[self::EMAIL_COLUMN])
+                /** @var CompanyImportInterface $companyImport */
+                $companyImport = $this->companyImportInterfaceFactory->create();
+                $companyImport->setEmail($row[self::EMAIL_COLUMN])
                     ->setRegNumber($row[self::REG_NUMBER_COLUMN])
                     ->setCountryCode($row[self::COUNTRY_CODE_COLUMN]);
 
-                $this->publisher->publish(CustomerImportHandler::TOPIC_NAME, $customerImport);
+                $this->publisher->publish(CompanyImportHandler::TOPIC_NAME, $companyImport);
 
                 if ($hokodoEntity->getCompanyId()) {
                     $this->countItemsUpdated += (int) isset($row[self::EMAIL_COLUMN]);
@@ -205,7 +205,7 @@ class Companies extends AbstractEntity
      * Row validation.
      *
      * @param array $rowData
-     * @param int $rowNum
+     * @param int   $rowNum
      *
      * @return bool
      */
@@ -266,6 +266,8 @@ class Companies extends AbstractEntity
                 $isExists = true;
             }
         } catch (NoSuchEntityException|LocalizedException $e) {
+            //linter compatibility
+            $isExists = false;
         }
         return $isExists;
     }
@@ -324,7 +326,23 @@ class Companies extends AbstractEntity
         );
         $this->addMessageTemplate(
             'CustomerNotFound',
-            __('The customer not found.')
+            __('The customer is not found.')
+        );
+        $this->addMessageTemplate(
+            'columnNotFound',
+            __('We can\'t find required columns: %s.')
+        );
+        $this->addMessageTemplate(
+            'invalidAttributeName',
+            __('Header contains invalid column(s): %s')
+        );
+        $this->addMessageTemplate(
+            'columnEmptyHeader',
+            __('Columns number: %s have empty headers')
+        );
+        $this->addMessageTemplate(
+            'columnNameInvalid',
+            __('Column names: "%s" are invalid')
         );
     }
 }

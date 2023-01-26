@@ -22,7 +22,7 @@ class Companies extends AbstractBehavior
     {
         return [
             Import::BEHAVIOR_APPEND => __('Add'),
-            Import::BEHAVIOR_REPLACE => __('Add/Replace')
+            Import::BEHAVIOR_REPLACE => __('Add/Replace'),
         ];
     }
 
@@ -39,7 +39,7 @@ class Companies extends AbstractBehavior
     /**
      * Get array of notes for possible values.
      *
-     * @param $entityCode
+     * @param string $entityCode
      *
      * @return array
      */
@@ -47,10 +47,10 @@ class Companies extends AbstractBehavior
     {
         $messages = ['hokodo_companies' => [
             Import::BEHAVIOR_APPEND => __(
-                "Add new Companies"
+                'Add new Companies'
             ),
             Import::BEHAVIOR_REPLACE => __(
-                "Add new Companies and Replace Existed Companies."
+                'Add new Companies and Replace Existed Companies.'
             ),
         ]];
         return $messages[$entityCode] ?? [];

@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Data;
 
-use Hokodo\BNPL\Api\Data\CustomerImportInterface;
+use Hokodo\BNPL\Api\Data\CompanyImportInterface;
 use Magento\Framework\DataObject;
 
-class CustomerImport extends DataObject implements CustomerImportInterface
+class CompanyImport extends DataObject implements CompanyImportInterface
 {
     /**
      * Getter for Email.

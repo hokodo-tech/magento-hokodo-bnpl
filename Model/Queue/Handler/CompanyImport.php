@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Queue\Handler;
 
+use Hokodo\BNPL\Api\Data\CompanyImportInterface;
 use Hokodo\BNPL\Api\Data\CompanyInterface as ApiCompany;
-use Hokodo\BNPL\Api\Data\CustomerImportInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CompanySearchRequestInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CompanySearchRequestInterfaceFactory;
 use Hokodo\BNPL\Gateway\Service\CompanySearch as Gateway;
@@ -18,13 +18,13 @@ use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Framework\Notification\NotifierInterface;
 use Magento\Payment\Gateway\Command\CommandException;
 use Psr\Log\LoggerInterface;
 
-class CustomerImport
+class CompanyImport
 {
-    public const TOPIC_NAME = 'hokodo.customer.import';
+    public const TOPIC_NAME = 'hokodo.company.import';
 
     /**
      * @var LoggerInterface
@@ -57,17 +57,18 @@ class CustomerImport
     private SessionCleanerInterface $sessionCleanerInterface;
 
     /**
-     * @var MessageManagerInterface
+     * @var NotifierInterface
      */
-    private $messageManager;
+    private NotifierInterface $notifierPool;
 
     /**
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param HokodoCompanyProvider $hokodoCompanyProvider
+     * @param CustomerRepositoryInterface          $customerRepository
+     * @param HokodoCompanyProvider                $hokodoCompanyProvider
      * @param CompanySearchRequestInterfaceFactory $companySearchRequestFactory
-     * @param Gateway $gateway
-     * @param SessionCleanerInterface $sessionCleanerInterface
-     * @param LoggerInterface $logger
+     * @param Gateway                              $gateway
+     * @param SessionCleanerInterface              $sessionCleanerInterface
+     * @param NotifierInterface                    $notifierPool
+     * @param LoggerInterface                      $logger
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
@@ -75,7 +76,7 @@ class CustomerImport
         CompanySearchRequestInterfaceFactory $companySearchRequestFactory,
         Gateway $gateway,
         SessionCleanerInterface $sessionCleanerInterface,
-        MessageManagerInterface $messageManager,
+        NotifierInterface $notifierPool,
         LoggerInterface $logger
     ) {
         $this->customerRepository = $customerRepository;
@@ -83,46 +84,48 @@ class CustomerImport
         $this->companySearchRequestFactory = $companySearchRequestFactory;
         $this->gateway = $gateway;
         $this->sessionCleanerInterface = $sessionCleanerInterface;
+        $this->notifierPool = $notifierPool;
         $this->logger = $logger;
-        $this->messageManager = $messageManager;
     }
 
     /**
      * Execute queue message handler.
      *
-     * @param CustomerImportInterface $customerImport
+     * @param CompanyImportInterface $companyImport
      *
      * @return void
      */
-    public function execute(CustomerImportInterface $customerImport): void
+    public function execute(CompanyImportInterface $companyImport): void
     {
-        $hasError = false;
         try {
             $data = [
-                CustomerImportInterface::EMAIL => $customerImport->getEmail(),
-                CustomerImportInterface::REG_NUMBER => $customerImport->getRegNumber(),
-                CustomerImportInterface::COUNTRY_CODE => $customerImport->getCountryCode(),
+                CompanyImportInterface::EMAIL => $companyImport->getEmail(),
+                CompanyImportInterface::REG_NUMBER => $companyImport->getRegNumber(),
+                CompanyImportInterface::COUNTRY_CODE => $companyImport->getCountryCode(),
             ];
             $this->logger->info(__METHOD__, $data);
 
             try {
-                $customer = $this->customerRepository->get($customerImport->getEmail());
+                $customer = $this->customerRepository->get($companyImport->getEmail());
             } catch (NoSuchEntityException|LocalizedException $e) {
                 $data['error'] = $e->getMessage();
-                throw new \Exception(
-                    "Hokodo_BNPL: Can not update customer {$customerImport->getEmail()}. Customer not found."
-                );
+                $data['message'] = "Can not update customer {$companyImport->getEmail()}. Customer not found.";
+                $this->processError($data, __METHOD__);
+                return;
             }
 
             $hokodoEntity = $this->hokodoCompanyProvider
                 ->getEntityRepository()->getByCustomerId((int) $customer->getId());
 
-            $hokodoCompany = $this->getCompanyFromHokodo($customerImport->getRegNumber(), $customerImport->getCountryCode());
+            $hokodoCompany = $this->getCompanyFromHokodo(
+                $companyImport->getRegNumber(),
+                $companyImport->getCountryCode()
+            );
 
             if (!$hokodoCompany || !$hokodoCompany->getId()) {
-                throw new \Exception(
-                    "Hokodo_BNPL: Company Id not found regnumber: {$customerImport->getRegNumber()}."
-                );
+                $data['message'] = "Company Id not found, regnumber: {$companyImport->getRegNumber()}";
+                $this->processError($data, __METHOD__);
+                return;
             }
 
             if ($hokodoEntity->getCompanyId() != $hokodoCompany->getId()) {
@@ -131,34 +134,44 @@ class CustomerImport
                     ->setCompanyId($hokodoCompany->getId());
                 $this->hokodoCompanyProvider->getEntityRepository()->save($hokodoEntity);
                 $this->sessionCleanerInterface->clearFor((int) $customer->getId());
-                $data['message'] = __("Hokodo_BNPL: Company was updated for customer %1.", $customer->getId());
+                $data['message'] = "Company was updated for customer {$customer->getId()}.";
                 $data['hokodo_company_id'] = $hokodoCompany->getId();
                 $this->logger->info(__METHOD__, $data);
             }
         } catch (\Exception $e) {
-            $hasError = true;
-            $data['message'] = __(
-                "Hokodo_BNPL: Error processing customer with email %1.",
-                $customerImport->getEmail()
-            );
+            $data['message'] = "Hokodo_BNPL: Error processing customer with email {$companyImport->getEmail()}.";
             $data['error'] = $e->getMessage();
-            $this->logger->error(__METHOD__, $data);
-        }
-        if ($hasError) {
-            var_dump($hasError);
-            $this->messageManager
-                ->addErrorMessage('Some errors occurred. Please check hokodo_import_error.log');
+            $this->processError($data, __METHOD__);
         }
     }
 
     /**
-     * Get Company Id from Hokodo
+     * Log Error and Push System Message.
+     *
+     * @param array  $data
+     * @param string $method
+     *
+     * @return void
+     */
+    public function processError(array $data, string $method): void
+    {
+        $this->logger->error($method, $data);
+        $this->notifierPool->addMajor(
+            __('Some errors occurred during Hokodo Company Import.'),
+            __('Please check hokodo_import_error.log'),
+            ''
+        );
+    }
+
+    /**
+     * Get Company Id from Hokodo.
      *
      * @param string $regNumber
      * @param string $countryCode
+     *
      * @return ApiCompany|null
      */
-    private function getCompanyFromHokodo(string $regNumber, string $countryCode):?ApiCompany
+    private function getCompanyFromHokodo(string $regNumber, string $countryCode): ?ApiCompany
     {
         /** @var CompanySearchRequestInterface $searchRequest */
         $searchRequest = $this->companySearchRequestFactory->create();
@@ -171,7 +184,7 @@ class CustomerImport
             }
         } catch (NotFoundException|CommandException $e) {
             $data = [
-                'message' => __('Can not find company. %1', $e->getMessage()),
+                'message' => 'Can not find company. ' . $e->getMessage(),
                 'regnumber' => $regNumber,
                 'countrycode' => $countryCode,
             ];

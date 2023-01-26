@@ -41,3 +41,13 @@
 "Hide Hokodo if","Ocultar Hokodo si"
 "Order isn't Eligible","El pedido no es elegible"
 "Company isn't attached","La empresa no está asociada"
+"Add","Agregar"
+"Add/Replace","Agregar/Reemplazar"
+'Add new Companies','Agregar nuevas empresas'
+'Add new Companies and Replace Existed Companies.','Agregar nuevas empresas y reemplazar empresas existentes.'
+"The email is not valid.","El correo electrónico no es válido."
+"The countrycode is not valid.","El countrycode de país no es válido."
+"The regnumber cannot be empty.","El regnumber no puede estar vacío."
+"The customer is not found.","No se encuentra el cliente."
+"Some errors occurred during Hokodo Company Import.","Ocurrieron algunos errores durante la importación de la empresa Hokodo."
+"Please check hokodo_import_error.log","Por favor revise hokodo_import_error.log"

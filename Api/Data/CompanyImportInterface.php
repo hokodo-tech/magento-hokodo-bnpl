@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data;
 
-interface CustomerImportInterface
+interface CompanyImportInterface
 {
     /**
      * String constants for property names.

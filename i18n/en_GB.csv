@@ -41,3 +41,13 @@
 "Hide Hokodo if","Hide Hokodo if"
 "Order isn't Eligible","Order isn't Eligible"
 "Company isn't attached","Company isn't attached"
+"Add","Add"
+"Add/Replace","Add/Replace"
+'Add new Companies','Add new Companies'
+'Add new Companies and Replace Existed Companies.','Add new Companies and Replace Existed Companies.'
+"The email is not valid.","The email is not valid."
+"The countrycode is not valid.","The countrycode is not valid."
+"The regnumber cannot be empty.","The regnumber cannot be empty."
+"The customer is not found.","The customer is not found."
+"Some errors occurred during Hokodo Company Import.","Some errors occurred during Hokodo Company Import."
+"Please check hokodo_import_error.log","Please check hokodo_import_error.log"

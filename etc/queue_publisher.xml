@@ -10,7 +10,7 @@
     <publisher topic="hokodo.order.documents">
         <connection name="amqp" exchange="HokodoAsync"/>
     </publisher>
-    <publisher topic="hokodo.customer.import">
+    <publisher topic="hokodo.company.import">
         <connection name="amqp" exchange="HokodoAsync"/>
     </publisher>
 </config>
