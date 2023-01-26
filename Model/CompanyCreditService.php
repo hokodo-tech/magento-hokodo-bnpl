@@ -88,6 +88,6 @@ class CompanyCreditService implements CompanyCreditServiceInterface
      */
     public function getCreditLimit(string $companyId): ?CreditLimitInterface
     {
-        return $this->getCredit($companyId)?->getCreditLimit();
+        return $this->getCredit($companyId) ? $this->getCredit($companyId)->getCreditLimit() : null;
     }
 }
