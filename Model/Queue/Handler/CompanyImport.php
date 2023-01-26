@@ -14,6 +14,7 @@ use Hokodo\BNPL\Api\Data\Gateway\CompanySearchRequestInterfaceFactory;
 use Hokodo\BNPL\Gateway\Service\CompanySearch as Gateway;
 use Hokodo\BNPL\Model\HokodoCompanyProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -62,6 +63,11 @@ class CompanyImport
     private NotifierInterface $notifierPool;
 
     /**
+     * @var array
+     */
+    private array $data = [];
+
+    /**
      * @param CustomerRepositoryInterface          $customerRepository
      * @param HokodoCompanyProvider                $hokodoCompanyProvider
      * @param CompanySearchRequestInterfaceFactory $companySearchRequestFactory
@@ -98,22 +104,18 @@ class CompanyImport
     public function execute(CompanyImportInterface $companyImport): void
     {
         try {
-            $data = [
+            $this->data = [
                 CompanyImportInterface::EMAIL => $companyImport->getEmail(),
                 CompanyImportInterface::REG_NUMBER => $companyImport->getRegNumber(),
                 CompanyImportInterface::COUNTRY_CODE => $companyImport->getCountryCode(),
             ];
-            $this->logger->info(__METHOD__, $data);
+            $this->logger->info(__METHOD__, $this->data);
 
-            try {
-                $customer = $this->customerRepository->get($companyImport->getEmail());
-            } catch (NoSuchEntityException|LocalizedException $e) {
-                $data['error'] = $e->getMessage();
-                $data['message'] = "Can not update customer {$companyImport->getEmail()}. Customer not found.";
-                $this->processError($data, __METHOD__);
+            $customer = $this->getCustomer($companyImport->getEmail());
+            if (!$customer) {
                 return;
             }
-
+            /* @todo refactor getByCustomerId() repository must throw exception */
             $hokodoEntity = $this->hokodoCompanyProvider
                 ->getEntityRepository()->getByCustomerId((int) $customer->getId());
 
@@ -123,8 +125,8 @@ class CompanyImport
             );
 
             if (!$hokodoCompany || !$hokodoCompany->getId()) {
-                $data['message'] = "Company Id not found, regnumber: {$companyImport->getRegNumber()}";
-                $this->processError($data, __METHOD__);
+                $this->data['message'] = "Company Id not found, regnumber: {$companyImport->getRegNumber()}";
+                $this->processError($this->data, __METHOD__);
                 return;
             }
 
@@ -134,15 +136,35 @@ class CompanyImport
                     ->setCompanyId($hokodoCompany->getId());
                 $this->hokodoCompanyProvider->getEntityRepository()->save($hokodoEntity);
                 $this->sessionCleanerInterface->clearFor((int) $customer->getId());
-                $data['message'] = "Company was updated for customer {$customer->getId()}.";
-                $data['hokodo_company_id'] = $hokodoCompany->getId();
-                $this->logger->info(__METHOD__, $data);
+                $this->data['message'] = "Company was updated for customer {$customer->getId()}.";
+                $this->data['hokodo_company_id'] = $hokodoCompany->getId();
+                $this->logger->info(__METHOD__, $this->data);
             }
         } catch (\Exception $e) {
-            $data['message'] = "Hokodo_BNPL: Error processing customer with email {$companyImport->getEmail()}.";
-            $data['error'] = $e->getMessage();
-            $this->processError($data, __METHOD__);
+            $this->data['message'] = "Hokodo_BNPL: Error processing customer with email {$companyImport->getEmail()}.";
+            $this->data['error'] = $e->getMessage();
+            $this->processError($this->data, __METHOD__);
         }
+    }
+
+    /**
+     * Get Customer.
+     *
+     * @param string $email
+     *
+     * @return CustomerInterface|null
+     */
+    public function getCustomer(string $email): ?CustomerInterface
+    {
+        $customer = null;
+        try {
+            $customer = $this->customerRepository->get($email);
+        } catch (NoSuchEntityException|LocalizedException $e) {
+            $this->data['error'] = $e->getMessage();
+            $this->data['message'] = "Can not update customer {$email}. Customer not found.";
+            $this->processError($this->data, __METHOD__);
+        }
+        return $customer;
     }
 
     /**
