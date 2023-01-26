@@ -95,7 +95,8 @@
             "customer_id": true,
             "company_id": true,
             "organisation_id": true,
-            "user_id": true
+            "user_id": true,
+            "credit_limit": true
         },
         "index": {
             "HOKODO_CUSTOMER_CUSTOMER_ID": true

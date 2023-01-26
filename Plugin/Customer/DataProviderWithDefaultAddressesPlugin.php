@@ -55,10 +55,22 @@ class DataProviderWithDefaultAddressesPlugin
                 if ($hokodoCustomer->getId()) {
                     $hokodoCustomers[$id]['hokodo']['company_id'] = $hokodoCustomer->getCompanyId();
                 }
-                $submitUrl = $this->urlBuilder->getUrl('hokodo/customer/savecompanyid');
-                $hokodoCustomers[$id]['hokodo']['submit_url'] = $submitUrl;
+                $hokodoCustomers[$id]['hokodo']['submit_url'] = $this->getUrl('hokodo/customer/savecompanyid');
+                $hokodoCustomers[$id]['hokodo']['company_credit_url'] = $this->getUrl('hokodo/company/credit');
             }
         }
         return array_replace_recursive($result, $hokodoCustomers);
+    }
+
+    /**
+     * Get url from path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private function getUrl(string $path): string
+    {
+        return $this->urlBuilder->getUrl($path);
     }
 }

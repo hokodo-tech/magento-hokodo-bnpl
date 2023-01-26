@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Controller\Adminhtml\Customer;
 
+use Hokodo\BNPL\Api\CompanyCreditServiceInterface;
 use Hokodo\BNPL\Api\Data\OrganisationInterface;
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
@@ -91,6 +92,11 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
     private SessionCleanerInterface $sessionCleanerInterface;
 
     /**
+     * @var CompanyCreditServiceInterface
+     */
+    private CompanyCreditServiceInterface $companyCreditService;
+
+    /**
      * @param Context                           $context
      * @param JsonFactory                       $resultJsonFactory
      * @param Emulation                         $emulation
@@ -104,6 +110,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
      * @param CartRepositoryInterface           $cartRepository
      * @param HokodoQuoteRepositoryInterface    $hokodoQuoteRepository
      * @param SessionCleanerInterface           $sessionCleanerInterface
+     * @param CompanyCreditServiceInterface     $companyCreditService
      */
     public function __construct(
         Context $context,
@@ -118,7 +125,8 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
         LoggerInterface $logger,
         CartRepositoryInterface $cartRepository,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
-        SessionCleanerInterface $sessionCleanerInterface
+        SessionCleanerInterface $sessionCleanerInterface,
+        CompanyCreditServiceInterface $companyCreditService
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -133,6 +141,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
         $this->cartRepository = $cartRepository;
         $this->hokodoQuoteRepository = $hokodoQuoteRepository;
         $this->sessionCleanerInterface = $sessionCleanerInterface;
+        $this->companyCreditService = $companyCreditService;
     }
 
     /**
@@ -159,6 +168,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
             $hokodoCustomer->setCustomerId($customerId);
         }
         $hokodoCustomer->setCompanyId($companyId);
+        $hokodoCustomer->setCreditLimit($this->companyCreditService->getCreditLimit($companyId));
 
         try {
             /* @todo remove this and similar piec of code from webapi into on service */

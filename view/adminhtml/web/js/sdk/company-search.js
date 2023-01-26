@@ -64,6 +64,9 @@ define([
                                 self.companySearch.unmount();
                                 self.companySearch.update({companyId: oldCompanyId});
                                 self.companySearch.mount("#hokodoCompanySearch");
+                            } else {
+                                self.source.data.hokodo.company_id = currentCompanyId;
+                                $('body').trigger('hokodo-company-updated');
                             }
                         });
                     }

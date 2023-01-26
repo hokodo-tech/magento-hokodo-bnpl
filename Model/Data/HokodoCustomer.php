@@ -7,25 +7,27 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Data;
 
+use Hokodo\BNPL\Api\Data\Company\CreditLimitInterface;
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
-use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer as ResourceModel;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class HokodoCustomer extends AbstractModel implements HokodoCustomerInterface
+class HokodoCustomer extends DataObject implements HokodoCustomerInterface
 {
     /**
-     * @var string
+     * @inheritdoc
      */
-    protected $_eventPrefix = 'hokodo_customer';
+    public function getId(): ?int
+    {
+        return $this->getData(self::ID);
+    }
 
     /**
-     * Initialize magento model.
-     *
-     * @return void
+     * @inheritdoc
      */
-    protected function _construct()
+    public function setId(int $id): self
     {
-        $this->_init(ResourceModel::class);
+        $this->setData(self::ID, $id);
+        return $this;
     }
 
     /**
@@ -94,6 +96,23 @@ class HokodoCustomer extends AbstractModel implements HokodoCustomerInterface
     public function setOrganisationId(string $organisationId): self
     {
         $this->setData(self::ORGANISATION_ID, $organisationId);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCreditLimit(): ?CreditLimitInterface
+    {
+        return $this->getData(self::CREDIT_LIMIT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCreditLimit(CreditLimitInterface $credit): self
+    {
+        $this->setData(self::CREDIT_LIMIT, $credit);
         return $this;
     }
 }

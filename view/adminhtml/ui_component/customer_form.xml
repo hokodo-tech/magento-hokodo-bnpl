@@ -11,6 +11,7 @@
         <settings>
             <label translate="true">Company (Hokodo)</label>
         </settings>
+        <container name="company_credit_limit_display" sortOrder="5" component="Hokodo_BNPL/js/form/element/company-credit-limit" />
         <field name="companyid" component="Hokodo_BNPL/js/sdk/company-search"
                sortOrder="10"
                formElement="input"
