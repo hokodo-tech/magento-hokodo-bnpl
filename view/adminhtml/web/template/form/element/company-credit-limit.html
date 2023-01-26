@@ -1,4 +1,25 @@
-<!-- ko text: companyId() -->
-<!-- /ko -->
-<!-- ko text: prices().total -->
+<!-- ko if: prices().is_eligible -->
+<ul class="credit-balance-list" data-role="credit-balance">
+    <li class="credit-balance-item">
+        <p class="credit-balance-label" data-bind="i18n: 'Credit Limit'"></p>
+        <span class="credit-balance-price">
+            <!-- ko text: prices().amount -->
+            <!-- /ko -->
+        </span>
+    </li>
+    <li class="credit-balance-item">
+        <p class="credit-balance-label" data-bind="i18n: 'Outstanding Balance'"></p>
+        <span class="credit-balance-price">
+            <!-- ko text: prices().amount_in_use -->
+            <!-- /ko -->
+        </span>
+    </li>
+    <li class="credit-balance-item">
+        <p class="credit-balance-label" data-bind="i18n: 'Available Credit'"></p>
+        <span class="credit-balance-price">
+            <!-- ko text: prices().amount_available -->
+            <!-- /ko -->
+        </span>
+    </li>
+</ul>
 <!-- /ko -->

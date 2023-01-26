@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model;
 
+use Hokodo\BNPL\Api\HokodoEntityRepositoryInterface;
 use Hokodo\BNPL\Api\HokodoEntityTypeResolverInterface;
 
 class HokodoCompanyProvider
@@ -38,9 +39,9 @@ class HokodoCompanyProvider
     /**
      * Get Entity's (where we store Company Id) Repository.
      *
-     * @return mixed
+     * @return HokodoEntityRepositoryInterface
      */
-    public function getEntityRepository()
+    public function getEntityRepository(): HokodoEntityRepositoryInterface
     {
         $entityType = $this->entityTypeResolver->resolve();
         return $this->getEntityRepositoryClass($entityType);
@@ -51,9 +52,9 @@ class HokodoCompanyProvider
      *
      * @param string $type
      *
-     * @return mixed
+     * @return HokodoEntityRepositoryInterface
      */
-    public function getEntityRepositoryClass($type)
+    public function getEntityRepositoryClass(string $type): HokodoEntityRepositoryInterface
     {
         try {
             return $this->companyProviderTypes[$type];

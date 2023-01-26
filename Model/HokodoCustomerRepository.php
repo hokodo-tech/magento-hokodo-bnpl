@@ -122,6 +122,14 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getByEntityId(int $entityId): HokodoCustomerInterface
+    {
+        return $this->getByCustomerId($entityId);
+    }
+
+    /**
      * Populate data model object from model data.
      *
      * @param HokodoCustomer $customerModel

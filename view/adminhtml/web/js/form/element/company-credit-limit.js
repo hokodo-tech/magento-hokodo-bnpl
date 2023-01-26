@@ -6,7 +6,7 @@ define([
     return Component.extend({
         defaults: {
             template: 'Hokodo_BNPL/form/element/company-credit-limit',
-            companyId: '',
+            entityIdSelector: 'customer_id',
             prices: {}
         },
 
@@ -15,9 +15,8 @@ define([
             this.hokodoData = this.source.data.hokodo;
             let self = this;
             $('body').on('hokodo-company-updated', () => {
-                self.companyId(this.hokodoData.company_id);
                 $.post(this.hokodoData.company_credit_url, {
-                    id: self.companyId()
+                    id: this.source.data[this.entityIdSelector]
                 }).done((result) => {
                     self.prices(result);
                 }).fail((result) => {
