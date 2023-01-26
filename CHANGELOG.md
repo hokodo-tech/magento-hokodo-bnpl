@@ -1,3 +1,10 @@
+2.1.3 / January 2023
+==================
+* Upgrade payment information display
+* Upgrade Analytics
+* Display Hokodo conditionally
+* Update copyrights
+
 2.1.2 / December 2022
 ==================
 * Change handling PDF
