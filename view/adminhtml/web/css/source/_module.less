@@ -1,0 +1,28 @@
+@company-credit-price__color: @color-phoenix;
+
+.credit-balance-list {
+    .lib-vendor-prefix-display(flex);
+    list-style: none;
+
+    .credit-balance-item {
+        margin-right: 15rem;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    .credit-balance-label {
+        font-size: 1.3rem;
+        font-weight: @font-weight__bold;
+    }
+
+    .credit-balance-price {
+        font-size: 2.4rem;
+        font-weight: @font-weight__semibold;
+
+        &._negative {
+            color: @company-credit-price__color;
+        }
+    }
+}
