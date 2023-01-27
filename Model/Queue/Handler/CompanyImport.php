@@ -14,7 +14,6 @@ use Hokodo\BNPL\Api\Data\Gateway\CompanySearchRequestInterfaceFactory;
 use Hokodo\BNPL\Gateway\Service\CompanySearch as Gateway;
 use Hokodo\BNPL\Model\HokodoCompanyProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -65,7 +64,7 @@ class CompanyImport
     /**
      * @var array
      */
-    private array $data = [];
+    private array $companyImportData = [];
 
     /**
      * @param CustomerRepositoryInterface          $customerRepository
@@ -104,8 +103,8 @@ class CompanyImport
     public function execute(CompanyImportInterface $companyImport): void
     {
         try {
-            $this->initData($companyImport);
-            $this->logger->info(__METHOD__, $this->data);
+            $this->initCompanyImportData($companyImport);
+            $this->logger->info(__METHOD__, $this->companyImportData);
 
             $customer = $this->customerRepository->get($companyImport->getEmail());
 
@@ -118,20 +117,26 @@ class CompanyImport
                 ->getEntityRepository()->getByCustomerId((int) $customer->getId());
 
             if ($hokodoEntity->getCompanyId() != $hokodoCompany->getId()) {
-                $this->updateHokodoEntity($hokodoEntity, $customer, $hokodoCompany);
+                $this->updateHokodoEntity($hokodoEntity, (int) $customer->getId(), $hokodoCompany->getId());
             }
         } catch (NotFoundException|CommandException $e) {
-            $this->data['message'] = 'Can not find company.';
-            $this->data['error'] = $e->getMessage();
-            $this->logger->error(__METHOD__, $this->data);
+            $this->companyImportData['message'] = 'Can not find company.';
+            $this->companyImportData['error'] = $e->getMessage();
+            $this->processError($this->companyImportData, __METHOD__);
         } catch (NoSuchEntityException|LocalizedException $e) {
-            $this->data['message'] = "Can not update customer {$companyImport->getEmail()}. Customer not found.";
-            $this->data['error'] = $e->getMessage();
-            $this->processError($this->data, __METHOD__);
+            $this->companyImportData['message'] = sprintf(
+                'Can not update customer %s. Customer not found.',
+                $companyImport->getEmail()
+            );
+            $this->companyImportData['error'] = $e->getMessage();
+            $this->processError($this->companyImportData, __METHOD__);
         } catch (\Exception $e) {
-            $this->data['message'] = "Hokodo_BNPL: Error processing customer with email {$companyImport->getEmail()}.";
-            $this->data['error'] = $e->getMessage();
-            $this->processError($this->data, __METHOD__);
+            $this->companyImportData['message'] = sprintf(
+                'Hokodo_BNPL: Error processing customer with email %s.',
+                $companyImport->getEmail()
+            );
+            $this->companyImportData['error'] = $e->getMessage();
+            $this->processError($this->companyImportData, __METHOD__);
         }
     }
 
@@ -142,9 +147,9 @@ class CompanyImport
      *
      * @return void
      */
-    public function initData(CompanyImportInterface $companyImport): void
+    public function initCompanyImportData(CompanyImportInterface $companyImport): void
     {
-        $this->data = [
+        $this->companyImportData = [
             CompanyImportInterface::EMAIL => $companyImport->getEmail(),
             CompanyImportInterface::REG_NUMBER => $companyImport->getRegNumber(),
             CompanyImportInterface::COUNTRY_CODE => $companyImport->getCountryCode(),
@@ -181,22 +186,22 @@ class CompanyImport
     /**
      * Update Hokodo Entity.
      *
-     * @param mixed             $hokodoEntity
-     * @param CustomerInterface $customer
-     * @param ApiCompany        $hokodoCompany
+     * @param mixed  $hokodoEntity
+     * @param int    $customerId
+     * @param string $hokodoCompanyId
      *
      * @return void
      */
-    public function updateHokodoEntity($hokodoEntity, CustomerInterface $customer, ApiCompany $hokodoCompany): void
+    public function updateHokodoEntity($hokodoEntity, int $customerId, string $hokodoCompanyId): void
     {
         $hokodoEntity
-            ->setCustomerId((int) $customer->getId())
-            ->setCompanyId($hokodoCompany->getId());
+            ->setCustomerId($customerId)
+            ->setCompanyId($hokodoCompanyId);
         $this->hokodoCompanyProvider->getEntityRepository()->save($hokodoEntity);
-        $this->sessionCleanerInterface->clearFor((int) $customer->getId());
-        $this->data['message'] = "Company was updated for customer {$customer->getId()}.";
-        $this->data['hokodo_company_id'] = $hokodoCompany->getId();
-        $this->logger->info(__METHOD__, $this->data);
+        $this->sessionCleanerInterface->clearFor($customerId);
+        $this->companyImportData['message'] = sprintf('Company was updated for customer %s.', $customerId);
+        $this->companyImportData['hokodo_company_id'] = $hokodoCompanyId;
+        $this->logger->info(__METHOD__, $this->companyImportData);
     }
 
     /**
