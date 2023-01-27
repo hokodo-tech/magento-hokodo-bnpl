@@ -17,7 +17,7 @@ class HokodoCompanyProvider
     /**
      * @var HokodoEntityTypeResolverInterface
      */
-    private HokodoEntityTypeResolverInterface $entityResolver;
+    private HokodoEntityTypeResolverInterface $entityTypeResolver;
 
     /**
      * @var array

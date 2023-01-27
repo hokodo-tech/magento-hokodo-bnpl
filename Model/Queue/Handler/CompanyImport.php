@@ -104,42 +104,30 @@ class CompanyImport
     public function execute(CompanyImportInterface $companyImport): void
     {
         try {
-            $this->data = [
-                CompanyImportInterface::EMAIL => $companyImport->getEmail(),
-                CompanyImportInterface::REG_NUMBER => $companyImport->getRegNumber(),
-                CompanyImportInterface::COUNTRY_CODE => $companyImport->getCountryCode(),
-            ];
+            $this->initData($companyImport);
             $this->logger->info(__METHOD__, $this->data);
 
-            $customer = $this->getCustomer($companyImport->getEmail());
-            if (!$customer) {
-                return;
-            }
-            /* @todo refactor getByCustomerId() repository must throw exception */
-            $hokodoEntity = $this->hokodoCompanyProvider
-                ->getEntityRepository()->getByCustomerId((int) $customer->getId());
+            $customer = $this->customerRepository->get($companyImport->getEmail());
 
             $hokodoCompany = $this->getCompanyFromHokodo(
                 $companyImport->getRegNumber(),
                 $companyImport->getCountryCode()
             );
 
-            if (!$hokodoCompany || !$hokodoCompany->getId()) {
-                $this->data['message'] = "Company Id not found, regnumber: {$companyImport->getRegNumber()}";
-                $this->processError($this->data, __METHOD__);
-                return;
-            }
+            $hokodoEntity = $this->hokodoCompanyProvider
+                ->getEntityRepository()->getByCustomerId((int) $customer->getId());
 
             if ($hokodoEntity->getCompanyId() != $hokodoCompany->getId()) {
-                $hokodoEntity
-                    ->setCustomerId((int) $customer->getId())
-                    ->setCompanyId($hokodoCompany->getId());
-                $this->hokodoCompanyProvider->getEntityRepository()->save($hokodoEntity);
-                $this->sessionCleanerInterface->clearFor((int) $customer->getId());
-                $this->data['message'] = "Company was updated for customer {$customer->getId()}.";
-                $this->data['hokodo_company_id'] = $hokodoCompany->getId();
-                $this->logger->info(__METHOD__, $this->data);
+                $this->updateHokodoEntity($hokodoEntity, $customer, $hokodoCompany);
             }
+        } catch (NotFoundException|CommandException $e) {
+            $this->data['message'] = 'Can not find company.';
+            $this->data['error'] = $e->getMessage();
+            $this->logger->error(__METHOD__, $this->data);
+        } catch (NoSuchEntityException|LocalizedException $e) {
+            $this->data['message'] = "Can not update customer {$companyImport->getEmail()}. Customer not found.";
+            $this->data['error'] = $e->getMessage();
+            $this->processError($this->data, __METHOD__);
         } catch (\Exception $e) {
             $this->data['message'] = "Hokodo_BNPL: Error processing customer with email {$companyImport->getEmail()}.";
             $this->data['error'] = $e->getMessage();
@@ -148,23 +136,67 @@ class CompanyImport
     }
 
     /**
-     * Get Customer.
+     * Init Data.
      *
-     * @param string $email
+     * @param CompanyImportInterface $companyImport
      *
-     * @return CustomerInterface|null
+     * @return void
      */
-    public function getCustomer(string $email): ?CustomerInterface
+    public function initData(CompanyImportInterface $companyImport): void
     {
-        $customer = null;
-        try {
-            $customer = $this->customerRepository->get($email);
-        } catch (NoSuchEntityException|LocalizedException $e) {
-            $this->data['error'] = $e->getMessage();
-            $this->data['message'] = "Can not update customer {$email}. Customer not found.";
-            $this->processError($this->data, __METHOD__);
+        $this->data = [
+            CompanyImportInterface::EMAIL => $companyImport->getEmail(),
+            CompanyImportInterface::REG_NUMBER => $companyImport->getRegNumber(),
+            CompanyImportInterface::COUNTRY_CODE => $companyImport->getCountryCode(),
+        ];
+    }
+
+    /**
+     * Get Company from Hokodo.
+     *
+     * @param string $regNumber
+     * @param string $countryCode
+     *
+     * @return ApiCompany|null
+     *
+     * @throws NotFoundException|CommandException
+     */
+    private function getCompanyFromHokodo(string $regNumber, string $countryCode): ?ApiCompany
+    {
+        $hokodoCompany = null;
+        /** @var CompanySearchRequestInterface $searchRequest */
+        $searchRequest = $this->companySearchRequestFactory->create();
+        $searchRequest
+            ->setCountry($countryCode)
+            ->setRegNumber($regNumber);
+        if ($list = $this->gateway->search($searchRequest)->getList()) {
+            $hokodoCompany = reset($list);
         }
-        return $customer;
+        if (!$hokodoCompany || !$hokodoCompany->getId()) {
+            throw new NotFoundException(__('Hokodo Company not found'));
+        }
+        return $hokodoCompany;
+    }
+
+    /**
+     * Update Hokodo Entity.
+     *
+     * @param mixed             $hokodoEntity
+     * @param CustomerInterface $customer
+     * @param ApiCompany        $hokodoCompany
+     *
+     * @return void
+     */
+    public function updateHokodoEntity($hokodoEntity, CustomerInterface $customer, ApiCompany $hokodoCompany): void
+    {
+        $hokodoEntity
+            ->setCustomerId((int) $customer->getId())
+            ->setCompanyId($hokodoCompany->getId());
+        $this->hokodoCompanyProvider->getEntityRepository()->save($hokodoEntity);
+        $this->sessionCleanerInterface->clearFor((int) $customer->getId());
+        $this->data['message'] = "Company was updated for customer {$customer->getId()}.";
+        $this->data['hokodo_company_id'] = $hokodoCompany->getId();
+        $this->logger->info(__METHOD__, $this->data);
     }
 
     /**
@@ -183,35 +215,5 @@ class CompanyImport
             __('Please check hokodo_import_error.log'),
             ''
         );
-    }
-
-    /**
-     * Get Company Id from Hokodo.
-     *
-     * @param string $regNumber
-     * @param string $countryCode
-     *
-     * @return ApiCompany|null
-     */
-    private function getCompanyFromHokodo(string $regNumber, string $countryCode): ?ApiCompany
-    {
-        /** @var CompanySearchRequestInterface $searchRequest */
-        $searchRequest = $this->companySearchRequestFactory->create();
-        $searchRequest
-            ->setCountry($countryCode)
-            ->setRegNumber($regNumber);
-        try {
-            if ($list = $this->gateway->search($searchRequest)->getList()) {
-                return reset($list);
-            }
-        } catch (NotFoundException|CommandException $e) {
-            $data = [
-                'message' => 'Can not find company. ' . $e->getMessage(),
-                'regnumber' => $regNumber,
-                'countrycode' => $countryCode,
-            ];
-            $this->logger->error(__METHOD__, $data);
-        }
-        return null;
     }
 }
