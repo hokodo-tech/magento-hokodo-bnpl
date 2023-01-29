@@ -161,7 +161,7 @@ review:queue:
   script:
     - ssh "magento@$SSH_HOST" "whoami"
     - ssh "ubuntu@$SSH_HOST" "whoami"
-    - ssh "root@$SSH_HOST" "whoami"
+    - ssh "ubuntu@$SSH_HOST" "sudo su - root && whoami"
     - ssh "magento@$SSH_HOST" "sudo $RABBITMQ_CTL add_vhost $REVIEW_INSTANCE && $RABBITMQ_CTL set_permissions -p $REVIEW_INSTANCE guest '.*' '.*' '.*'"
 
 review:detach:
