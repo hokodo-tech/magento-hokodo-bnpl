@@ -145,6 +145,8 @@ test:unit:
 #
 review:queue:
   extends: .review
+  needs:
+    - test:unit
   variables:
     PHP_VERSION: "7.4"
     COMPOSER_VERSION: ""
