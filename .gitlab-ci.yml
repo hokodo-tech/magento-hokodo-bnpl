@@ -159,10 +159,7 @@ review:queue:
     url: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
     on_stop: review:detach
   script:
-    - ssh "magento@$SSH_HOST" "whoami"
-    - ssh "ubuntu@$SSH_HOST" "whoami"
-    - ssh "ubuntu@$SSH_HOST" "sudo systemctl"
-    - ssh "magento@$SSH_HOST" "sudo $RABBITMQ_CTL add_vhost $REVIEW_INSTANCE && $RABBITMQ_CTL set_permissions -p $REVIEW_INSTANCE guest '.*' '.*' '.*'"
+    - ssh "ubuntu@$SSH_HOST" "sudo $RABBITMQ_CTL add_vhost $REVIEW_INSTANCE && sudo $RABBITMQ_CTL set_permissions -p $REVIEW_INSTANCE guest '.*' '.*' '.*'"
 
 review:detach:
   extends: .review
