@@ -158,6 +158,8 @@ review:queue:
     url: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
     on_stop: review:detach
   script:
+    - ls -la
+    - ls -la /home
     - ssh "rabbitmqctl add_vhost $REVIEW_INSTANCE && rabbitmqctl set_permissions -p $REVIEW_INSTANCE guest '.*' '.*' '.*'"
     - ssh "sudo su - root rabbitmqctl add_vhost $REVIEW_INSTANCE"
 
