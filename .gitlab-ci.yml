@@ -160,6 +160,7 @@ review:queue:
     on_stop: review:detach
   script:
     - ssh "ubuntu@$SSH_HOST" "sudo $RABBITMQ_CTL add_vhost $REVIEW_INSTANCE && sudo $RABBITMQ_CTL set_permissions -p $REVIEW_INSTANCE guest '.*' '.*' '.*'"
+    - ssh "magento@$SSH_HOST" "echo '$PHP_CLI $SSH_PATH/$REVIEW_INSTANCE/bin/magento cron:run --group=consumers' >> /home/magento/magento_cron_script/queue.sh"
 
 review:detach:
   extends: .review
