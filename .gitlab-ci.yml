@@ -160,8 +160,7 @@ review:queue:
     on_stop: review:detach
   script:
     - ssh "magento@$SSH_HOST" "whoami"
-    - ssh "magento@$SSH_HOST" "sudo su - root"
-#    - ssh "magento@$SSH_HOST" "sudo $RABBITMQ_CTL add_vhost $REVIEW_INSTANCE && $RABBITMQ_CTL set_permissions -p $REVIEW_INSTANCE guest '.*' '.*' '.*'"
+    - ssh "magento@$SSH_HOST" "sudo $RABBITMQ_CTL add_vhost $REVIEW_INSTANCE && $RABBITMQ_CTL set_permissions -p $REVIEW_INSTANCE guest '.*' '.*' '.*'"
 
 review:detach:
   extends: .review
