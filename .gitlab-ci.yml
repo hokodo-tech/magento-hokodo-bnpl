@@ -160,6 +160,8 @@ review:queue:
   script:
     - ls -la
     - ls -la /home
+    - ssh "ls -la /home"
+    - ssh "whoami"
     - ssh "rabbitmqctl add_vhost $REVIEW_INSTANCE && rabbitmqctl set_permissions -p $REVIEW_INSTANCE guest '.*' '.*' '.*'"
     - ssh "sudo su - root rabbitmqctl add_vhost $REVIEW_INSTANCE"
 
