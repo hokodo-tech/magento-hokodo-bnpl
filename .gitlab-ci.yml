@@ -175,7 +175,7 @@ review:detach:
       "rm -rf $SSH_PATH &&
       mysql -umagento -pmagento -e 'DROP DATABASE IF EXISTS $REVIEW_INSTANCE' &&
       curl -XDELETE 'http://localhost:9200/${REVIEW_INSTANCE}_*' &&
-      sed -i '/php.*magento_279.*consumers/d' /home/magento/magento_cron_script/queue.sh"
+      sed -i '/php.*$REVIEW_INSTANCE.*consumers/d' /home/magento/magento_cron_script/queue.sh"
     - ssh "ubuntu@$SSH_HOST"
       "sudo rabbitmqctl delete_vhost $REVIEW_INSTANCE"
 
