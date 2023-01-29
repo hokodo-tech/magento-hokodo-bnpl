@@ -124,7 +124,7 @@ review:create:
           --amqp-port='5672'
           --amqp-user='guest'
           --amqp-password='guest'
-          --amqp-virtualhost='/' &&
+          --amqp-virtualhost='$REVIEW_INSTANCE' &&
         $PHP_CLI bin/magento deploy:mode:set developer &&
         $PHP_CLI bin/magento config:set catalog/search/elasticsearch7_index_prefix '${REVIEW_INSTANCE}_' &&
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/active 1 &&
@@ -139,7 +139,10 @@ review:create:
         $PHP_CLI bin/magento sampledata:deploy;
       } || echo 'Magento project was installed with sample data, skipping configuration.'"
     # Magento commands: setup:upgrade => setup:di:compile => cache:flush
+    - rabbitmqctl add_vhost $REVIEW_INSTANCE
+    - rabbitmqctl set_permissions -p $REVIEW_INSTANCE guest ".*" ".*" ".*"
     - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up && $PHP_CLI bin/magento se:d:c && $PHP_CLI bin/magento c:f && $PHP_CLI app/code/Hokodo/BNPL/Test/Fixtures/create-customers.php '$HOKODO_TEST_CUSTOMER_PASSWORD'"
+    - echo '$PHP_CLI $SSH_PATH/$REVIEW_INSATNCE/bin/magento cron:run --group=consumers' >> /home/magento/magento_cron_script/queue.sh
 
 review:detach:
   extends: .review
@@ -154,137 +157,131 @@ review:detach:
     - ssh "magento@$SSH_HOST"
       "rm -rf $SSH_PATH &&
       mysql -umagento -pmagento -e 'DROP DATABASE IF EXISTS $REVIEW_INSTANCE' &&
-      curl -XDELETE 'http://localhost:9200/${REVIEW_INSTANCE}_*'"
+      curl -XDELETE 'http://localhost:9200/${REVIEW_INSTANCE}_*' &&
+      rabbitmqctl delete_vhost $REVIEW_INSTANCE &&
+      sed -i '/php.*magento_279.*consumers/d' /home/magento/magento_cron_script/queue.sh"
 
-review:queue:
-  extends: .review
-  needs:
-    - review:create
-  when: manual
-  script:
-    - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento queue:consumers:start hokodo.order.documents"
-
-# Magento 2.3.7
-review:create [2.3.7]:
-  extends: review:create
-  variables:
-    MAGENTO_VERSION: "2.3.7"
-    COMPOSER_VERSION: "1"
-    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m237
-  environment:
-    name: review/$CI_MERGE_REQUEST_IID-m237
-    url: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
-    on_stop: review:detach [2.3.7]
-  resource_group: review-2.3.7
-
-review:detach [2.3.7]:
-  extends: review:detach
-  needs:
-    - review:create [2.3.7]
-  variables:
-    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m237
-  environment:
-    name: review/$CI_MERGE_REQUEST_IID-m237
-  resource_group: review-2.3.7
-
-## Magento 2.4.5
-review:create [2.4.5]:
-  extends: review:create
-  variables:
-    PHP_VERSION: "8.1"
-    MAGENTO_VERSION: "2.4.5"
-    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m245
-  environment:
-    name: review/$CI_MERGE_REQUEST_IID-m245
-    url: https://qa${CI_MERGE_REQUEST_IID}-m245.${DEPLOY_HOST_DEV}
-    on_stop: review:detach [2.4.5]
-  resource_group: review-2.4.5
-
-review:detach [2.4.5]:
-  extends: review:detach
-  needs:
-    - review:create [2.4.5]
-  variables:
-    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m245
-  environment:
-    name: review/$CI_MERGE_REQUEST_IID-m245
-  resource_group: review-2.4.5
-
-## ======= E2E TESTS =======
-test:e2e:
-  image: mcr.microsoft.com/playwright:v1.26.0-focal
-  stage: test
-  needs:
-    - review:create
-  rules:
-    - if: $CI_MERGE_REQUEST_ID
-  artifacts:
-    when: always
-    paths:
-      - playwright-report/
-      - test-results/
-    reports:
-      junit: playwright-results.xml
-    expire_in: 1 week
-  variables:
-    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
-  script:
-    - npm install
-    - npx playwright install --with-deps
-    - HOKODO_API_KEY=$HOKODO_API_KEY_DEV HOKODO_API_BASE_URL=https://api-dev.hokodo.co MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER BASE_URL=$BASE_URL npx playwright test --config ./tests/playwright/playwright.config.ts
-
-test:e2e [2.3.7]:
- extends: test:e2e
- needs:
-   - review:create [2.3.7]
- variables:
-   BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
+## Magento 2.3.7
+#review:create [2.3.7]:
+#  extends: review:create
+#  variables:
+#    MAGENTO_VERSION: "2.3.7"
+#    COMPOSER_VERSION: "1"
+#    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m237
+#  environment:
+#    name: review/$CI_MERGE_REQUEST_IID-m237
+#    url: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
+#    on_stop: review:detach [2.3.7]
+#  resource_group: review-2.3.7
 #
-test:e2e [2.4.5]:
- extends: test:e2e
- needs:
-   - review:create [2.4.5]
- variables:
-   BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m245.${DEPLOY_HOST_DEV}
-
-# ======= DEPLOYMENT =======
-.deploy:
-  extends: .ssh-client
-  stage: deploy
-  needs:
-    - test:unit
-  variables:
-    PHP_VERSION: "7.4"
-    PHP_CLI: php$PHP_VERSION
-  script:
-    - ssh "magento@$SSH_HOST" "cd $SSH_PATH/app/code/ && rm -rf * && mkdir -p Hokodo/BNPL/"
-    - scp -r * "magento@$SSH_HOST:$SSH_PATH/app/code/Hokodo/BNPL/"
-    - ssh "magento@$SSH_HOST"
-      "cd $SSH_PATH &&
-      $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/active 1 &&
-      $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/environment '$HOKODO_ENV'&&
-      $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/${HOKODO_ENV}_api_key '$HOKODO_API_KEY_SANDBOX' &&
-      $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/${HOKODO_ENV}_sdk_key '$HOKODO_SDK_KEY_SANDBOX'"
-    # Magento commands: setup:upgrade => setup:di:compile => setup:static-content:deploy => cache:flush
-    - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up && $PHP_CLI bin/magento se:d:c && $PHP_CLI bin/magento se:s:d && $PHP_CLI bin/magento c:f"
-
-.deploy-dev:
-  extends: .deploy
-  variables:
-    SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY_DEV
-    SSH_HOST:        $SSH_HOST_DEV
-    SSH_PATH:        ~/public_html
-    HOKODO_ENV:      sandbox
-    HOKODO_API_KEY:  $HOKODO_API_KEY_SANDBOX
-  resource_group: deploy-dev
-
-deploy:dev:
-  extends: .deploy-dev
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
-deploy:dev:manual:
-  extends: .deploy-dev
-  rules:
-    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
-  when: manual
+#review:detach [2.3.7]:
+#  extends: review:detach
+#  needs:
+#    - review:create [2.3.7]
+#  variables:
+#    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m237
+#  environment:
+#    name: review/$CI_MERGE_REQUEST_IID-m237
+#  resource_group: review-2.3.7
+#
+### Magento 2.4.5
+#review:create [2.4.5]:
+#  extends: review:create
+#  variables:
+#    PHP_VERSION: "8.1"
+#    MAGENTO_VERSION: "2.4.5"
+#    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m245
+#  environment:
+#    name: review/$CI_MERGE_REQUEST_IID-m245
+#    url: https://qa${CI_MERGE_REQUEST_IID}-m245.${DEPLOY_HOST_DEV}
+#    on_stop: review:detach [2.4.5]
+#  resource_group: review-2.4.5
+#
+#review:detach [2.4.5]:
+#  extends: review:detach
+#  needs:
+#    - review:create [2.4.5]
+#  variables:
+#    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m245
+#  environment:
+#    name: review/$CI_MERGE_REQUEST_IID-m245
+#  resource_group: review-2.4.5
+#
+### ======= E2E TESTS =======
+#test:e2e:
+#  image: mcr.microsoft.com/playwright:v1.26.0-focal
+#  stage: test
+#  needs:
+#    - review:create
+#  rules:
+#    - if: $CI_MERGE_REQUEST_ID
+#  artifacts:
+#    when: always
+#    paths:
+#      - playwright-report/
+#      - test-results/
+#    reports:
+#      junit: playwright-results.xml
+#    expire_in: 1 week
+#  variables:
+#    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
+#  script:
+#    - npm install
+#    - npx playwright install --with-deps
+#    - HOKODO_API_KEY=$HOKODO_API_KEY_DEV HOKODO_API_BASE_URL=https://api-dev.hokodo.co MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER BASE_URL=$BASE_URL npx playwright test --config ./tests/playwright/playwright.config.ts
+#
+#test:e2e [2.3.7]:
+# extends: test:e2e
+# needs:
+#   - review:create [2.3.7]
+# variables:
+#   BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
+##
+#test:e2e [2.4.5]:
+# extends: test:e2e
+# needs:
+#   - review:create [2.4.5]
+# variables:
+#   BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m245.${DEPLOY_HOST_DEV}
+#
+## ======= DEPLOYMENT =======
+#.deploy:
+#  extends: .ssh-client
+#  stage: deploy
+#  needs:
+#    - test:unit
+#  variables:
+#    PHP_VERSION: "7.4"
+#    PHP_CLI: php$PHP_VERSION
+#  script:
+#    - ssh "magento@$SSH_HOST" "cd $SSH_PATH/app/code/ && rm -rf * && mkdir -p Hokodo/BNPL/"
+#    - scp -r * "magento@$SSH_HOST:$SSH_PATH/app/code/Hokodo/BNPL/"
+#    - ssh "magento@$SSH_HOST"
+#      "cd $SSH_PATH &&
+#      $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/active 1 &&
+#      $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/environment '$HOKODO_ENV'&&
+#      $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/${HOKODO_ENV}_api_key '$HOKODO_API_KEY_SANDBOX' &&
+#      $PHP_CLI bin/magento config:set --lock-env payment/hokodo_bnpl/${HOKODO_ENV}_sdk_key '$HOKODO_SDK_KEY_SANDBOX'"
+#    # Magento commands: setup:upgrade => setup:di:compile => setup:static-content:deploy => cache:flush
+#    - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up && $PHP_CLI bin/magento se:d:c && $PHP_CLI bin/magento se:s:d && $PHP_CLI bin/magento c:f"
+#
+#.deploy-dev:
+#  extends: .deploy
+#  variables:
+#    SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY_DEV
+#    SSH_HOST:        $SSH_HOST_DEV
+#    SSH_PATH:        ~/public_html
+#    HOKODO_ENV:      sandbox
+#    HOKODO_API_KEY:  $HOKODO_API_KEY_SANDBOX
+#  resource_group: deploy-dev
+#
+#deploy:dev:
+#  extends: .deploy-dev
+#  rules:
+#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+#
+#deploy:dev:manual:
+#  extends: .deploy-dev
+#  rules:
+#    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+#  when: manual
