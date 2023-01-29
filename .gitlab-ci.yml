@@ -139,10 +139,9 @@ review:create:
         $PHP_CLI bin/magento sampledata:deploy;
       } || echo 'Magento project was installed with sample data, skipping configuration.'"
     # Magento commands: setup:upgrade => setup:di:compile => cache:flush
-    - rabbitmqctl add_vhost $REVIEW_INSTANCE
-    - rabbitmqctl set_permissions -p $REVIEW_INSTANCE guest ".*" ".*" ".*"
+    - ssh "rabbitmqctl add_vhost $REVIEW_INSTANCE && rabbitmqctl set_permissions -p $REVIEW_INSTANCE guest '.*' '.*' '.*'"
     - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up && $PHP_CLI bin/magento se:d:c && $PHP_CLI bin/magento c:f && $PHP_CLI app/code/Hokodo/BNPL/Test/Fixtures/create-customers.php '$HOKODO_TEST_CUSTOMER_PASSWORD'"
-    - echo '$PHP_CLI $SSH_PATH/$REVIEW_INSATNCE/bin/magento cron:run --group=consumers' >> /home/magento/magento_cron_script/queue.sh
+    - ssh "echo '$PHP_CLI $SSH_PATH/$REVIEW_INSATNCE/bin/magento cron:run --group=consumers' >> /home/magento/magento_cron_script/queue.sh"
 
 review:detach:
   extends: .review
