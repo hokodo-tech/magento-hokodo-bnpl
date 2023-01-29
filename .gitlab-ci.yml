@@ -162,8 +162,8 @@ review:queue:
 
 review:detach:
   extends: .review
-  needs:
-    - review:create
+#  needs:
+#    - review:create
   variables:
     GIT_STRATEGY: none  # no git checkout!
   environment:
