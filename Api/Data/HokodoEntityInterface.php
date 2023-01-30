@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data;
 
+use Hokodo\BNPL\Api\Data\Company\CreditLimitInterface;
+
 interface HokodoEntityInterface
 {
     /**
@@ -24,4 +26,20 @@ interface HokodoEntityInterface
      * @return $this
      */
     public function setCompanyId(?string $companyId): self;
+
+    /**
+     * CreditLimit getter.
+     *
+     * @return \Hokodo\BNPL\Api\Data\Company\CreditLimitInterface|null
+     */
+    public function getCreditLimit(): ?CreditLimitInterface;
+
+    /**
+     * CreditLimit setter.
+     *
+     * @param CreditLimitInterface|null $credit
+     *
+     * @return $this
+     */
+    public function setCreditLimit(?CreditLimitInterface $credit): self;
 }

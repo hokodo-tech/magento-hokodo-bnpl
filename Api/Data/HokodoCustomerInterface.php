@@ -14,6 +14,23 @@ interface HokodoCustomerInterface extends HokodoEntityInterface
     public const COMPANY_ID = 'company_id';
     public const USER_ID = 'user_id';
     public const ORGANISATION_ID = 'organisation_id';
+    public const CREDIT_LIMIT = 'credit_limit';
+
+    /**
+     * Id getter.
+     *
+     * @return int
+     */
+    public function getId(): ?int;
+
+    /**
+     * Id setter.
+     *
+     * @param int $id
+     *
+     * @return $this
+     */
+    public function setId(int $id): self;
 
     /**
      * Customer Id getter.

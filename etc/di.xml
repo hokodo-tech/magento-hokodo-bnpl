@@ -134,6 +134,7 @@
                 <item name="fetch_transaction_information" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPaymentFetchStatus</item>
                 <item name="create_order_documents" xsi:type="string">Hokodo\BNPL\Gateway\Command\CreateOrderDocuments</item>
                 <item name="view_order_documents" xsi:type="string">Hokodo\BNPL\Gateway\Command\ViewOrderDocuments</item>
+                <item name="hokodo_company_search" xsi:type="string">Hokodo\BNPL\Gateway\Command\CompanySearch</item>
             </argument>
         </arguments>
     </virtualType>
@@ -315,11 +316,26 @@
         </arguments>
     </type>
 
+    <type name="Hokodo\BNPL\Model\Queue\Handler\CustomerImport">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoImportLogger</argument>
+        </arguments>
+    </type>
+
     <virtualType name="HokodoLogger" type="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="error" xsi:type="object">Hokodo\BNPL\Model\Logger\Handler\Error</item>
                 <item name="debug" xsi:type="object">Hokodo\BNPL\Model\Logger\Handler\Debug</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="HokodoImportLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">Hokodo\BNPL\Model\Logger\Import\Handler\Error</item>
+                <item name="debug" xsi:type="object">Hokodo\BNPL\Model\Logger\Import\Handler\Debug</item>
             </argument>
         </arguments>
     </virtualType>
@@ -334,6 +350,16 @@
             <argument name="fileName" xsi:type="string">var/log/hokodo_debug.log</argument>
         </arguments>
     </type>
+    <virtualType name="Hokodo\BNPL\Model\Logger\Import\Handler\Error" type="Hokodo\BNPL\Model\Logger\Handler\Error">
+        <arguments>
+            <argument name="fileName" xsi:type="string">var/log/hokodo_import_error.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Model\Logger\Import\Handler\Debug" type="Hokodo\BNPL\Model\Logger\Handler\Debug">
+        <arguments>
+            <argument name="fileName" xsi:type="string">var/log/hokodo_import_debug.log</argument>
+        </arguments>
+    </virtualType>
     <!-- End Logger -->
 
     <!-- Methods builders -->
@@ -553,12 +579,12 @@
     <!-- End Endpoints builders -->
 
     <!-- Company command -->
-    <virtualType name="Hokodo\BNPL\Gateway\Command\CompanySearch" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
+   <!-- <virtualType name="Hokodo\BNPL\Gateway\Command\CompanySearch" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\CompanySearch\BuilderComposite</argument>
             <argument name="resultFactory" xsi:type="object">Hokodo\BNPL\Gateway\Command\Company\ResultInterfaceFactory</argument>
         </arguments>
-    </virtualType>
+    </virtualType>-->
     <virtualType name="Hokodo\BNPL\Gateway\Command\CompanyView" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\CompanyView\BuilderComposite</argument>
@@ -574,7 +600,7 @@
     </virtualType>
 
     <!-- Company Search Request -->
-    <virtualType name="Hokodo\BNPL\Gateway\Request\CompanySearch\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
+    <!--<virtualType name="Hokodo\BNPL\Gateway\Request\CompanySearch\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
                 <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\CompanySearchEndpointBuilder</item>
@@ -596,7 +622,7 @@
             <argument name="field" xsi:type="string">country</argument>
             <argument name="value" xsi:type="string">country</argument>
         </arguments>
-    </virtualType>
+    </virtualType>-->
 
     <!-- Company View Request -->
     <virtualType name="Hokodo\BNPL\Gateway\Request\CompanyView\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
@@ -1431,7 +1457,6 @@
         </arguments>
     </type>
 
-
     <!-- Post Sale Actions v2 -->
     <preference for="\Hokodo\BNPL\Api\Data\Gateway\DeferredPaymentsPostSaleActionInterface" type="\Hokodo\BNPL\Model\Data\Gateway\DeferredPaymentsPostSaleAction" />
     <preference for="\Hokodo\BNPL\Api\Data\PostSaleEventInterface" type="\Hokodo\BNPL\Model\Data\PostSaleEvent" />
@@ -1499,6 +1524,7 @@
                 type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice"/>
     </type>
     <preference for="Hokodo\BNPL\Api\Data\OrderDocumentInterface" type="Hokodo\BNPL\Model\Data\OrderDocument"/>
+    <preference for="Hokodo\BNPL\Api\Data\CustomerImportInterface" type="Hokodo\BNPL\Model\Data\CustomerImport"/>
     <preference for="Hokodo\BNPL\Api\OrderDocumentsRepositoryInterface" type="Hokodo\BNPL\Model\OrderDocumentsRepository"/>
 
     <preference for="Hokodo\BNPL\Api\HokodoEntityTypeResolverInterface" type="Hokodo\BNPL\Model\HokodoEntityTypeResolver"/>
@@ -1509,4 +1535,102 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ImportExport\Model\Import\SampleFileProvider">
+        <arguments>
+            <argument name="samples" xsi:type="array">
+                <item name="hokodo_companies" xsi:type="string">Hokodo_BNPL</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Notification\MessageList">
+        <arguments>
+            <argument name="messages" xsi:type="array">
+                <item name="companyImportSystemMessage" xsi:type="string">Hokodo\BNPL\Model\System\Message\CompanyImportSystemMessage</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Company Search -->
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\CompanySearchRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CompanySearchRequest" />
+    <virtualType name="Hokodo\BNPL\Gateway\Command\CompanySearch" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\CompanySearch\BuilderComposite</argument>
+            <argument name="resultFactory" xsi:type="object">Hokodo\BNPL\Gateway\Command\CompanySearch\ResultInterfaceFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\CompanySearch\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\CompanySearch</item>
+                <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostMethodBuilder</item>
+                <item name="body" xsi:type="string">Hokodo\BNPL\Gateway\Request\CompanySearchEventBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\CompanySearchEventBuilder" type="Hokodo\BNPL\Gateway\Request\Sdk\GeneralSubjectBuilder">
+        <arguments>
+            <argument name="endpointBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\CompanySearch</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\CompanySearch" type="Hokodo\BNPL\Gateway\Request\Sdk\EndpointBuilder">
+        <arguments>
+            <argument name="endpoint" xsi:type="string">companies/search</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Command\CompanySearch\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">\Hokodo\BNPL\Gateway\Command\Result\Company</argument>
+        </arguments>
+    </virtualType>
+    <!-- /Company Search -->
+
+    <!-- Company Credit Limit -->
+    <preference for="Hokodo\BNPL\Api\Data\Gateway\CompanyCreditRequestInterface" type="Hokodo\BNPL\Model\Data\Gateway\CompanyCreditRequest" />
+    <preference for="Hokodo\BNPL\Api\Data\Company\CreditInterface" type="Hokodo\BNPL\Model\Data\Company\Credit" />
+    <preference for="Hokodo\BNPL\Api\Data\Company\CreditLimitInterface" type="Hokodo\BNPL\Model\Data\Company\CreditLimit" />
+    <preference for="Hokodo\BNPL\Api\CompanyCreditServiceInterface" type="Hokodo\BNPL\Model\CompanyCreditService" />
+
+    <virtualType name="Hokodo\BNPL\Gateway\Command\CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="hokodo_company_credit" xsi:type="string">Hokodo\BNPL\Gateway\Command\CompanyCredit</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Command\CompanyCredit" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\CompanyCredit\BuilderComposite</argument>
+            <argument name="resultFactory" xsi:type="object">Hokodo\BNPL\Gateway\Command\CompanyCredit\ResultInterfaceFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\CompanyCredit\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\CompanyCredit</item>
+                <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\PostMethodBuilder</item>
+                <item name="body" xsi:type="string">Hokodo\BNPL\Gateway\Request\CompanyCreditEventBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\CompanyCreditEventBuilder" type="Hokodo\BNPL\Gateway\Request\Sdk\GeneralSubjectBuilder">
+        <arguments>
+            <argument name="endpointBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\CompanyCredit</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\CompanyCredit" type="Hokodo\BNPL\Gateway\Request\Sdk\EndpointBuilder">
+        <arguments>
+            <argument name="endpoint" xsi:type="string">payment/credit_limits/company/:company_id</argument>
+            <argument name="params" xsi:type="array">
+                <item name=":company_id" xsi:type="string">company_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Command\CompanyCredit\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">\Hokodo\BNPL\Gateway\Command\Result\CompanyCredit</argument>
+        </arguments>
+    </virtualType>
+    <!-- /Company Credit Limit -->
 </config>

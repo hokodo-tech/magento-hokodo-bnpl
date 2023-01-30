@@ -12,11 +12,20 @@ use Hokodo\BNPL\Api\Data\HokodoEntityInterface;
 interface HokodoEntityRepositoryInterface
 {
     /**
-     * Retrieve Hokodo Data Webapi by magento customer id.
+     * Get HokodoEntityInterface model by magento customer it is linked to.
      *
      * @param int $customerId
      *
      * @return HokodoEntityInterface
      */
     public function getByCustomerId(int $customerId): HokodoEntityInterface;
+
+    /**
+     * Get HokodoEntityInterface model by magento entity id it is linked to.
+     *
+     * @param int $entityId
+     *
+     * @return HokodoEntityInterface
+     */
+    public function getByEntityId(int $entityId): HokodoEntityInterface;
 }

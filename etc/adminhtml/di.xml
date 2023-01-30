@@ -18,4 +18,9 @@
                 type="Hokodo\BNPL\Plugin\Customer\DataProviderWithDefaultAddressesPlugin"
                 sortOrder="1" disabled="false"/>
     </type>
+    <type name="Hokodo\BNPL\Controller\Adminhtml\Company\Credit">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
 </config>
