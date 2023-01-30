@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\ViewModel\Marketing;
 
 use Hokodo\BNPL\Gateway\Config\Config;
+use Hokodo\BNPL\Model\Marketing\BannerConfigProviderInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-class CreditLimitBanners implements ArgumentInterface
+class Banners implements ArgumentInterface
 {
     /**
      * @var Config
@@ -85,11 +86,28 @@ class CreditLimitBanners implements ArgumentInterface
     }
 
     /**
+     * Set banner config by type.
+     *
+     * @param BannerConfigProviderInterface $bannerConfig
+     *
+     * @return Banners
+     */
+    public function setBannerTypeConfig(BannerConfigProviderInterface $bannerConfig): self
+    {
+        $this->bannerConfig = array_merge(
+            $this->bannerConfig,
+            $bannerConfig->getBannerConfig($this->paymentConfig->getValue(Config::MARKETING_TOP_BANNER_TYPE))
+        );
+
+        return $this;
+    }
+
+    /**
      * Banner static type setter.
      *
      * @param array $bannerConfig
      *
-     * @return CreditLimitBanners
+     * @return Banners
      */
     public function setBannerConfig(array $bannerConfig): self
     {
