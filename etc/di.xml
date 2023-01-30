@@ -99,7 +99,6 @@
     <virtualType name="Hokodo\BNPL\Gateway\Command\CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
-<!--                <item name="company_search" xsi:type="string">Hokodo\BNPL\Gateway\Command\CompanySearch</item>-->
 <!--                <item name="company_view" xsi:type="string">Hokodo\BNPL\Gateway\Command\CompanyView</item>-->
 <!--                <item name="user_create" xsi:type="string">Hokodo\BNPL\Gateway\Command\UserCreate</item>-->
 <!--                <item name="user_delete" xsi:type="string">Hokodo\BNPL\Gateway\Command\UserDelete</item>-->
@@ -579,12 +578,6 @@
     <!-- End Endpoints builders -->
 
     <!-- Company command -->
-   <!-- <virtualType name="Hokodo\BNPL\Gateway\Command\CompanySearch" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\CompanySearch\BuilderComposite</argument>
-            <argument name="resultFactory" xsi:type="object">Hokodo\BNPL\Gateway\Command\Company\ResultInterfaceFactory</argument>
-        </arguments>
-    </virtualType>-->
     <virtualType name="Hokodo\BNPL\Gateway\Command\CompanyView" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\CompanyView\BuilderComposite</argument>
