@@ -55,9 +55,8 @@ define([
                     this.mountCheckout();
                 }
             })
-            if (!this.isCustomerLoggedIn() || this.hasOfferedPlan() === true) {
-                this.showBNPLPaymentMethodIfPossible();
-            }
+
+            this.showBNPLPaymentMethodIfPossible();
 
             if (this.hokodoCheckout().companyId()) {
                 this.companySearch = this.hokodoElements.create("companySearch", {companyId: this.hokodoCheckout().companyId()});
@@ -93,8 +92,9 @@ define([
                 || this.isBothCompanyAttachedAndOrderEligible()
             ) {
                 this.isReadyToShow(true);
+            } else {
+                this.isReadyToShow(false);
             }
-            return this.isReadyToShow();
         },
 
         isMustShow: function () {
@@ -112,7 +112,7 @@ define([
         isOrderEligible: function () {
             let isOrderEligible = false;
             if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible' &&
-                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || !this.hasOffer())
+                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || (!this.hasOffer() && !this.hokodoCheckout().companyId()))
             ) {
                 isOrderEligible = true;
             }
@@ -123,7 +123,7 @@ define([
             let isBothCompanyAttachedAndOrderEligible = false;
             if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible_or_company_is_not_attached'
                 && this.hokodoCheckout().companyId() &&
-                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || !this.hasOffer())
+                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || (!this.hasOffer() && !this.hokodoCheckout().companyId()))
             ) {
                 isBothCompanyAttachedAndOrderEligible = true;
             }
@@ -192,24 +192,22 @@ define([
         _mountCheckout: function () {
             var self = this;
             if (!this.userCheckout && this.hokodoCheckout().offer()) {
-                if (this.showBNPLPaymentMethodIfPossible()) {
-                    this.userCheckout = this.hokodoElements.create("checkout", {
-                        paymentOffer: this.hokodoCheckout().offer()
-                    });
+                this.userCheckout = this.hokodoElements.create("checkout", {
+                    paymentOffer: this.hokodoCheckout().offer()
+                });
 
-                    this.userCheckout.on("failure", () => {
-                        hokodoData.setOffer(null);
-                        self.hokodoCheckout().offer(null);
-                    });
+                this.userCheckout.on("failure", () => {
+                    hokodoData.setOffer(null);
+                    self.hokodoCheckout().offer(null);
+                });
 
-                    this.userCheckout.on('success', () => {
-                        self.additionalData.hokodo_payment_offer_id = this.hokodoCheckout().offer().id;
-                        self.additionalData.hokodo_order_id = this.hokodoCheckout().offer().order;
-                        self.placeOrder()
-                    });
+                this.userCheckout.on('success', () => {
+                    self.additionalData.hokodo_payment_offer_id = this.hokodoCheckout().offer().id;
+                    self.additionalData.hokodo_order_id = this.hokodoCheckout().offer().order;
+                    self.placeOrder()
+                });
 
-                    this.userCheckout.mount("#hokodoCheckout");
-                }
+                this.userCheckout.mount("#hokodoCheckout");
             } else {
                 if (this.userCheckout) {
                     this.userCheckout.destroy();
@@ -217,6 +215,7 @@ define([
                 }
                 this._mountCheckout();
             }
+            this.showBNPLPaymentMethodIfPossible();
         },
 
         afterPlaceOrder() {

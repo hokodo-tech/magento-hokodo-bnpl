@@ -24,7 +24,7 @@ define([
             if (hokodoConfig.isDefault && hokodoConfig.isActive) {
                 defaultPayment = hokodoConfig.paymentMethodCode;
             }
-            if (typeof hokodoData.getOffer() !== 'undefined' && hokodoData.getOffer() !== ''
+            if (typeof hokodoData.getOffer() !== 'undefined' && hokodoData.getOffer() !== '' && hokodoData.getOffer() !== null
                 && hokodoConfig.isActive && hokodoConfig.isForEligibleOrderOnly) {
                 hokodoData.getOffer().offered_payment_plans.forEach(function (item, index) {
                     if (item.status === 'offered') {
