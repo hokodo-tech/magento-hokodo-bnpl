@@ -88,6 +88,11 @@ define([
         },
 
         showBNPLPaymentMethodIfPossible: function() {
+            if ((typeof hokodoData.getOffer() === 'undefined' || hokodoData.getOffer() === '')
+                && this.hokodoCheckout().companyId()) {
+                this.hokodoCheckout().createOfferAction();
+            }
+
             if (this.isMustShow()
                 || this.isCompanyAttached()
                 || this.isOrderEligible()
