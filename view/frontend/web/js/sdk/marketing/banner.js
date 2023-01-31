@@ -14,9 +14,9 @@ define([
     return Component.extend({
         defaults: {
             template: 'Hokodo_BNPL/sdk/marketing/banner',
-            bannerTypeStatic: 'top-strip',
-            bannerTypeCredit: 'credit-limit-banner',
-            bannerForIdentifiedLoggedUser: null,
+            bannerTypeNonLoggedIn: 'top-strip',
+            bannerTypeLoggedIn: 'credit-limit-banner',
+            bannerTypeLoggedInCompanyAssigned: null,
             customerGroupsEnabled: false,
             customerGroups: [],
             advertisedCreditAmount: null,
@@ -55,16 +55,16 @@ define([
                     this.isUserCompanyIdentifiedOnInit = !!hokodoData.getCompanyId();
                 }
                 if (this.creditBannersEnabled && this.isAllowedCustomerGroup(data.hokodoCustomerGroup)) {
-                    if (this.bannerForIdentifiedLoggedUser && this.isMarketingUpdated && this.isAllowedToReplace()) {
-                        this.bannerType(this.bannerForIdentifiedLoggedUser)
+                    if (this.bannerTypeLoggedInCompanyAssigned && this.isMarketingUpdated && this.isAllowedToReplace()) {
+                        this.bannerType(this.bannerTypeLoggedInCompanyAssigned)
                     } else {
-                        this.bannerType(this.bannerTypeCredit)
+                        this.bannerType(this.bannerTypeLoggedIn)
                     }
                 } else if (this.staticBannersEnabled && this.isAllowedCustomerGroup(data.hokodoCustomerGroup)) {
-                    this.bannerType(this.bannerTypeStatic)
+                    this.bannerType(this.bannerTypeNonLoggedIn)
                 }
             } else if (this.staticBannersEnabled && this.isAllowedCustomerGroup(data.hokodoCustomerGroup)) {
-                this.bannerType(this.bannerTypeStatic)
+                this.bannerType(this.bannerTypeNonLoggedIn)
             }
         },
 

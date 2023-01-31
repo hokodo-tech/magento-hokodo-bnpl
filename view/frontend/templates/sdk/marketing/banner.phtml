@@ -6,10 +6,13 @@
 
 /**
  * @var $block \Magento\Framework\View\Element\Template
- * @var $viewModel \Hokodo\BNPL\ViewModel\Marketing\CreditLimitBanners
+ * @var $viewModel \Hokodo\BNPL\ViewModel\Marketing\Banners
  */
 $viewModel = $block->getData('viewModel');
 $viewModel->setBannerConfig($block->getData('bannerConfig') ?? []);
+if ($bannerConfig = $block->getData('bannerTypeConfig')) {
+    $viewModel->setBannerTypeConfig($bannerConfig);
+}
 ?>
 
 <?php if ($viewModel->isEnabled()): ?>

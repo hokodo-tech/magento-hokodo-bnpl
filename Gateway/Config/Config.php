@@ -44,6 +44,7 @@ class Config extends DefaultPaymentConfig
     public const MARKETING_PRODUCT_PAGE_ENABLE = 'marketing/enable_product';
     public const MARKETING_TOP_BANNER_ENABLE = 'marketing/enable_top';
     public const MARKETING_TOP_BANNER_THEME = 'marketing/top_theme';
+    public const MARKETING_TOP_BANNER_TYPE = 'marketing/top_banner_type';
     public const MARKETING_STATIC_BANNERS_ENABLE = 'marketing/enable_static';
     public const MARKETING_CREDIT_BANNERS_ENABLE = 'marketing/enable_credit';
     public const MARKETING_ADVERTISED_CREDIT_AMOUNT = 'marketing/advertised_credit_amount';

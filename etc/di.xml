@@ -1626,4 +1626,35 @@
         </arguments>
     </virtualType>
     <!-- /Company Credit Limit -->
+
+    <!-- Marketing -->
+    <type name="\Hokodo\BNPL\Model\Marketing\TopBanner">
+        <arguments>
+            <argument name="bannerTypes" xsi:type="array">
+                <item name="static/credit" xsi:type="array">
+                    <item name="bannerTypeNonLoggedIn" xsi:type="string">top-strip</item>
+                    <item name="bannerTypeLoggedIn" xsi:type="string">credit-limit-banner</item>
+                    <item name="bannerTypeLoggedInCompanyAssigned" xsi:type="string">credit-limit-top-strip</item>
+                    <item name="label" xsi:type="string"><![CDATA[Static promo / Credit limit]]></item>
+                </item>
+                <item name="discount/credit" xsi:type="array">
+                    <item name="bannerTypeNonLoggedIn" xsi:type="string">discount-top-strip</item>
+                    <item name="bannerTypeLoggedIn" xsi:type="string">credit-limit-banner</item>
+                    <item name="bannerTypeLoggedInCompanyAssigned" xsi:type="string">credit-limit-top-strip</item>
+                    <item name="label" xsi:type="string"><![CDATA[Discount promo / Credit limit]]></item>
+                </item>
+                <item name="static/discount" xsi:type="array">
+                    <item name="bannerTypeNonLoggedIn" xsi:type="string">top-strip</item>
+                    <item name="bannerTypeLoggedIn" xsi:type="string">discount-top-strip</item>
+                    <item name="label" xsi:type="string"><![CDATA[Static promo / Discount promo]]></item>
+                </item>
+                <item name="discount/discount" xsi:type="array">
+                    <item name="bannerTypeNonLoggedIn" xsi:type="string">discount-top-strip</item>
+                    <item name="bannerTypeLoggedIn" xsi:type="string">discount-top-strip</item>
+                    <item name="label" xsi:type="string"><![CDATA[Discount promo / Discount promo]]></item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- /Marketing -->
 </config>

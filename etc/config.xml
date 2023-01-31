@@ -63,6 +63,7 @@
                     <enable_credit>1</enable_credit>
                     <enable_product>1</enable_product>
                     <enable_top>1</enable_top>
+                    <top_banner_type>static/credit</top_banner_type>
                     <top_theme>default</top_theme>
                     <hokodo_logo>1</hokodo_logo>
                     <subtitle>No interest. No fees</subtitle>
