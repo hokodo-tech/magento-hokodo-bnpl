@@ -112,7 +112,7 @@ define([
         isOrderEligible: function () {
             let isOrderEligible = false;
             if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible' &&
-                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || (!this.hasOffer() && !this.hokodoCheckout().companyId()))
+                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || !this.hasOffer())
             ) {
                 isOrderEligible = true;
             }
@@ -123,7 +123,7 @@ define([
             let isBothCompanyAttachedAndOrderEligible = false;
             if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible_or_company_is_not_attached'
                 && this.hokodoCheckout().companyId() &&
-                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || (!this.hasOffer() && !this.hokodoCheckout().companyId()))
+                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || !this.hasOffer())
             ) {
                 isBothCompanyAttachedAndOrderEligible = true;
             }
