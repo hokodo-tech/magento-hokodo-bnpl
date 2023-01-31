@@ -1,3 +1,9 @@
+2.1.4 / January 2023
+==================
+* Discount banners
+* Credit limit are available in Admin
+* Pre-matching feature
+
 2.1.3 / January 2023
 ==================
 * Upgrade payment information display
