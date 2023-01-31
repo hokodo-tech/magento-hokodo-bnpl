@@ -13,7 +13,7 @@ interface CompanyImportInterface
      * String constants for property names.
      */
     public const EMAIL = 'email';
-    public const REG_NUMBER = 'regnumber';
+    public const REG_NUMBER = 'reg_number';
     public const COUNTRY_CODE = 'country_code';
 
     /**
@@ -42,11 +42,11 @@ interface CompanyImportInterface
     /**
      * Setter for Regnumber.
      *
-     * @param string|null $regnumber
+     * @param string|null $regNumber
      *
      * @return self
      */
-    public function setRegNumber(?string $regnumber): self;
+    public function setRegNumber(?string $regNumber): self;
 
     /**
      * Getter for CountryCode.
@@ -58,9 +58,9 @@ interface CompanyImportInterface
     /**
      * Setter for CountryCode.
      *
-     * @param string|null $countrycode
+     * @param string|null $countryCode
      *
      * @return self
      */
-    public function setCountryCode(?string $countrycode): self;
+    public function setCountryCode(?string $countryCode): self;
 }

@@ -48,13 +48,13 @@ class CompanyImport extends DataObject implements CompanyImportInterface
     /**
      * Setter for Regnumber.
      *
-     * @param string|null $regnumber
+     * @param string|null $regNumber
      *
      * @return self
      */
-    public function setRegNumber(?string $regnumber): self
+    public function setRegNumber(?string $regNumber): self
     {
-        $this->setData(self::REG_NUMBER, $regnumber);
+        $this->setData(self::REG_NUMBER, $regNumber);
         return $this;
     }
 
@@ -71,13 +71,13 @@ class CompanyImport extends DataObject implements CompanyImportInterface
     /**
      * Setter for CountryCode.
      *
-     * @param string|null $countrycode
+     * @param string|null $countryCode
      *
      * @return self
      */
-    public function setCountryCode(?string $countrycode): self
+    public function setCountryCode(?string $countryCode): self
     {
-        $this->setData(self::COUNTRY_CODE, $countrycode);
+        $this->setData(self::COUNTRY_CODE, $countryCode);
         return $this;
     }
 }

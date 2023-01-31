@@ -260,15 +260,15 @@ class Companies extends AbstractEntity
     public function isCustomerExists(string $email): bool
     {
         $isExists = false;
+        // @codingStandardsIgnoreStart
         try {
             $customer = $this->customerRepository->get($email);
             if ($customer->getId()) {
                 $isExists = true;
             }
         } catch (NoSuchEntityException|LocalizedException $e) {
-            //linter compatibility
-            $isExists = false;
         }
+        // @codingStandardsIgnoreEnd
         return $isExists;
     }
 
