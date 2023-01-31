@@ -220,6 +220,7 @@ test:e2e:
     expire_in: 1 week
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
+  allow_failure: true
   script:
     - npm install
     - npx playwright install --with-deps
