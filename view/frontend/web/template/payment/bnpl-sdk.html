@@ -18,7 +18,8 @@
                     value: getCode(),
                     checked: isChecked,
                     click: selectPaymentMethod,
-                    visible: isRadioButtonVisible()
+                    visible: isRadioButtonVisible(),
+                    disable: isDisabled()
                "/>
         <label class="label" data-bind="attr: {'for': getCode()}">
             <span class="label-left">
