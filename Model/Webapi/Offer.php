@@ -578,7 +578,7 @@ class Offer implements OfferInterface
      *
      * @return bool
      */
-    private function isPaymentPlanHaveStatus(PaymentOffersInterface $offer, string $status): bool
+    public function isPaymentPlanHaveStatus(PaymentOffersInterface $offer, string $status): bool
     {
         foreach ($offer->getOfferedPaymentPlans() as $offeredPaymentPlan) {
             if ($offeredPaymentPlan->getStatus() === $status) {

@@ -173,4 +173,24 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
     {
         return $this->setData(self::URLS, $urls);
     }
+
+    /**
+     * @inheritDoc
+     *
+     * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getIsEligible()
+     */
+    public function getIsEligible(): bool
+    {
+        return (bool) $this->_get(self::IS_ELIGIBLE);
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setIsEligible()
+     */
+    public function setIsEligible(bool $isEligible = null): self
+    {
+        return $this->setData(self::IS_ELIGIBLE, $isEligible);
+    }
 }

@@ -18,6 +18,7 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
     public const URLS = 'urls';
     public const LOCALE = 'locale';
     public const METADATA = 'metadata';
+    public const IS_ELIGIBLE = 'is_eligible';
 
     /**
      * A function that sets url.
@@ -146,4 +147,20 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
      * @return string
      */
     public function getMetadata();
+
+    /**
+     * A function that sets is_eligible flag.
+     *
+     * @param bool|null $isEligible
+     *
+     * @return $this
+     */
+    public function setIsEligible(bool $isEligible = null): self;
+
+    /**
+     * A function that gets is_eligible flag.
+     *
+     * @return bool
+     */
+    public function getIsEligible(): bool;
 }

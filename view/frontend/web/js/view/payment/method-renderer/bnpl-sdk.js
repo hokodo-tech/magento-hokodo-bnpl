@@ -161,6 +161,12 @@ define([
             }
         },
 
+        isDisabled: function() {
+
+            // Marty put logic here
+            return true;
+        },
+
         getCode: function () {
             return 'hokodo_bnpl';
         },
