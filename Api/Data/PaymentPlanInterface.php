@@ -24,6 +24,9 @@ interface PaymentPlanInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public const REJECTION_REASON = 'rejection_reason';
     public const PAYMENT_TERMS_RELATIVE_TO = 'payment_terms_relative_to';
 
+    public const STATUS_OFFERED = 'offered';
+    public const STATUS_EXPIRED = 'expired';
+
     /**
      * A function that sets id.
      *

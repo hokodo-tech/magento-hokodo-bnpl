@@ -1213,16 +1213,8 @@
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\SalesRule\Model\RulesApplier">
-        <plugin name="hokodo_sales_rule" type="\Hokodo\BNPL\Plugin\Model\SalesRule\RulesApplier"/>
-    </type>
-    <type name="Magento\Quote\Model\CouponManagement">
-        <plugin name="hokodo_coupon" type="Hokodo\BNPL\Plugin\Quote\Model\CouponManagement"/>
-    </type>
-    <type name="Hokodo\BNPL\Plugin\Quote\Model\CouponManagement">
-        <arguments>
-            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
-        </arguments>
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="hokodo_patch_order" type="Hokodo\BNPL\Plugin\Quote\Model\Quote"/>
     </type>
     <type name="Hokodo\BNPL\Model\Webapi\Offer">
         <arguments>

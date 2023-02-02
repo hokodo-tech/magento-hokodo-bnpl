@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\CustomerData;
 
 use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
+use Hokodo\BNPL\Api\Data\PaymentPlanInterface;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Gateway\Service\Offer;
 use Hokodo\BNPL\Model\Webapi\Offer as WebapiOffer;
@@ -20,8 +21,6 @@ class HokodoCheckout implements SectionSourceInterface
     public const USER_ID = 'userId';
     public const ORGANISATION_ID = 'organisationId';
     public const OFFER = 'offer';
-
-    public const OFFERED_PAYMENT_PLAN_STATUS = 'offered';
 
     /**
      * @var Session
@@ -82,6 +81,7 @@ class HokodoCheckout implements SectionSourceInterface
         if ($hokodoQuote->getOfferId()) {
             try {
                 $offer = $this->offerService->getOffer(['id' => $hokodoQuote->getOfferId()])->getDataModel();
+                $this->addIsEligibleFlag($offer);
             } catch (\Exception $e) {
                 $data = [
                     'message' => 'Hokodo_BNPL: getOffer call failed with error.',
@@ -92,7 +92,6 @@ class HokodoCheckout implements SectionSourceInterface
             }
         }
         $this->hokodoQuoteRepository->save($hokodoQuote);
-        $offer = $this->addIsEligibleFlag($offer);
         return [
             self::OFFER => $offer ? $offer->__toArray() : '',
         ];
@@ -101,18 +100,14 @@ class HokodoCheckout implements SectionSourceInterface
     /**
      * Add is_eligible flag to offer.
      *
-     * @param PaymentOffersInterface|string $offer
+     * @param PaymentOffersInterface $offer
      *
-     * @return PaymentOffersInterface|string|null
+     * @return void
      */
-    private function addIsEligibleFlag($offer = null)
+    private function addIsEligibleFlag(PaymentOffersInterface $offer): void
     {
-        if (!empty($offer)) {
-            $offer->setIsEligible(false);
-            if ($this->webapiOffer->isPaymentPlanHaveStatus($offer, self::OFFERED_PAYMENT_PLAN_STATUS)) {
-                $offer->setIsEligible(true);
-            }
-        }
-        return $offer;
+        $offer->setIsEligible(
+            $this->webapiOffer->isPaymentPlanHaveStatus($offer, PaymentPlanInterface::STATUS_OFFERED)
+        );
     }
 }

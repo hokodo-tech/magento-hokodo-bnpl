@@ -10,7 +10,6 @@ namespace Hokodo\BNPL\Model\Ui;
 
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos;
-use Hokodo\BNPL\Model\Config\Source\HideHokodoOptions;
 use Hokodo\BNPL\Model\Config\Source\PaymentMethodBehaviour;
 use Hokodo\BNPL\Service\CustomersGroup;
 use Magento\Checkout\Model\ConfigProviderInterface;
@@ -66,7 +65,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'hokodoLogo' => (bool) $this->config->getValue(Config::HOKODO_LOGO),
                     'logos' => $logos,
                     'moreInfo' => $this->config->getValue(Config::PAYMENT_MORE_INFO),
-                    'hideIfNoOffer' => $this->config->getValue(Config::HIDE_IF_NO_OFFER)
+                    'hideIfNoOffer' => (bool) $this->config->getValue(Config::HIDE_IF_NO_OFFER),
                 ],
             ],
         ];

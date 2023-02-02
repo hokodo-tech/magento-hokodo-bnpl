@@ -126,7 +126,7 @@ define([
             },
 
             initLoggedInCustomer() {
-                this.createOfferAction();
+                // this.createOfferAction();
             },
 
             createOfferAction() {
