@@ -1,6 +1,6 @@
 2.1.5 / February 2023
 ==================
-* Fix 2.3.7
+* Fix compatibility for 2.3.7
 
 2.1.4 / January 2023
 ==================
