@@ -14,7 +14,7 @@ define([
 
     return {
         isVisibilityValidationRequired() {
-            return !hideIfNoOffer;
+            return hideIfNoOffer;
         },
 
         validate() {
