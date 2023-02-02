@@ -61,13 +61,12 @@ class ConfigProvider implements ConfigProviderInterface
                     'isActive' => $this->config->isActive() &&
                         $this->customersGroupService->isEnabledForCustomerGroup(),
                     'isDefault' => $this->isDefault(),
-                    'isForEligibleOrderOnly' => $this->isForEligibleOrderOnly(),
-                    'hideHokodoPaymentType' => $this->getHideHokodoPaymentType(),
                     'title' => $this->config->getValue(Config::PAYMENT_TITLE),
                     'subtitle' => $this->config->getValue(Config::PAYMENT_SUBTITLE),
                     'hokodoLogo' => (bool) $this->config->getValue(Config::HOKODO_LOGO),
                     'logos' => $logos,
                     'moreInfo' => $this->config->getValue(Config::PAYMENT_MORE_INFO),
+                    'hideIfNoOffer' => $this->config->getValue(Config::HIDE_IF_NO_OFFER)
                 ],
             ],
         ];
@@ -84,45 +83,6 @@ class ConfigProvider implements ConfigProviderInterface
         $value = $this->config->getValue(Config::PAYMENT_DEFAULT);
         if ($value == PaymentMethodBehaviour::IS_DEFAULT_YES) {
             $result = true;
-        }
-        return $result;
-    }
-
-    /**
-     * Checks is payment method was set for Eligible orders only.
-     *
-     * @return bool
-     */
-    private function isForEligibleOrderOnly(): bool
-    {
-        $result = false;
-        $value = $this->config->getValue(Config::PAYMENT_DEFAULT);
-        if ($value == PaymentMethodBehaviour::IF_ORDER_ELIGIBLE) {
-            $result = true;
-        }
-        return $result;
-    }
-
-    /**
-     * Get Hide Hokodo Payment Type.
-     *
-     * @return string
-     */
-    private function getHideHokodoPaymentType(): string
-    {
-        $result = HideHokodoOptions::DONT_HIDE_CODE;
-        if ($this->config->getValue(Config::HIDE_HOKODO)) {
-            $hideHokodoConfigValue = $this->config->getValue(Config::HIDE_HOKODO_OPTIONS);
-            if (!empty($hideHokodoConfigValue)) {
-                $values = explode(',', $hideHokodoConfigValue);
-                if (count($values) > 1) {
-                    $result = HideHokodoOptions::BOTH_CODE;
-                } elseif ($values[0] == HideHokodoOptions::ORDER_IS_NOT_ELIGIBLE) {
-                    $result = HideHokodoOptions::ORDER_IS_NOT_ELIGIBLE_CODE;
-                } elseif ($values[0] == HideHokodoOptions::COMPANY_IS_NOT_ATTACHED) {
-                    $result = HideHokodoOptions::COMPANY_IS_NOT_ATTACHED_CODE;
-                }
-            }
         }
         return $result;
     }

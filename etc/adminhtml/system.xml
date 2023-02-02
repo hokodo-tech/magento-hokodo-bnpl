@@ -199,17 +199,10 @@
                         <comment><![CDATA[Enables fix when using thirdparty modules for tax calculations and discount providers.]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
-                    <field id="hide_hokodo" translate="label comment" type="select" sortOrder="130" showInDefault="1" showInWebsite="1">
+                    <field id="hide_if_no_offer" translate="label comment" type="select" sortOrder="130" showInDefault="1" showInWebsite="1">
                         <label>Hide Hokodo</label>
+                        <comment><![CDATA[Hide Hokodo payment method if no company matched to customer or order isn't eligible.]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    </field>
-                    <field id="hide_hokodo_options" translate="label" type="multiselect" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Hide Hokodo if</label>
-                        <source_model>Hokodo\BNPL\Model\Config\Source\HideHokodoOptions</source_model>
-                        <depends>
-                            <field id="hide_hokodo">1</field>
-                        </depends>
-                        <validate>required-entry</validate>
                     </field>
                 </group>
             </group>
