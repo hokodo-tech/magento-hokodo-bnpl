@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\CustomerData;
 
+use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
+use Hokodo\BNPL\Api\Data\PaymentPlanInterface;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Gateway\Service\Offer;
+use Hokodo\BNPL\Model\Webapi\Offer as WebapiOffer;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Psr\Log\LoggerInterface;
@@ -40,20 +43,28 @@ class HokodoCheckout implements SectionSourceInterface
     private LoggerInterface $logger;
 
     /**
+     * @var WebapiOffer
+     */
+    private WebapiOffer $webapiOffer;
+
+    /**
      * @param Session                        $checkoutSession
      * @param HokodoQuoteRepositoryInterface $hokodoQuoteRepository
      * @param Offer                          $offerService
+     * @param WebapiOffer                    $webapiOffer
      * @param LoggerInterface                $logger
      */
     public function __construct(
         Session $checkoutSession,
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
         Offer $offerService,
+        WebapiOffer $webapiOffer,
         LoggerInterface $logger
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->hokodoQuoteRepository = $hokodoQuoteRepository;
         $this->offerService = $offerService;
+        $this->webapiOffer = $webapiOffer;
         $this->logger = $logger;
     }
 
@@ -70,6 +81,7 @@ class HokodoCheckout implements SectionSourceInterface
         if ($hokodoQuote->getOfferId()) {
             try {
                 $offer = $this->offerService->getOffer(['id' => $hokodoQuote->getOfferId()])->getDataModel();
+                $this->addIsEligibleFlag($offer);
             } catch (\Exception $e) {
                 $data = [
                     'message' => 'Hokodo_BNPL: getOffer call failed with error.',
@@ -80,9 +92,22 @@ class HokodoCheckout implements SectionSourceInterface
             }
         }
         $this->hokodoQuoteRepository->save($hokodoQuote);
-
         return [
             self::OFFER => $offer ? $offer->__toArray() : '',
         ];
+    }
+
+    /**
+     * Add is_eligible flag to offer.
+     *
+     * @param PaymentOffersInterface $offer
+     *
+     * @return void
+     */
+    private function addIsEligibleFlag(PaymentOffersInterface $offer): void
+    {
+        $offer->setIsEligible(
+            $this->webapiOffer->isPaymentPlanHaveStatus($offer, PaymentPlanInterface::STATUS_OFFERED)
+        );
     }
 }

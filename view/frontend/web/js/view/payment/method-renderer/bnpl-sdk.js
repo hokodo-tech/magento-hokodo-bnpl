@@ -10,7 +10,8 @@ define([
     'Hokodo_BNPL/js/sdk/hokodo-data-persistor',
     'Magento_Customer/js/model/customer',
     'Magento_Checkout/js/model/error-processor',
-    'Magento_Ui/js/modal/modal'
+    'Hokodo_BNPL/js/view/payment/validator/visibility',
+    'Magento_Ui/js/modal/modal',
 ], function (
     $,
     _,
@@ -18,7 +19,8 @@ define([
     Component,
     hokodoData,
     customer,
-    errorProcessor
+    errorProcessor,
+    visibilityValidator
 ) {
     'use strict';
 
@@ -32,12 +34,23 @@ define([
             },
             //temp SDK search event fix
             searchInitialized: false,
-            isCompanyIdAssignedByComponent: false
+            isCompanyIdAssignedByComponent: false,
+            isValidated: false
         },
-        isReadyToShow: ko.observable(false),
-        isOfferLoading: ko.observable(false),
         hokodoElements: window.hokodoSdk.elements(),
-        getLogos: ko.observableArray(paymentConfig.logos),
+
+        initObservable() {
+            this._super().observe({
+                isVisible: false,
+                isOfferLoading: false,
+            });
+
+            return this;
+        },
+
+        getLogos() {
+            return paymentConfig.logos;
+        },
 
         /**
          * Init component
@@ -45,7 +58,6 @@ define([
         initialize: function () {
             this._super();
             const self = this;
-            console.log('bnpl:initialize');
 
             this.hokodoCheckout().isLoading.subscribe((value) => {
                 this.isOfferLoading(value);
@@ -53,12 +65,9 @@ define([
 
             this.hokodoCheckout().offer.subscribe((offer) => {
                 if (offer) {
-                    console.log('bnpl:offer.changed: ' + offer.id);
                     this.mountCheckout();
                 }
             })
-
-            this.showBNPLPaymentMethodIfPossible();
 
             if (this.hokodoCheckout().companyId()) {
                 this.companySearch = this.hokodoElements.create("companySearch", {companyId: this.hokodoCheckout().companyId()});
@@ -77,24 +86,20 @@ define([
                     hokodoData.setCompanyId(company.id);
                     self.destroyCheckout();
                 }
-
             });
 
             self.hokodoCheckout().companyId.subscribe((companyId) => {
                 self.onCompanyChange(companyId);
             })
 
-            return this;
-        },
-
-        showBNPLPaymentMethodIfPossible: function() {
-            if (this.isMustShow()
-                || this.isCompanyAttached()
-                || this.isOrderEligible()
-                || this.isBothCompanyAttachedAndOrderEligible()
-            ) {
-                this.isReadyToShow(true);
+            if (!visibilityValidator.isVisibilityValidationRequired()) {
+                this.isVisible(true);
+                this.isValidated = true;
             }
+
+            this.mountCheckout();
+
+            return this;
         },
 
         isMustShow: function () {
@@ -161,6 +166,12 @@ define([
             }
         },
 
+        isDisabled: function() {
+
+            // Marty put logic here
+            return false;
+        },
+
         getCode: function () {
             return 'hokodo_bnpl';
         },
@@ -178,16 +189,17 @@ define([
         },
 
         mountSearch: function () {
-            console.log('bnpl:mountSearch')
             this.companySearch.mount("#hokodoCompanySearch");
         },
 
         mountCheckout: function () {
             if (this.hokodoCheckout().offer()) {
-                console.log('bnpl:mountCheckout:offer: ' + this.hokodoCheckout().offer().id)
+                if (!this.isValidated) {
+                    this.isVisible(visibilityValidator.validate());
+                    this.isValidated = true;
+                }
                 this._mountCheckout()
             } else {
-                console.log('bnpl:mountCheckout: offer - false')
                 this.hokodoCheckout().createOfferAction();
             }
         },
@@ -195,14 +207,11 @@ define([
         _mountCheckout: function () {
             var self = this;
             if (!this.userCheckout && this.hokodoCheckout().offer()) {
-                console.log('bnpl:_mountCheckout:!this.userCheckout')
-                console.log(this.hokodoCheckout().offer())
                 this.userCheckout = this.hokodoElements.create("checkout", {
                     paymentOffer: this.hokodoCheckout().offer()
                 });
 
                 this.userCheckout.on("failure", () => {
-                    console.log('bnpl:_mountCheckout:!this.userCheckout:failure')
                     hokodoData.setOffer(null);
                     self.hokodoCheckout().offer(null);
                 });
@@ -215,7 +224,6 @@ define([
 
                 this.userCheckout.mount("#hokodoCheckout");
             } else {
-                console.log('bnpl:_mountCheckout:else')
                 if (this.userCheckout) {
                     this.userCheckout.destroy();
                     this.userCheckout = null;

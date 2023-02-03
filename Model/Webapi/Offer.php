@@ -12,6 +12,7 @@ use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
 use Hokodo\BNPL\Api\Data\HokodoQuoteInterface;
 use Hokodo\BNPL\Api\Data\OrganisationInterface;
 use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
+use Hokodo\BNPL\Api\Data\PaymentPlanInterface;
 use Hokodo\BNPL\Api\Data\UserInterface;
 use Hokodo\BNPL\Api\Data\Webapi\OfferRequestInterface;
 use Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterface;
@@ -538,7 +539,7 @@ class Offer implements OfferInterface
         try {
             if ($this->hokodoQuote->getOfferId()) {
                 $offer = $this->offerGatewayService->getOffer(['id' => $this->hokodoQuote->getOfferId()]);
-                if ($this->isPaymentPlanHaveStatus($offer->getDataModel(), 'expired')) {
+                if ($this->isPaymentPlanHaveStatus($offer->getDataModel(), PaymentPlanInterface::STATUS_EXPIRED)) {
                     $this->hokodoQuote->setOfferId('');
                 }
             }
@@ -548,13 +549,13 @@ class Offer implements OfferInterface
                 );
             }
             if (($dataModel = $offer->getDataModel())) {
-                $quote = $this->checkoutSession->getQuote();
-                $quote->setData('payment_offer_id', $dataModel->getId());
-                $this->cartRepository->save($quote);
-
                 $this->hokodoQuote->setOfferId($dataModel->getId());
                 $this->hokodoQuote->setPatchType(null);
                 $this->hokodoQuoteRepository->save($this->hokodoQuote);
+
+                $dataModel->setIsEligible(
+                    $this->isPaymentPlanHaveStatus($dataModel, PaymentPlanInterface::STATUS_OFFERED)
+                );
 
                 return $dataModel;
             }
@@ -578,7 +579,7 @@ class Offer implements OfferInterface
      *
      * @return bool
      */
-    private function isPaymentPlanHaveStatus(PaymentOffersInterface $offer, string $status): bool
+    public function isPaymentPlanHaveStatus(PaymentOffersInterface $offer, string $status): bool
     {
         foreach ($offer->getOfferedPaymentPlans() as $offeredPaymentPlan) {
             if ($offeredPaymentPlan->getStatus() === $status) {
