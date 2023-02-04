@@ -18,7 +18,7 @@ class HokodoCustomer extends DataObject implements HokodoCustomerInterface
      */
     public function getId(): ?int
     {
-        return $this->getData(self::ID);
+        return $this->getData(self::ID) ? (int) $this->getData(self::ID) : null;
     }
 
     /**
