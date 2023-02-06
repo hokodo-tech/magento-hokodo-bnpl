@@ -16,7 +16,6 @@ use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\HokodoCompanyProvider;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
 
 class UpdateCreditLimits
@@ -35,11 +34,6 @@ class UpdateCreditLimits
      * @var CompanyCreditServiceInterface
      */
     private CompanyCreditServiceInterface $companyCreditService;
-
-    /**
-     * @var SerializerInterface
-     */
-    private SerializerInterface $serializer;
 
     /**
      * @var Config
@@ -63,14 +57,12 @@ class UpdateCreditLimits
         HokodoCompanyProvider $hokodoCompanyProvider,
         SearchCriteriaBuilderFactory $criteriaBuilderFactory,
         CompanyCreditServiceInterface $companyCreditService,
-        SerializerInterface $serializer,
         Config $config,
         LoggerInterface $logger
     ) {
         $this->hokodoCompanyProvider = $hokodoCompanyProvider;
         $this->criteriaBuilderFactory = $criteriaBuilderFactory;
         $this->companyCreditService = $companyCreditService;
-        $this->serializer = $serializer;
         $this->config = $config;
         $this->logger = $logger;
     }
@@ -97,7 +89,7 @@ class UpdateCreditLimits
                 try {
                     $this->hokodoCompanyProvider->getEntityRepository()->save($hokodoEntity);
                 } catch (CouldNotSaveException $e) {
-                    $this->logger->error();
+                    $this->logger->error($e->getMessage());
                 }
             }
         }
