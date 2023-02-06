@@ -49,7 +49,6 @@ class UpdateCreditLimits
      * @param HokodoCompanyProvider         $hokodoCompanyProvider
      * @param SearchCriteriaBuilderFactory  $criteriaBuilderFactory
      * @param CompanyCreditServiceInterface $companyCreditService
-     * @param SerializerInterface           $serializer
      * @param Config                        $config
      * @param LoggerInterface               $logger
      */
