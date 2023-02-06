@@ -230,6 +230,10 @@
                         <validate>required-entry</validate>
                         <comment><![CDATA[Pay attention to the misconfiguration of this field can cause cron faults.]]></comment>
                     </field>
+                    <field id="min_order_total" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1">
+                        <label>Minimum Order Total</label>
+                        <validate>validate-number validate-zero-or-greater</validate>
+                    </field>
                 </group>
             </group>
         </section>
