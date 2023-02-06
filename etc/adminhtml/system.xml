@@ -86,27 +86,6 @@
                     </depends>
                     <validate>required-entry</validate>
                 </field>
-
-                <field id="create_invoice_on_payment_accepted" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Create invoice automatically</label>
-                    <comment>Invoice will be created automatically after payment update</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="capture_online" translate="label" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Capture Online</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <depends>
-                        <field id="create_invoice_on_payment_accepted">1</field>
-                    </depends>
-                </field>
-                <field id="allow_customer_to_change_company" translate="label comment" type="select" sortOrder="90" showInDefault="1" showInWebsite="1">
-                    <label>Allow User to change company</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="debug" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
-                    <label>Enable Debug</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
                 <field id="is_default" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1">
                     <label>Set as Default</label>
                     <source_model>Hokodo\BNPL\Model\Config\Source\PaymentMethodBehaviour</source_model>
@@ -233,6 +212,26 @@
                         </depends>
                         <validate>required-entry</validate>
                         <comment><![CDATA[Pay attention to the misconfiguration of this field can cause cron faults.]]></comment>
+                    </field>
+                    <field id="create_invoice_on_payment_accepted" translate="label" type="select" sortOrder="250" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Create invoice automatically</label>
+                        <comment>Invoice will be created automatically after payment update</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="capture_online" translate="label" type="select" sortOrder="260" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Capture Online</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <depends>
+                            <field id="create_invoice_on_payment_accepted">1</field>
+                        </depends>
+                    </field>
+                    <field id="allow_customer_to_change_company" translate="label comment" type="select" sortOrder="270" showInDefault="1" showInWebsite="1">
+                        <label>Allow User to change company</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="debug" translate="label" type="select" sortOrder="280" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                        <label>Enable Debug</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                 </group>
             </group>
