@@ -321,6 +321,12 @@
         </arguments>
     </type>
 
+    <type name="Hokodo\BNPL\Cron\UpdateCreditLimits">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoCronLogger</argument>
+        </arguments>
+    </type>
+
     <virtualType name="HokodoLogger" type="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="handlers" xsi:type="array">
@@ -335,6 +341,15 @@
             <argument name="handlers" xsi:type="array">
                 <item name="error" xsi:type="object">Hokodo\BNPL\Model\Logger\Import\Handler\Error</item>
                 <item name="debug" xsi:type="object">Hokodo\BNPL\Model\Logger\Import\Handler\Debug</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="HokodoCronLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">Hokodo\BNPL\Model\Logger\Cron\Handler\Error</item>
+                <item name="debug" xsi:type="object">Hokodo\BNPL\Model\Logger\Cron\Handler\Debug</item>
             </argument>
         </arguments>
     </virtualType>
@@ -357,6 +372,17 @@
     <virtualType name="Hokodo\BNPL\Model\Logger\Import\Handler\Debug" type="Hokodo\BNPL\Model\Logger\Handler\Debug">
         <arguments>
             <argument name="fileName" xsi:type="string">var/log/hokodo_import_debug.log</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Hokodo\BNPL\Model\Logger\Cron\Handler\Error" type="Hokodo\BNPL\Model\Logger\Handler\Error">
+        <arguments>
+            <argument name="fileName" xsi:type="string">var/log/hokodo_cron_error.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Model\Logger\Cron\Handler\Debug" type="Hokodo\BNPL\Model\Logger\Handler\Debug">
+        <arguments>
+            <argument name="fileName" xsi:type="string">var/log/hokodo_cron_debug.log</argument>
         </arguments>
     </virtualType>
     <!-- End Logger -->

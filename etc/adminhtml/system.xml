@@ -218,6 +218,18 @@
                         <comment><![CDATA[Hide Hokodo payment method if no company matched to customer or order isn't eligible.]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
+                    <field id="is_cron_enabled" translate="label comment" type="select" sortOrder="160" showInDefault="1" showInWebsite="1">
+                        <label>Update Credit Limits</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="cron_expr" translate="label" type="text" sortOrder="170" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                        <label>Cron Expression</label>
+                        <depends>
+                            <field id="is_cron_enabled">1</field>
+                        </depends>
+                        <validate>required-entry</validate>
+                        <comment><![CDATA[Pay attention to the misconfiguration of this field can cause cron faults.]]></comment>
+                    </field>
                 </group>
             </group>
         </section>

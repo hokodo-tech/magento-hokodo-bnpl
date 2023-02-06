@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2018-2023 Hokodo. All Rights Reserved.
+ * See LICENSE for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="hokodo_bnpl_update_credit_limits" instance="Hokodo\BNPL\Cron\UpdateCreditLimits" method="execute">
+            <config_path>payment/hokodo_bnpl/advanced/cron_expr</config_path>
+        </job>
+    </group>
+</config>

@@ -74,6 +74,8 @@
                 <advanced>
                     <enable_thirdparty_totals_compatibility>0</enable_thirdparty_totals_compatibility>
                     <hide_if_no_offer>0</hide_if_no_offer>
+                    <is_cron_enabled>0</is_cron_enabled>
+                    <cron_expr>0 5 * * *</cron_expr>
                 </advanced>
             </hokodo_bnpl>
         </payment>

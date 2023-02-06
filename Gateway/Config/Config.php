@@ -37,6 +37,7 @@ class Config extends DefaultPaymentConfig
     public const REPLACE_PLACE_ORDER_HOOKS = 'payment/hokodo_bnpl/replace_place_order_hooks';
     public const PAYMENT_DEFAULT = 'is_default';
     public const HIDE_IF_NO_OFFER = 'advanced/hide_if_no_offer';
+    public const IS_CRON_ENABLED = 'advanced/is_cron_enabled';
     public const ALLOW_CUSTOMER_TO_CHANGE_COMPANY = 'payment/hokodo_bnpl/allow_customer_to_change_company';
     public const MARKETING_FAQ_LINK = 'marketing/faq_link';
     public const MARKETING_BANNER_LINK = 'marketing/banner_link';
