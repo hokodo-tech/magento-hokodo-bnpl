@@ -29,7 +29,7 @@ class CreditLimit extends DataObject implements CreditLimitInterface
     /**
      * @inheritdoc
      */
-    public function getAmountAvailable(): int
+    public function getAmountAvailable(): ?int
     {
         return $this->getData(self::AMOUNT_AVAILABLE);
     }
@@ -37,7 +37,7 @@ class CreditLimit extends DataObject implements CreditLimitInterface
     /**
      * @inheritdoc
      */
-    public function setAmountAvailable(int $amountAvailable): self
+    public function setAmountAvailable(?int $amountAvailable): self
     {
         $this->setData(self::AMOUNT_AVAILABLE, $amountAvailable);
         return $this;
@@ -46,7 +46,7 @@ class CreditLimit extends DataObject implements CreditLimitInterface
     /**
      * @inheritdoc
      */
-    public function getAmountInUse(): int
+    public function getAmountInUse(): ?int
     {
         return $this->getData(self::AMOUNT_IN_USE);
     }
@@ -54,7 +54,7 @@ class CreditLimit extends DataObject implements CreditLimitInterface
     /**
      * @inheritdoc
      */
-    public function setAmountInUse(int $amountInUse): self
+    public function setAmountInUse(?int $amountInUse): self
     {
         $this->setData(self::AMOUNT_IN_USE, $amountInUse);
         return $this;
@@ -63,7 +63,7 @@ class CreditLimit extends DataObject implements CreditLimitInterface
     /**
      * @inheritdoc
      */
-    public function getAmount(): int
+    public function getAmount(): ?int
     {
         return $this->getData(self::AMOUNT);
     }
@@ -71,7 +71,7 @@ class CreditLimit extends DataObject implements CreditLimitInterface
     /**
      * @inheritdoc
      */
-    public function setAmount(int $amount): self
+    public function setAmount(?int $amount): self
     {
         $this->setData(self::AMOUNT, $amount);
         return $this;

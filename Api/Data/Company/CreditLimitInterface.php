@@ -28,41 +28,41 @@ interface CreditLimitInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Amount Available getter.
      *
-     * @return int
+     * @return int|null
      */
-    public function getAmountAvailable(): int;
+    public function getAmountAvailable(): ?int;
 
     /**
      * Amount Available setter.
      *
-     * @param int $amountAvailable
+     * @param int|null $amountAvailable
      *
      * @return $this
      */
-    public function setAmountAvailable(int $amountAvailable): self;
+    public function setAmountAvailable(?int $amountAvailable): self;
 
     /**
      * Amount In Use getter.
      *
-     * @return int
+     * @return int|null
      */
-    public function getAmountInUse(): int;
+    public function getAmountInUse(): ?int;
 
     /**
      * Amount In Use setter.
      *
-     * @param int $amountInUse
+     * @param int|null $amountInUse
      *
      * @return $this
      */
-    public function setAmountInUse(int $amountInUse): self;
+    public function setAmountInUse(?int $amountInUse): self;
 
     /**
      * Amount getter.
      *
-     * @return int
+     * @return int|null
      */
-    public function getAmount(): int;
+    public function getAmount(): ?int;
 
     /**
      * Amount setter.
@@ -71,5 +71,5 @@ interface CreditLimitInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @return $this
      */
-    public function setAmount(int $amount): self;
+    public function setAmount(?int $amount): self;
 }

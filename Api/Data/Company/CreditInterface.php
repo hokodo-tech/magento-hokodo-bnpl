@@ -44,18 +44,18 @@ interface CreditInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Rejection Reason getter.
      *
-     * @return array|null
+     * @return string[]|null
      */
     public function getRejectionReason(): ?array;
 
     /**
      * Rejection Reason setter.
      *
-     * @param array|null $rejectionReason
+     * @param string[]|null $rejectionReason
      *
      * @return $this
      */
-    public function setRejectionReason(?array $rejectionReason): self;
+    public function setRejectionReason($rejectionReason): self;
 
     /**
      * Credit Limit getter.

@@ -55,7 +55,7 @@ class Credit extends DataObject implements CreditInterface
     /**
      * @inheritdoc
      */
-    public function setRejectionReason(?array $rejectionReason): self
+    public function setRejectionReason($rejectionReason): self
     {
         $this->setData(self::REJECTION_REASON, $rejectionReason);
         return $this;

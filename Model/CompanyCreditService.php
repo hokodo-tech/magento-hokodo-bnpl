@@ -69,9 +69,16 @@ class CompanyCreditService implements CompanyCreditServiceInterface
         try {
             /** @var CreditInterface $companyCredit */
             $companyCredit = $this->gateway->getCredit($searchRequest)->getDataModel();
-            if (!$companyCredit->getRejectionReason()) {
-                return $companyCredit;
+            if ($companyCredit->getRejectionReason()) {
+                $companyCredit->setCreditLimit(
+                    $companyCredit
+                        ->getCreditLimit()
+                        ->setAmount(0)
+                        ->setAmountAvailable(0)
+                        ->setAmountInUse(0)
+                );
             }
+            return $companyCredit;
         } catch (\Exception $e) {
             $data = [
                 'message' => 'Hokodo_BNPL: company credit call failed with error.',
