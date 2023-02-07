@@ -24,7 +24,7 @@ class Config extends DefaultPaymentConfig
     public const KEY_DEV_URI = 'dev_uri';
     public const KEY_SANDBOX_URI = 'sandbox_uri';
     public const KEY_URI = 'uri';
-    public const KEY_DEBUG = 'debug';
+    public const KEY_DEBUG = 'advanced/debug';
     public const KEY_DEV_API_KEY = 'dev_api_key';
     public const KEY_SANDBOX_API_KEY = 'sandbox_api_key';
     public const KEY_API_KEY = 'api_key';
@@ -33,12 +33,12 @@ class Config extends DefaultPaymentConfig
     public const KEY_SDK_KEY = 'sdk_key';
     public const KEY_ALLOW_SPECIFIC = 'allowspecific';
     public const KEY_SPECIFIC_COUNTRY = 'specificcountry';
-    public const INVOICE_ON_PAYMENT = 'payment/hokodo_bnpl/create_invoice_on_payment_accepted';
+    public const INVOICE_ON_PAYMENT = 'payment/hokodo_bnpl/advanced/create_invoice_on_payment_accepted';
     public const REPLACE_PLACE_ORDER_HOOKS = 'payment/hokodo_bnpl/replace_place_order_hooks';
     public const PAYMENT_DEFAULT = 'is_default';
     public const HIDE_IF_NO_OFFER = 'advanced/hide_if_no_offer';
     public const IS_CRON_ENABLED = 'advanced/is_cron_enabled';
-    public const ALLOW_CUSTOMER_TO_CHANGE_COMPANY = 'payment/hokodo_bnpl/allow_customer_to_change_company';
+    public const ALLOW_CUSTOMER_TO_CHANGE_COMPANY = 'payment/hokodo_bnpl/advanced/allow_customer_to_change_company';
     public const MARKETING_FAQ_LINK = 'marketing/faq_link';
     public const MARKETING_BANNER_LINK = 'marketing/banner_link';
     public const MARKETING_PRODUCT_PAGE_ENABLE = 'marketing/enable_product';
@@ -56,7 +56,7 @@ class Config extends DefaultPaymentConfig
     public const PAYMENT_MORE_INFO = 'marketing/payment_more_info';
     public const ENABLE_CUSTOMER_GROUPS = 'enable_customer_groups';
     public const CUSTOMER_GROUPS = 'customer_groups';
-    public const CAPTURE_ONLINE = 'capture_online';
+    public const CAPTURE_ONLINE = 'advanced/capture_online';
     public const TOTALS_FIX = 'advanced/enable_thirdparty_totals_compatibility';
     public const HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL = 'advanced/entity_level';
 
