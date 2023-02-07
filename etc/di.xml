@@ -1675,7 +1675,4 @@
         </arguments>
     </type>
     <!-- /Marketing -->
-    <type name="Magento\Payment\Model\Checks\TotalMinMax">
-        <plugin name="process_not_standart_path_min_max" type="Hokodo\BNPL\Plugin\Payment\Model\Checks\TotalMinMaxPlugin" sortOrder="10"/>
-    </type>
 </config>
