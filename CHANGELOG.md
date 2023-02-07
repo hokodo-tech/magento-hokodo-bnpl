@@ -1,3 +1,8 @@
+2.1.6 / February 2023
+==================
+* Credit limits are updated everyday 
+* Bug fixing
+
 2.1.5 / February 2023
 ==================
 * Fix compatibility for 2.3.7
