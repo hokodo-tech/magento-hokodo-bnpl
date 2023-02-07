@@ -31,7 +31,10 @@ define([
                             }
                         }
                     )
-                    self.segment.identify(hokodoData.getCompanyId());
+                    let phone = self.quote.shippingAddress().telephone;
+                    let name = self.getCustomerName(self.quote);
+                    let email = self.getCustomerEmail(self.quote);
+                    self.segment.identify(hokodoData.getCompanyId(), phone, name, email);
                     segment.trackLanding(
                         self.priceUtils.formatPrice(self.quote.getCalculatedTotal(), {pattern: '%s'}),
                         self.quote.totals().quote_currency_code,
@@ -40,6 +43,22 @@ define([
                     this.fired = true;
                 }
             })
+        },
+
+        getCustomerName(quote) {
+            let name =  quote.shippingAddress().firstname + ' ' + quote.shippingAddress().lastname;
+            if (typeof quote.shippingAddress().middlename !== 'undefined' && quote.shippingAddress().middlename !== null) {
+                name =  quote.shippingAddress().firstname + ' ' + quote.shippingAddress().middlename + ' ' + quote.shippingAddress().lastname;
+            }
+            return name;
+        },
+
+        getCustomerEmail(quote) {
+            let email = quote.guestEmail;
+            if (window.isCustomerLoggedIn) {
+                email = window.customerData.email;
+            }
+            return email;
         }
     })
 })
