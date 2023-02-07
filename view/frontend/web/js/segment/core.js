@@ -3,44 +3,23 @@
  * See LICENSE for license details.
  */
 define([
-    'Magento_Checkout/js/model/quote'
-], function(
-    quote
-) {
+], function() {
     'use strict';
 
     return {
-        identify(companyId) {
+        identify(companyId, phone, name, email) {
             if (this.isAnalyticsLoaded()) {
-                let fullName = this.getCustomerName(quote);
-                let email = this.getCustomerEmail(quote);
                 this.userId = analytics.user().anonymousId();
                 analytics.identify(this.userId, {
                     Merchant: window.location.host,
                     LoggedIn: window.checkoutConfig.isCustomerLoggedIn,
                     Module_version: window.bnpl_version,
                     Company_identified: !!companyId,
-                    Phone: quote.shippingAddress().telephone,
-                    Name: fullName,
+                    Phone: phone,
+                    Name: name,
                     Email: email
                 })
             }
-        },
-
-        getCustomerName(quote) {
-            let name =  quote.shippingAddress().firstname + ' ' + quote.shippingAddress().lastname;
-            if (typeof quote.shippingAddress().middlename !== 'undefined' && quote.shippingAddress().middlename !== null) {
-                name =  quote.shippingAddress().firstname + ' ' + quote.shippingAddress().middlename + ' ' + quote.shippingAddress().lastname;
-            }
-            return name;
-        },
-
-        getCustomerEmail(quote) {
-            let email = quote.guestEmail;
-            if (window.isCustomerLoggedIn) {
-                email = window.customerData.email;
-            }
-            return email;
         },
 
         track(event, data) {
