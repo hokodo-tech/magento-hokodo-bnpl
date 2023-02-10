@@ -79,4 +79,14 @@ class Organisation extends Result
 
         return parent::populateListResult();
     }
+
+    /**
+     * A function that returns data model.
+     *
+     * @return OrganisationInterface
+     */
+    public function getDataModel(): OrganisationInterface
+    {
+        return parent::getDataModel();
+    }
 }

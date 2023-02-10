@@ -20,7 +20,7 @@ interface CreateOrganisationRequestInterface
      *
      * @return mixed
      */
-    public function setCompanyId(string $companyId);
+    public function setCompanyId(string $companyId): self;
 
     /**
      * @param string $uniqueId
