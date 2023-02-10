@@ -164,19 +164,7 @@
 
     <!-- Logger -->
     <!-- inject HokodoLogger where you need -->
-    <type name="Hokodo\BNPL\Gateway\Command\DeferredPaymentCancelCommand">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
-
     <type name="Hokodo\BNPL\Gateway\Request\CreateOrderDocumentsBuilder">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
-
-    <type name="Hokodo\BNPL\Gateway\Command\DeferredPaymentRefundCommand">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
@@ -189,18 +177,6 @@
     </type>
 
     <type name="Hokodo\BNPL\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
-
-    <type name="Hokodo\BNPL\Gateway\Request\OrderBuilder">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
-
-    <type name="Hokodo\BNPL\Gateway\Request\UserOrganisationBuilder">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
