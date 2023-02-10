@@ -80,6 +80,7 @@ class Organisation extends Result
         return parent::populateListResult();
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * A function that returns data model.
      *
@@ -89,4 +90,5 @@ class Organisation extends Result
     {
         return parent::getDataModel();
     }
+    // @codingStandardsIgnoreEnd
 }

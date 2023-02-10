@@ -26,9 +26,9 @@ class Organisation extends AbstractService
      * @throws NotFoundException
      * @throws CommandException
      */
-    public function createOrganisation(CreateOrganisationRequestInterface $createOrganisationRequest): ?OrganisationResult
-    {
+    public function createOrganisation(
+        CreateOrganisationRequestInterface $createOrganisationRequest
+    ): ?OrganisationResult {
         return $this->commandPool->get('sdk_organisation_create')->execute($createOrganisationRequest->__toArray());
     }
 }
-
