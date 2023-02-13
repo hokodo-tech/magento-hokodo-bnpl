@@ -56,8 +56,11 @@ class OrderPlaceSuccessObserver implements ObserverInterface
     {
         /** @var OrderInterface $order */
         $order = $observer->getEvent()->getOrder();
-        if ($order->getPayment()->getMethod() === \Hokodo\BNPL\Gateway\Config\Config::CODE) {
-            $orderRequest = $this->orderBuilder->buildPatchOrderRequestBase($order->getData('order_api_id'));
+        $payment = $order->getPayment();
+        if ($payment && $payment->getMethod() === \Hokodo\BNPL\Gateway\Config\Config::CODE) {
+            $orderRequest = $this->orderBuilder->buildPatchOrderRequestBase(
+                $payment->getAdditionalInformation()[\Hokodo\BNPL\Observer\DataAssignObserver::HOKODO_ORDER_ID]
+            );
             $orderRequest->setUniqueId($order->getIncrementId());
             try {
                 $this->orderService->patchOrder($orderRequest);
