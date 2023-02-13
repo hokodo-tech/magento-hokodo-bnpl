@@ -9,9 +9,6 @@
     <event name="payment_method_assign_data_hokodo_bnpl">
         <observer name="hokodo_bnpl_data_assign" instance="Hokodo\BNPL\Observer\DataAssignObserver" />
     </event>
-    <event name="sales_model_service_quote_submit_before">
-        <observer name="hokodo_service_quote_submit_before" instance="Hokodo\BNPL\Observer\ProcessOrderPlaceObserver"/>
-    </event>
     <event name="sales_model_service_quote_submit_success">
         <observer name="hokodo_service_quote_submit_success" instance="Hokodo\BNPL\Observer\OrderPlaceSuccessObserver"/>
     </event>

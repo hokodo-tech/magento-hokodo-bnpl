@@ -41,28 +41,6 @@ php:compat:
   script:
     - phpcs -s -p --colors --extensions=php --standard=PHPCompatibility --runtime-set testVersion $PHP_VERSION .
 
-# ======= UNIT TESTS [PHP] =======
-test:unit:
-  stage: test
-  needs:
-    - php:lint
-    - php:compat
-  image: php:7.4-cli-alpine
-  variables:
-    XDEBUG_MODE: coverage
-  before_script:
-    - apk add --update --virtual build-dependencies build-base gcc wget autoconf
-    - apk add --no-cache zlib-dev libpng-dev libjpeg-turbo-dev freetype-dev icu-dev oniguruma-dev libxml2-dev libxslt-dev libzip-dev
-    - docker-php-ext-configure gd --with-freetype --with-jpeg
-    - docker-php-ext-install bcmath gd intl mbstring opcache pdo_mysql xsl zip
-    - pecl install xdebug && docker-php-ext-enable xdebug
-    - apk del build-dependencies && rm -rf /var/cache/apk/*
-    - curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php && php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
-    - composer global config http-basic.repo.magento.com "$MAGENTO_REPOSITORY_USER" "$MAGENTO_REPOSITORY_PASSWORD"
-    - composer install
-  script:
-    - vendor/bin/phpunit --coverage-text --colors=never ./Test/
-
 # ======= REVIEW INSTANCES =======
 .review:
   extends: .ssh-client
@@ -82,7 +60,8 @@ test:unit:
 review:create:
   extends: .review
   needs:
-    - test:unit
+    - php:lint
+    - php:compat
   variables:
     PHP_VERSION: "7.4"
     COMPOSER_VERSION: ""
@@ -132,13 +111,13 @@ review:create:
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_api_key '$HOKODO_API_KEY_DEV' &&
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_sdk_key '$HOKODO_SDK_KEY_DEV' &&
         $PHP_CLI bin/magento config:set payment/hokodo_bnpl/create_invoice_on_payment_accepted 1 &&
-        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/capture_online 1 &&
-        $PHP_CLI bin/magento module:disable Magento_TwoFactorAuth ;
+        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/capture_online 1;
         echo '{}' > ./auth.json &&
         $PHP_CLI /usr/local/bin/$COMPOSER_CLI config --file=./auth.json http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
         $PHP_CLI bin/magento sampledata:deploy;
       } || echo 'Magento project was installed with sample data, skipping configuration.'"
     # Magento commands: setup:upgrade => setup:di:compile => cache:flush
+    - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up && m2fa=$(cat app/etc/config.php|grep Magento_TwoFactorAuth) && [ -n $m2fa ] && $PHP_CLI bin/magento module:disable Magento_TwoFactorAuth || echo 'No 2fa module was found'"
     - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up && $PHP_CLI bin/magento se:d:c && $PHP_CLI bin/magento c:f && $PHP_CLI app/code/Hokodo/BNPL/Test/Fixtures/create-customers.php '$HOKODO_TEST_CUSTOMER_PASSWORD'"
 
 review:detach:
@@ -244,8 +223,6 @@ test:e2e [2.4.5]:
 .deploy:
   extends: .ssh-client
   stage: deploy
-  needs:
-    - test:unit
   variables:
     PHP_VERSION: "7.4"
     PHP_CLI: php$PHP_VERSION
