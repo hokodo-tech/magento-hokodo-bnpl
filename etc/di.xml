@@ -13,8 +13,6 @@
     <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentIpnPayloadInterface" type="Hokodo\BNPL\Model\Data\DeferredPaymentIpnPayload" />
     <preference for="Hokodo\BNPL\Api\Data\FulfillmentInfoInterface" type="Hokodo\BNPL\Model\Data\FulfillmentInfo" />
     <preference for="Hokodo\BNPL\Api\Data\OrderDocumentsInterface" type="Hokodo\BNPL\Model\Data\OrderDocumentsInfo" />
-    <preference for="Hokodo\BNPL\Api\Data\HokodoOrganisationInterface" type="Hokodo\BNPL\Model\HokodoOrganisation" />
-    <preference for="Hokodo\BNPL\Api\Data\HokodoOrganisationSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Hokodo\BNPL\Api\Data\OrderCustomerAddressInterface" type="Hokodo\BNPL\Model\Data\OrderCustomerAddress" />
     <preference for="Hokodo\BNPL\Api\Data\OrderCustomerInterface" type="Hokodo\BNPL\Model\Data\OrderCustomer" />
     <preference for="Hokodo\BNPL\Api\Data\OrderCustomerIpnInterface" type="Hokodo\BNPL\Model\Data\OrderCustomerIpn" />
@@ -26,18 +24,12 @@
     <preference for="Hokodo\BNPL\Api\Data\OrganisationUserInterface" type="Hokodo\BNPL\Model\Data\OrganisationUser" />
     <preference for="Hokodo\BNPL\Api\Data\PaymentOffersInterface" type="Hokodo\BNPL\Model\Data\PaymentOffers" />
     <preference for="Hokodo\BNPL\Api\Data\PaymentPlanInterface" type="Hokodo\BNPL\Model\Data\PaymentPlan" />
-    <preference for="Hokodo\BNPL\Api\Data\PaymentQuoteInterface" type="Hokodo\BNPL\Model\PaymentQuote" />
     <preference for="Hokodo\BNPL\Api\Data\RejectionReasonInterface" type="Hokodo\BNPL\Model\Data\RejectionReason" />
     <preference for="Hokodo\BNPL\Api\Data\ScheduledPaymentsInterface" type="Hokodo\BNPL\Model\Data\ScheduledPayments" />
     <preference for="Hokodo\BNPL\Api\Data\UserInterface" type="Hokodo\BNPL\Model\Data\User" />
     <preference for="Hokodo\BNPL\Api\Data\UserOrganisationInterface" type="Hokodo\BNPL\Model\Data\UserOrganisation" />
-    <preference for="Hokodo\BNPL\Api\Data\UserOrganisationResultInterface" type="Hokodo\BNPL\Model\Data\UserOrganisationResult" />
     <preference for="Hokodo\BNPL\Api\DeferredPaymentIpnProcessorInterface" type="Hokodo\BNPL\Model\DeferredPaymentIpnProcessor" />
-    <preference for="Hokodo\BNPL\Api\HokodoOrganisationManagementInterface" type="Hokodo\BNPL\Model\HokodoOrganisationManagement" />
-    <preference for="Hokodo\BNPL\Api\HokodoOrganisationCheckingInterface" type="Hokodo\BNPL\Model\HokodoOrganisationChecking" />
-    <preference for="Hokodo\BNPL\Api\HokodoOrganisationRepositoryInterface" type="Hokodo\BNPL\Model\HokodoOrganisationRepository" />
     <preference for="Hokodo\BNPL\Api\OrderDocumentsManagementInterface" type="Hokodo\BNPL\Model\OrderDocumentsManagement" />
-    <preference for="Hokodo\BNPL\Api\PaymentQuoteRepositoryInterface" type="Hokodo\BNPL\Model\PaymentQuoteRepository" />
     <preference for="Hokodo\BNPL\Gateway\SubjectReaderInterface" type="Hokodo\BNPL\Gateway\SubjectReader" />
 
     <!-- Payment Method Facade configuration -->
@@ -177,18 +169,6 @@
     </type>
 
     <type name="Hokodo\BNPL\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
-
-    <type name="Hokodo\BNPL\Model\HokodoOrganisationManagement">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
-
-    <type name="Hokodo\BNPL\Model\PostSaleProcessor">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
@@ -404,6 +384,20 @@
 
     <!-- End Endpoints builders -->
 
+    <!-- User Result -->
+    <virtualType name="Hokodo\BNPL\Gateway\Command\User\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Hokodo\BNPL\Gateway\Command\Result\User</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Organisation Result -->
+    <virtualType name="Hokodo\BNPL\Gateway\Command\Organisation\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Hokodo\BNPL\Gateway\Command\Result\Organisation</argument>
+        </arguments>
+    </virtualType>
+
     <!-- Order Result -->
     <virtualType name="Hokodo\BNPL\Gateway\Command\Order\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
         <arguments>
@@ -514,12 +508,8 @@
     </type>
 
     <!-- js SDK API backend-frontend communication config -->
-    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrganisationRequest" />
-    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateOrganisationResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateOrganisationResponse" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateOrganisationRequestInterface" type="Hokodo\BNPL\Model\Data\Gateway\CreateOrganisationRequest" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\UserOrganisationInterface" type="Hokodo\BNPL\Model\Data\Gateway\UserOrganisation" />
-    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateUserRequestInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateUserRequest" />
-    <preference for="Hokodo\BNPL\Api\Data\Webapi\CreateUserResponseInterface" type="Hokodo\BNPL\Model\Data\Webapi\CreateUserResponse" />
     <preference for="Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterface" type="Hokodo\BNPL\Model\Data\Gateway\CreateUserRequest" />
 
     <preference for="Hokodo\BNPL\Api\Webapi\OfferInterface" type="Hokodo\BNPL\Model\Webapi\Offer" />
