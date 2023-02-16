@@ -75,7 +75,8 @@
                     <is_cron_enabled>0</is_cron_enabled>
                     <cron_expr>0 5 * * *</cron_expr>
                     <allow_customer_to_change_company>1</allow_customer_to_change_company>
-                    <debug>1</debug>
+                    <debug>0</debug>
+                    <send_customer_purchase_history>1</send_customer_purchase_history>
                 </advanced>
             </hokodo_bnpl>
         </payment>

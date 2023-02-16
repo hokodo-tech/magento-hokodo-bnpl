@@ -39,4 +39,13 @@ interface HokodoCustomerRepositoryInterface extends HokodoEntityRepositoryInterf
      * @return SearchResults
      */
     public function getList(SearchCriteriaInterface $searchCriteria): SearchResults;
+
+    /**
+     * Get Hokodo Customer by magneto customer id.
+     *
+     * @param int $customerId
+     *
+     * @return HokodoCustomerInterface
+     */
+    public function getByCustomerId(int $customerId): HokodoCustomerInterface;
 }
