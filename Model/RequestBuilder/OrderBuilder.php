@@ -379,7 +379,7 @@ class OrderBuilder
     private function getCustomerInformation(CartInterface $quote): ?array
     {
         if ($this->gatewayConfig->getValue(Config::SEND_PURCHASE_HISTORY) && ($customer = $quote->getCustomer())) {
-            $orders = $this->getCustomersOrders($customer->getId());
+            $orders = $this->getCustomersOrders((int) $customer->getId());
             return [
                 'group_id' => $this->groupRepository->getById($customer->getGroupId())->getCode(),
                 'orders_qty' => count($orders) ?: null,
@@ -392,11 +392,11 @@ class OrderBuilder
     /**
      * Get customer's orders.
      *
-     * @param int|string $customerId
+     * @param int $customerId
      *
      * @return OrderInterface[]
      */
-    private function getCustomersOrders(int|string $customerId): array
+    private function getCustomersOrders(int $customerId): array
     {
         return $this->orderRepository->getList(
             $this->searchCriteriaBuilder->addFilter(OrderInterface::CUSTOMER_ID, $customerId)->create()
