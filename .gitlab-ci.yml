@@ -74,47 +74,47 @@ review:create:
   script:
     - ssh "magento@$SSH_HOST"
       "[ ! -f '$SSH_PATH/app/etc/config.php' ] && {
-        rm -rf $SSH_PATH && mkdir $SSH_PATH &&
-        $PHP_CLI /usr/local/bin/$COMPOSER_CLI global config http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
-        $PHP_CLI /usr/local/bin/$COMPOSER_CLI create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=$MAGENTO_VERSION $SSH_PATH &&
-        mysql -umagento -pmagento -e 'DROP DATABASE IF EXISTS $REVIEW_INSTANCE; CREATE DATABASE $REVIEW_INSTANCE' &&
-        mkdir -p $SSH_PATH/app/code/Hokodo/BNPL/ ;
+      rm -rf $SSH_PATH && mkdir $SSH_PATH &&
+      $PHP_CLI /usr/local/bin/$COMPOSER_CLI global config http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
+      $PHP_CLI /usr/local/bin/$COMPOSER_CLI create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=$MAGENTO_VERSION $SSH_PATH &&
+      mysql -umagento -pmagento -e 'DROP DATABASE IF EXISTS $REVIEW_INSTANCE; CREATE DATABASE $REVIEW_INSTANCE' &&
+      mkdir -p $SSH_PATH/app/code/Hokodo/BNPL/ ;
       } || echo 'Magento project exists in $SSH_PATH, skipping prerequisites.'"
     - scp -r * "magento@$SSH_HOST:$SSH_PATH/app/code/Hokodo/BNPL/"
     - ssh "magento@$SSH_HOST"
       "cd $SSH_PATH;
       [ ! -f '$SSH_PATH/app/etc/config.php' ] && {
-        $PHP_CLI bin/magento setup:install --no-interaction
-          --use-rewrites=1
-          --base-url='$CI_ENVIRONMENT_URL'
-          --backend-frontname=admin
-          --language=en_GB
-          --currency=GBP
-          --timezone=Europe/London
-          --db-name=$REVIEW_INSTANCE
-          --db-user=magento
-          --db-password=magento
-          --admin-firstname='Hokodo'
-          --admin-lastname='BNPL'
-          --admin-email='tech@hokodo.co'
-          --admin-user='$MAGENTO_ADMIN_USER'
-          --admin-password='$MAGENTO_ADMIN_PASSWORD'
-          --amqp-host="localhost"
-          --amqp-port="5672"
-          --amqp-user="guest"
-          --amqp-password="guest"
-          --amqp-virtualhost="/" &&
-        $PHP_CLI bin/magento deploy:mode:set developer &&
-        $PHP_CLI bin/magento config:set catalog/search/elasticsearch7_index_prefix '${REVIEW_INSTANCE}_' &&
-        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/active 1 &&
-        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/environment dev &&
-        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_api_key '$HOKODO_API_KEY_DEV' &&
-        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_sdk_key '$HOKODO_SDK_KEY_DEV' &&
-        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/create_invoice_on_payment_accepted 1 &&
-        $PHP_CLI bin/magento config:set payment/hokodo_bnpl/capture_online 1;
-        echo '{}' > ./auth.json &&
-        $PHP_CLI /usr/local/bin/$COMPOSER_CLI config --file=./auth.json http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
-        $PHP_CLI bin/magento sampledata:deploy;
+      $PHP_CLI bin/magento setup:install --no-interaction
+      --use-rewrites=1
+      --base-url='$CI_ENVIRONMENT_URL'
+      --backend-frontname=admin
+      --language=en_GB
+      --currency=GBP
+      --timezone=Europe/London
+      --db-name=$REVIEW_INSTANCE
+      --db-user=magento
+      --db-password=magento
+      --admin-firstname='Hokodo'
+      --admin-lastname='BNPL'
+      --admin-email='tech@hokodo.co'
+      --admin-user='$MAGENTO_ADMIN_USER'
+      --admin-password='$MAGENTO_ADMIN_PASSWORD'
+      --amqp-host="localhost"
+      --amqp-port="5672"
+      --amqp-user="guest"
+      --amqp-password="guest"
+      --amqp-virtualhost="/" &&
+      $PHP_CLI bin/magento deploy:mode:set developer &&
+      $PHP_CLI bin/magento config:set catalog/search/elasticsearch7_index_prefix '${REVIEW_INSTANCE}_' &&
+      $PHP_CLI bin/magento config:set payment/hokodo_bnpl/active 1 &&
+      $PHP_CLI bin/magento config:set payment/hokodo_bnpl/environment dev &&
+      $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_api_key '$HOKODO_API_KEY_DEV' &&
+      $PHP_CLI bin/magento config:set payment/hokodo_bnpl/dev_sdk_key '$HOKODO_SDK_KEY_DEV' &&
+      $PHP_CLI bin/magento config:set payment/hokodo_bnpl/create_invoice_on_payment_accepted 1 &&
+      $PHP_CLI bin/magento config:set payment/hokodo_bnpl/capture_online 1;
+      echo '{}' > ./auth.json &&
+      $PHP_CLI /usr/local/bin/$COMPOSER_CLI config --file=./auth.json http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
+      $PHP_CLI bin/magento sampledata:deploy;
       } || echo 'Magento project was installed with sample data, skipping configuration.'"
     # Magento commands: setup:upgrade => setup:di:compile => cache:flush
     - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up && m2fa=$(cat app/etc/config.php|grep Magento_TwoFactorAuth) && [ -n $m2fa ] && $PHP_CLI bin/magento module:disable Magento_TwoFactorAuth || echo 'No 2fa module was found'"
@@ -206,18 +206,18 @@ test:e2e:
     - HOKODO_API_KEY=$HOKODO_API_KEY_DEV HOKODO_API_BASE_URL=https://api-dev.hokodo.co MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER BASE_URL=$BASE_URL npx playwright test --config ./tests/playwright/playwright.config.ts
 
 test:e2e [2.3.7]:
- extends: test:e2e
- needs:
-   - review:create [2.3.7]
- variables:
-   BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
+  extends: test:e2e
+  needs:
+    - review:create [2.3.7]
+  variables:
+    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
 #
 test:e2e [2.4.5]:
- extends: test:e2e
- needs:
-   - review:create [2.4.5]
- variables:
-   BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m245.${DEPLOY_HOST_DEV}
+  extends: test:e2e
+  needs:
+    - review:create [2.4.5]
+  variables:
+    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m245.${DEPLOY_HOST_DEV}
 
 # ======= DEPLOYMENT =======
 .deploy:
