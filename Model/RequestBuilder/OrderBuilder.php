@@ -381,9 +381,9 @@ class OrderBuilder
         if ($this->gatewayConfig->getValue(Config::SEND_PURCHASE_HISTORY) && ($customer = $quote->getCustomer())) {
             $orders = $this->getCustomersOrders((int) $customer->getId());
             return [
-                'group_id' => $quote->getCustomerIsGuest()
-                    ? 'Guest'
-                    : $this->groupRepository->getById($customer->getGroupId())->getCode(),
+                'group_id' => $customer->getId()
+                    ? $this->groupRepository->getById($customer->getGroupId())->getCode()
+                    : 'Guest',
                 'orders_qty' => count($orders) ?: null,
                 'total_amount' => count($orders) ? $this->getOrdersTotalAmount($orders) : null,
             ];
