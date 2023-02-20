@@ -386,7 +386,7 @@ class OrderBuilder
                     : 'Guest',
                 'orders_qty' => count($orders) ?: null,
                 'total_amount' => count($orders) ? $this->getOrdersTotalAmount($orders) : null,
-                'currency' => $quote->getCurrency()->getStoreCurrencyCode()
+                'currency' => $quote->getCurrency()->getStoreCurrencyCode(),
             ];
         }
         return null;
