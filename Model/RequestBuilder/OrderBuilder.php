@@ -386,6 +386,7 @@ class OrderBuilder
                     : 'Guest',
                 'orders_qty' => count($orders) ?: null,
                 'total_amount' => count($orders) ? $this->getOrdersTotalAmount($orders) : null,
+                'currency' => $quote->getCurrency()->getStoreCurrencyCode()
             ];
         }
         return null;
@@ -410,16 +411,16 @@ class OrderBuilder
      *
      * @param OrderInterface[] $orders
      *
-     * @return int
+     * @return float
      */
-    private function getOrdersTotalAmount(array $orders): int
+    private function getOrdersTotalAmount(array $orders): float
     {
         $amount = 0;
         foreach ($orders as $order) {
             $amount += $order->getGrandTotal();
         }
 
-        return (int) ($amount * 100);
+        return $amount;
     }
 
     /**
