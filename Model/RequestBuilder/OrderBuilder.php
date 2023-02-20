@@ -17,16 +17,23 @@ use Hokodo\BNPL\Api\Data\Gateway\OrderItemInterface;
 use Hokodo\BNPL\Api\Data\Gateway\OrderItemInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface;
 use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterfaceFactory;
+use Hokodo\BNPL\Gateway\Config\Config;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Model\Config as TaxConfig;
@@ -89,6 +96,26 @@ class OrderBuilder
     private ReadFactory $readFactory;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private OrderRepositoryInterface $orderRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
+
+    /**
+     * @var GroupRepositoryInterface
+     */
+    private GroupRepositoryInterface $groupRepository;
+
+    /**
+     * @var Config
+     */
+    private Config $gatewayConfig;
+
+    /**
      * @param CreateOrderRequestInterfaceFactory $createOrderRequestInterfaceFactory
      * @param PatchOrderRequestInterfaceFactory  $patchOrderRequestInterfaceFactory
      * @param OrderCustomerInterfaceFactory      $orderCustomerFactory
@@ -100,6 +127,10 @@ class OrderBuilder
      * @param DateTimeFactory                    $dateTimeFactory
      * @param ComponentRegistrarInterface        $componentRegistrar
      * @param ReadFactory                        $readFactory
+     * @param OrderRepositoryInterface           $orderRepository
+     * @param SearchCriteriaBuilder              $searchCriteriaBuilder
+     * @param GroupRepositoryInterface           $groupRepository
+     * @param Config                             $gatewayConfig
      */
     public function __construct(
         CreateOrderRequestInterfaceFactory $createOrderRequestInterfaceFactory,
@@ -112,7 +143,11 @@ class OrderBuilder
         StoreManagerInterface $storeManager,
         DateTimeFactory $dateTimeFactory,
         ComponentRegistrarInterface $componentRegistrar,
-        ReadFactory $readFactory
+        ReadFactory $readFactory,
+        OrderRepositoryInterface $orderRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        GroupRepositoryInterface $groupRepository,
+        Config $gatewayConfig
     ) {
         $this->createOrderRequestInterfaceFactory = $createOrderRequestInterfaceFactory;
         $this->patchOrderRequestInterfaceFactory = $patchOrderRequestInterfaceFactory;
@@ -125,6 +160,10 @@ class OrderBuilder
         $this->dateTimeFactory = $dateTimeFactory;
         $this->componentRegistrar = $componentRegistrar;
         $this->readFactory = $readFactory;
+        $this->orderRepository = $orderRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->groupRepository = $groupRepository;
+        $this->gatewayConfig = $gatewayConfig;
     }
 
     /**
@@ -135,6 +174,7 @@ class OrderBuilder
      * @return CreateOrderRequestInterface
      *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
      */
     public function buildOrderRequestBase(CartInterface $quote): CreateOrderRequestInterface
     {
@@ -154,6 +194,7 @@ class OrderBuilder
                     'Magento Version: ' . $this->productMetadata->getVersion(),
                     'Hokodo Module Version: ' . $this->getModuleVersion(),
                     'PHP version: ' . PHP_VERSION,
+                    'Customer' => $this->getCustomerInformation($quote),
                 ]
             );
     }
@@ -323,6 +364,63 @@ class OrderBuilder
         } catch (\Exception $e) {
             return __('Read Error!');
         }
+    }
+
+    /**
+     * Get customer metadata information.
+     *
+     * @param CartInterface $quote
+     *
+     * @return array|null
+     *
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    private function getCustomerInformation(CartInterface $quote): ?array
+    {
+        if ($this->gatewayConfig->getValue(Config::SEND_PURCHASE_HISTORY) && ($customer = $quote->getCustomer())) {
+            $orders = $this->getCustomersOrders((int) $customer->getId());
+            return [
+                'group_id' => $customer->getId()
+                    ? $this->groupRepository->getById($customer->getGroupId())->getCode()
+                    : 'Guest',
+                'orders_qty' => count($orders) ?: null,
+                'total_amount' => count($orders) ? $this->getOrdersTotalAmount($orders) : null,
+                'currency' => $quote->getCurrency()->getStoreCurrencyCode(),
+            ];
+        }
+        return null;
+    }
+
+    /**
+     * Get customer's orders.
+     *
+     * @param int $customerId
+     *
+     * @return OrderInterface[]
+     */
+    private function getCustomersOrders(int $customerId): array
+    {
+        return $this->orderRepository->getList(
+            $this->searchCriteriaBuilder->addFilter(OrderInterface::CUSTOMER_ID, $customerId)->create()
+        )->getItems();
+    }
+
+    /**
+     * Get orders total amount sum.
+     *
+     * @param OrderInterface[] $orders
+     *
+     * @return float
+     */
+    private function getOrdersTotalAmount(array $orders): float
+    {
+        $amount = 0;
+        foreach ($orders as $order) {
+            $amount += $order->getGrandTotal();
+        }
+
+        return $amount;
     }
 
     /**
