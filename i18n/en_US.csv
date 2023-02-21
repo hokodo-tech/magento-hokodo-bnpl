@@ -29,6 +29,7 @@
 "Allow User to change company","Allow User to change company"
 "due_date","Due date"
 "payment_method","Payment method"
+"hokodo_deferred_payment_id","Payment Reference"
 "direct_debit","Direct Debit"
 "invoice","Invoice"
 "card","Debit/Credit Card"

@@ -29,6 +29,7 @@
 "Allow User to change company","Consenti all'utente di cambiare azienda"
 "due_date","Data di scadenza"
 "payment_method","Metodo di pagamento"
+"hokodo_deferred_payment_id","Referenza di pagamento"
 "direct_debit","Addebito diretto"
 "invoice","Fattura"
 "card","Carta di Debito/Credito"
