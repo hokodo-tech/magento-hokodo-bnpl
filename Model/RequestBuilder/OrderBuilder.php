@@ -29,6 +29,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
+use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Item;
@@ -116,6 +117,11 @@ class OrderBuilder
     private Config $gatewayConfig;
 
     /**
+     * @var CartTotalRepositoryInterface
+     */
+    private CartTotalRepositoryInterface $cartTotalRepository;
+
+    /**
      * @param CreateOrderRequestInterfaceFactory $createOrderRequestInterfaceFactory
      * @param PatchOrderRequestInterfaceFactory  $patchOrderRequestInterfaceFactory
      * @param OrderCustomerInterfaceFactory      $orderCustomerFactory
@@ -131,6 +137,7 @@ class OrderBuilder
      * @param SearchCriteriaBuilder              $searchCriteriaBuilder
      * @param GroupRepositoryInterface           $groupRepository
      * @param Config                             $gatewayConfig
+     * @param CartTotalRepositoryInterface       $cartTotalRepository
      */
     public function __construct(
         CreateOrderRequestInterfaceFactory $createOrderRequestInterfaceFactory,
@@ -147,7 +154,8 @@ class OrderBuilder
         OrderRepositoryInterface $orderRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         GroupRepositoryInterface $groupRepository,
-        Config $gatewayConfig
+        Config $gatewayConfig,
+        CartTotalRepositoryInterface $cartTotalRepository
     ) {
         $this->createOrderRequestInterfaceFactory = $createOrderRequestInterfaceFactory;
         $this->patchOrderRequestInterfaceFactory = $patchOrderRequestInterfaceFactory;
@@ -164,6 +172,7 @@ class OrderBuilder
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->groupRepository = $groupRepository;
         $this->gatewayConfig = $gatewayConfig;
+        $this->cartTotalRepository = $cartTotalRepository;
     }
 
     /**
@@ -186,7 +195,7 @@ class OrderBuilder
             )
             ->setStatus('draft')
             ->setCurrency($quote->getQuoteCurrencyCode())
-            ->setTotalAmount((int) ($quote->getGrandTotal() * 100))
+            ->setTotalAmount((int) ($this->cartTotalRepository->get($quote->getId())->getBaseGrandTotal() * 100))
             ->setTaxAmount(0)
             ->setOrderDate($this->dateTimeFactory->create()->gmtDate('Y-m-d', time()))
             ->setMetadata(
@@ -266,10 +275,10 @@ class OrderBuilder
             ->setType('product')
             ->setDescription('Combined totals item')
             ->setQuantity('1')
-            ->setUnitPrice((int) round($quote->getGrandTotal() * 100))
+            ->setUnitPrice((int) ($this->cartTotalRepository->get($quote->getId())->getBaseGrandTotal() * 100))
             ->setTaxRate('0')
             ->setTaxAmount(0)
-            ->setTotalAmount((int) round($quote->getGrandTotal() * 100));
+            ->setTotalAmount((int) ($this->cartTotalRepository->get($quote->getId())->getBaseGrandTotal() * 100));
     }
 
     /**
