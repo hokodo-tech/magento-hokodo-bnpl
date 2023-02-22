@@ -73,13 +73,13 @@ test.describe("Full end to end for Registered Buyers", () => {
     await adminLoginPage.navigate();
     await adminLoginPage.loginToAdmin();
 
-    await orderPage.navigate(magentoOrder.entity_id);
-
     // capture the Magento order if it hasn't already been captured
     if (getCaptureStatus(await magentoApi.getOrder(magentoOrderId)) === MagentoOrderCaptureStatus.NotInvoiced) {
       await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");  
       await orderPage.captureInvoice();
     }
+
+    await orderPage.navigate(magentoOrder.entity_id);
 
     const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "captured")
     
@@ -162,13 +162,13 @@ test.describe("Full end to end for Registered Buyers", () => {
     await adminLoginPage.navigate();
     await adminLoginPage.loginToAdmin();
 
-    await orderPage.navigate(magentoOrder.entity_id);
-
     // capture the Magento order if it hasn't already been captured
     if (getCaptureStatus(magentoOrder) === MagentoOrderCaptureStatus.NotInvoiced) {
       await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");
       await orderPage.captureInvoice();
     }
+
+    await orderPage.navigate(magentoOrder.entity_id);
 
     // fetch the Hokodo Deferred Payment
     const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "captured")
