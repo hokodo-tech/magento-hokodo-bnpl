@@ -2,9 +2,6 @@ import { Page } from "@playwright/test";
 import LoginPageBase from "../login-page-base";
 
 export default class AdminLoginPage extends LoginPageBase {
-    readonly url: string;
-    readonly page: Page;
-
     constructor(page: Page) {
         super(page, "/admin");
     }
