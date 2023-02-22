@@ -18,11 +18,13 @@ test.describe("Full end to end for Registered Buyers", () => {
     generateOrderData,
     createAccountPage,
     magentoApi,
+    buyerLoginPage,
   }) => {
     const testOrderData = await generateOrderData(CompanyType.REGISTERED_COMPANY);
 
     await createAccountPage.navigate();
     await createAccountPage.createAccount(testOrderData.buyer);
+    await buyerLoginPage.login(testOrderData.buyer.email, testOrderData.buyer.password);
 
     // add products to the basket
     for (const product of testOrderData.products) {
@@ -71,15 +73,16 @@ test.describe("Full end to end for Registered Buyers", () => {
     expect(organisation.users[0].role, "Ensure the user has the correct role").toBe("member");
         
     await adminLoginPage.navigate();
-    await adminLoginPage.loginToAdmin();
+    await adminLoginPage.login();
+
+    await orderPage.navigate(magentoOrder.entity_id);
 
     // capture the Magento order if it hasn't already been captured
     if (getCaptureStatus(await magentoApi.getOrder(magentoOrderId)) === MagentoOrderCaptureStatus.NotInvoiced) {
       await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");  
       await orderPage.captureInvoice();
+      await orderPage.navigate(magentoOrder.entity_id);
     }
-
-    await orderPage.navigate(magentoOrder.entity_id);
 
     const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "captured")
     
@@ -105,12 +108,14 @@ test.describe("Full end to end for Registered Buyers", () => {
     hokodoApi,
     generateOrderData,
     createAccountPage,
-    magentoApi
+    magentoApi,
+    buyerLoginPage
   }) => {
     const testOrderData = await generateOrderData(CompanyType.SOLE_TRADER);
 
     await createAccountPage.navigate();
     await createAccountPage.createAccount(testOrderData.buyer);
+    await buyerLoginPage.login(testOrderData.buyer.email, testOrderData.buyer.password);
 
     // add products to the basket
     for (const product of testOrderData.products) {
@@ -160,15 +165,16 @@ test.describe("Full end to end for Registered Buyers", () => {
     
     // ship the order in Magento
     await adminLoginPage.navigate();
-    await adminLoginPage.loginToAdmin();
+    await adminLoginPage.login();
+
+    await orderPage.navigate(magentoOrder.entity_id);
 
     // capture the Magento order if it hasn't already been captured
     if (getCaptureStatus(magentoOrder) === MagentoOrderCaptureStatus.NotInvoiced) {
       await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");
       await orderPage.captureInvoice();
+      await orderPage.navigate(magentoOrder.entity_id);
     }
-
-    await orderPage.navigate(magentoOrder.entity_id);
 
     // fetch the Hokodo Deferred Payment
     const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "captured")

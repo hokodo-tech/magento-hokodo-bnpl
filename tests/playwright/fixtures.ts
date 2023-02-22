@@ -18,6 +18,7 @@ import { HokodoAPI } from "./support/hokodo-api";
 import { BuyerStatus, CompanyType, CreditStatus, FraudStatus } from "./support/types/Buyer";
 import InvoicePage from "./page-objects/admin/invoice-page";
 import { MagentoApi } from "./support/magento-api";
+import BuyerLoginPage from "./page-objects/buyer-login-page";
 
 export type TestFixtures = {
   page: Page;
@@ -37,6 +38,7 @@ export type TestFixtures = {
   abortSegmentApiCalls: Function;
   invoicePage: InvoicePage;
   magentoApi: MagentoApi;
+  buyerLoginPage: BuyerLoginPage;
 };
 
 const clientPlaywrightVersion = cp
@@ -159,6 +161,9 @@ const test = base.extend<TestFixtures>({
   },
   listOrdersPage: async ({ page }, use) => {
     await use(new ListOrdersPage(page))
+  },
+  buyerLoginPage: async ({ page }, use) => {
+    await use(new BuyerLoginPage(page))
   },
   orderPage: async ({ page }, use) => {
     await use(new OrderPage(page))

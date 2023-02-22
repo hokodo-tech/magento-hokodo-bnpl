@@ -1,21 +1,15 @@
-import { Locator, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
+import LoginPageBase from "../login-page-base";
 
-export default class AdminLoginPage {
+export default class AdminLoginPage extends LoginPageBase {
     readonly url: string;
     readonly page: Page;
 
     constructor(page: Page) {
-        this.page = page;
-        this.url = "/admin";
+        super(page, "/admin");
     }
 
-    async navigate() {
-        await this.page.goto(this.url);
-    }
-
-    async loginToAdmin() {
-        await this.page.locator("[name='login[username]']").fill(process.env.MAGENTO_ADMIN_USER);
-        await this.page.locator("[name='login[password]']").fill(process.env.MAGENTO_ADMIN_PASSWORD);
-        await this.page.locator("text='Sign in'").click();
+    public async login(): Promise<void> {
+        super.login(process.env.MAGENTO_ADMIN_USER || "", process.env.MAGENTO_ADMIN_PASSWORD || "");
     }
 }
