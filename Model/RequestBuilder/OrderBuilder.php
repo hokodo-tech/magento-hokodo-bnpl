@@ -195,7 +195,9 @@ class OrderBuilder
             )
             ->setStatus('draft')
             ->setCurrency($quote->getQuoteCurrencyCode())
-            ->setTotalAmount((int) ($this->cartTotalRepository->get($quote->getId())->getBaseGrandTotal() * 100))
+            ->setTotalAmount(
+                (int) round($this->cartTotalRepository->get($quote->getId())->getBaseGrandTotal() * 100)
+            )
             ->setTaxAmount(0)
             ->setOrderDate($this->dateTimeFactory->create()->gmtDate('Y-m-d', time()))
             ->setMetadata(
@@ -275,10 +277,14 @@ class OrderBuilder
             ->setType('product')
             ->setDescription('Combined totals item')
             ->setQuantity('1')
-            ->setUnitPrice((int) ($this->cartTotalRepository->get($quote->getId())->getBaseGrandTotal() * 100))
+            ->setUnitPrice(
+                (int) round($this->cartTotalRepository->get($quote->getId())->getBaseGrandTotal() * 100)
+            )
             ->setTaxRate('0')
             ->setTaxAmount(0)
-            ->setTotalAmount((int) ($this->cartTotalRepository->get($quote->getId())->getBaseGrandTotal() * 100));
+            ->setTotalAmount(
+                (int) round($this->cartTotalRepository->get($quote->getId())->getBaseGrandTotal() * 100)
+            );
     }
 
     /**
