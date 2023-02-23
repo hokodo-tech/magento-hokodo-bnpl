@@ -42,6 +42,7 @@ export default class OrderPage {
     }
 
     async cancelOrder() {
+        await this.getPaymentUpdate();
         await this.page.locator("#order-view-cancel-button").click();
         await this.page.locator(".action-accept").click();
         await this.page.locator("text='You canceled the order.'");
