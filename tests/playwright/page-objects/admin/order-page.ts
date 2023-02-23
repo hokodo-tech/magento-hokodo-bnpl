@@ -10,12 +10,12 @@ export default class OrderPage {
     }
 
     async getPaymentUpdate() {
-        const updatedLocator = this.page.locator("text='Get Payment Update'");
+        const updateLocator = this.page.locator("text='Get Payment Update'");
         
-        const needsUpdate = await updatedLocator.isVisible();
+        const needsUpdate = await updateLocator.isVisible();
 
         if (needsUpdate) {
-            await updatedLocator.click();
+            await updateLocator.click();
         }
     }
 
