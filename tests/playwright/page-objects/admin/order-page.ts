@@ -9,6 +9,16 @@ export default class OrderPage {
         this.page = page
     }
 
+    async getPaymentUpdate() {
+        const updatedLocator = this.page.locator("text='Get Payment Update'");
+        
+        const needsUpdate = await updatedLocator.isVisible();
+
+        if (needsUpdate) {
+            await updatedLocator.click();
+        }
+    }
+
     async waitForDeferredPaymentToBeAccepted() {
         let attemptsRemaining = 150;
 
@@ -26,6 +36,7 @@ export default class OrderPage {
     }
 
     async captureInvoice() {
+        await this.getPaymentUpdate();
         await this.page.locator("#order_invoice").click();
         new InvoicePage(this.page).captureInvoice();
     }
