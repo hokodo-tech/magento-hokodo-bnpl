@@ -101,6 +101,7 @@
                 <item name="create_order_documents" xsi:type="string">Hokodo\BNPL\Gateway\Command\CreateOrderDocuments</item>
                 <item name="view_order_documents" xsi:type="string">Hokodo\BNPL\Gateway\Command\ViewOrderDocuments</item>
                 <item name="hokodo_company_search" xsi:type="string">Hokodo\BNPL\Gateway\Command\CompanySearch</item>
+                <item name="deferred_payment_info" xsi:type="string">Hokodo\BNPL\Gateway\Command\DeferredPayment</item>
             </argument>
         </arguments>
     </virtualType>
@@ -848,6 +849,43 @@
         </arguments>
     </virtualType>
     <!-- /Company Search -->
+
+    <!-- Deferred Payment Service -->
+    <virtualType name="Hokodo\BNPL\Gateway\Command\DeferredPayment" type="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\DeferredPayment\BuilderComposite</argument>
+            <argument name="resultFactory" xsi:type="object">Hokodo\BNPL\Gateway\Command\DeferredPayment\ResultInterfaceFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\DeferredPayment\BuilderComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="api_key" xsi:type="string">Hokodo\BNPL\Gateway\Request\AuthorizationBuilder</item>
+                <item name="uri" xsi:type="string">Hokodo\BNPL\Gateway\Request\DeferredPayment</item>
+                <item name="method" xsi:type="string">Hokodo\BNPL\Gateway\Request\GetMethodBuilder</item>
+                <item name="body" xsi:type="string">Hokodo\BNPL\Gateway\Request\DeferredPaymentEventBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\DeferredPaymentEventBuilder" type="Hokodo\BNPL\Gateway\Request\Sdk\GeneralSubjectBuilder">
+        <arguments>
+            <argument name="endpointBuilder" xsi:type="object">Hokodo\BNPL\Gateway\Request\DeferredPayment</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Request\DeferredPayment" type="Hokodo\BNPL\Gateway\Request\Sdk\EndpointBuilder">
+        <arguments>
+            <argument name="endpoint" xsi:type="string">payment/deferred_payments/:deferredpayment_id</argument>
+            <argument name="params" xsi:type="array">
+                <item name=":deferredpayment_id" xsi:type="string">deferredpayment_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Gateway\Command\DeferredPayment\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">\Hokodo\BNPL\Gateway\Command\Result\DeferredPayment</argument>
+        </arguments>
+    </virtualType>
+    <!-- Deferred Payment Service -->
 
     <!-- Company Credit Limit -->
     <preference for="Hokodo\BNPL\Api\Data\Gateway\CompanyCreditRequestInterface" type="Hokodo\BNPL\Model\Data\Gateway\CompanyCreditRequest" />

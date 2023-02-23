@@ -47,7 +47,7 @@
                 <dev_uri>https://api-dev.hokodo.co/v1/</dev_uri>
                 <sandbox_uri>https://api-sandbox.hokodo.co/v1/</sandbox_uri>
                 <uri>https://api.hokodo.co/v1/</uri>
-                <paymentInfoKeys>payment_terms,due_date,payment_method,hokodo_deferred_payment_id</paymentInfoKeys>
+                <paymentInfoKeys>payment_terms,due_date,payment_method,hokodo_deferred_payment_number</paymentInfoKeys>
                 <replace_place_order_hooks>0</replace_place_order_hooks>
                 <enable_customer_groups>0</enable_customer_groups>
                 <is_default>2</is_default>

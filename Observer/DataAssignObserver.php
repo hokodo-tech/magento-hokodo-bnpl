@@ -8,6 +8,7 @@ namespace Hokodo\BNPL\Observer;
 
 use Hokodo\BNPL\Api\Data\PaymentPlanInterface;
 use Hokodo\BNPL\Api\Data\ScheduledPaymentsInterface;
+use Hokodo\BNPL\Gateway\Service\DeferredPayment;
 use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order;
 use Hokodo\BNPL\Service\PaymentTerms;
@@ -25,6 +26,7 @@ class DataAssignObserver extends AbstractDataAssignObserver
     public const HOKODO_ORDER_ID = 'hokodo_order_id';
     public const HOKODO_PAYMENT_OFFER_ID = 'hokodo_payment_offer_id';
     public const HOKODO_DEFERRED_PAYMENT_ID = 'hokodo_deferred_payment_id';
+    public const HOKODO_DEFERRED_PAYMENT_NUMBER = 'hokodo_deferred_payment_number';
     public const HOKODO_PAYMENT_PLAN_NAME = 'name';
     public const HOKODO_PAYMENT_TERMS_RELATIVE_TO = 'payment_terms_relative_to';
     public const HOKODO_PAYMENT_TERMS = 'payment_terms';
@@ -58,18 +60,26 @@ class DataAssignObserver extends AbstractDataAssignObserver
     private PaymentTerms $paymentTerms;
 
     /**
+     * @var DeferredPayment
+     */
+    private DeferredPayment $deferredPayment;
+
+    /**
      * @param Order               $orderService
      * @param PaymentTerms        $paymentTerms
      * @param OfferGatewayService $offerGatewayService
+     * @param DeferredPayment     $deferredPayment
      */
     public function __construct(
         Order $orderService,
         PaymentTerms $paymentTerms,
-        OfferGatewayService $offerGatewayService
+        OfferGatewayService $offerGatewayService,
+        DeferredPayment $deferredPayment
     ) {
         $this->orderService = $orderService;
         $this->paymentTerms = $paymentTerms;
         $this->offerGatewayService = $offerGatewayService;
+        $this->deferredPayment = $deferredPayment;
     }
 
     /**
@@ -113,7 +123,13 @@ class DataAssignObserver extends AbstractDataAssignObserver
                     }
                 }
 
-                $additionalData['hokodo_deferred_payment_id'] = $hokodoOrder->getDeferredPayment();
+                $additionalData[self::HOKODO_DEFERRED_PAYMENT_ID] = $hokodoOrder->getDeferredPayment();
+                if (!empty($additionalData[self::HOKODO_DEFERRED_PAYMENT_ID])) {
+                    $deferredPayment = $this->deferredPayment->getDeferredPayment(
+                        ['deferredpayment_id' => $additionalData[self::HOKODO_DEFERRED_PAYMENT_ID]]
+                    )->getDataModel();
+                    $additionalData[self::HOKODO_DEFERRED_PAYMENT_NUMBER] = $deferredPayment->getNumber();
+                }
                 $quote->getPayment()->setAdditionalInformation($additionalData)->save();
             }
         }

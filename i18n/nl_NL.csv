@@ -29,7 +29,7 @@
 "Allow User to change company","Gebruiker toestaan om van bedrijf te veranderen"
 "due_date","Vervaldatum"
 "payment_method","Betaalmethode"
-"hokodo_deferred_payment_id","Betalingsreferentie"
+"hokodo_deferred_payment_number","Betalingsreferentie"
 "direct_debit","Automatische incasso"
 "invoice","Factuur"
 "card","Debetkaart/Creditcard"
