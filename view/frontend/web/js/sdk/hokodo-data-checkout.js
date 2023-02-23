@@ -130,7 +130,7 @@ define([
             },
 
             createOfferAction() {
-                if (this.companyId() && !this.isWaitingForPaymentInformationUpdateHook) {
+                if (this.companyId() && !this.isWaitingForPaymentInformationUpdateHook && !this.isLoading()) {
                     if (this.hokodoPaymentMethod() !== undefined) {
                         this.hokodoPaymentMethod().destroyCheckout();
                     }
