@@ -268,7 +268,9 @@ class OrderBuilder
      *
      * @param CartInterface $quote
      *
-     * @return array
+     * @return OrderItemInterface
+     *
+     * @throws NoSuchEntityException
      */
     public function buildTotalItem(CartInterface $quote): OrderItemInterface
     {

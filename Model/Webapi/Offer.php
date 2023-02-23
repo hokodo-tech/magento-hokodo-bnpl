@@ -37,6 +37,7 @@ use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Webapi\Exception;
 use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
 class Offer implements OfferInterface
@@ -127,6 +128,11 @@ class Offer implements OfferInterface
     private Config $config;
 
     /**
+     * @var CartTotalRepositoryInterface
+     */
+    private CartTotalRepositoryInterface $cartTotalRepository;
+
+    /**
      * @param OfferResponseInterfaceFactory     $responseInterfaceFactory
      * @param CartRepositoryInterface           $cartRepository
      * @param OrderGatewayService               $orderGatewayService
@@ -142,6 +148,7 @@ class Offer implements OfferInterface
      * @param OfferBuilder                      $offerBuilder
      * @param HokodoCustomerRepositoryInterface $hokodoCustomerRepository
      * @param Config                            $config
+     * @param CartTotalRepositoryInterface      $cartTotalRepository
      */
     public function __construct(
         OfferResponseInterfaceFactory $responseInterfaceFactory,
@@ -158,7 +165,8 @@ class Offer implements OfferInterface
         UserService $userService,
         OfferBuilder $offerBuilder,
         HokodoCustomerRepositoryInterface $hokodoCustomerRepository,
-        Config $config
+        Config $config,
+        CartTotalRepositoryInterface $cartTotalRepository
     ) {
         $this->responseInterfaceFactory = $responseInterfaceFactory;
         $this->cartRepository = $cartRepository;
@@ -176,6 +184,7 @@ class Offer implements OfferInterface
         $this->hokodoCustomerRepository = $hokodoCustomerRepository;
         $this->hokodoCustomer = null;
         $this->config = $config;
+        $this->cartTotalRepository = $cartTotalRepository;
     }
 
     /**
@@ -502,7 +511,9 @@ class Offer implements OfferInterface
             )
             ) {
                 $patchRequest
-                    ->setTotalAmount((int) ($quote->getGrandTotal() * 100))
+                    ->setTotalAmount(
+                        (int) round($this->cartTotalRepository->get($quote->getId())->getBaseGrandTotal() * 100)
+                    )
                     ->setTaxAmount(0);
                 if ($this->config->getValue(Config::TOTALS_FIX)) {
                     $items[] = $this->orderBuilder->buildTotalItem($this->checkoutSession->getQuote());
