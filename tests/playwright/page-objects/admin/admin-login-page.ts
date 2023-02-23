@@ -7,6 +7,6 @@ export default class AdminLoginPage extends LoginPageBase {
     }
 
     public async login(): Promise<void> {
-        super.login(process.env.MAGENTO_ADMIN_USER || "", process.env.MAGENTO_ADMIN_PASSWORD || "");
+        await super.login(process.env.MAGENTO_ADMIN_USER || "", process.env.MAGENTO_ADMIN_PASSWORD || "");
     }
 }
