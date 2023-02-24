@@ -60,7 +60,7 @@ class PaymentProcessor
                     $payment->update(false);
                 }
                 break;
-            case DeferredPaymentInterface::STATUS_FULFILLED:
+            case DeferredPaymentInterface::STATUS_CAPTURED:
                 break;
         }
     }

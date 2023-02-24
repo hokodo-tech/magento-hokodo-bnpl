@@ -59,7 +59,7 @@ class OrderProcessor
                     $this->orderRepository->save($order);
                 }
                 break;
-            case DeferredPaymentInterface::STATUS_FULFILLED:
+            case DeferredPaymentInterface::STATUS_CAPTURED:
                 if ($order->getState() === Order::STATE_PENDING_PAYMENT) {
                     $order->setState(Order::STATE_PROCESSING);
                     $order->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));

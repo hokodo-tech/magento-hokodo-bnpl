@@ -22,7 +22,7 @@ interface DeferredPaymentInterface
     public const STATUS_PENDING = 'pending_review';
     public const STATUS_ACTION_REQUIRED = 'customer_action_required';
     public const STATUS_REJECTED = 'rejected';
-    public const STATUS_FULFILLED = 'fulfilled';
+    public const STATUS_CAPTURED = 'captured';
     public const STATUS_PENDING_PAYMENT = 'pending_payment';
 
     /**
