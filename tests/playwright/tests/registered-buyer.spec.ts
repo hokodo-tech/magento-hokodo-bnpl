@@ -18,6 +18,7 @@ test.describe("Full end to end for Registered Buyers", () => {
     generateOrderData,
     createAccountPage,
     magentoApi,
+    buyerLoginPage,
   }) => {
     const testOrderData = await generateOrderData(CompanyType.REGISTERED_COMPANY);
 
@@ -71,7 +72,7 @@ test.describe("Full end to end for Registered Buyers", () => {
     expect(organisation.users[0].role, "Ensure the user has the correct role").toBe("member");
         
     await adminLoginPage.navigate();
-    await adminLoginPage.loginToAdmin();
+    await adminLoginPage.login();
 
     await orderPage.navigate(magentoOrder.entity_id);
 
@@ -105,7 +106,8 @@ test.describe("Full end to end for Registered Buyers", () => {
     hokodoApi,
     generateOrderData,
     createAccountPage,
-    magentoApi
+    magentoApi,
+    buyerLoginPage
   }) => {
     const testOrderData = await generateOrderData(CompanyType.SOLE_TRADER);
 
@@ -160,7 +162,7 @@ test.describe("Full end to end for Registered Buyers", () => {
     
     // ship the order in Magento
     await adminLoginPage.navigate();
-    await adminLoginPage.loginToAdmin();
+    await adminLoginPage.login();
 
     await orderPage.navigate(magentoOrder.entity_id);
 

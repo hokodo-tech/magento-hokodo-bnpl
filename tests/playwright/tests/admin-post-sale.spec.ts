@@ -45,7 +45,7 @@ test.describe("Post Sale Admin Actions", () => {
     const magentoOrderId = await paymentPage.hokodoCheckout.createDeferredPayment();
     
     await adminLoginPage.navigate();
-    await adminLoginPage.loginToAdmin();
+    await adminLoginPage.login();
 
     const magentoOrder = await magentoApi.getOrder(magentoOrderId);
     const hokodoIds = getHokodoIdsFromMagentoOrder(magentoOrder);
@@ -97,7 +97,7 @@ test.describe("Post Sale Admin Actions", () => {
     const magentoOrderId = await paymentPage.hokodoCheckout.createDeferredPayment();
     
     await adminLoginPage.navigate();
-    await adminLoginPage.loginToAdmin();
+    await adminLoginPage.login();
     
     const magentoOrder = await magentoApi.getOrder(magentoOrderId);
 
