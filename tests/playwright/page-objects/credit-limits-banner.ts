@@ -4,7 +4,6 @@ export default class CreditLimitsBanner {
 
     readonly page: Page;
     readonly parentElementSelector: string;
-    readonly url: string;
 
     constructor(page: Page, parentElementSelector: string) {
         this.page = page;

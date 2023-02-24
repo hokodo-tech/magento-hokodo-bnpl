@@ -37,7 +37,7 @@ test.describe("Credit Limits", () => {
     expect(await productDetailsPage.hokodoMarketing.canCheckCreditLimit(), "Can still check credit limits even though they're already known").toBe(false);
   });
 
-  test.only("Hokodo banners are displayed to guest buyers", async ({
+  test("Hokodo banners are displayed to guest buyers", async ({
     homePage,
     productDetailsPage,
     generateOrderData
