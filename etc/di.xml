@@ -478,6 +478,11 @@
             <argument name="config" xsi:type="object">Hokodo\BNPL\Gateway\Config\Config</argument>
         </arguments>
     </type>
+    <type name="Hokodo\BNPL\Service\AbstractService">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">Hokodo\BNPL\Gateway\Command\CommandPool</argument>
+        </arguments>
+    </type>
 
     <!-- SDK UPGRADE -->
 
