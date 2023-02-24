@@ -1,56 +1,55 @@
 import { expect } from "@playwright/test";
 import test from "../fixtures";
-import { verifyAddressDetails, verifyHokodoOrder } from "../support/playwright-assertion-helpers";
-import { getCaptureStatus, getHokodoIdsFromMagentoOrder } from "../support/playwright-test-helpers";
 import { CompanyType } from "../support/types/Buyer";
-import { MagentoOrderCaptureStatus } from "../support/types/MagentoOrder";
 
 test.describe("Credit Limits", () => {
-  test("Registered buyer viewing credit limits in the top banner", async ({
+  test("First time registered buyer checking credit limits in the top banner", async ({
     homePage,
-    productDetailsPage,
-    shippingAddressPage,
-    paymentPage,
-    adminLoginPage,
-    orderPage,
-    shipOrderPage,
-    hokodoApi,
     generateOrderData,
     createAccountPage,
-    magentoApi,
   }) => {
-    
+    const testOrderData = await generateOrderData(CompanyType.REGISTERED_COMPANY);
+
+    await createAccountPage.navigate();
+    await createAccountPage.createAccount(testOrderData.buyer);
+
+    await homePage.navigate();
+
+    await homePage.hokodoTopBanner.checkCreditLimit(testOrderData.buyer.companyName);
+
+    expect(await homePage.hokodoTopBanner.canCheckCreditLimit(), "Can still check credit limits even though they're already known").toBe(false);
   });
 
-  test("Registered buyer checking credit limits in the Product Details Page", async ({
-    homePage,
+  test("First time registered buyer checking credit limits in the Product Details Page", async ({
     productDetailsPage,
-    shippingAddressPage,
-    paymentPage,
-    adminLoginPage,
-    orderPage,
-    shipOrderPage,
-    hokodoApi,
     generateOrderData,
     createAccountPage,
-    magentoApi
   }) => {
-    
+    const testOrderData = await generateOrderData(CompanyType.REGISTERED_COMPANY);
+
+    await createAccountPage.navigate();
+    await createAccountPage.createAccount(testOrderData.buyer);
+
+    await productDetailsPage.navigate(testOrderData.products[0].name);
+
+    await productDetailsPage.hokodoMarketing.checkCreditLimit(testOrderData.buyer.companyName);
+
+    expect(await productDetailsPage.hokodoMarketing.canCheckCreditLimit(), "Can still check credit limits even though they're already known").toBe(false);
   });
 
-  test("Hokodo banners are displayed to guest buyers", async ({
+  test.only("Hokodo banners are displayed to guest buyers", async ({
     homePage,
     productDetailsPage,
-    shippingAddressPage,
-    paymentPage,
-    adminLoginPage,
-    orderPage,
-    shipOrderPage,
-    hokodoApi,
-    generateOrderData,
-    createAccountPage,
-    magentoApi
+    generateOrderData
   }) => {
-    
+    const testOrderData = await generateOrderData(CompanyType.REGISTERED_COMPANY);
+
+    await homePage.navigate();
+
+    expect(await homePage.hokodoTopBanner.canCheckCreditLimit(), "Can check credit limit even though it's a guest buyer").toBe(false);
+
+    await productDetailsPage.navigate(testOrderData.products[0].name);
+
+    expect(await productDetailsPage.hokodoMarketing.canCheckCreditLimit(), "Can check credit limit even though it's a guest buyer").toBe(false);
   });
 });

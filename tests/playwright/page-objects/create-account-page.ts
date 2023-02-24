@@ -25,6 +25,6 @@ export default class CreateAccountPage {
             await registrationForm.locator("[name='password_confirmation']").fill(password);
         }                
         await registrationForm.locator("[type='submit']").click();
-        await this.page.waitForSelector("[name='firstname']", { state: "detached" });
+        await this.page.waitForSelector("text='Account Information'", { state: "attached" });
     }
 }
