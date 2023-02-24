@@ -1,13 +1,14 @@
 import { Page } from "@playwright/test";
 import CreditLimitsBanner from "./credit-limits-banner";
+import PageObjectBase from "./page-object-base";
 
-export default class ProductDetailsPage {
+export default class ProductDetailsPage extends PageObjectBase {
 
     readonly page: Page;
-    readonly url: string;
     readonly hokodoMarketing: CreditLimitsBanner;
 
     constructor(page: Page) {
+        super(page);
         this.page = page;
         this.hokodoMarketing = new CreditLimitsBanner(page, ".hokodo-marketing-banner-wrapper.product-banner");
     }

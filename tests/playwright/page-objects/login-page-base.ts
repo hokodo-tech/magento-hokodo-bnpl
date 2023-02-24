@@ -12,7 +12,8 @@ export default class LoginPageBase {
     public async login(username?, password?): Promise<void> {
         await this.page.locator("[name='login[username]']").fill(username || "");
         await this.page.locator("[name='login[password]']").fill(password || "");
-        await this.page.locator("text='Sign in'").click();
+
+        await this.page.locator(".login.primary").click();
     }
 
     public async navigate() {
