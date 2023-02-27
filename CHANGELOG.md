@@ -1,3 +1,7 @@
+2.1.7 / February 2023
+==================
+* Module supports upfront payment
+
 2.1.6 / February 2023
 ==================
 * Credit limits are updated everyday 
