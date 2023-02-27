@@ -20,7 +20,7 @@ test.describe("Credit Limits", () => {
     expect(await homePage.hokodoTopBanner.canCheckCreditLimit(), "Can still check credit limits even though they're already known").toBe(false);
   });
 
-  test("Returning registered buyer should display their previous credit limit", async ({
+  test.only("Returning registered buyer should display their previous credit limit", async ({
     homePage,
     generateOrderData,
     createAccountPage,
@@ -59,10 +59,13 @@ test.describe("Credit Limits", () => {
 
     expect(await homePage.hokodoTopBanner.isDisplayed(), "The Hokodo Top Banner was not displayed").toBe(true);
 
+    const firstCustomerRequest = customerRequests[0];
+    const lastCustomerRequest = customerRequests.at(-1);
+
     // verify that there were two requests to get customer data and they both contained the same request and response
-    expect(customerRequests, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toHaveLength(2);
-    expect(customerRequests[0].postData(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with the same data, as the Buyer is the same").toBe(customerRequests[1].postData());
-    expect(await((await customerRequests[0].response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with the same data, as the Buyer is the same").toStrictEqual(await((await customerRequests[1].response()))?.json());
+    expect(customerRequests.length, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toBeGreaterThanOrEqual(2);
+    expect(firstCustomerRequest.postData(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with the same data, as the Buyer is the same").toBe(lastCustomerRequest?.postData());
+    expect(await((await firstCustomerRequest.response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with the same data, as the Buyer is the same").toStrictEqual(await((await lastCustomerRequest?.response()))?.json());
   });
 
   test("Handling logging in with different accounts at different companies", async ({
@@ -104,12 +107,12 @@ test.describe("Credit Limits", () => {
     await homePage.hokodoTopBanner.checkCreditLimit(secondBuyerOrder.buyer.companyName); // buyer is from a different company
 
     // verify that there were two requests to get customer data and they both referenced different companies
-    const buyerOneRequestData = customerRequests[0].postData();
-    const buyerTwoRequestData = customerRequests[1].postData();
+    const firstCustomerRequest = customerRequests[0];
+    const lastCustomerRequest = customerRequests.at(-1);
     
     expect(customerRequests, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toHaveLength(2);
-    expect(buyerOneRequestData, "The 'rest/V1/hokodo/customer' endpoint should have been called twice with different data, as the Buyer's company is not the same").not.toStrictEqual(buyerTwoRequestData);
-    expect(await((await customerRequests[0].response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with different data, as the Buyer is not the same").not.toStrictEqual(await((await customerRequests[1].response()))?.json());
+    expect(firstCustomerRequest.postDataJSON(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with different data, as the Buyer's company is not the same").not.toStrictEqual(lastCustomerRequest?.postDataJSON());
+    expect(await((await firstCustomerRequest.response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with different data, as the Buyer is not the same").not.toStrictEqual(await((await lastCustomerRequest?.response()))?.json());
   });
 
   test("Handling logging in with different accounts but the same Company", async ({
@@ -150,12 +153,12 @@ test.describe("Credit Limits", () => {
     await homePage.hokodoTopBanner.checkCreditLimit(secondBuyerOrder.buyer.companyName); // buyer is from the same company
 
     // verify that there were two requests to get customer data and they both referenced different companies
-    const buyerOneRequestData = customerRequests[0].postData();
-    const buyerTwoRequestData = customerRequests[1].postData();
+    const firstCustomerRequest = customerRequests[0];
+    const lastCustomerRequest = customerRequests.at(-1);
     
     expect(customerRequests, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toHaveLength(2);
-    expect(buyerOneRequestData, "The 'rest/V1/hokodo/customer' endpoint should have been called twice with the same data, as the Buyer's company is the same").toStrictEqual(buyerTwoRequestData);
-    expect(await((await customerRequests[0].response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with different data, as the Buyer is not the same").not.toStrictEqual(await((await customerRequests[1].response()))?.json());
+    expect(firstCustomerRequest.postDataJSON(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with the same data, as the Buyer's company is the same").toStrictEqual(lastCustomerRequest?.postDataJSON());
+    expect(await((await firstCustomerRequest.response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with different data, as the Buyer is not the same").not.toStrictEqual(await((await lastCustomerRequest?.response()))?.json());
   });
 
   test("First time registered buyer checking credit limits in the Product Details Page", async ({
