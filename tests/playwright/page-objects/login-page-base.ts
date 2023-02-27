@@ -9,7 +9,7 @@ export default class LoginPageBase {
         this.url = url;
     }
 
-    public async login(username?: string, password?: string): Promise<void> {
+    protected async login(username?: string, password?: string): Promise<void> {
         const usernameSelector = "[name='login[username]']";
         await this.page.locator(usernameSelector).fill(username || "");
         await this.page.locator("[name='login[password]']").fill(password || "");
@@ -17,7 +17,6 @@ export default class LoginPageBase {
         await this.page.locator(usernameSelector).press("Enter");
 
         await this.page.waitForSelector(usernameSelector, { state: "detached" });
-        await this.page.waitForSelector("text=Welcome, ", { state: "visible" });
     }
 
     public async navigate() {

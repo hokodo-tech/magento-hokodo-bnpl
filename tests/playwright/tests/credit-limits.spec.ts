@@ -20,7 +20,7 @@ test.describe("Credit Limits", () => {
     expect(await homePage.hokodoTopBanner.canCheckCreditLimit(), "Can still check credit limits even though they're already known").toBe(false);
   });
 
-  test.only("Returning registered buyer should display their previous credit limit", async ({
+  test("Returning registered buyer should display their previous credit limit", async ({
     homePage,
     generateOrderData,
     createAccountPage,
@@ -60,7 +60,7 @@ test.describe("Credit Limits", () => {
     expect(await homePage.hokodoTopBanner.isDisplayed(), "The Hokodo Top Banner was not displayed").toBe(true);
 
     const firstCustomerRequest = customerRequests[0];
-    const lastCustomerRequest = customerRequests.at(-1);
+    const lastCustomerRequest = customerRequests[customerRequests.length -1];
 
     // verify that there were two requests to get customer data and they both contained the same request and response
     expect(customerRequests.length, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toBeGreaterThanOrEqual(2);
@@ -108,7 +108,7 @@ test.describe("Credit Limits", () => {
 
     // verify that there were two requests to get customer data and they both referenced different companies
     const firstCustomerRequest = customerRequests[0];
-    const lastCustomerRequest = customerRequests.at(-1);
+    const lastCustomerRequest = customerRequests[customerRequests.length -1];
     
     expect(customerRequests.length, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toBeGreaterThanOrEqual(2);
     expect(firstCustomerRequest.postDataJSON(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with different data, as the Buyer's company is not the same").not.toStrictEqual(lastCustomerRequest?.postDataJSON());
@@ -154,7 +154,7 @@ test.describe("Credit Limits", () => {
 
     // verify that there were two requests to get customer data and they both referenced different companies
     const firstCustomerRequest = customerRequests[0];
-    const lastCustomerRequest = customerRequests.at(-1);
+    const lastCustomerRequest = customerRequests[customerRequests.length -1];
     
     expect(customerRequests.length, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toBeGreaterThanOrEqual(2);
     expect(firstCustomerRequest.postDataJSON(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with the same data, as the Buyer's company is the same").toStrictEqual(lastCustomerRequest?.postDataJSON());
