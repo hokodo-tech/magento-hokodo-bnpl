@@ -9,11 +9,13 @@ namespace Hokodo\BNPL\Gateway\Response;
 use Hokodo\BNPL\Api\Data\DeferredPaymentInterface;
 use Hokodo\BNPL\Api\OrderAdapterReaderInterface;
 use Hokodo\BNPL\Gateway\DeferredPaymentOrderSubjectReader;
+use Hokodo\BNPL\Gateway\Service\DifferedPayment\OrderProcessor;
+use Hokodo\BNPL\Gateway\Service\DifferedPayment\PaymentProcessor;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order;
+use Psr\Log\LoggerInterface;
 
 class DeferredPaymentFetchStatusHandler implements HandlerInterface, OrderAdapterReaderInterface
 {
@@ -28,15 +30,39 @@ class DeferredPaymentFetchStatusHandler implements HandlerInterface, OrderAdapte
     private OrderRepositoryInterface $orderRepository;
 
     /**
+     * @var OrderProcessor
+     */
+    private OrderProcessor $orderProcessor;
+
+    /**
+     * @var PaymentProcessor
+     */
+    private PaymentProcessor $paymentProcessor;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param DeferredPaymentOrderSubjectReader $subjectReader
      * @param OrderRepositoryInterface          $orderRepository
+     * @param OrderProcessor                    $orderProcessor
+     * @param PaymentProcessor                  $paymentProcessor
+     * @param LoggerInterface                   $logger
      */
     public function __construct(
         DeferredPaymentOrderSubjectReader $subjectReader,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        OrderProcessor $orderProcessor,
+        PaymentProcessor $paymentProcessor,
+        LoggerInterface $logger
     ) {
         $this->subjectReader = $subjectReader;
         $this->orderRepository = $orderRepository;
+        $this->orderProcessor = $orderProcessor;
+        $this->paymentProcessor = $paymentProcessor;
+        $this->logger = $logger;
     }
 
     /**
@@ -50,26 +76,20 @@ class DeferredPaymentFetchStatusHandler implements HandlerInterface, OrderAdapte
             /** @var OrderPaymentInterface $payment */
             $payment = $this->subjectReader->readPayment($handlingSubject);
             $orderAdapter = $this->getOrderAdapter($handlingSubject);
-            switch ($response[DeferredPaymentInterface::STATUS]) {
-                case DeferredPaymentInterface::STATUS_ACCEPTED:
-                    $payment
-                        ->setTransactionId($response[DeferredPaymentInterface::NUMBER])
-                        ->setData('is_transaction_approved', true);
-                    $order = $this->orderRepository->get($orderAdapter->getId());
-                    if ($order->getState() === Order::STATE_PAYMENT_REVIEW) {
-                        $order->setState(Order::STATE_PROCESSING);
-                        $this->orderRepository->save($order);
-                    }
-                    break;
-                case DeferredPaymentInterface::STATUS_PENDING:
-                case DeferredPaymentInterface::STATUS_ACTION_REQUIRED:
-                    $payment->setIsTransactionPending(true);
-                    break;
-                case DeferredPaymentInterface::STATUS_REJECTED:
-                    $payment
-                        ->setTransactionId($response[DeferredPaymentInterface::NUMBER])
-                        ->setData('is_transaction_denied', true);
-                    break;
+            $status = $response[DeferredPaymentInterface::STATUS];
+            $transactionId = $response[DeferredPaymentInterface::NUMBER];
+            $order = $this->orderRepository->get($orderAdapter->getId());
+
+            try {
+                $this->orderProcessor->process($order, $status);
+                $this->paymentProcessor->process($payment, $status, $transactionId, true);
+            } catch (\Exception $e) {
+                $data = [
+                    'message' => 'Differed Payment Fetch Status Error for order: ' . $order->getIncrementId(),
+                    'response' => $response,
+                    'error' => $e->getMessage(),
+                ];
+                $this->logger->error(__METHOD__, $data);
             }
         }
     }

@@ -247,6 +247,18 @@
         </arguments>
     </type>
 
+    <type name="Hokodo\BNPL\Gateway\Response\DeferredPaymentFetchStatusHandler">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Hokodo\BNPL\Gateway\Response\DeferredPaymentOrderHandler">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+
     <type name="Hokodo\BNPL\Model\Queue\Handler\CustomerImport">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoImportLogger</argument>
