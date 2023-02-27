@@ -9,7 +9,7 @@ export default class LoginPageBase {
         this.url = url;
     }
 
-    public async login(username?, password?): Promise<void> {
+    protected async login(username?: string, password?: string): Promise<void> {
         const usernameSelector = "[name='login[username]']";
         await this.page.locator(usernameSelector).fill(username || "");
         await this.page.locator("[name='login[password]']").fill(password || "");
