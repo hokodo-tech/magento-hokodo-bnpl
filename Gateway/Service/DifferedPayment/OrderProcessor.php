@@ -55,7 +55,7 @@ class OrderProcessor
                 break;
             case DeferredPaymentInterface::STATUS_PENDING_PAYMENT:
                 if ($order->getState() === Order::STATE_PAYMENT_REVIEW) {
-                    $order->setStatus('hokodo_pending_payment');
+                    $order->setStatus('hokodo_pending_upfront_payment');
                     $this->orderRepository->save($order);
                 }
                 break;

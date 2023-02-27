@@ -51,8 +51,8 @@ class AddHokodoPendingPayment implements DataPatchInterface
         $status = $this->statusFactory->create();
 
         $status->setData([
-            'status' => 'hokodo_pending_payment',
-            'label' => 'Hokodo Pending Payment',
+            'status' => 'hokodo_pending_upfront_payment',
+            'label' => 'Pending Upfront Payment',
         ]);
 
         try {
