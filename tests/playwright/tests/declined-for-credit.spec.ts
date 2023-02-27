@@ -1,5 +1,5 @@
 import test from "../fixtures";
-import { BuyerStatus, CompanyType, CreditStatus, FraudStatus } from "../support/types/Buyer";
+import { BuyerStatus, CompanyType, CreditStatus, DeferredPaymentStatus } from "../support/types/Buyer";
 
 test.describe("Credit is declined", () => {
   test("Can't place an order with Hokodo when declined for credit", async ({
@@ -11,7 +11,7 @@ test.describe("Credit is declined", () => {
   }) => {
     const buyerStatus: BuyerStatus = {
       creditStatus: CreditStatus.DECLINED,
-      fraudStatus: FraudStatus.ACCEPTED
+      fraudStatus: DeferredPaymentStatus.ACCEPTED
     };
 
     const testOrderData = await generateOrderData(CompanyType.REGISTERED_COMPANY, buyerStatus);

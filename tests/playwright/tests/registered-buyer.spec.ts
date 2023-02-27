@@ -2,7 +2,7 @@ import { expect } from "@playwright/test";
 import test from "../fixtures";
 import { verifyAddressDetails, verifyHokodoOrder } from "../support/playwright-assertion-helpers";
 import { getCaptureStatus, getHokodoIdsFromMagentoOrder } from "../support/playwright-test-helpers";
-import { CompanyType } from "../support/types/Buyer";
+import { CompanyType, DeferredPaymentStatus } from "../support/types/Buyer";
 import { MagentoOrderCaptureStatus } from "../support/types/MagentoOrder";
 
 test.describe("Full end to end for Registered Buyers", () => {
@@ -78,11 +78,11 @@ test.describe("Full end to end for Registered Buyers", () => {
 
     // capture the Magento order if it hasn't already been captured
     if (getCaptureStatus(await magentoApi.getOrder(magentoOrderId)) === MagentoOrderCaptureStatus.NotInvoiced) {
-      await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");  
+      await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, DeferredPaymentStatus.ACCEPTED);  
       await orderPage.captureInvoice();
     }
 
-    const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "captured")
+    const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, DeferredPaymentStatus.CAPTURED)
     
     expect(deferredPayment.authorisation, "Deferred Payment authorisation").toBe(0);
     expect(deferredPayment.protected_captures, "Deferred Payment protected_captures").toBe(basketDetails.totals.grand_total * 100);
@@ -168,12 +168,12 @@ test.describe("Full end to end for Registered Buyers", () => {
 
     // capture the Magento order if it hasn't already been captured
     if (getCaptureStatus(magentoOrder) === MagentoOrderCaptureStatus.NotInvoiced) {
-      await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "accepted");
+      await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, DeferredPaymentStatus.ACCEPTED);
       await orderPage.captureInvoice();
     }
 
     // fetch the Hokodo Deferred Payment
-    const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, "captured")
+    const deferredPayment = await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, DeferredPaymentStatus.CAPTURED)
     
     // expect(deferred_payment.status, "Deferred Payment Status").toBe("captured");
     expect(deferredPayment.authorisation, "Deferred Payment authorisation").toBe(0);

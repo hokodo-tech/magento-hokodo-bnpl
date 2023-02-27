@@ -10,10 +10,13 @@ export default class LoginPageBase {
     }
 
     public async login(username?, password?): Promise<void> {
-        await this.page.locator("[name='login[username]']").fill(username || "");
+        const usernameSelector = "[name='login[username]']";
+        await this.page.locator(usernameSelector).fill(username || "");
         await this.page.locator("[name='login[password]']").fill(password || "");
 
-        await this.page.locator(".login.primary").click();
+        await this.page.locator(usernameSelector).press("Enter");
+
+        await this.page.waitForSelector(usernameSelector, { state: "detached" });
     }
 
     public async navigate() {

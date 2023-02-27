@@ -15,7 +15,7 @@ export type Buyer = {
 
 export type BuyerStatus = {
     creditStatus: CreditStatus,
-    fraudStatus: FraudStatus,
+    fraudStatus: DeferredPaymentStatus,
 }
 
 export enum CompanyType {
@@ -29,9 +29,12 @@ export enum CreditStatus {
     PARTLY_OFFERED = "partly-offered"
 }
 
-export enum FraudStatus {
+export enum DeferredPaymentStatus {
     ACCEPTED = "accepted",
     REJECTED = "rejected",
-    CUSTOMER_ACTION_REQUIRED = "customer-action-required",
-    PENDING_REVIEW = "pending-review"
+    CUSTOMER_ACTION_REQUIRED = "customer_action_required",
+    PENDING_REVIEW = "pending_review",
+    VOIDED = "voided",
+    ACCEPTED_PENDING_PAYMENT = "accepted_pending_payment",
+    CAPTURED = "captured"
 }
