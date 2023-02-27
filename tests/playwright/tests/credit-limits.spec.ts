@@ -29,33 +29,133 @@ test.describe("Credit Limits", () => {
   }) => {
     const customerRequests: Array<Request> = [];
 
-    page.on('request', (req) => {
+    // capture all hokodo/customer requests
+    page.on('request', async (req) => {
       if (req.url().endsWith("rest/V1/hokodo/customer")) {
-        customerRequests.push(req)
+        customerRequests.push(req);
       }
     });
 
     const testOrderData = await generateOrderData(CompanyType.REGISTERED_COMPANY);
     
+    // create an account and check your credit score
     await createAccountPage.navigate();
     await createAccountPage.createAccount(testOrderData.buyer);
 
     await homePage.navigate();
 
     await homePage.hokodoTopBanner.checkCreditLimit(testOrderData.buyer.companyName);
-
+    
+    // logout, then login again and return to the homepage
     await homePage.logout();
-
+    
     await buyerLoginPage.navigate();
     await buyerLoginPage.login(testOrderData.buyer.email, testOrderData.buyer.password);
 
     await homePage.navigate();
 
-    await homePage.hokodoTopBanner.checkCreditLimit(testOrderData.buyer.companyName);
+    // wait for the request to get the Buyer's data (it should have cached this from the first time the Buyer was on the homepage)
+    await page.waitForRequest(r => r.url().includes("rest/V1/hokodo/customer"));
 
+    expect(await homePage.hokodoTopBanner.isDisplayed(), "The Hokodo Top Banner was not displayed").toBe(true);
+
+    // verify that there were two requests to get customer data and they both contained the same request and response
     expect(customerRequests, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toHaveLength(2);
     expect(customerRequests[0].postData(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with the same data, as the Buyer is the same").toBe(customerRequests[1].postData());
-    expect((await customerRequests[0].response())?.body(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with the same data, as the Buyer is the same").toBe(customerRequests[1].postData());
+    expect(await((await customerRequests[0].response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with the same data, as the Buyer is the same").toStrictEqual(await((await customerRequests[1].response()))?.json());
+  });
+
+  test("Handling logging in with different accounts at different companies", async ({
+    homePage,
+    generateOrderData,
+    createAccountPage,
+    page,
+  }) => {
+    const customerRequests: Array<Request> = [];
+
+    // capture all hokodo/customer requests
+    page.on('request', async (req) => {
+      if (req.url().endsWith("rest/V1/hokodo/customer")) {
+        customerRequests.push(req);
+      }
+    });
+
+    // Buyer one create an account and check the credit score
+    const firstBuyerOrder = await generateOrderData(CompanyType.REGISTERED_COMPANY);
+        
+    await createAccountPage.navigate();
+    await createAccountPage.createAccount(firstBuyerOrder.buyer);
+
+    await homePage.navigate();
+
+    await homePage.hokodoTopBanner.checkCreditLimit(firstBuyerOrder.buyer.companyName);
+    
+    await homePage.logout();
+
+    // Buyer two create an account and check the credit score
+    const secondBuyerOrder = await generateOrderData(CompanyType.REGISTERED_COMPANY);
+    secondBuyerOrder.buyer.companyName = "Tesco PLC"
+    
+    await createAccountPage.navigate();
+    await createAccountPage.createAccount(secondBuyerOrder.buyer);
+
+    await homePage.navigate();
+
+    await homePage.hokodoTopBanner.checkCreditLimit(secondBuyerOrder.buyer.companyName); // buyer is from a different company
+
+    // verify that there were two requests to get customer data and they both referenced different companies
+    const buyerOneRequestData = customerRequests[0].postData();
+    const buyerTwoRequestData = customerRequests[1].postData();
+    
+    expect(customerRequests, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toHaveLength(2);
+    expect(buyerOneRequestData, "The 'rest/V1/hokodo/customer' endpoint should have been called twice with different data, as the Buyer's company is not the same").not.toStrictEqual(buyerTwoRequestData);
+    expect(await((await customerRequests[0].response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with different data, as the Buyer is not the same").not.toStrictEqual(await((await customerRequests[1].response()))?.json());
+  });
+
+  test("Handling logging in with different accounts but the same Company", async ({
+    homePage,
+    generateOrderData,
+    createAccountPage,
+    page,
+  }) => {
+    const customerRequests: Array<Request> = [];
+
+    // capture all hokodo/customer requests
+    page.on('request', async (req) => {
+      if (req.url().endsWith("rest/V1/hokodo/customer")) {
+        customerRequests.push(req);
+      }
+    });
+
+    // Buyer one create an account and check the credit score
+    const firstBuyerOrder = await generateOrderData(CompanyType.REGISTERED_COMPANY);
+        
+    await createAccountPage.navigate();
+    await createAccountPage.createAccount(firstBuyerOrder.buyer);
+
+    await homePage.navigate();
+
+    await homePage.hokodoTopBanner.checkCreditLimit(firstBuyerOrder.buyer.companyName);
+    
+    await homePage.logout();
+
+    // Buyer two create an account and check the credit score
+    const secondBuyerOrder = await generateOrderData(CompanyType.REGISTERED_COMPANY);
+    
+    await createAccountPage.navigate();
+    await createAccountPage.createAccount(secondBuyerOrder.buyer);
+
+    await homePage.navigate();
+
+    await homePage.hokodoTopBanner.checkCreditLimit(secondBuyerOrder.buyer.companyName); // buyer is from the same company
+
+    // verify that there were two requests to get customer data and they both referenced different companies
+    const buyerOneRequestData = customerRequests[0].postData();
+    const buyerTwoRequestData = customerRequests[1].postData();
+    
+    expect(customerRequests, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toHaveLength(2);
+    expect(buyerOneRequestData, "The 'rest/V1/hokodo/customer' endpoint should have been called twice with the same data, as the Buyer's company is the same").toStrictEqual(buyerTwoRequestData);
+    expect(await((await customerRequests[0].response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with different data, as the Buyer is not the same").not.toStrictEqual(await((await customerRequests[1].response()))?.json());
   });
 
   test("First time registered buyer checking credit limits in the Product Details Page", async ({

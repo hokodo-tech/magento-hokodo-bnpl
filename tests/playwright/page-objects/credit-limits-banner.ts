@@ -2,6 +2,7 @@ import { Page } from "@playwright/test";
 
 export default class CreditLimitsBanner {
 
+
     readonly page: Page;
     readonly parentElementSelector: string;
 
@@ -24,5 +25,13 @@ export default class CreditLimitsBanner {
         await this.page.waitForSelector(this.parentElementSelector);
 
         return await this.page.locator(this.parentElementSelector).locator("text='Check your available credit'").isVisible();
+    }
+
+    async isDisplayed() {
+        return await 
+            (await this.page.waitForSelector(this.parentElementSelector))
+            .waitForSelector("[data-testid='marketing-element-container']")
+            .then(x => true)
+            .catch(x => false);
     }
 }
