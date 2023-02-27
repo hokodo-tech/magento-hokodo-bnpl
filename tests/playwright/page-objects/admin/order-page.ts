@@ -16,6 +16,7 @@ export default class OrderPage {
 
         if (needsUpdate) {
             await updateLocator.click();
+            await this.page.waitForLoadState("networkidle");
         }
     }
 
