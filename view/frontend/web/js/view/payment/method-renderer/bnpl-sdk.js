@@ -41,7 +41,8 @@ define([
 
         initObservable() {
             this._super().observe({
-                isVisible: false,
+                isVisible: true,
+                isDisabled: true,
                 isOfferLoading: false,
             });
 
@@ -94,6 +95,7 @@ define([
 
             if (!visibilityValidator.isVisibilityValidationRequired()) {
                 this.isVisible(true);
+                this.isDisabled(false);
                 this.isValidated = true;
             }
 
@@ -166,11 +168,11 @@ define([
             }
         },
 
-        isDisabled: function() {
+        /*isDisabled: function() {
 
             // Marty put logic here
             return false;
-        },
+        },*/
 
         getCode: function () {
             return 'hokodo_bnpl';
@@ -196,6 +198,7 @@ define([
             if (this.hokodoCheckout().offer()) {
                 if (!this.isValidated) {
                     this.isVisible(visibilityValidator.validate());
+                    this.isDisabled(!visibilityValidator.validate());
                     this.isValidated = true;
                 }
                 this._mountCheckout()

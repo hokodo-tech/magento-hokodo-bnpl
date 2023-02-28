@@ -5,7 +5,6 @@
  */
  F5EAD7
 -->
-<!-- ko if: isVisible() -->
 <div id="hokodo-bnpl" class="payment-method hokodo-gateway" data-bind="css: {'_active': (getCode() == isChecked())}">
     <div class="payment-method-title field choice">
         <input type="radio"
@@ -21,7 +20,7 @@
                     visible: isRadioButtonVisible(),
                     disable: isDisabled()
                "/>
-        <label class="label" data-bind="attr: {'for': getCode()}">
+        <label class="label" data-bind="attr: {'for': getCode()}, css: {'inactive': isDisabled()}">
             <span class="label-left">
                 <span class="title-hokodo" data-bind="text: getTitle()"></span>
                 <span class="logo-hokodo" data-bind="visible: getHokodoLogo()">
@@ -63,4 +62,3 @@
         </div>
     </div>
 </div>
-<!-- /ko -->
