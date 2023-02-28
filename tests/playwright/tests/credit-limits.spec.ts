@@ -62,8 +62,9 @@ test.describe("Credit Limits", () => {
     const firstCustomerRequest = customerRequests[0];
     const lastCustomerRequest = customerRequests[customerRequests.length -1];
 
-    // verify that there were two requests to get customer data and they both contained the same request and response
-    expect(customerRequests.length, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toBeGreaterThanOrEqual(2);
+    // verify that the requests to get customer contained the same request and response body
+    // we assert the number of requests is 3 because there is one request on the homepage, one on the login success page, and another one on the homepage after logging in
+    expect(customerRequests.length, "Expected to see multiple requests to the 'rest/V1/hokodo/customer' endpoint").toBe(3);
     expect(firstCustomerRequest.postData(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with the same data, as the Buyer is the same").toBe(lastCustomerRequest?.postData());
     expect(await((await firstCustomerRequest.response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with the same data, as the Buyer is the same").toStrictEqual(await((await lastCustomerRequest?.response()))?.json());
   });
@@ -108,9 +109,9 @@ test.describe("Credit Limits", () => {
 
     // verify that there were two requests to get customer data and they both referenced different companies
     const firstCustomerRequest = customerRequests[0];
-    const lastCustomerRequest = customerRequests[customerRequests.length -1];
+    const lastCustomerRequest = customerRequests[1];
     
-    expect(customerRequests.length, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toBeGreaterThanOrEqual(2);
+    expect(customerRequests.length, "Expected to see multiple requests to the 'rest/V1/hokodo/customer' endpoint").toBe(2);
     expect(firstCustomerRequest.postDataJSON(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with different data, as the Buyer's company is not the same").not.toStrictEqual(lastCustomerRequest?.postDataJSON());
     expect(await((await firstCustomerRequest.response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with different data, as the Buyer is not the same").not.toStrictEqual(await((await lastCustomerRequest?.response()))?.json());
   });
@@ -154,9 +155,9 @@ test.describe("Credit Limits", () => {
 
     // verify that there were two requests to get customer data and they both referenced different companies
     const firstCustomerRequest = customerRequests[0];
-    const lastCustomerRequest = customerRequests[customerRequests.length -1];
+    const lastCustomerRequest = customerRequests[1];
     
-    expect(customerRequests.length, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toBeGreaterThanOrEqual(2);
+    expect(customerRequests.length, "Expected to see multiple requests to the 'rest/V1/hokodo/customer' endpoint").toBe(2);
     expect(firstCustomerRequest.postDataJSON(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with the same data, as the Buyer's company is the same").toStrictEqual(lastCustomerRequest?.postDataJSON());
     expect(await((await firstCustomerRequest.response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with different data, as the Buyer is not the same").not.toStrictEqual(await((await lastCustomerRequest?.response()))?.json());
   });
