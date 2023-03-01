@@ -9,6 +9,16 @@ export default class OrderPage {
         this.page = page
     }
 
+    async getPaymentUpdate() {
+        const updateLocator = this.page.locator("text='Get Payment Update'");
+        
+        const needsUpdate = await updateLocator.isVisible();
+
+        if (needsUpdate) {
+            await updateLocator.click();
+        }
+    }
+
     async waitForDeferredPaymentToBeAccepted() {
         let attemptsRemaining = 150;
 
@@ -26,11 +36,13 @@ export default class OrderPage {
     }
 
     async captureInvoice() {
+        await this.getPaymentUpdate();
         await this.page.locator("#order_invoice").click();
         new InvoicePage(this.page).captureInvoice();
     }
 
     async cancelOrder() {
+        await this.getPaymentUpdate();
         await this.page.locator("#order-view-cancel-button").click();
         await this.page.locator(".action-accept").click();
         await this.page.locator("text='You canceled the order.'");
