@@ -182,34 +182,50 @@ review:detach [2.4.5]:
   resource_group: review-2.4.5
 
 ## ======= E2E TESTS =======
-test:e2e:
+.end-to-end-tests: &end-to-end-tests
   image: mcr.microsoft.com/playwright:v1.26.0-focal
   stage: test
-  needs:
-    - review:create
-  rules:
-    - if: $CI_MERGE_REQUEST_ID
   artifacts:
     when: on_success
     paths:
       - playwright-report/
       - test-results/
-    reports:
-      junit: playwright-results.xml
-    expire_in: 1 week
+    expire_in: 1 week  
+  rules:
+  - if: $CI_MERGE_REQUEST_ID
+
+test:e2e:
+  <<: *end-to-end-tests
+  # image: mcr.microsoft.com/playwright:v1.26.0-focal
+  # stage: test
+  needs:
+    - review:create
+  # rules:
+  #   - if: $CI_MERGE_REQUEST_ID
+  # artifacts:
+  #   when: on_success
+  #   paths:
+  #     - playwright-report/
+  #     - test-results/
+  #   expire_in: 1 week
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
+  allow_failure: false
+  when: manual
   script:
     - npm install
     - npx playwright install --with-deps
-    - > 
+    - >
       HOKODO_API_KEY=$HOKODO_API_KEY_DEV 
       HOKODO_API_BASE_URL=https://api-dev.hokodo.co 
       MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER 
-      BASE_URL=$BASE_URL 
+      BASE_URL=$BASE_URL     
+      npx playwright test  
+      --config ./tests/playwright/playwright.config.ts
 
 test:e2e quick:
-  extends: test:e2e
+  <<: *end-to-end-tests
+  # extends: test:e2e
   allow_failure: false
   script:
     - npm install
@@ -223,20 +239,42 @@ test:e2e quick:
       --config ./tests/playwright/playwright.config.ts
 
 test:e2e [2.3.7]:
-  extends: test:e2e
+  <<: *end-to-end-tests
+  # extends: test:e2e
   needs:
     - review:create [2.3.7]
   when: manual
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
+  script:
+    - npm install
+    - npx playwright install --with-deps
+    - >
+      HOKODO_API_KEY=$HOKODO_API_KEY_DEV 
+      HOKODO_API_BASE_URL=https://api-dev.hokodo.co 
+      MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER 
+      BASE_URL=$BASE_URL     
+      npx playwright test 
+      --config ./tests/playwright/playwright.config.ts    
 #
 test:e2e [2.4.5]:
-  extends: test:e2e
+  <<: *end-to-end-tests  
+  # extends: test:e2e
   needs:
     - review:create [2.4.5]
   when: manual
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m245.${DEPLOY_HOST_DEV}
+  script:
+    - npm install
+    - npx playwright install --with-deps
+    - >
+      HOKODO_API_KEY=$HOKODO_API_KEY_DEV 
+      HOKODO_API_BASE_URL=https://api-dev.hokodo.co 
+      MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER 
+      BASE_URL=$BASE_URL     
+      npx playwright test 
+      --config ./tests/playwright/playwright.config.ts        
 
 # ======= DEPLOYMENT =======
 .deploy:
