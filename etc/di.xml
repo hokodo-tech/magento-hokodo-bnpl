@@ -162,112 +162,99 @@
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Gateway\Command\HokodoGatewayCommand">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Gateway\Http\TransferFactory">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Model\Data\User">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Observer\OrderPlaceSuccessObserver">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Controller\Adminhtml\Customer\SaveCompanyId">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\CustomerData\HokodoCheckout">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Gateway\Command\PostSale\CapturePayment">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Gateway\Command\PostSale\RefundPayment">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Gateway\Command\PostSale\VoidPayment">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Model\DeferredPaymentIpnProcessor">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Model\Queue\Handler\Documents">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Model\Webapi\HokodoCustomer">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Plugin\Model\CheckoutAgreements\AgreementsProvider">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Gateway\Response\DeferredPaymentFetchStatusHandler">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Gateway\Response\DeferredPaymentOrderHandler">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Model\Queue\Handler\CustomerImport">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoImportLogger</argument>
         </arguments>
     </type>
-
     <type name="Hokodo\BNPL\Cron\UpdateCreditLimits">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoCronLogger</argument>
+        </arguments>
+    </type>
+    <type name="Hokodo\BNPL\Observer\Customer\InvalidateHokodoCustomerObserver">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
 
@@ -279,7 +266,6 @@
             </argument>
         </arguments>
     </virtualType>
-
     <virtualType name="HokodoImportLogger" type="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="handlers" xsi:type="array">
@@ -288,7 +274,6 @@
             </argument>
         </arguments>
     </virtualType>
-
     <virtualType name="HokodoCronLogger" type="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="handlers" xsi:type="array">

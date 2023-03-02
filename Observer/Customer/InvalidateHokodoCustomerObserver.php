@@ -8,8 +8,11 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Observer\Customer;
 
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
+use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Observes the `customer_save_after_data_object` event.
@@ -22,12 +25,36 @@ class InvalidateHokodoCustomerObserver implements ObserverInterface
     private HokodoCustomerRepositoryInterface $hokodoCustomerRepository;
 
     /**
+     * @var HokodoQuoteRepositoryInterface
+     */
+    private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
+
+    /**
+     * @var CartRepositoryInterface
+     */
+    private CartRepositoryInterface $cartRepository;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param HokodoCustomerRepositoryInterface $hokodoCustomerRepository
+     * @param HokodoQuoteRepositoryInterface    $hokodoQuoteRepository
+     * @param CartRepositoryInterface           $cartRepository
+     * @param LoggerInterface                   $logger
      */
     public function __construct(
-        HokodoCustomerRepositoryInterface $hokodoCustomerRepository
+        HokodoCustomerRepositoryInterface $hokodoCustomerRepository,
+        HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
+        CartRepositoryInterface $cartRepository,
+        LoggerInterface $logger
     ) {
         $this->hokodoCustomerRepository = $hokodoCustomerRepository;
+        $this->hokodoQuoteRepository = $hokodoQuoteRepository;
+        $this->cartRepository = $cartRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -50,6 +77,15 @@ class InvalidateHokodoCustomerObserver implements ObserverInterface
             if ($hokodoCustomer->getUserId()) {
                 $hokodoCustomer->setUserId('');
                 $this->hokodoCustomerRepository->save($hokodoCustomer);
+                try {
+                    $this->hokodoQuoteRepository->deleteByCustomerId((int) $customer->getId());
+                } catch (\Exception $e) {
+                    $data = [
+                        'message' => 'Hokodo_BNPL: There was an error during quote deletion.',
+                        'error' => $e->getMessage(),
+                    ];
+                    $this->logger->debug(__METHOD__, $data);
+                }
             }
         }
     }
