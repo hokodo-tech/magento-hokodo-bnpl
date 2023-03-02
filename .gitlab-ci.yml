@@ -185,23 +185,23 @@ review:detach [2.4.5]:
 .end-to-end-tests: &end-to-end-tests
   image: mcr.microsoft.com/playwright:v1.26.0-focal
   stage: test
+  rules:
+  - if: $CI_MERGE_REQUEST_ID
+
+All Playwright:
+  <<: *end-to-end-tests
+  needs:
+    - Playwright Smoke Test
+  variables:
+    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
+  allow_failure: false
+  when: manual
   artifacts:
     when: on_success
     paths:
       - playwright-report/
       - test-results/
-    expire_in: 1 week  
-  rules:
-  - if: $CI_MERGE_REQUEST_ID
-
-Run all tests:
-  <<: *end-to-end-tests
-  needs:
-    - Run critical end to end tests
-  variables:
-    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
-  allow_failure: false
-  when: manual
+    expire_in: 1 week    
   script:
     - npm install
     - npx playwright install --with-deps
@@ -213,11 +213,19 @@ Run all tests:
       npx playwright test  
       --config ./tests/playwright/playwright.config.ts
 
-Run critical end to end tests:
+Playwright Smoke Test:
   <<: *end-to-end-tests
   needs:
     - review:create
   allow_failure: false
+  artifacts:
+    when: on_success
+    paths:
+      - playwright-report/
+      - test-results/
+    expire_in: 1 week    
+  variables:
+    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
   script:
     - npm install
     - npx playwright install --with-deps
@@ -229,11 +237,17 @@ Run critical end to end tests:
       npx playwright test -g "Placing and fulfilling a Registered Company's first Order" 
       --config ./tests/playwright/playwright.config.ts
 
-Run all tests against Magento v2.3.7:
+All Playwright v2.3.7:
   <<: *end-to-end-tests
   needs:
     - review:create [2.3.7]
   when: manual
+  artifacts:
+    when: on_success
+    paths:
+      - playwright-report/
+      - test-results/
+    expire_in: 1 week    
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
   script:
@@ -247,11 +261,17 @@ Run all tests against Magento v2.3.7:
       npx playwright test 
       --config ./tests/playwright/playwright.config.ts    
 #
-Run all tests against Magento v2.4.5:
+All Playwright v2.4.5:
   <<: *end-to-end-tests  
   needs:
     - review:create [2.4.5]
   when: manual
+  artifacts:
+    when: on_success
+    paths:
+      - playwright-report/
+      - test-results/
+    expire_in: 1 week    
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m245.${DEPLOY_HOST_DEV}
   script:
