@@ -26,5 +26,6 @@ export default class CreateAccountPage {
         }                
         await registrationForm.locator("[type='submit']").click();
         await this.page.waitForSelector("text='Account Information'", { state: "attached" });
+        await this.page.waitForSelector("text=Welcome, ", { state: "visible" });
     }
 }
