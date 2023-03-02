@@ -15,7 +15,7 @@ import ListOrdersPage from "./page-objects/admin/list-orders-page";
 import OrderPage from "./page-objects/admin/order-page";
 import ShipOrderPage from "./page-objects/admin/ship-order-page";
 import { HokodoAPI } from "./support/hokodo-api";
-import { BuyerStatus, CompanyType, CreditStatus, FraudStatus } from "./support/types/Buyer";
+import { BuyerStatus, CompanyType, CreditStatus, DeferredPaymentStatus } from "./support/types/Buyer";
 import InvoicePage from "./page-objects/admin/invoice-page";
 import { MagentoApi } from "./support/magento-api";
 import BuyerLoginPage from "./page-objects/buyer-login-page";
@@ -187,7 +187,7 @@ const test = base.extend<TestFixtures>({
     use(async (companyType: CompanyType = CompanyType.REGISTERED_COMPANY,
       buyerStatus: BuyerStatus = {
         creditStatus: CreditStatus.OFFERED,
-        fraudStatus: FraudStatus.ACCEPTED
+        fraudStatus: DeferredPaymentStatus.ACCEPTED
       }) => {
       return {
         buyer: generateBuyerData(companyType, buyerStatus),

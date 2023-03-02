@@ -1,10 +1,13 @@
 import { Page } from "@playwright/test";
+import CreditLimitsBanner from "./credit-limits-banner";
+import PageObjectBase from "./page-object-base";
 
-export default class HomePage {
+export default class HomePage extends PageObjectBase {
+    
     readonly page: Page;
-    readonly url: string;
-
+    
     constructor(page: Page) {
+        super(page);
         this.page = page;
     }
 

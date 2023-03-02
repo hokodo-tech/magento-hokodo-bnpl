@@ -1,4 +1,5 @@
 import { APIRequestContext, expect, Page, request } from "@playwright/test";
+import { DeferredPaymentStatus } from "./types/Buyer";
 import { DeferredPayment } from "./types/DeferredPayment";
 import { HokodoOrder } from "./types/HokodoOrder";
 import { HokodoOrganisation } from "./types/HokodoOrganisation";
@@ -22,12 +23,12 @@ export class HokodoAPI {
         return this.fetchItem(`/v1/payment/deferred_payments/${deferredPaymentId}`);
     }
 
-    async waitForDeferredPaymentToReachStatus(deferredPaymentId: string, desiredStatus: string): Promise<DeferredPayment> {
+    async waitForDeferredPaymentToReachStatus(deferredPaymentId: string, desiredStatus: DeferredPaymentStatus): Promise<DeferredPayment> {
         let attemptsRemaining = 60;
         let deferredPayment = await this.viewDeferredPayment(deferredPaymentId);
 
         while (attemptsRemaining > 0) {
-            if (deferredPayment.status.toLocaleLowerCase() === desiredStatus.toLocaleLowerCase()) {
+            if (deferredPayment.status === desiredStatus) {
                 break;
             }
 
@@ -37,7 +38,7 @@ export class HokodoAPI {
             deferredPayment = await this.viewDeferredPayment(deferredPaymentId);
         }
 
-        expect(deferredPayment.status.toLocaleLowerCase(), `Deferred Payment ${deferredPaymentId} never reached a status of ${desiredStatus} after 2 minutes`).toBe(desiredStatus.toLocaleLowerCase());
+        expect(deferredPayment.status, `Deferred Payment ${deferredPaymentId} never reached a status of ${desiredStatus} after 2 minutes`).toBe(desiredStatus);
 
         return deferredPayment;
     }

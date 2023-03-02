@@ -1,7 +1,7 @@
 import { Address } from "./types/Address";
-import { Buyer, BuyerStatus, CompanyType, CreditStatus, FraudStatus } from "./types/Buyer";
+import { Buyer, BuyerStatus, CompanyType, CreditStatus, DeferredPaymentStatus } from "./types/Buyer";
 
-export function generateBuyerData(type: CompanyType = CompanyType.REGISTERED_COMPANY, buyerStatus: BuyerStatus = { fraudStatus: FraudStatus.ACCEPTED, creditStatus: CreditStatus.OFFERED }, 
+export function generateBuyerData(type: CompanyType = CompanyType.REGISTERED_COMPANY, buyerStatus: BuyerStatus = { fraudStatus: DeferredPaymentStatus.ACCEPTED, creditStatus: CreditStatus.OFFERED }, 
     {
         firstName = "Derek",
         lastName = "Trotter",

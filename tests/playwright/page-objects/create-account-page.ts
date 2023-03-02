@@ -25,7 +25,7 @@ export default class CreateAccountPage {
             await registrationForm.locator("[name='password_confirmation']").fill(password);
         }                
         await registrationForm.locator("[type='submit']").click();
-        await this.page.waitForLoadState("networkidle");
         await this.page.waitForSelector("text='Account Information'", { state: "attached" });
+        await this.page.waitForSelector("text=Welcome, ", { state: "visible" });
     }
 }

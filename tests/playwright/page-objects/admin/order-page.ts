@@ -16,6 +16,7 @@ export default class OrderPage {
 
         if (needsUpdate) {
             await updateLocator.click();
+            await this.page.waitForRequest(r => r.url().includes("notification_area"));
         }
     }
 
