@@ -199,20 +199,18 @@ test:e2e:
     expire_in: 1 week
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
-  script:
-    - npm install
-    - npx playwright install --with-deps
-    - > 
-      HOKODO_API_KEY=$HOKODO_API_KEY_DEV 
-      HOKODO_API_BASE_URL=https://api-dev.hokodo.co 
-      MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER 
-      BASE_URL=$BASE_URL 
 
 test:e2e quick:
   extends: test:e2e
   allow_failure: false
   script:
+    - npm install
+    - npx playwright install --with-deps
     - >
+      HOKODO_API_KEY=$HOKODO_API_KEY_DEV 
+      HOKODO_API_BASE_URL=https://api-dev.hokodo.co 
+      MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER 
+      BASE_URL=$BASE_URL     
       npx playwright test -g "Placing and fulfilling a Registered Company's first Order" 
       --config ./tests/playwright/playwright.config.ts
 
@@ -221,6 +219,7 @@ test:e2e [2.3.7]:
   needs:
     - review:create [2.3.7]
   when: manual
+  allow_failure: false
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
 #
