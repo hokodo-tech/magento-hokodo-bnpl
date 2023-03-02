@@ -194,20 +194,10 @@ review:detach [2.4.5]:
   rules:
   - if: $CI_MERGE_REQUEST_ID
 
-test:e2e:
+Run all tests:
   <<: *end-to-end-tests
-  # image: mcr.microsoft.com/playwright:v1.26.0-focal
-  # stage: test
   needs:
-    - review:create
-  # rules:
-  #   - if: $CI_MERGE_REQUEST_ID
-  # artifacts:
-  #   when: on_success
-  #   paths:
-  #     - playwright-report/
-  #     - test-results/
-  #   expire_in: 1 week
+    - Run critical end to end tests
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
   allow_failure: false
@@ -223,9 +213,10 @@ test:e2e:
       npx playwright test  
       --config ./tests/playwright/playwright.config.ts
 
-test:e2e quick:
+Run critical end to end tests:
   <<: *end-to-end-tests
-  # extends: test:e2e
+  needs:
+    - review:create
   allow_failure: false
   script:
     - npm install
@@ -238,9 +229,8 @@ test:e2e quick:
       npx playwright test -g "Placing and fulfilling a Registered Company's first Order" 
       --config ./tests/playwright/playwright.config.ts
 
-test:e2e [2.3.7]:
+Run all tests against Magento v2.3.7:
   <<: *end-to-end-tests
-  # extends: test:e2e
   needs:
     - review:create [2.3.7]
   when: manual
@@ -257,9 +247,8 @@ test:e2e [2.3.7]:
       npx playwright test 
       --config ./tests/playwright/playwright.config.ts    
 #
-test:e2e [2.4.5]:
+Run all tests against Magento v2.4.5:
   <<: *end-to-end-tests  
-  # extends: test:e2e
   needs:
     - review:create [2.4.5]
   when: manual
