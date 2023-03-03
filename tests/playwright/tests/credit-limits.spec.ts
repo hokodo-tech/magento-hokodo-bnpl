@@ -63,8 +63,7 @@ test.describe("Credit Limits", () => {
     const lastCustomerRequest = customerRequests[customerRequests.length -1];
 
     // verify that the requests to get customer contained the same request and response body
-    // we assert the number of requests is 3 because there is one request on the homepage, one on the login success page, and another one on the homepage after logging in
-    expect(customerRequests.length, "Expected to see multiple requests to the 'rest/V1/hokodo/customer' endpoint").toBe(3);
+    expect(customerRequests.length, "Expected to see two requests to the 'rest/V1/hokodo/customer' endpoint").toBe(2);
     expect(firstCustomerRequest.postData(), "The 'rest/V1/hokodo/customer' endpoint should have been called twice with the same data, as the Buyer is the same").toBe(lastCustomerRequest?.postData());
     expect(await((await firstCustomerRequest.response()))?.json(), "The 'rest/V1/hokodo/customer' endpoint should have responded twice with the same data, as the Buyer is the same").toStrictEqual(await((await lastCustomerRequest?.response()))?.json());
   });

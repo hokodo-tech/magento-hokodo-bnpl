@@ -14,5 +14,6 @@ export default class PageObjectBase {
     async logout() {
         await this.page.locator("header [data-action='customer-menu-toggle']").click();
         await this.page.locator("header .customer-menu .authorization-link").click();
+        await this.page.waitForSelector("text='You are signed out'", { state: "visible" });
     }
 }

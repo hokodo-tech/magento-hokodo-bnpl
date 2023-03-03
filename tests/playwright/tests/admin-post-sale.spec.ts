@@ -42,12 +42,12 @@ test.describe("Post Sale Admin Actions", () => {
     await paymentPage.hokodoCheckout.selectAPaymentPlan();
     await paymentPage.hokodoCheckout.selectPaymentMethod("invoice");
     await paymentPage.hokodoCheckout.acceptTermsAndConditions();
-    const magentoOrderId = await paymentPage.hokodoCheckout.createDeferredPayment();
+    const mangentoOrderIncrementId = await paymentPage.hokodoCheckout.createDeferredPayment();
     
     await adminLoginPage.navigate();
     await adminLoginPage.login();
 
-    const magentoOrder = await magentoApi.getOrder(magentoOrderId);
+    const magentoOrder = await magentoApi.getOrder(mangentoOrderIncrementId);
     const hokodoIds = getHokodoIdsFromMagentoOrder(magentoOrder);
     
     await hokodoApi.waitForDeferredPaymentToReachStatus(hokodoIds.deferredPayment, DeferredPaymentStatus.PENDING_REVIEW);

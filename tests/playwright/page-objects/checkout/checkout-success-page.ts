@@ -9,11 +9,11 @@ export default class CheckoutSuccessPage {
         this.checkoutSuccessWrapper = page.locator(".checkout-success");
     }
 
-    async extractOrderNumber(): Promise<string> {
+    async extractOrderIncrementId(): Promise<string> {
         const orderSuccessString = await this.checkoutSuccessWrapper.textContent() || "";
         const regex = orderSuccessString.match(/\d+/);
 
-        expect(regex, "Unable to extract the Order Number from the Checkout Success page").not.toBeNull();
+        expect(regex, "Unable to extract the Order Increment Id from the Checkout Success page").not.toBeNull();
 
         return regex[0];
     }
