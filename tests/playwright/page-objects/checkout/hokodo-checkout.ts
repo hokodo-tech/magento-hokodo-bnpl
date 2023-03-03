@@ -86,6 +86,6 @@ export default class HokodoCheckout {
 
     async createDeferredPayment(): Promise<string> {
         await this.getIframe().locator("text='Confirm'").click();
-        return await new CheckoutSuccessPage(this.page).extractOrderNumber();
+        return await new CheckoutSuccessPage(this.page).extractOrderIncrementId();
     }
 }
