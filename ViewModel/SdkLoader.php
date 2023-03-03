@@ -11,6 +11,7 @@ namespace Hokodo\BNPL\ViewModel;
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Config\Sdk;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Resolver;
@@ -50,6 +51,7 @@ class SdkLoader implements ArgumentInterface
      * @var ScopeResolverInterface
      */
     private ScopeResolverInterface $scopeResolver;
+    private State $state;
 
     /**
      * @param Sdk                    $sdkConfig
@@ -65,7 +67,8 @@ class SdkLoader implements ArgumentInterface
         StoreManagerInterface $store,
         Resolver $localeResolver,
         Json $json,
-        ScopeResolverInterface $scopeResolver
+        ScopeResolverInterface $scopeResolver,
+        State $state
     ) {
         $this->sdkConfig = $sdkConfig;
         $this->paymentConfig = $paymentConfig;
@@ -73,6 +76,7 @@ class SdkLoader implements ArgumentInterface
         $this->localeResolver = $localeResolver;
         $this->json = $json;
         $this->scopeResolver = $scopeResolver;
+        $this->state = $state;
     }
 
     /**
@@ -183,6 +187,7 @@ class SdkLoader implements ArgumentInterface
      * Check is module active.
      *
      * @return bool
+     * @throws LocalizedException
      */
     public function isModuleActive(): bool
     {
@@ -193,9 +198,10 @@ class SdkLoader implements ArgumentInterface
      * Check is request use default scope.
      *
      * @return bool
+     * @throws LocalizedException
      */
     private function isAdminStore(): bool
     {
-        return $this->scopeResolver->getScope()->getCode() === \Magento\Store\Model\Store::ADMIN_CODE;
+        return $this->state->getAreaCode() === \Magento\Framework\App\Area::AREA_ADMINHTML;
     }
 }
