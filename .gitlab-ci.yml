@@ -232,7 +232,7 @@ Playwright Smoke Test:
       HOKODO_API_BASE_URL=https://api-dev.hokodo.co 
       MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER 
       BASE_URL=$BASE_URL     
-      npx playwright test -g "Placing and fulfilling a Registered Company's first Order" 
+      npx playwright test -g "Returning registered buyer should display their previous credit limit" 
       --config ./tests/playwright/playwright.config.ts
 
 All Playwright v2.3.7:
