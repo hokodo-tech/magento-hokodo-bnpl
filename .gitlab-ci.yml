@@ -197,11 +197,10 @@ All Playwright:
   allow_failure: false
   when: manual
   artifacts:
-    when: on_success
+    when: always
     paths:
       - playwright-report/
-      - test-results/
-    expire_in: 1 week    
+    expire_in: 1 week
   script:
     - npm install
     - npx playwright install --with-deps
@@ -219,11 +218,10 @@ Playwright Smoke Test:
     - review:create
   allow_failure: false
   artifacts:
-    when: on_success
+    when: always
     paths:
       - playwright-report/
-      - test-results/
-    expire_in: 1 week    
+    expire_in: 1 week 
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}.${DEPLOY_HOST_DEV}
   script:
@@ -243,11 +241,10 @@ All Playwright v2.3.7:
     - review:create [2.3.7]
   when: manual
   artifacts:
-    when: on_success
+    when: always
     paths:
       - playwright-report/
-      - test-results/
-    expire_in: 1 week    
+    expire_in: 1 week  
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
   script:
@@ -260,18 +257,17 @@ All Playwright v2.3.7:
       BASE_URL=$BASE_URL     
       npx playwright test 
       --config ./tests/playwright/playwright.config.ts    
-#
+
 All Playwright v2.4.5:
   <<: *end-to-end-tests  
   needs:
     - review:create [2.4.5]
   when: manual
   artifacts:
-    when: on_success
+    when: always
     paths:
       - playwright-report/
-      - test-results/
-    expire_in: 1 week    
+    expire_in: 1 week 
   variables:
     BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m245.${DEPLOY_HOST_DEV}
   script:
