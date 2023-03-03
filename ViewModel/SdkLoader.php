@@ -10,7 +10,6 @@ namespace Hokodo\BNPL\ViewModel;
 
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Config\Sdk;
-use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -48,18 +47,17 @@ class SdkLoader implements ArgumentInterface
     private Json $json;
 
     /**
-     * @var ScopeResolverInterface
+     * @var State
      */
-    private ScopeResolverInterface $scopeResolver;
     private State $state;
 
     /**
-     * @param Sdk                    $sdkConfig
-     * @param Config                 $paymentConfig
-     * @param StoreManagerInterface  $store
-     * @param Resolver               $localeResolver
-     * @param Json                   $json
-     * @param ScopeResolverInterface $scopeResolver
+     * @param Sdk                   $sdkConfig
+     * @param Config                $paymentConfig
+     * @param StoreManagerInterface $store
+     * @param Resolver              $localeResolver
+     * @param Json                  $json
+     * @param State                 $state
      */
     public function __construct(
         Sdk $sdkConfig,
@@ -67,7 +65,6 @@ class SdkLoader implements ArgumentInterface
         StoreManagerInterface $store,
         Resolver $localeResolver,
         Json $json,
-        ScopeResolverInterface $scopeResolver,
         State $state
     ) {
         $this->sdkConfig = $sdkConfig;
@@ -75,7 +72,6 @@ class SdkLoader implements ArgumentInterface
         $this->store = $store;
         $this->localeResolver = $localeResolver;
         $this->json = $json;
-        $this->scopeResolver = $scopeResolver;
         $this->state = $state;
     }
 
@@ -187,6 +183,7 @@ class SdkLoader implements ArgumentInterface
      * Check is module active.
      *
      * @return bool
+     *
      * @throws LocalizedException
      */
     public function isModuleActive(): bool
@@ -198,6 +195,7 @@ class SdkLoader implements ArgumentInterface
      * Check is request use default scope.
      *
      * @return bool
+     *
      * @throws LocalizedException
      */
     private function isAdminStore(): bool
