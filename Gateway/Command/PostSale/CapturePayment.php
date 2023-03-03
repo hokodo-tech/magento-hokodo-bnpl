@@ -60,7 +60,7 @@ class CapturePayment implements CommandInterface
                 if ($hokodoDeferredPaymentId = $paymentInfo->getAdditionalInformation()['hokodo_deferred_payment_id']) {
                     /** @var $postSaleAction DeferredPaymentsPostSaleActionInterface */
                     $postSaleAction = $this->postSaleActionInterfaceFactory->create();
-                    $postSaleAction->setPaymentId($hokodoDeferredPaymentId)->setAmount((int) ($amount * 100));
+                    $postSaleAction->setPaymentId($hokodoDeferredPaymentId)->setAmount((int) round($amount * 100));
 
                     return $this->postSale->capture($postSaleAction);
                 }
