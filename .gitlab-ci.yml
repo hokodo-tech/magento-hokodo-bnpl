@@ -240,6 +240,7 @@ All Playwright v2.3.7:
   needs:
     - review:create [2.3.7]
   when: manual
+  allow_failure: false
   artifacts:
     when: always
     paths:
@@ -263,6 +264,7 @@ All Playwright v2.4.5:
   needs:
     - review:create [2.4.5]
   when: manual
+  allow_failure: false
   artifacts:
     when: always
     paths:
