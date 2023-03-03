@@ -10,6 +10,7 @@ namespace Hokodo\BNPL\ViewModel;
 
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Config\Sdk;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Resolver;
@@ -46,24 +47,32 @@ class SdkLoader implements ArgumentInterface
     private Json $json;
 
     /**
-     * @param Sdk                   $sdkConfig
-     * @param Config                $paymentConfig
-     * @param StoreManagerInterface $store
-     * @param Resolver              $localeResolver
-     * @param Json                  $json
+     * @var ScopeResolverInterface
+     */
+    private ScopeResolverInterface $scopeResolver;
+
+    /**
+     * @param Sdk                    $sdkConfig
+     * @param Config                 $paymentConfig
+     * @param StoreManagerInterface  $store
+     * @param Resolver               $localeResolver
+     * @param Json                   $json
+     * @param ScopeResolverInterface $scopeResolver
      */
     public function __construct(
         Sdk $sdkConfig,
         Config $paymentConfig,
         StoreManagerInterface $store,
         Resolver $localeResolver,
-        Json $json
+        Json $json,
+        ScopeResolverInterface $scopeResolver
     ) {
         $this->sdkConfig = $sdkConfig;
         $this->paymentConfig = $paymentConfig;
         $this->store = $store;
         $this->localeResolver = $localeResolver;
         $this->json = $json;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -177,6 +186,16 @@ class SdkLoader implements ArgumentInterface
      */
     public function isModuleActive(): bool
     {
-        return $this->paymentConfig->isActive();
+        return $this->isAdminStore() || $this->paymentConfig->isActive();
+    }
+
+    /**
+     * Check is request use default scope.
+     *
+     * @return bool
+     */
+    private function isAdminStore(): bool
+    {
+        return $this->scopeResolver->getScope()->getCode() === \Magento\Store\Model\Store::ADMIN_CODE;
     }
 }
