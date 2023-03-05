@@ -10,6 +10,7 @@ namespace Hokodo\BNPL\ViewModel;
 
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Config\Sdk;
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Resolver;
@@ -46,24 +47,32 @@ class SdkLoader implements ArgumentInterface
     private Json $json;
 
     /**
+     * @var State
+     */
+    private State $state;
+
+    /**
      * @param Sdk                   $sdkConfig
      * @param Config                $paymentConfig
      * @param StoreManagerInterface $store
      * @param Resolver              $localeResolver
      * @param Json                  $json
+     * @param State                 $state
      */
     public function __construct(
         Sdk $sdkConfig,
         Config $paymentConfig,
         StoreManagerInterface $store,
         Resolver $localeResolver,
-        Json $json
+        Json $json,
+        State $state
     ) {
         $this->sdkConfig = $sdkConfig;
         $this->paymentConfig = $paymentConfig;
         $this->store = $store;
         $this->localeResolver = $localeResolver;
         $this->json = $json;
+        $this->state = $state;
     }
 
     /**
@@ -174,9 +183,23 @@ class SdkLoader implements ArgumentInterface
      * Check is module active.
      *
      * @return bool
+     *
+     * @throws LocalizedException
      */
     public function isModuleActive(): bool
     {
-        return $this->paymentConfig->isActive();
+        return $this->isAdminStore() || $this->paymentConfig->isActive();
+    }
+
+    /**
+     * Check is request use default scope.
+     *
+     * @return bool
+     *
+     * @throws LocalizedException
+     */
+    private function isAdminStore(): bool
+    {
+        return $this->state->getAreaCode() === \Magento\Framework\App\Area::AREA_ADMINHTML;
     }
 }
