@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Plugin\CustomerData;
 
+use Hokodo\BNPL\Gateway\Config\Config;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\CustomerData\Customer;
 use Magento\Customer\Model\Session;
@@ -26,15 +27,23 @@ class CustomerGroup
     private GroupManagementInterface $groupManagement;
 
     /**
+     * @var Config
+     */
+    private Config $config;
+
+    /**
      * @param Session                  $customerSession
      * @param GroupManagementInterface $groupManagement
+     * @param Config                   $config
      */
     public function __construct(
         Session $customerSession,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        Config $config
     ) {
         $this->customerSession = $customerSession;
         $this->groupManagement = $groupManagement;
+        $this->config = $config;
     }
 
     /**
@@ -50,6 +59,7 @@ class CustomerGroup
      */
     public function afterGetSectionData(Customer $subject, array $result)
     {
+        $canPushAnalytics = true;
         $customer = $this->customerSession->getCustomer();
         if ($customer && $this->customerSession->isLoggedIn()) {
             $result['hokodoCustomerGroup'] = $customer->getGroupId();
@@ -57,6 +67,12 @@ class CustomerGroup
             $result['hokodoCustomerGroup'] = $this->groupManagement->getNotLoggedInGroup()->getId();
         }
 
+        if ($this->config->isCustomerGroupsEnabled()
+            && !in_array($result['hokodoCustomerGroup'], $this->config->getCustomerGroups())) {
+            $canPushAnalytics = false;
+        }
+
+        $result['canPushAnalytics'] = $canPushAnalytics;
         return $result;
     }
 }

@@ -3,12 +3,13 @@
  * See LICENSE for license details.
  */
 define([
-], function() {
+    'Magento_Customer/js/customer-data'
+], function(customerData) {
     'use strict';
 
     return {
         identify(companyId, phone, name, email) {
-            if (this.isAnalyticsLoaded()) {
+            if (this.isAnalyticsLoaded() && this.canPushAnalytics()) {
                 this.userId = analytics.user().anonymousId();
                 analytics.identify(this.userId, {
                     Merchant: window.location.host,
@@ -23,9 +24,13 @@ define([
         },
 
         track(event, data) {
-            if (this.isAnalyticsLoaded()) {
+            if (this.isAnalyticsLoaded() && this.canPushAnalytics()) {
                 analytics.track(event, data);
             }
+        },
+
+        canPushAnalytics() {
+            return customerData.get('customer')().canPushAnalytics;
         },
 
         isAnalyticsLoaded() {
@@ -59,7 +64,7 @@ define([
         },
 
         trackOrderPlaced(method, id, amount, currencyCode) {
-            analytics.track(
+            this.track(
                 'Order Placed',
                 {
                     currency: currencyCode,
