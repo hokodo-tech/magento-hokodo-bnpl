@@ -14,6 +14,8 @@ use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Model\ResourceModel\HokodoQuote as QuoteResource;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 class HokodoQuoteRepository implements HokodoQuoteRepositoryInterface
 {
@@ -28,15 +30,23 @@ class HokodoQuoteRepository implements HokodoQuoteRepositoryInterface
     private $quoteFactory;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    /**
      * @param QuoteResource               $resource
      * @param HokodoQuoteInterfaceFactory $quoteFactory
+     * @param CartRepositoryInterface     $cartRepository
      */
     public function __construct(
         QuoteResource $resource,
-        HokodoQuoteInterfaceFactory $quoteFactory
+        HokodoQuoteInterfaceFactory $quoteFactory,
+        CartRepositoryInterface $cartRepository
     ) {
         $this->resource = $resource;
         $this->quoteFactory = $quoteFactory;
+        $this->cartRepository = $cartRepository;
     }
 
     /**
@@ -90,5 +100,22 @@ class HokodoQuoteRepository implements HokodoQuoteRepositoryInterface
     public function deleteByQuoteId($quoteId): bool
     {
         return $this->delete($this->getByQuoteId($quoteId));
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @throws CouldNotDeleteException
+     * @throws NoSuchEntityException
+     */
+    public function deleteByCustomerId(int $customerId): void
+    {
+        $cart = $this->cartRepository->getActiveForCustomer($customerId);
+        if ($cart->getId()) {
+            $hokodoQuote = $this->getByQuoteId($cart->getId());
+            if ($hokodoQuote->getQuoteId()) {
+                $this->deleteByQuoteId($cart->getId());
+            }
+        }
     }
 }

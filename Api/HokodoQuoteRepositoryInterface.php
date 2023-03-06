@@ -46,4 +46,13 @@ interface HokodoQuoteRepositoryInterface
      * @return bool
      */
     public function deleteByQuoteId(int $quoteId): bool;
+
+    /**
+     * Delete hokodo quote that references to magento active quote for customer.
+     *
+     * @param int $customerId
+     *
+     * @return void
+     */
+    public function deleteByCustomerId(int $customerId): void;
 }

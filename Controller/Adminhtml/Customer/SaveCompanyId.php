@@ -24,7 +24,6 @@ use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Store\Model\App\Emulation;
 use Psr\Log\LoggerInterface;
@@ -192,16 +191,9 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
 
             $this->hokodoCustomerRepository->save($hokodoCustomer);
 
-            /* @var \Magento\Quote\Api\Data\CartInterface $cart */
             try {
-                $cart = $this->cartRepository->getActiveForCustomer($customerId);
-                if ($cart->getId()) {
-                    $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($cart->getId());
-                    if ($hokodoQuote->getQuoteId()) {
-                        $this->hokodoQuoteRepository->deleteByQuoteId($cart->getId());
-                    }
-                }
-            } catch (NoSuchEntityException $exception) {
+                $this->hokodoQuoteRepository->deleteByCustomerId($customerId);
+            } catch (\Exception $exception) {
                 $data = [
                     'message' => 'Hokodo_BNPL: try get active quote.',
                     'error' => $exception->getMessage(),
