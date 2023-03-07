@@ -37,6 +37,7 @@ define([
             isCompanyIdAssignedByComponent: false,
             isValidated: false
         },
+        getLogos: ko.observableArray(paymentConfig.logos),
         hokodoElements: window.hokodoSdk.elements(),
 
         initObservable() {
@@ -46,10 +47,6 @@ define([
             });
 
             return this;
-        },
-
-        getLogos() {
-            return paymentConfig.logos;
         },
 
         /**
