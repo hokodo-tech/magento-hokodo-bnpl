@@ -23,4 +23,21 @@
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
+
+    <!-- Plugin for additional column on customer grid BEGIN-->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <plugin name="Hokodo_BNPL::customer_grid_collection_plugin"
+                type="Hokodo\BNPL\Plugin\Framework\View\Element\UiComponent\DataProvider\CollectionFactoryPlugin"
+                sortOrder="100"
+                disabled="false"/>
+    </type>
+    <!-- Plugin for additional column on customer grid END-->
+    <!-- Plugin for Filtration on customer grid BEGIN-->
+    <type name="Magento\Customer\Model\ResourceModel\Grid\Collection">
+        <plugin name="Hokodo_BNPL:customer_grid_collection_filter_plugin"
+                type="Hokodo\BNPL\Plugin\Customer\Model\ResourceModel\Grid\CollectionPlugin"
+                sortOrder="100"
+                disabled="false"/>
+    </type>
+    <!-- Plugin for Filtration nn customer grid END-->
 </config>
