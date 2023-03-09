@@ -60,6 +60,7 @@ class Config extends DefaultPaymentConfig
     public const TOTALS_FIX = 'advanced/enable_thirdparty_totals_compatibility';
     public const HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL = 'advanced/entity_level';
     public const SEND_PURCHASE_HISTORY = 'advanced/send_customer_purchase_history';
+    public const SDK_COUNTRIES = 'advanced/sdk_countries';
 
     /**
      * @var ScopeConfigInterface
@@ -423,5 +424,15 @@ class Config extends DefaultPaymentConfig
         return (string) $this->getValue(
             self::HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL
         );
+    }
+
+    /**
+     * Get sdk countries restriction.
+     *
+     * @return array
+     */
+    public function getSdkCountries(): array
+    {
+        return explode(',', $this->getValue(self::SDK_COUNTRIES) ?? '');
     }
 }

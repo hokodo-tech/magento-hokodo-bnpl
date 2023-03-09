@@ -22,7 +22,8 @@ $viewModel = $block->getData('viewModel');
                     "hokodo-company-search": {
                         "component": "Hokodo_BNPL/js/sdk/company-search",
                         "config": {
-                            "sdkKey": "<?= $viewModel->getSdkKey() ?>"
+                            "sdkKey": "<?= $viewModel->getSdkKey() ?>",
+                            "searchElementConfig": <?= $viewModel->getSearchConfig() ?>
                         }
                     }
                 }

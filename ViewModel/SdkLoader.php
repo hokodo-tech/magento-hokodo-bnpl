@@ -202,4 +202,14 @@ class SdkLoader implements ArgumentInterface
     {
         return $this->state->getAreaCode() === \Magento\Framework\App\Area::AREA_ADMINHTML;
     }
+
+    /**
+     * Get country options for company search sdk component.
+     *
+     * @return string
+     */
+    public function getSearchConfig(): string
+    {
+        return $this->json->serialize(['countryOptions' => $this->paymentConfig->getSdkCountries()]);
+    }
 }

@@ -17,7 +17,7 @@
                 </field>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enabled</label>
-                    <comment>v2.1.7</comment>
+                    <comment>v2.1.8</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="enable_customer_groups" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
@@ -237,6 +237,11 @@
                         <label>Add purchase history to metadata</label>
                         <comment><![CDATA[Add customer's purchase history to Hokodo order providing more information for scoring.]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="sdk_countries" translate="label" type="multiselect" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Enabled countries</label>
+                        <comment><![CDATA[Restrict company search component to the countries selected.]]></comment>
+                        <source_model>Hokodo\BNPL\Model\Config\Source\SdkCountries</source_model>
                     </field>
                 </group>
             </group>
