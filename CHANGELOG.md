@@ -1,3 +1,7 @@
+2.1.8 / March 2023
+==================
+* Added country restriction to company search component
+
 2.1.7 / February 2023
 ==================
 * Module supports upfront payment
