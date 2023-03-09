@@ -11,6 +11,7 @@ define([
     'Magento_Customer/js/model/customer',
     'Magento_Checkout/js/model/error-processor',
     'Hokodo_BNPL/js/view/payment/validator/visibility',
+    'Magento_Checkout/js/model/quote',
     'Magento_Ui/js/modal/modal',
 ], function (
     $,
@@ -20,7 +21,8 @@ define([
     hokodoData,
     customer,
     errorProcessor,
-    visibilityValidator
+    visibilityValidator,
+    quote,
 ) {
     'use strict';
 
@@ -55,6 +57,7 @@ define([
         initialize: function () {
             this._super();
             const self = this;
+            this.searchConfig = paymentConfig.searchConfig
 
             this.hokodoCheckout().isLoading.subscribe((value) => {
                 this.isOfferLoading(value);
@@ -67,11 +70,13 @@ define([
             })
 
             if (this.hokodoCheckout().companyId()) {
-                this.companySearch = this.hokodoElements.create("companySearch", {companyId: this.hokodoCheckout().companyId()});
+                this.searchConfig.companyId = this.hokodoCheckout().companyId();
                 this.isCompanyIdAssignedByComponent = true;
-            } else {
-                this.companySearch = this.hokodoElements.create("companySearch");
             }
+            if (quote && quote.billingAddress().countryId) {
+                this.searchConfig.country = quote.billingAddress().countryId;
+            }
+            this.companySearch = this.hokodoElements.create("companySearch", this.searchConfig);
             this.companySearch.on("companySelection", (company) => {
                 if (company === null && !self.searchInitialized) {
                     //skip initializing call
@@ -99,57 +104,6 @@ define([
             return this;
         },
 
-        isMustShow: function () {
-            return paymentConfig.hideHokodoPaymentType === 'dont_hide';
-        },
-
-        isCompanyAttached: function () {
-            let isCompanyAttached = false;
-            if (paymentConfig.hideHokodoPaymentType === 'company_is_not_attached' && this.hokodoCheckout().companyId()) {
-                isCompanyAttached = true;
-            }
-            return isCompanyAttached;
-        },
-
-        isOrderEligible: function () {
-            let isOrderEligible = false;
-            if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible' &&
-                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || !this.hasOffer())
-            ) {
-                isOrderEligible = true;
-            }
-            return isOrderEligible;
-        },
-
-        isBothCompanyAttachedAndOrderEligible: function () {
-            let isBothCompanyAttachedAndOrderEligible = false;
-            if (paymentConfig.hideHokodoPaymentType === 'order_is_not_eligible_or_company_is_not_attached'
-                && this.hokodoCheckout().companyId() &&
-                (this.hasOfferedPlan() === true || !this.isCustomerLoggedIn() || !this.hasOffer())
-            ) {
-                isBothCompanyAttachedAndOrderEligible = true;
-            }
-            return isBothCompanyAttachedAndOrderEligible;
-        },
-
-        hasOffer: function ()
-        {
-            return typeof hokodoData.getOffer() !== 'undefined' && hokodoData.getOffer() !== '';
-        },
-
-        hasOfferedPlan: function ()
-        {
-            let isOffered = false;
-            if (typeof hokodoData.getOffer() !== 'undefined' && hokodoData.getOffer() !== '') {
-                hokodoData.getOffer().offered_payment_plans.forEach(function (item, index) {
-                    if (item.status === 'offered') {
-                        isOffered = true;
-                    }
-                })
-            }
-            return isOffered;
-        },
-
         isCustomerLoggedIn: function () {
             return customer.isLoggedIn();
         },
@@ -157,7 +111,8 @@ define([
         onCompanyChange: function(companyId) {
             if(!this.isCompanyIdAssignedByComponent) {
                 this.companySearch.destroy();
-                this.companySearch = this.hokodoElements.create("companySearch", {companyId: companyId});
+                this.searchConfig.companyId = companyId;
+                this.companySearch = this.hokodoElements.create("companySearch", this.searchConfig);
                 this.mountSearch();
                 this.isCompanyIdAssignedByComponent = true;
             }

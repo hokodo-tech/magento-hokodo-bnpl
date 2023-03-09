@@ -12,7 +12,8 @@ define([
     return Component.extend({
         defaults: {
             template: 'Hokodo_BNPL/sdk/company-search',
-            rendered: false
+            rendered: false,
+            searchElementConfig: {}
         },
 
         initialize() {
@@ -28,23 +29,9 @@ define([
 
         initComponent(){
             if (hokodoData.getCompanyId()) {
-                this.companySearch = window.hokodoSdk.elements().create("companySearch", {companyId: hokodoData.getCompanyId()});
-            } else {
-                this.companySearch = window.hokodoSdk.elements().create("companySearch");
+                this.searchElementConfig.companyId = hokodoData.getCompanyId();
             }
-            const self = this;
-            this.companySearch.on("ready", () => {
-
-            });
-            this.companySearch.on("failure", () => {
-
-            });
-            this.companySearch.on("countryInputChange", (country) => {
-
-            });
-            this.companySearch.on("companyTypeInputChange", (companyType) => {
-
-            });
+            this.companySearch = window.hokodoSdk.elements().create("companySearch", this.searchElementConfig);
             this.companySearch.on("companySelection", (company) => {
                 if (company !== null) {
                     hokodoData.clearData();
@@ -52,7 +39,6 @@ define([
                 }
             });
             this.mountSearch();
-            //this.openModal();
         },
 
         mountSearch() {
@@ -61,19 +47,9 @@ define([
             }
         },
 
-        openModal() {
-            $("#company-search-placeholder").modal({
-                // buttons: []
-            }).modal('openModal');
-        },
-
         onAfterRender() {
             this.rendered = true;
             this.mountSearch();
-        },
-
-        getSdk() {
-            return Hokodo(this.sdkKey);
         }
     })
 })
