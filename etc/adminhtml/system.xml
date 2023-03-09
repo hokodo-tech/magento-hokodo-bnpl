@@ -94,11 +94,6 @@
                     <label>Sort Order</label>
                     <frontend_class>validate-number</frontend_class>
                 </field>
-                <field id="sdk_countries" translate="label" type="multiselect" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>SDK countries</label>
-                    <comment><![CDATA[Restrict company search component to the countries selected.]]></comment>
-                    <source_model>Hokodo\BNPL\Model\Config\Source\SdkCountries</source_model>
-                </field>
                 <field id="min_order_total" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1">
                     <label>Minimum Order Total</label>
                     <validate>validate-number validate-zero-or-greater</validate>
@@ -242,6 +237,11 @@
                         <label>Add purchase history to metadata</label>
                         <comment><![CDATA[Add customer's purchase history to Hokodo order providing more information for scoring.]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="sdk_countries" translate="label" type="multiselect" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>SDK countries</label>
+                        <comment><![CDATA[Restrict company search component to the countries selected.]]></comment>
+                        <source_model>Hokodo\BNPL\Model\Config\Source\SdkCountries</source_model>
                     </field>
                 </group>
             </group>
