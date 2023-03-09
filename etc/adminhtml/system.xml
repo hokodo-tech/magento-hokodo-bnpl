@@ -98,9 +98,6 @@
                     <label>SDK countries</label>
                     <comment><![CDATA[Restrict company search component to the countries selected.]]></comment>
                     <source_model>Hokodo\BNPL\Model\Config\Source\SdkCountries</source_model>
-                    <depends>
-                        <field id="enable_customer_groups">1</field>
-                    </depends>
                 </field>
                 <field id="min_order_total" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1">
                     <label>Minimum Order Total</label>
