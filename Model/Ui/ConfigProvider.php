@@ -66,6 +66,9 @@ class ConfigProvider implements ConfigProviderInterface
                     'logos' => $logos,
                     'moreInfo' => $this->config->getValue(Config::PAYMENT_MORE_INFO),
                     'hideIfNoOffer' => (bool) $this->config->getValue(Config::HIDE_IF_NO_OFFER),
+                    'searchConfig' => [
+                        'countryOptions' => $this->config->getSdkCountries(),
+                    ],
                 ],
             ],
         ];
