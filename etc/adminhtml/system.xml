@@ -239,7 +239,7 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                     <field id="sdk_countries" translate="label" type="multiselect" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>SDK countries</label>
+                        <label>Enabled countries</label>
                         <comment><![CDATA[Restrict company search component to the countries selected.]]></comment>
                         <source_model>Hokodo\BNPL\Model\Config\Source\SdkCountries</source_model>
                     </field>
