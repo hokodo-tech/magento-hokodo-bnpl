@@ -33,7 +33,6 @@ class Config extends DefaultPaymentConfig
     public const KEY_SDK_KEY = 'sdk_key';
     public const KEY_ALLOW_SPECIFIC = 'allowspecific';
     public const KEY_SPECIFIC_COUNTRY = 'specificcountry';
-    public const SDK_COUNTRIES = 'sdk_countries';
     public const INVOICE_ON_PAYMENT = 'payment/hokodo_bnpl/advanced/create_invoice_on_payment_accepted';
     public const REPLACE_PLACE_ORDER_HOOKS = 'payment/hokodo_bnpl/replace_place_order_hooks';
     public const PAYMENT_DEFAULT = 'is_default';
@@ -61,6 +60,7 @@ class Config extends DefaultPaymentConfig
     public const TOTALS_FIX = 'advanced/enable_thirdparty_totals_compatibility';
     public const HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL = 'advanced/entity_level';
     public const SEND_PURCHASE_HISTORY = 'advanced/send_customer_purchase_history';
+    public const SDK_COUNTRIES = 'advanced/sdk_countries';
 
     /**
      * @var ScopeConfigInterface
