@@ -1,3 +1,7 @@
+2.1.9 / March 2023
+==================
+* Fix segment tracking
+
 2.1.8 / March 2023
 ==================
 * Added country restriction to company search component
