@@ -14,6 +14,10 @@ define([
     'use strict';
 
     return Component.extend({
+        defaults : {
+            phone: '',
+            name: ''
+        },
         fired: false,
         initialize() {
             this._super();
@@ -31,10 +35,12 @@ define([
                             }
                         }
                     )
-                    let phone = self.quote.shippingAddress().telephone;
-                    let name = self.getCustomerName(self.quote);
+                    if (self.quote.shippingAddress()) {
+                        self.phone = self.quote.shippingAddress().telephone;
+                        self.name = self.getCustomerName(self.quote);
+                    }
                     let email = self.getCustomerEmail(self.quote);
-                    self.segment.identify(hokodoData.getCompanyId(), phone, name, email);
+                    self.segment.identify(hokodoData.getCompanyId(), self.phone, self.name, email);
                     segment.trackLanding(
                         self.priceUtils.formatPrice(self.quote.getCalculatedTotal(), {pattern: '%s'}),
                         self.quote.totals().quote_currency_code,
