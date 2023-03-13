@@ -97,7 +97,7 @@ class CollectionPlugin
      *
      * @return string
      */
-    public function getIsNullQuery(): string
+    private function getIsNullQuery(): string
     {
         return $this->queryConfig->getIsNullQuery();
     }
