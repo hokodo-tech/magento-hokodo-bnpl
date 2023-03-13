@@ -23,4 +23,16 @@
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
+
+    <!-- Customer Grid Add Additional Column Begin-->
+    <preference for="Hokodo\BNPL\Service\Customer\Grid\QueryConfigInterface"
+                type="Hokodo\BNPL\Service\Customer\Grid\QueryConfig" />
+
+    <type name="Magento\Customer\Model\ResourceModel\Grid\Collection">
+        <plugin name="Hokodo_BNPL:customer_grid_collection_plugin"
+                type="Hokodo\BNPL\Plugin\Customer\Model\ResourceModel\Grid\CollectionPlugin"
+                sortOrder="100"
+                disabled="false"/>
+    </type>
+    <!-- Customer Grid Add Additional Column END-->
 </config>

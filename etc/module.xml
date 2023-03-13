@@ -9,6 +9,7 @@
     <module name="Hokodo_BNPL">
         <sequence>
             <module name="Magento_ImportExport" />
+            <module name="Magento_Customer"/>
         </sequence>
     </module>
 </config>
