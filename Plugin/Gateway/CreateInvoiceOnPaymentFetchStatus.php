@@ -52,10 +52,11 @@ class CreateInvoiceOnPaymentFetchStatus
         array $handlingSubject,
         array $response
     ): void {
+        $order = $subject->getOrderAdapter($handlingSubject);
         if ($response[DeferredPaymentInterface::STATUS] === DeferredPaymentInterface::STATUS_ACCEPTED
-            && $this->config->getCreateInvoiceAutomaticallyConfig()
-            && ($orderId = $subject->getOrderAdapter($handlingSubject)->getId())) {
-            $this->invoiceCreatorService->execute($orderId);
+            && $this->config->getCreateInvoiceAutomaticallyConfig($order->getStoreId())
+            && ($order->getId())) {
+            $this->invoiceCreatorService->execute($order->getId());
         }
     }
 }

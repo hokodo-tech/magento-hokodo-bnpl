@@ -11,6 +11,7 @@ use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Observer\OrderPlaceSuccessObserver;
 use Hokodo\BNPL\Service\InvoiceCreatorService;
 use Magento\Framework\Event\Observer;
+use Magento\Sales\Api\Data\OrderInterface;
 
 class CreateInvoiceOnSuccessOrderPlacement
 {
@@ -47,8 +48,9 @@ class CreateInvoiceOnSuccessOrderPlacement
      */
     public function afterExecute(OrderPlaceSuccessObserver $subject, $result, Observer $observer): void
     {
+        /** @var OrderInterface $order */
         $order = $observer->getEvent()->getOrder();
-        if ($this->config->getCreateInvoiceAutomaticallyConfig()
+        if ($this->config->getCreateInvoiceAutomaticallyConfig($order->getStoreId())
             && $order->getPayment()->getData('is_transaction_approved')) {
             $this->invoiceCreatorService->execute($order->getEntityId());
         }
