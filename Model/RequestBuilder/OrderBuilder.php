@@ -194,7 +194,7 @@ class OrderBuilder
                     $this->storeManager->getStore()->getName() . $quote->getId())
             )
             ->setStatus('draft')
-            ->setCurrency($quote->getQuoteCurrencyCode())
+            ->setCurrency($quote->getStoreCurrencyCode())
             ->setTotalAmount(
                 (int) round($this->cartTotalRepository->get($quote->getId())->getBaseGrandTotal() * 100)
             )
