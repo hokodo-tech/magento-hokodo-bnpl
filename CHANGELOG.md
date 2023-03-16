@@ -1,3 +1,8 @@
+2.1.10 / March 2023
+==================
+* Change currency source for Hokodo Order create request
+* Disable fetch transaction support
+
 2.1.9 / March 2023
 ==================
 * Fix segment tracking
