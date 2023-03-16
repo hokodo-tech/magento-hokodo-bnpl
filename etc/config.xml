@@ -24,8 +24,8 @@
                 <can_use_internal>0</can_use_internal>
                 <can_use_checkout>1</can_use_checkout>
                 <can_edit>0</can_edit>
-                <can_fetch_transaction_info>1</can_fetch_transaction_info>
-                <can_fetch_transaction_information>1</can_fetch_transaction_information>
+                <can_fetch_transaction_info>0</can_fetch_transaction_info>
+                <can_fetch_transaction_information>0</can_fetch_transaction_information>
                 <can_review_payment>0</can_review_payment>
                 <is_gateway>1</is_gateway>
                 <is_offline>0</is_offline>
