@@ -99,7 +99,7 @@ class CollectionPlugin
      */
     public function getIsNullQuery(): string
     {
-        return '!ISNULL(`hokodo_entity_table`.`company_id`)';
+        return $this->queryConfig->getIsNullQuery();
     }
 
     /**
