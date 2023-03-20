@@ -15,6 +15,7 @@ interface CustomerAddressInterface
     public const CITY = 'city';
     public const POSTCODE = 'postcode';
     public const COUNTRY = 'country';
+    public const PHONE = 'phone';
 
     /**
      * Name setter.
@@ -69,4 +70,13 @@ interface CustomerAddressInterface
      * @return $this
      */
     public function setCountry(string $country): self;
+
+    /**
+     * Phone setter.
+     *
+     * @param string $phone
+     *
+     * @return $this
+     */
+    public function setPhone(string $phone): self;
 }

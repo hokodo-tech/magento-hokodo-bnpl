@@ -65,4 +65,13 @@ class CustomerAddress extends AbstractSimpleObject implements CustomerAddressInt
         $this->setData(self::COUNTRY, $country);
         return $this;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function setPhone(string $phone): self
+    {
+        $this->setData(self::PHONE, $phone);
+        return $this;
+    }
 }
