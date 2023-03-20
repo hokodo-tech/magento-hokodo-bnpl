@@ -11,6 +11,13 @@ namespace Hokodo\BNPL\Service\Customer\Grid;
 interface QueryConfigInterface
 {
     /**
+     * Get query.
+     *
+     * @return string
+     */
+    public function getIsNullQuery(): string;
+
+    /**
      * Get additional tables.
      *
      * @return array
