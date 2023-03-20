@@ -242,6 +242,7 @@ class OrderBuilder
             ->setAddressLineTwo($address->getStreetLine(2) ?? '')
             ->setCity($address->getCity() ?? '')
             ->setCountry($address->getCountry() ?? '')
+            ->setPhone($address->getTelephone() ?? '')
             ->setPostcode($address->getPostcode() ?? '');
     }
 
