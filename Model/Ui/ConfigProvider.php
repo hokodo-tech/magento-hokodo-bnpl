@@ -10,7 +10,6 @@ namespace Hokodo\BNPL\Model\Ui;
 
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos;
-use Hokodo\BNPL\Model\Config\Source\PaymentMethodBehaviour;
 use Hokodo\BNPL\Service\CustomersGroup;
 use Magento\Checkout\Model\ConfigProviderInterface;
 
@@ -77,15 +76,10 @@ class ConfigProvider implements ConfigProviderInterface
     /**
      * Checks is payment method was set as default.
      *
-     * @return bool
+     * @return string
      */
-    private function isDefault(): bool
+    private function isDefault(): string
     {
-        $result = false;
-        $value = $this->config->getValue(Config::PAYMENT_DEFAULT);
-        if ($value == PaymentMethodBehaviour::IS_DEFAULT_YES) {
-            $result = true;
-        }
-        return $result;
+        return (string) $this->config->getValue(Config::PAYMENT_DEFAULT);
     }
 }
