@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Api\Data;
 
 /**
@@ -27,14 +29,14 @@ interface OrganisationInterface
      *
      * @return $this
      */
-    public function setId($id);
+    public function setId(string $id): self;
 
     /**
      * A function that gets id.
      *
      * @return string
      */
-    public function getId();
+    public function getId(): string;
 
     /**
      * A function that sets unique id.
@@ -43,14 +45,14 @@ interface OrganisationInterface
      *
      * @return $this
      */
-    public function setUniqueId($uniqueId);
+    public function setUniqueId(string $uniqueId): self;
 
     /**
      * A function that gets unique id.
      *
      * @return string
      */
-    public function getUniqueId();
+    public function getUniqueId(): string;
 
     /**
      * A function that sets registered.
@@ -59,14 +61,14 @@ interface OrganisationInterface
      *
      * @return $this
      */
-    public function setRegistered($registered);
+    public function setRegistered(string $registered): self;
 
     /**
      * A function that gets registered.
      *
      * @return string
      */
-    public function getRegistered();
+    public function getRegistered(): string;
 
     /**
      * A function that sets company.
@@ -75,14 +77,14 @@ interface OrganisationInterface
      *
      * @return $this
      */
-    public function setCompany($company);
+    public function setCompany(string $company): self;
 
     /**
      * A function that gets company.
      *
      * @return string
      */
-    public function getCompany();
+    public function getCompany(): string;
 
     /**
      * A function that sets users.
@@ -91,12 +93,12 @@ interface OrganisationInterface
      *
      * @return $this
      */
-    public function setUsers(array $users);
+    public function setUsers(array $users): self;
 
     /**
      * A function that gets users.
      *
      * @return \Hokodo\BNPL\Api\Data\OrganisationUserInterface[]
      */
-    public function getUsers();
+    public function getUsers(): array;
 }

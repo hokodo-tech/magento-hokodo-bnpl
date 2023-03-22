@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Api\Data;
 
 /**
@@ -32,14 +34,14 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setUrl($url);
+    public function setUrl(string $url): self;
 
     /**
      * A function that gets url.
      *
      * @return string
      */
-    public function getUrl();
+    public function getUrl(): string;
 
     /**
      * A function that sets id.
@@ -48,14 +50,14 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setId($id);
+    public function setId(string $id): self;
 
     /**
      * A function that gets id.
      *
      * @return string
      */
-    public function getId();
+    public function getId(): string;
 
     /**
      * A function that sets number.
@@ -64,14 +66,14 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setNumber($number);
+    public function setNumber(string $number): self;
 
     /**
      * A function that gets number.
      *
      * @return string
      */
-    public function getNumber();
+    public function getNumber(): string;
 
     /**
      * A function that sets payment plan.
@@ -80,14 +82,14 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setPaymentPlan($paymentPlan);
+    public function setPaymentPlan(string $paymentPlan): self;
 
     /**
      * A function that gets payment plan.
      *
      * @return string
      */
-    public function getPaymentPlan();
+    public function getPaymentPlan(): string;
 
     /**
      * A function that sets order.
@@ -96,14 +98,14 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setOrder($order);
+    public function setOrder(string $order): self;
 
     /**
      * A function that gets order.
      *
      * @return string
      */
-    public function getOrder();
+    public function getOrder(): string;
 
     /**
      * A function that sets status.
@@ -112,12 +114,12 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setStatus($status);
+    public function setStatus(string $status): self;
 
     /**
      * A function that gets status.
      *
      * @return string
      */
-    public function getStatus();
+    public function getStatus(): string;
 }

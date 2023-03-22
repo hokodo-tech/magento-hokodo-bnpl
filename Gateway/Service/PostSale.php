@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Gateway\Service;
 
 use Hokodo\BNPL\Api\Data\Gateway\DeferredPaymentsPostSaleActionInterface;
+use Hokodo\BNPL\Gateway\Command\Result\PostSaleEventResultInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\Command\CommandException;
-use Magento\Payment\Gateway\Command\ResultInterface;
 
 class PostSale extends AbstractService
 {
@@ -19,12 +19,12 @@ class PostSale extends AbstractService
      *
      * @param DeferredPaymentsPostSaleActionInterface $postSaleAction
      *
-     * @return ResultInterface
+     * @return PostSaleEventResultInterface
      *
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function capture(DeferredPaymentsPostSaleActionInterface $postSaleAction): ResultInterface
+    public function capture(DeferredPaymentsPostSaleActionInterface $postSaleAction): PostSaleEventResultInterface
     {
         $postSaleAction->setType(DeferredPaymentsPostSaleActionInterface::TYPE_CAPTURE);
         return $this->commandPool->get('hokodo_post_sale')->execute($postSaleAction->__toArray());
@@ -35,13 +35,14 @@ class PostSale extends AbstractService
      *
      * @param DeferredPaymentsPostSaleActionInterface $postSaleAction
      *
-     * @return ResultInterface
+     * @return PostSaleEventResultInterface
      *
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function captureRemaining(DeferredPaymentsPostSaleActionInterface $postSaleAction): ResultInterface
-    {
+    public function captureRemaining(
+        DeferredPaymentsPostSaleActionInterface $postSaleAction
+    ): PostSaleEventResultInterface {
         $postSaleAction->setType(DeferredPaymentsPostSaleActionInterface::TYPE_CAPTURE_REMAINING);
         return $this->commandPool->get('hokodo_post_sale')->execute($postSaleAction->__toArray());
     }
@@ -51,12 +52,12 @@ class PostSale extends AbstractService
      *
      * @param DeferredPaymentsPostSaleActionInterface $postSaleAction
      *
-     * @return ResultInterface
+     * @return PostSaleEventResultInterface
      *
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function refund(DeferredPaymentsPostSaleActionInterface $postSaleAction): ResultInterface
+    public function refund(DeferredPaymentsPostSaleActionInterface $postSaleAction): PostSaleEventResultInterface
     {
         $postSaleAction->setType(DeferredPaymentsPostSaleActionInterface::TYPE_REFUND);
         return $this->commandPool->get('hokodo_post_sale')->execute($postSaleAction->__toArray());
@@ -67,12 +68,12 @@ class PostSale extends AbstractService
      *
      * @param DeferredPaymentsPostSaleActionInterface $postSaleAction
      *
-     * @return ResultInterface
+     * @return PostSaleEventResultInterface
      *
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function void(DeferredPaymentsPostSaleActionInterface $postSaleAction): ResultInterface
+    public function void(DeferredPaymentsPostSaleActionInterface $postSaleAction): PostSaleEventResultInterface
     {
         $postSaleAction->setType(DeferredPaymentsPostSaleActionInterface::TYPE_VOID);
         return $this->commandPool->get('hokodo_post_sale')->execute($postSaleAction->__toArray());
@@ -83,12 +84,12 @@ class PostSale extends AbstractService
      *
      * @param DeferredPaymentsPostSaleActionInterface $postSaleAction
      *
-     * @return ResultInterface
+     * @return PostSaleEventResultInterface
      *
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function voidRemaining(DeferredPaymentsPostSaleActionInterface $postSaleAction): ResultInterface
+    public function voidRemaining(DeferredPaymentsPostSaleActionInterface $postSaleAction): PostSaleEventResultInterface
     {
         $postSaleAction->setType(DeferredPaymentsPostSaleActionInterface::TYPE_VOID_REMAINING);
         return $this->commandPool->get('hokodo_post_sale')->execute($postSaleAction->__toArray());

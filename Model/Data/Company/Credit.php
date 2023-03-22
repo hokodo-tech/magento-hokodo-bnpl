@@ -10,6 +10,7 @@ use Magento\Framework\DataObject;
 
 class Credit extends DataObject implements CreditInterface
 {
+    /** @todo add strict_types */
     /**
      * @inheritdoc
      */

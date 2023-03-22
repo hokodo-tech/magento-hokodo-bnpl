@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -27,14 +29,14 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setUrl($url);
+    public function setUrl(string $url): self;
 
     /**
      * A function that gets url.
      *
      * @return string
      */
-    public function getUrl();
+    public function getUrl(): string;
 
     /**
      * A function that sets id.
@@ -43,14 +45,14 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setId($id);
+    public function setId(string $id): self;
 
     /**
      * A function that gets id.
      *
      * @return string
      */
-    public function getId();
+    public function getId(): string;
 
     /**
      * A function that sets order.
@@ -59,14 +61,14 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setOrder($order);
+    public function setOrder(string $order): self;
 
     /**
      * A function that gets order.
      *
      * @return string
      */
-    public function getOrder();
+    public function getOrder(): string;
 
     /**
      * A function that sets offered payment plans.
@@ -75,14 +77,14 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setOfferedPaymentPlans(array $offeredPaymentPlans);
+    public function setOfferedPaymentPlans(array $offeredPaymentPlans): self;
 
     /**
      * A function that gets offered payment plans.
      *
      * @return \Hokodo\BNPL\Api\Data\PaymentPlanInterface[]
      */
-    public function getOfferedPaymentPlans();
+    public function getOfferedPaymentPlans(): array;
 
     /**
      * A function that sets legals.
@@ -91,14 +93,14 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setLegals(array $legals);
+    public function setLegals(array $legals): self;
 
     /**
      * A function that gets legals.
      *
      * @return string[]
      */
-    public function getLegals();
+    public function getLegals(): array;
 
     /**
      * A function that sets urls.
@@ -107,14 +109,14 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setUrls(array $urls);
+    public function setUrls(array $urls): self;
 
     /**
      * A function that gets urls.
      *
      * @return string[]
      */
-    public function getUrls();
+    public function getUrls(): array;
 
     /**
      * A function that sets locale.
@@ -123,14 +125,14 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setLocale($locale);
+    public function setLocale(string $locale): self;
 
     /**
      * A function that gets locale.
      *
      * @return string
      */
-    public function getLocale();
+    public function getLocale(): string;
 
     /**
      * A function that sets metadata.
@@ -139,14 +141,14 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setMetadata($metadata);
+    public function setMetadata(string $metadata): self;
 
     /**
      * A function that gets metadata.
      *
      * @return string
      */
-    public function getMetadata();
+    public function getMetadata(): string;
 
     /**
      * A function that sets is_eligible flag.

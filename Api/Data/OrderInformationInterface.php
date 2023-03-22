@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Api\Data;
 
 /**
@@ -37,14 +39,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setId($id);
+    public function setId(string $id): self;
 
     /**
      * A function that gets id.
      *
      * @return string
      */
-    public function getId();
+    public function getId(): string;
 
     /**
      * A function that sets unique id.
@@ -53,14 +55,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setUniqueId($uniqueId);
+    public function setUniqueId(string $uniqueId): self;
 
     /**
      * A function that gets unique id.
      *
      * @return string
      */
-    public function getUniqueId();
+    public function getUniqueId(): string;
 
     /**
      * A function that sets po number.
@@ -69,14 +71,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setPoNumber($poNumber);
+    public function setPoNumber(string $poNumber): self;
 
     /**
      * A function that gets po number.
      *
      * @return string
      */
-    public function getPoNumber();
+    public function getPoNumber(): string;
 
     /**
      * A function that sets customer.
@@ -85,14 +87,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setCustomer(OrderCustomerInterface $customer);
+    public function setCustomer(OrderCustomerInterface $customer): self;
 
     /**
      * A function that gets customer.
      *
      * @return \Hokodo\BNPL\Api\Data\OrderCustomerInterface
      */
-    public function getCustomer();
+    public function getCustomer(): OrderCustomerInterface;
 
     /**
      * A function that sets created.
@@ -101,14 +103,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setCreated($created);
+    public function setCreated(string $created): self;
 
     /**
      * A function that gets created.
      *
      * @return string
      */
-    public function getCreated();
+    public function getCreated(): string;
 
     /**
      * A function that sets currency.
@@ -117,14 +119,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setCurrency($currency);
+    public function setCurrency(string $currency): self;
 
     /**
      * A function that gets currency.
      *
      * @return string
      */
-    public function getCurrency();
+    public function getCurrency(): string;
 
     /**
      * A function that sets order date.
@@ -133,14 +135,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setOrderDate($orderDate);
+    public function setOrderDate(string $orderDate): self;
 
     /**
      * A function that gets order date.
      *
      * @return string
      */
-    public function getOrderDate();
+    public function getOrderDate(): string;
 
     /**
      * A function that sets invoice date.
@@ -149,14 +151,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setInvoiceDate($invoiceDate);
+    public function setInvoiceDate(string $invoiceDate): self;
 
     /**
      * A function that gets invoice date.
      *
      * @return string
      */
-    public function getInvoiceDate();
+    public function getInvoiceDate(): string;
 
     /**
      * A function that sets due date.
@@ -165,14 +167,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setDueDate($dueDate);
+    public function setDueDate(string $dueDate): self;
 
     /**
      * A function that gets due date.
      *
      * @return string
      */
-    public function getDueDate();
+    public function getDueDate(): string;
 
     /**
      * A function that sets paid date.
@@ -181,14 +183,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setPaidDate($paidDate);
+    public function setPaidDate(string $paidDate): self;
 
     /**
      * A function that gets paid date.
      *
      * @return string
      */
-    public function getPaidDate();
+    public function getPaidDate(): string;
 
     /**
      * A function that sets total amount.
@@ -197,14 +199,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setTotalAmount($totalAmount);
+    public function setTotalAmount(string $totalAmount): self;
 
     /**
      * A function that gets total amount.
      *
      * @return string
      */
-    public function getTotalAmount();
+    public function getTotalAmount(): string;
 
     /**
      * A function that sets amount.
@@ -213,14 +215,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setTaxAmount($taxAmount);
+    public function setTaxAmount(string $taxAmount): self;
 
     /**
      * A function that gets tax amount.
      *
      * @return string
      */
-    public function getTaxAmount();
+    public function getTaxAmount(): string;
 
     /**
      * A function that sets metadata.
@@ -229,14 +231,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setMetadata(array $metadata);
+    public function setMetadata(array $metadata): self;
 
     /**
      * A function that gets metadata.
      *
      * @return string[]
      */
-    public function getMetadata();
+    public function getMetadata(): array;
 
     /**
      * A function that sets items.
@@ -245,14 +247,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setItems(array $items);
+    public function setItems(array $items): self;
 
     /**
      * A function that gets items.
      *
      * @return \Hokodo\BNPL\Api\Data\OrderItemInterface[]
      */
-    public function getItems();
+    public function getItems(): array;
 
     /**
      * A function that sets payment offer.
@@ -261,14 +263,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setPaymentOffer($paymentOffer);
+    public function setPaymentOffer(string $paymentOffer): self;
 
     /**
      * A function that gets payment offer.
      *
      * @return string
      */
-    public function getPaymentOffer();
+    public function getPaymentOffer(): string;
 
     /**
      * A function that sets status.
@@ -277,14 +279,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setStatus($status);
+    public function setStatus(string $status): self;
 
     /**
      * A function that gets status.
      *
      * @return string
      */
-    public function getStatus();
+    public function getStatus(): string;
 
     /**
      * A function that sets pay method.
@@ -293,14 +295,14 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setPayMethod($payMethod);
+    public function setPayMethod(string $payMethod): self;
 
     /**
      * A function that gets pay method.
      *
      * @return string
      */
-    public function getPayMethod();
+    public function getPayMethod(): string;
 
     /**
      * A function that sets deferred payment.
@@ -309,12 +311,12 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setDeferredPayment($deferredPayment);
+    public function setDeferredPayment(string $deferredPayment): self;
 
     /**
      * A function that gets deferred payment.
      *
      * @return string
      */
-    public function getDeferredPayment();
+    public function getDeferredPayment(): string;
 }

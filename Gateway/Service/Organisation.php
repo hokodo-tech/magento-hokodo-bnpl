@@ -9,24 +9,25 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Gateway\Service;
 
 use Hokodo\BNPL\Api\Data\Gateway\CreateOrganisationRequestInterface;
+use Hokodo\BNPL\Gateway\Command\Result\OrganisationResultInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\Command\CommandException;
-use Magento\Payment\Gateway\Command\ResultInterface;
 
 class Organisation extends AbstractService
 {
     /**
      * Create Organisation service command.
      *
-     * @param CreateOrganisationRequestInterface $createOrganisationRequest
+     * @param OrganisationResultInterface $createOrganisationRequest
      *
      * @return ResultInterface|null
      *
      * @throws NotFoundException
      * @throws CommandException
      */
-    public function createOrganisation(CreateOrganisationRequestInterface $createOrganisationRequest): ?ResultInterface
-    {
+    public function createOrganisation(
+        CreateOrganisationRequestInterface $createOrganisationRequest
+    ): ?OrganisationResultInterface {
         return $this->commandPool->get('sdk_organisation_create')->execute($createOrganisationRequest->__toArray());
     }
 }

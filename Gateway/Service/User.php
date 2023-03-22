@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Gateway\Service;
 
 use Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterface;
+use Hokodo\BNPL\Gateway\Command\Result\UserResultInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\Command\CommandException;
-use Magento\Payment\Gateway\Command\ResultInterface;
 
 class User extends AbstractService
 {
@@ -20,12 +20,12 @@ class User extends AbstractService
      *
      * @param CreateUserRequestInterface $createUserRequest
      *
-     * @return ResultInterface|null
+     * @return UserResultInterface|null
      *
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function createUser(CreateUserRequestInterface $createUserRequest): ?ResultInterface
+    public function createUser(CreateUserRequestInterface $createUserRequest): ?UserResultInterface
     {
         return $this->executeCommand('sdk_user_create', $createUserRequest);
     }

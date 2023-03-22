@@ -3,6 +3,7 @@
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
+declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data;
 
@@ -35,14 +36,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setUrl($url);
+    public function setUrl(string $url): self;
 
     /**
      * A function that gets url.
      *
      * @return string
      */
-    public function getUrl();
+    public function getUrl(): string;
 
     /**
      * A function that sets id.
@@ -51,14 +52,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setId($id);
+    public function setId(string $id): self;
 
     /**
      * A function that gets id.
      *
      * @return string
      */
-    public function getId();
+    public function getId(): string;
 
     /**
      * A function that sets country.
@@ -67,14 +68,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setCountry($country);
+    public function setCountry(string $country): self;
 
     /**
      * A function that gets country.
      *
      * @return string
      */
-    public function getCountry();
+    public function getCountry(): string;
 
     /**
      * A function that sets name.
@@ -83,14 +84,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setName($name);
+    public function setName(string $name): self;
 
     /**
      * A function that gets name.
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * A function that sets address.
@@ -99,14 +100,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setAddress($address);
+    public function setAddress(string $address): self;
 
     /**
      * A function that gets address.
      *
      * @return string
      */
-    public function getAddress();
+    public function getAddress(): string;
 
     /**
      * A function that sets city.
@@ -115,14 +116,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setCity($city);
+    public function setCity(string $city): self;
 
     /**
      * A function that gets city.
      *
      * @return string
      */
-    public function getCity();
+    public function getCity(): string;
 
     /**
      * A function that sets postcode.
@@ -131,14 +132,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setPostcode($postcode);
+    public function setPostcode(string $postcode): self;
 
     /**
      * A function that gets postcode.
      *
      * @return string
      */
-    public function getPostcode();
+    public function getPostcode(): string;
 
     /**
      * A function that sets legal form.
@@ -147,14 +148,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setLegalForm($legalForm);
+    public function setLegalForm(string $legalForm): self;
 
     /**
      * A function that gets legal form.
      *
      * @return string
      */
-    public function getLegalForm();
+    public function getLegalForm(): string;
 
     /**
      * A function that sets sectors.
@@ -170,7 +171,7 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return string[]
      */
-    public function getSectors();
+    public function getSectors(): array;
 
     /**
      * A function that sets creation date.
@@ -179,14 +180,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setCreationDate($creationDate);
+    public function setCreationDate(string $creationDate): self;
 
     /**
      * A function that gets creation date.
      *
      * @return string
      */
-    public function getCreationDate();
+    public function getCreationDate(): string;
 
     /**
      * A function that sets identifiers.
@@ -195,14 +196,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setIdentifiers(array $identifiers);
+    public function setIdentifiers(array $identifiers): self;
 
     /**
      * A function that gets identifiers.
      *
      * @return string[]
      */
-    public function getIdentifiers();
+    public function getIdentifiers(): array;
 
     /**
      * A function that sets email.
@@ -211,14 +212,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setEmail($email);
+    public function setEmail(string $email): self;
 
     /**
      * A function that gets email.
      *
      * @return string
      */
-    public function getEmail();
+    public function getEmail(): string;
 
     /**
      * A function that sets phone.
@@ -227,14 +228,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setPhone($phone);
+    public function setPhone(string $phone): self;
 
     /**
      * A function that gets phone.
      *
      * @return string
      */
-    public function getPhone();
+    public function getPhone(): string;
 
     /**
      * A function that sets status.
@@ -243,14 +244,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setStatus($status);
+    public function setStatus(string $status): self;
 
     /**
      * A function that gets status.
      *
      * @return string
      */
-    public function getStatus();
+    public function getStatus(): string;
 
     /**
      * A function that set account type.
@@ -259,14 +260,14 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setAccountsType($accountsType);
+    public function setAccountsType(string $accountsType): self;
 
     /**
      * A function that gets account type.
      *
      * @return string
      */
-    public function getAccountsType();
+    public function getAccountsType(): string;
 
     /**
      * A function that sets confidence.
@@ -275,12 +276,12 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setConfidence($confidence);
+    public function setConfidence(string $confidence): self;
 
     /**
      * A function that gets confidence.
      *
      * @return string
      */
-    public function getConfidence();
+    public function getConfidence(): string;
 }

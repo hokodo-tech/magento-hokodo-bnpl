@@ -6,7 +6,9 @@
 
 namespace Hokodo\BNPL\Gateway\Command\Result;
 
+use Magento\Framework\Api\AbstractSimpleObject;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\Command\ResultInterface;
 
 /**
@@ -17,32 +19,56 @@ class Result implements ResultInterface
     /**
      * @var DataObjectHelper
      */
-    protected $dataObjectHelper;
+    private DataObjectHelper $dataObjectHelper;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private ObjectManagerInterface $objectManager;
 
     /**
      * @var array
      */
-    protected $result;
+    private array $result;
 
     /**
-     * @var \Magento\Framework\DataObject
+     * @var AbstractSimpleObject
      */
-    protected $dataModel;
+    private AbstractSimpleObject $dataModel;
 
     /**
      * @var array
      */
-    protected $list = [];
+    private array $list = [];
 
     /**
-     * @param DataObjectHelper $dataObjectHelper
-     * @param array            $result
+     * @var string
+     */
+    private string $field;
+
+    /**
+     * @var string
+     */
+    private string $dataInterface;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param DataObjectHelper       $dataObjectHelper
+     * @param string                 $field
+     * @param string                 $dataInterface
+     * @param array                  $result
      */
     public function __construct(
+        ObjectManagerInterface $objectManager,
         DataObjectHelper $dataObjectHelper,
+        string $field,
+        string $dataInterface,
         array $result = []
     ) {
+        $this->objectManager = $objectManager;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->field = $field;
+        $this->dataInterface = $dataInterface;
         $this->result = $result;
     }
 
@@ -51,7 +77,7 @@ class Result implements ResultInterface
      *
      * @see \Magento\Payment\Gateway\Command\ResultInterface::get()
      */
-    public function get()
+    public function get(): array
     {
         return $this->result;
     }
@@ -59,11 +85,11 @@ class Result implements ResultInterface
     /**
      * A function that returns data model.
      *
-     * @return \Magento\Framework\DataObject
+     * @return AbstractSimpleObject
      */
-    public function getDataModel()
+    public function getDataModel(): AbstractSimpleObject
     {
-        if (null == $this->dataModel) {
+        if (empty($this->dataModel)) {
             $this->populateDataModel();
         }
         return $this->dataModel;
@@ -74,7 +100,7 @@ class Result implements ResultInterface
      *
      * @return array
      */
-    public function getList()
+    public function getList(): array
     {
         if (empty($this->list)) {
             $this->populateListResult();
@@ -85,20 +111,42 @@ class Result implements ResultInterface
     /**
      * A function that returns populate data model.
      *
-     * @return \Hokodo\BNPL\Gateway\Command\Result\Result
+     * @return void
      */
-    protected function populateDataModel()
+    private function populateDataModel(): void
     {
-        return $this;
+        $this->dataModel = $this->objectManager->create($this->dataInterface);
+        $data = $this->get();
+        if (isset($data[$this->field])) {
+            $this->dataObjectHelper->populateWithArray(
+                $this->dataModel,
+                $data,
+                $this->dataInterface
+            );
+        }
     }
 
     /**
      * A function that returns populate list result.
      *
-     * @return \Hokodo\BNPL\Gateway\Command\Result\Result
+     * @return void
      */
-    protected function populateListResult()
+    private function populateListResult(): void
     {
-        return $this;
+        $data = $this->get();
+        $this->list = [];
+
+        if (isset($data['results']) && is_array($data['results'])) {
+            foreach ($data['results'] as $userData) {
+                $user = $this->objectManager->create($this->dataInterface);
+                $this->dataObjectHelper->populateWithArray(
+                    $user,
+                    $userData,
+                    $this->dataInterface
+                );
+
+                $this->list[] = $user;
+            }
+        }
     }
 }

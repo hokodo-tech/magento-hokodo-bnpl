@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Api\Data;
 
 /**
@@ -28,14 +30,14 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setId($id);
+    public function setId(string $id): self;
 
     /**
      * A function that id.
      *
      * @return string
      */
-    public function getId();
+    public function getId(): string;
 
     /**
      * A function that sets email.
@@ -44,14 +46,14 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setEmail($email);
+    public function setEmail(string $email): self;
 
     /**
      * A function that gets email.
      *
      * @return string
      */
-    public function getEmail();
+    public function getEmail(): string;
 
     /**
      * A function that sets email validated.
@@ -60,14 +62,14 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setEmailValidated($emailValidated);
+    public function setEmailValidated(bool $emailValidated): self;
 
     /**
      * A function that gets email validated.
      *
      * @return bool
      */
-    public function getEmailValidated();
+    public function getEmailValidated(): bool;
 
     /**
      * A function that sets unique id.
@@ -76,14 +78,14 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setUniqueId($uniqueId);
+    public function setUniqueId(string $uniqueId): self;
 
     /**
      * A function that gets unique id.
      *
      * @return string
      */
-    public function getUniqueId();
+    public function getUniqueId(): string;
 
     /**
      * A function that sets name.
@@ -92,14 +94,14 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setName($name);
+    public function setName(string $name): self;
 
     /**
      * A function that gets name.
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * A function that sets phone.
@@ -108,14 +110,14 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setPhone($phone);
+    public function setPhone(string $phone): self;
 
     /**
      * A function that gets phone.
      *
      * @return string
      */
-    public function getPhone();
+    public function getPhone(): string;
 
     /**
      * A function that sets registered.
@@ -124,14 +126,14 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setRegistered($registered);
+    public function setRegistered(string $registered): self;
 
     /**
      * A function that gets registered.
      *
      * @return string
      */
-    public function getRegistered();
+    public function getRegistered(): string;
 
     /**
      * A function that sets organisations.
@@ -140,14 +142,14 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setOrganisations(array $organisations);
+    public function setOrganisations(array $organisations): self;
 
     /**
      * A function that gets organisations.
      *
      * @return \Hokodo\BNPL\Api\Data\UserOrganisationInterface[]
      */
-    public function getOrganisations();
+    public function getOrganisations(): array;
 
     /**
      * A function that sets type.
@@ -156,12 +158,12 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setType($type);
+    public function setType(string $type): self;
 
     /**
      * A function that gets type.
      *
      * @return string
      */
-    public function getType();
+    public function getType(): string;
 }

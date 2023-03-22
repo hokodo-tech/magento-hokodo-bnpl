@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Model\Webapi;
 
 use Hokodo\BNPL\Api\Data\OrganisationInterface;
-use Hokodo\BNPL\Api\Data\UserInterface;
 use Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerRequestInterface;
 use Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterface;
 use Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterfaceFactory;
@@ -146,7 +145,6 @@ class HokodoCustomer implements HokodoCustomerInterface
             }
 
             if (!$hokodoCustomer->getUserId()) {
-                /** @var UserInterface $user */
                 $user = $this->userService->createUser(
                     $this->userBuilder->build($this->customerSession->getCustomer(), $organisation->getId())
                 )->getDataModel();
