@@ -16,4 +16,8 @@
         <observer name="invalidate_hokodo_customer_observer"
                   instance="Hokodo\BNPL\Observer\Customer\InvalidateHokodoCustomerObserver"/>
     </event>
+    <event name="customer_register_success">
+        <observer name="hokodo_assign_company_after_regisration"
+                  instance="Hokodo\BNPL\Observer\Customer\AssignCompanyAfterRegistration"/>
+    </event>
 </config>
