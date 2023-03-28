@@ -331,6 +331,10 @@ class Companies extends AbstractEntity
     private function getWebsiteId(array $rowData): ?int
     {
         $websiteId = null;
+        /*
+         * We need to set website id = 0 because we can't use null.
+         * See get() method of Magento\Customer\Api\CustomerRepositoryInterface.
+         */
         if (count($this->websites) > 1) {
             $websiteId = 0;
         }
