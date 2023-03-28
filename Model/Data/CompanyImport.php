@@ -80,4 +80,27 @@ class CompanyImport extends DataObject implements CompanyImportInterface
         $this->setData(self::COUNTRY_CODE, $countryCode);
         return $this;
     }
+
+    /**
+     * Getter for WebsiteId.
+     *
+     * @return int|null
+     */
+    public function getWebsiteId(): ?int
+    {
+        return $this->getData(self::WEBSITE_ID);
+    }
+
+    /**
+     * Setter for WebsiteId.
+     *
+     * @param int|null $websiteId
+     *
+     * @return self
+     */
+    public function setWebsiteId(?int $websiteId): self
+    {
+        $this->setData(self::WEBSITE_ID, $websiteId);
+        return $this;
+    }
 }

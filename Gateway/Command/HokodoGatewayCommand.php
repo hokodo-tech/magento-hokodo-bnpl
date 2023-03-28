@@ -141,6 +141,7 @@ class HokodoGatewayCommand implements CommandInterface
      * @param ResultInterface $result
      *
      * @throws CommandException|LocalizedException
+     *
      * @phpcs:disable Generic.Metrics.NestingLevel
      */
     private function processErrors(ResultInterface $result)

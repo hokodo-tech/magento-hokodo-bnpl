@@ -15,6 +15,7 @@ interface CompanyImportInterface
     public const EMAIL = 'email';
     public const REG_NUMBER = 'reg_number';
     public const COUNTRY_CODE = 'country_code';
+    public const WEBSITE_ID = 'website_id';
 
     /**
      * Getter for Email.
@@ -63,4 +64,20 @@ interface CompanyImportInterface
      * @return self
      */
     public function setCountryCode(?string $countryCode): self;
+
+    /**
+     * Getter for WebsiteId.
+     *
+     * @return int|null
+     */
+    public function getWebsiteId(): ?int;
+
+    /**
+     * Setter for WebsiteId.
+     *
+     * @param int|null $websiteId
+     *
+     * @return self
+     */
+    public function setWebsiteId(?int $websiteId): self;
 }

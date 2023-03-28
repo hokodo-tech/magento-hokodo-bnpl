@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Hokodo\BNPL\Api\Data\PaymentMethodInterface" type="Hokodo\BNPL\Model\Data\PaymentMethod" />
     <preference for="Hokodo\BNPL\Api\Data\CompanyInterface" type="Hokodo\BNPL\Model\Data\Company" />
+    <preference for="Hokodo\BNPL\Api\Data\CompanyImportInterface" type="Hokodo\BNPL\Model\Data\CompanyImport" />
     <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentInterface" type="Hokodo\BNPL\Model\Data\DeferredPayment" />
     <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentIpnInterface" type="Hokodo\BNPL\Model\Data\DeferredPaymentIpn" />
     <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentIpnPayloadInterface" type="Hokodo\BNPL\Model\Data\DeferredPaymentIpnPayload" />
@@ -242,7 +243,7 @@
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-    <type name="Hokodo\BNPL\Model\Queue\Handler\CustomerImport">
+    <type name="Hokodo\BNPL\Model\Queue\Handler\CompanyImport">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoImportLogger</argument>
         </arguments>
