@@ -28,7 +28,7 @@ class Company extends AbstractService
      * @throws NotFoundException
      * @throws CommandException
      */
-    public function search(CompanySearchRequestInterface $request): CompanyResultInterface
+    public function search(CompanySearchRequestInterface $request)
     {
         return $this->commandPool->get('hokodo_company_search')->execute($request->__toArray());
     }
@@ -43,7 +43,7 @@ class Company extends AbstractService
      * @throws NotFoundException
      * @throws CommandException
      */
-    public function getCredit(CompanyCreditRequestInterface $request): CompanyCreditResultInterface
+    public function getCredit(CompanyCreditRequestInterface $request)
     {
         return $this->commandPool->get('hokodo_company_credit')->execute($request->__toArray());
     }

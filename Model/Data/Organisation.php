@@ -16,13 +16,12 @@ use Magento\Framework\Api\AbstractSimpleObject;
  */
 class Organisation extends AbstractSimpleObject implements OrganisationInterface
 {
-    /** @todo add strict_types */
     /**
      * @inheritDoc
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::setId()
      */
-    public function setId(string $id): OrganisationInterface
+    public function setId(string $id = null): OrganisationInterface
     {
         return $this->setData(self::ID, $id);
     }
@@ -32,7 +31,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::getId()
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->_get(self::ID);
     }
@@ -42,7 +41,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::setUniqueId()
      */
-    public function setUniqueId(string $uniqueId): OrganisationInterface
+    public function setUniqueId(string $uniqueId = null): OrganisationInterface
     {
         return $this->setData(self::UNIQUE_ID, $uniqueId);
     }
@@ -52,7 +51,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::getUniqueId()
      */
-    public function getUniqueId(): string
+    public function getUniqueId(): ?string
     {
         return $this->_get(self::UNIQUE_ID);
     }
@@ -62,7 +61,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::setRegistered()
      */
-    public function setRegistered(string $registered): OrganisationInterface
+    public function setRegistered(string $registered = null): OrganisationInterface
     {
         return $this->setData(self::REGISTERED, $registered);
     }
@@ -72,7 +71,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::getRegistered()
      */
-    public function getRegistered(): string
+    public function getRegistered(): ?string
     {
         return $this->_get(self::REGISTERED);
     }
@@ -82,7 +81,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::setCompany()
      */
-    public function setCompany(string $company): OrganisationInterface
+    public function setCompany(string $company = null): OrganisationInterface
     {
         return $this->setData(self::COMPANY, $company);
     }
@@ -92,7 +91,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::getCompany()
      */
-    public function getCompany(): string
+    public function getCompany(): ?string
     {
         return $this->_get(self::COMPANY);
     }
@@ -102,7 +101,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::setUsers()
      */
-    public function setUsers(array $users): OrganisationInterface
+    public function setUsers(array $users = []): OrganisationInterface
     {
         return $this->setData(self::USERS, $users);
     }

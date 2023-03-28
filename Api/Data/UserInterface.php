@@ -26,34 +26,34 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * A function that sets id.
      *
-     * @param string $id
+     * @param string|null $id
      *
      * @return $this
      */
-    public function setId(string $id): self;
+    public function setId(string $id = null): self;
 
     /**
      * A function that id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId(): string;
+    public function getId(): ?string;
 
     /**
      * A function that sets email.
      *
-     * @param string $email
+     * @param string|null $email
      *
      * @return $this
      */
-    public function setEmail(string $email): self;
+    public function setEmail(string $email = null): self;
 
     /**
      * A function that gets email.
      *
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string;
+    public function getEmail(): ?string;
 
     /**
      * A function that sets email validated.
@@ -74,66 +74,66 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * A function that sets unique id.
      *
-     * @param string $uniqueId
+     * @param string|null $uniqueId
      *
      * @return $this
      */
-    public function setUniqueId(string $uniqueId): self;
+    public function setUniqueId(string $uniqueId = null): self;
 
     /**
      * A function that gets unique id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUniqueId(): string;
+    public function getUniqueId(): ?string;
 
     /**
      * A function that sets name.
      *
-     * @param string $name
+     * @param string|null $name
      *
      * @return $this
      */
-    public function setName(string $name): self;
+    public function setName(string $name = null): self;
 
     /**
      * A function that gets name.
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string;
+    public function getName(): ?string;
 
     /**
      * A function that sets phone.
      *
-     * @param string $phone
+     * @param string|null $phone
      *
      * @return $this
      */
-    public function setPhone(string $phone): self;
+    public function setPhone(string $phone = null): self;
 
     /**
      * A function that gets phone.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPhone(): string;
+    public function getPhone(): ?string;
 
     /**
      * A function that sets registered.
      *
-     * @param string $registered
+     * @param string|null $registered
      *
      * @return $this
      */
-    public function setRegistered(string $registered): self;
+    public function setRegistered(string $registered = null): self;
 
     /**
      * A function that gets registered.
      *
-     * @return string
+     * @return string|null
      */
-    public function getRegistered(): string;
+    public function getRegistered(): ?string;
 
     /**
      * A function that sets organisations.
@@ -142,7 +142,7 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setOrganisations(array $organisations): self;
+    public function setOrganisations(array $organisations = []): self;
 
     /**
      * A function that gets organisations.
@@ -154,16 +154,16 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * A function that sets type.
      *
-     * @param string $type
+     * @param string|null $type
      *
      * @return $this
      */
-    public function setType(string $type): self;
+    public function setType(string $type = null): self;
 
     /**
      * A function that gets type.
      *
-     * @return string
+     * @return string|null
      */
-    public function getType(): string;
+    public function getType(): ?string;
 }

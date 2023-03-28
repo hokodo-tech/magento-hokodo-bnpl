@@ -26,7 +26,7 @@ class CompanySearch extends AbstractService
      * @throws NotFoundException
      * @throws CommandException
      */
-    public function search(CompanySearchRequestInterface $request): CompanyResultInterface
+    public function search(CompanySearchRequestInterface $request)
     {
         return $this->commandPool->get('hokodo_company_search')->execute($request->__toArray());
     }

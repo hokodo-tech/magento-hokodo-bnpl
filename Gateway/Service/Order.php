@@ -23,7 +23,7 @@ class Order extends AbstractService
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Payment\Gateway\Command\CommandException
      */
-    public function createOrder(CreateOrderRequestInterface $createOrderRequest): ?OrderResultInterface
+    public function createOrder(CreateOrderRequestInterface $createOrderRequest)
     {
         return $this->commandPool->get('sdk_order_create')->execute($createOrderRequest->__toArray());
     }
@@ -38,7 +38,7 @@ class Order extends AbstractService
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Payment\Gateway\Command\CommandException
      */
-    public function patchOrder(PatchOrderRequestInterface $createOrderRequest): ?OrderResultInterface
+    public function patchOrder(PatchOrderRequestInterface $createOrderRequest)
     {
         return $this->commandPool->get('sdk_order_patch')->execute($createOrderRequest->__toArray());
     }
@@ -53,7 +53,7 @@ class Order extends AbstractService
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Payment\Gateway\Command\CommandException
      */
-    public function getOrder($getOrderRequest): ?OrderResultInterface
+    public function getOrder($getOrderRequest)
     {
         return $this->commandPool->get('sdk_order_get')->execute($getOrderRequest);
     }

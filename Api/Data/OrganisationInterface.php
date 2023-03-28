@@ -25,66 +25,66 @@ interface OrganisationInterface
     /**
      * A function that sets id.
      *
-     * @param string $id
+     * @param string|null $id
      *
      * @return $this
      */
-    public function setId(string $id): self;
+    public function setId(string $id = null): self;
 
     /**
      * A function that gets id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId(): string;
+    public function getId(): ?string;
 
     /**
      * A function that sets unique id.
      *
-     * @param string $uniqueId
+     * @param string|null $uniqueId
      *
      * @return $this
      */
-    public function setUniqueId(string $uniqueId): self;
+    public function setUniqueId(string $uniqueId = null): self;
 
     /**
      * A function that gets unique id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUniqueId(): string;
+    public function getUniqueId(): ?string;
 
     /**
      * A function that sets registered.
      *
-     * @param string $registered
+     * @param string|null $registered
      *
      * @return $this
      */
-    public function setRegistered(string $registered): self;
+    public function setRegistered(string $registered = null): self;
 
     /**
      * A function that gets registered.
      *
-     * @return string
+     * @return string|null
      */
-    public function getRegistered(): string;
+    public function getRegistered(): ?string;
 
     /**
      * A function that sets company.
      *
-     * @param string $company
+     * @param string|null $company
      *
      * @return $this
      */
-    public function setCompany(string $company): self;
+    public function setCompany(string $company = null): self;
 
     /**
      * A function that gets company.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCompany(): string;
+    public function getCompany(): ?string;
 
     /**
      * A function that sets users.
@@ -93,7 +93,7 @@ interface OrganisationInterface
      *
      * @return $this
      */
-    public function setUsers(array $users): self;
+    public function setUsers(array $users = []): self;
 
     /**
      * A function that gets users.

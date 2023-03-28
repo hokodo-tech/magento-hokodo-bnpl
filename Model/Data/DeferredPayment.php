@@ -21,7 +21,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::setUrl()
      */
-    public function setUrl(string $url): DeferredPaymentInterface
+    public function setUrl(string $url = null): DeferredPaymentInterface
     {
         return $this->setData(self::URL, $url);
     }
@@ -31,7 +31,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::getUrl()
      */
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->_get(self::URL);
     }
@@ -41,7 +41,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::setId()
      */
-    public function setId(string $id): DeferredPaymentInterface
+    public function setId(string $id = null): DeferredPaymentInterface
     {
         return $this->setData(self::ID, $id);
     }
@@ -51,7 +51,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::getId()
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->_get(self::ID);
     }
@@ -61,7 +61,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::setNumber()
      */
-    public function setNumber(string $number): DeferredPaymentInterface
+    public function setNumber(string $number = null): DeferredPaymentInterface
     {
         return $this->setData(self::NUMBER, $number);
     }
@@ -71,7 +71,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::getNumber()
      */
-    public function getNumber(): string
+    public function getNumber(): ?string
     {
         return $this->_get(self::NUMBER);
     }
@@ -81,7 +81,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::setPaymentPlan()
      */
-    public function setPaymentPlan(string $paymentPlan): DeferredPaymentInterface
+    public function setPaymentPlan(string $paymentPlan = null): DeferredPaymentInterface
     {
         return $this->setData(self::PAYMENT_PLAN, $paymentPlan);
     }
@@ -91,7 +91,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::getPaymentPlan()
      */
-    public function getPaymentPlan(): string
+    public function getPaymentPlan(): ?string
     {
         return $this->_get(self::PAYMENT_PLAN);
     }
@@ -101,7 +101,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::setOrder()
      */
-    public function setOrder(string $order): DeferredPaymentInterface
+    public function setOrder(string $order = null): DeferredPaymentInterface
     {
         return $this->setData(self::ORDER, $order);
     }
@@ -111,7 +111,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::getOrder()
      */
-    public function getOrder(): string
+    public function getOrder(): ?string
     {
         return $this->_get(self::ORDER);
     }
@@ -121,7 +121,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::setStatus()
      */
-    public function setStatus(string $status): DeferredPaymentInterface
+    public function setStatus(string $status = null): DeferredPaymentInterface
     {
         return $this->setData(self::STATUS, $status);
     }
@@ -131,7 +131,7 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
      *
      * @see \Hokodo\BNPL\Api\Data\DeferredPaymentInterface::getStatus()
      */
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->_get(self::STATUS);
     }

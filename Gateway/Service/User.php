@@ -25,7 +25,7 @@ class User extends AbstractService
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function createUser(CreateUserRequestInterface $createUserRequest): ?UserResultInterface
+    public function createUser(CreateUserRequestInterface $createUserRequest)
     {
         return $this->executeCommand('sdk_user_create', $createUserRequest);
     }

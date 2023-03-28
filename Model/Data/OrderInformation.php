@@ -23,7 +23,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setId()
      */
-    public function setId(string $id): OrderInformationInterface
+    public function setId(string $id = null): OrderInformationInterface
     {
         return $this->setData(self::ID, $id);
     }
@@ -33,7 +33,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getId()
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->_get(self::ID);
     }
@@ -43,7 +43,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setUniqueId()
      */
-    public function setUniqueId(string $uniqueId): OrderInformationInterface
+    public function setUniqueId(string $uniqueId = null): OrderInformationInterface
     {
         return $this->setData(self::UNIQUE_ID, $uniqueId);
     }
@@ -53,7 +53,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getUniqueId()
      */
-    public function getUniqueId(): string
+    public function getUniqueId(): ?string
     {
         return $this->_get(self::UNIQUE_ID);
     }
@@ -63,7 +63,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setPoNumber()
      */
-    public function setPoNumber(string $poNumber): OrderInformationInterface
+    public function setPoNumber(string $poNumber = null): OrderInformationInterface
     {
         return $this->setData(self::PO_NUMBER, $poNumber);
     }
@@ -73,7 +73,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getPoNumber()
      */
-    public function getPoNumber(): string
+    public function getPoNumber(): ?string
     {
         return $this->_get(self::PO_NUMBER);
     }
@@ -93,7 +93,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getCustomer()
      */
-    public function getCustomer(): OrderCustomerInterface
+    public function getCustomer(): ?OrderCustomerInterface
     {
         return $this->_get(self::CUSTOMER);
     }
@@ -103,7 +103,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setCreated()
      */
-    public function setCreated(string $created): OrderInformationInterface
+    public function setCreated(string $created = null): OrderInformationInterface
     {
         return $this->setData(self::CREATED, $created);
     }
@@ -113,7 +113,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getCreated()
      */
-    public function getCreated(): string
+    public function getCreated(): ?string
     {
         return $this->_get(self::CREATED);
     }
@@ -123,7 +123,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setCurrency()
      */
-    public function setCurrency(string $currency): OrderInformationInterface
+    public function setCurrency(string $currency = null): OrderInformationInterface
     {
         return $this->setData(self::CURRENCY, $currency);
     }
@@ -133,7 +133,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getCurrency()
      */
-    public function getCurrency(): string
+    public function getCurrency(): ?string
     {
         return $this->_get(self::CURRENCY);
     }
@@ -143,7 +143,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setOrderDate()
      */
-    public function setOrderDate(string $orderDate): OrderInformationInterface
+    public function setOrderDate(string $orderDate = null): OrderInformationInterface
     {
         return $this->setData(self::ORDER_DATE, $orderDate);
     }
@@ -153,7 +153,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getOrderDate()
      */
-    public function getOrderDate(): string
+    public function getOrderDate(): ?string
     {
         return $this->_get(self::ORDER_DATE);
     }
@@ -163,7 +163,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setInvoiceDate()
      */
-    public function setInvoiceDate(string $invoiceDate): OrderInformationInterface
+    public function setInvoiceDate(string $invoiceDate = null): OrderInformationInterface
     {
         return $this->setData(self::INVOICE_DATE, $invoiceDate);
     }
@@ -173,7 +173,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getInvoiceDate()
      */
-    public function getInvoiceDate(): string
+    public function getInvoiceDate(): ?string
     {
         return $this->_get(self::INVOICE_DATE);
     }
@@ -183,7 +183,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setDueDate()
      */
-    public function setDueDate(string $dueDate): OrderInformationInterface
+    public function setDueDate(string $dueDate = null): OrderInformationInterface
     {
         return $this->setData(self::DUE_DATE, $dueDate);
     }
@@ -193,7 +193,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getDueDate()
      */
-    public function getDueDate(): string
+    public function getDueDate(): ?string
     {
         return $this->_get(self::DUE_DATE);
     }
@@ -203,7 +203,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setPaidDate()
      */
-    public function setPaidDate(string $paidDate): OrderInformationInterface
+    public function setPaidDate(string $paidDate = null): OrderInformationInterface
     {
         return $this->setData(self::PAID_DATE, $paidDate);
     }
@@ -213,7 +213,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getPaidDate()
      */
-    public function getPaidDate(): string
+    public function getPaidDate(): ?string
     {
         return $this->_get(self::PAID_DATE);
     }
@@ -223,7 +223,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setTotalAmount()
      */
-    public function setTotalAmount(string $totalAmount): OrderInformationInterface
+    public function setTotalAmount(string $totalAmount = null): OrderInformationInterface
     {
         return $this->setData(self::TOTAL_AMOUNT, $totalAmount);
     }
@@ -233,7 +233,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getTotalAmount()
      */
-    public function getTotalAmount(): string
+    public function getTotalAmount(): ?string
     {
         return $this->_get(self::TOTAL_AMOUNT);
     }
@@ -243,7 +243,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setTaxAmount()
      */
-    public function setTaxAmount(string $taxAmount): OrderInformationInterface
+    public function setTaxAmount(string $taxAmount = null): OrderInformationInterface
     {
         return $this->setData(self::TAX_AMOUNT, $taxAmount);
     }
@@ -253,7 +253,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getTaxAmount()
      */
-    public function getTaxAmount(): string
+    public function getTaxAmount(): ?string
     {
         return $this->_get(self::TAX_AMOUNT);
     }
@@ -263,7 +263,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setMetadata()
      */
-    public function setMetadata(array $metadata): OrderInformationInterface
+    public function setMetadata(array $metadata = []): OrderInformationInterface
     {
         return $this->setData(self::METADATA, $metadata);
     }
@@ -283,7 +283,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setItems()
      */
-    public function setItems(array $items): OrderInformationInterface
+    public function setItems(array $items = []): OrderInformationInterface
     {
         return $this->setData(self::ITEMS, $items);
     }
@@ -303,7 +303,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setPaymentOffer()
      */
-    public function setPaymentOffer(string $paymentOffer): OrderInformationInterface
+    public function setPaymentOffer(string $paymentOffer = null): OrderInformationInterface
     {
         return $this->setData(self::PAYMENT_OFFER, $paymentOffer);
     }
@@ -313,7 +313,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getPaymentOffer()
      */
-    public function getPaymentOffer(): string
+    public function getPaymentOffer(): ?string
     {
         return $this->_get(self::PAYMENT_OFFER);
     }
@@ -323,7 +323,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setStatus()
      */
-    public function setStatus(string $status): OrderInformationInterface
+    public function setStatus(string $status = null): OrderInformationInterface
     {
         return $this->setData(self::STATUS, $status);
     }
@@ -333,7 +333,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getStatus()
      */
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->_get(self::STATUS);
     }
@@ -343,7 +343,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setPayMethod()
      */
-    public function setPayMethod(string $payMethod): OrderInformationInterface
+    public function setPayMethod(string $payMethod = null): OrderInformationInterface
     {
         return $this->setData(self::PAY_METHOD, $payMethod);
     }
@@ -353,7 +353,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getPayMethod()
      */
-    public function getPayMethod(): string
+    public function getPayMethod(): ?string
     {
         return $this->_get(self::PAY_METHOD);
     }
@@ -363,7 +363,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::setDeferredPayment()
      */
-    public function setDeferredPayment(string $deferredPayment): OrderInformationInterface
+    public function setDeferredPayment(string $deferredPayment = null): OrderInformationInterface
     {
         return $this->setData(self::DEFERRED_PAYMENT, $deferredPayment);
     }
@@ -373,7 +373,7 @@ class OrderInformation extends AbstractSimpleObject implements OrderInformationI
      *
      * @see \Hokodo\BNPL\Api\Data\OrderInformationInterface::getDeferredPayment()
      */
-    public function getDeferredPayment(): string
+    public function getDeferredPayment(): ?string
     {
         return $this->_get(self::DEFERRED_PAYMENT);
     }

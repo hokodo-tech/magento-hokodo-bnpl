@@ -30,96 +30,96 @@ interface DeferredPaymentInterface
     /**
      * A function that sets url.
      *
-     * @param string $url
+     * @param string|null $url
      *
      * @return $this
      */
-    public function setUrl(string $url): self;
+    public function setUrl(string $url = null): self;
 
     /**
      * A function that gets url.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUrl(): string;
+    public function getUrl(): ?string;
 
     /**
      * A function that sets id.
      *
-     * @param string $id
+     * @param string|null $id
      *
      * @return $this
      */
-    public function setId(string $id): self;
+    public function setId(string $id = null): self;
 
     /**
      * A function that gets id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId(): string;
+    public function getId(): ?string;
 
     /**
      * A function that sets number.
      *
-     * @param string $number
+     * @param string|null $number
      *
      * @return $this
      */
-    public function setNumber(string $number): self;
+    public function setNumber(string $number = null): self;
 
     /**
      * A function that gets number.
      *
-     * @return string
+     * @return string|null
      */
-    public function getNumber(): string;
+    public function getNumber(): ?string;
 
     /**
      * A function that sets payment plan.
      *
-     * @param string $paymentPlan
+     * @param string|null $paymentPlan
      *
      * @return $this
      */
-    public function setPaymentPlan(string $paymentPlan): self;
+    public function setPaymentPlan(string $paymentPlan = null): self;
 
     /**
      * A function that gets payment plan.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPaymentPlan(): string;
+    public function getPaymentPlan(): ?string;
 
     /**
      * A function that sets order.
      *
-     * @param string $order
+     * @param string|null $order
      *
      * @return $this
      */
-    public function setOrder(string $order): self;
+    public function setOrder(string $order = null): self;
 
     /**
      * A function that gets order.
      *
-     * @return string
+     * @return string|null
      */
-    public function getOrder(): string;
+    public function getOrder(): ?string;
 
     /**
      * A function that sets status.
      *
-     * @param string $status
+     * @param string|null $status
      *
      * @return $this
      */
-    public function setStatus(string $status): self;
+    public function setStatus(string $status = null): self;
 
     /**
      * A function that gets status.
      *
-     * @return string
+     * @return string|null
      */
-    public function getStatus(): string;
+    public function getStatus(): ?string;
 }

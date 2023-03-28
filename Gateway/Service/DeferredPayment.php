@@ -24,7 +24,7 @@ class DeferredPayment extends AbstractService
      * @throws NotFoundException
      * @throws CommandException
      */
-    public function getDeferredPayment(array $request): DeferredPaymentResultInterface
+    public function getDeferredPayment(array $request)
     {
         return $this->commandPool->get('deferred_payment_info')->execute($request);
     }

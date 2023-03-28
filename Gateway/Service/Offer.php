@@ -24,7 +24,7 @@ class Offer extends AbstractService
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Payment\Gateway\Command\CommandException
      */
-    public function createOffer(CreateOfferRequestInterface $createOfferRequest): PaymentOfferResultInterface
+    public function createOffer(CreateOfferRequestInterface $createOfferRequest)
     {
         return $this->commandPool->get('sdk_offer_create')->execute($createOfferRequest->__toArray());
     }
@@ -39,7 +39,7 @@ class Offer extends AbstractService
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function getOffer(array $getOfferRequest): PaymentOfferResultInterface
+    public function getOffer(array $getOfferRequest)
     {
         return $this->commandPool->get('sdk_offer_get')->execute($getOfferRequest);
     }

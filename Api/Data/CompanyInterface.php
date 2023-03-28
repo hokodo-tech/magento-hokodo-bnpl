@@ -32,130 +32,130 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * A function that sets url.
      *
-     * @param string $url
+     * @param string|null $url
      *
      * @return CompanyInterface
      */
-    public function setUrl(string $url): self;
+    public function setUrl(string $url = null): self;
 
     /**
      * A function that gets url.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUrl(): string;
+    public function getUrl(): ?string;
 
     /**
      * A function that sets id.
      *
-     * @param string $id
+     * @param string|null $id
      *
      * @return CompanyInterface
      */
-    public function setId(string $id): self;
+    public function setId(string $id = null): self;
 
     /**
      * A function that gets id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId(): string;
+    public function getId(): ?string;
 
     /**
      * A function that sets country.
      *
-     * @param string $country
+     * @param string|null $country
      *
      * @return CompanyInterface
      */
-    public function setCountry(string $country): self;
+    public function setCountry(string $country = null): self;
 
     /**
      * A function that gets country.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCountry(): string;
+    public function getCountry(): ?string;
 
     /**
      * A function that sets name.
      *
-     * @param string $name
+     * @param string|null $name
      *
      * @return CompanyInterface
      */
-    public function setName(string $name): self;
+    public function setName(string $name = null): self;
 
     /**
      * A function that gets name.
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string;
+    public function getName(): ?string;
 
     /**
      * A function that sets address.
      *
-     * @param string $address
+     * @param string|null $address
      *
      * @return CompanyInterface
      */
-    public function setAddress(string $address): self;
+    public function setAddress(string $address = null): self;
 
     /**
      * A function that gets address.
      *
-     * @return string
+     * @return string|null
      */
-    public function getAddress(): string;
+    public function getAddress(): ?string;
 
     /**
      * A function that sets city.
      *
-     * @param string $city
+     * @param string|null $city
      *
      * @return CompanyInterface
      */
-    public function setCity(string $city): self;
+    public function setCity(string $city = null): self;
 
     /**
      * A function that gets city.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string;
+    public function getCity(): ?string;
 
     /**
      * A function that sets postcode.
      *
-     * @param string $postcode
+     * @param string|null $postcode
      *
      * @return CompanyInterface
      */
-    public function setPostcode(string $postcode): self;
+    public function setPostcode(string $postcode = null): self;
 
     /**
      * A function that gets postcode.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPostcode(): string;
+    public function getPostcode(): ?string;
 
     /**
      * A function that sets legal form.
      *
-     * @param string $legalForm
+     * @param string|null $legalForm
      *
      * @return CompanyInterface
      */
-    public function setLegalForm(string $legalForm): self;
+    public function setLegalForm(string $legalForm = null): self;
 
     /**
      * A function that gets legal form.
      *
-     * @return string
+     * @return string|null
      */
-    public function getLegalForm(): string;
+    public function getLegalForm(): ?string;
 
     /**
      * A function that sets sectors.
@@ -164,7 +164,7 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setSectors(array $sectors);
+    public function setSectors(array $sectors = []);
 
     /**
      * A function that gets sectors.
@@ -176,18 +176,18 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * A function that sets creation date.
      *
-     * @param string $creationDate
+     * @param string|null $creationDate
      *
      * @return CompanyInterface
      */
-    public function setCreationDate(string $creationDate): self;
+    public function setCreationDate(string $creationDate = null): self;
 
     /**
      * A function that gets creation date.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCreationDate(): string;
+    public function getCreationDate(): ?string;
 
     /**
      * A function that sets identifiers.
@@ -196,7 +196,7 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return CompanyInterface
      */
-    public function setIdentifiers(array $identifiers): self;
+    public function setIdentifiers(array $identifiers = []): self;
 
     /**
      * A function that gets identifiers.
@@ -208,80 +208,80 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * A function that sets email.
      *
-     * @param string $email
+     * @param string|null $email
      *
      * @return CompanyInterface
      */
-    public function setEmail(string $email): self;
+    public function setEmail(string $email = null): self;
 
     /**
      * A function that gets email.
      *
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string;
+    public function getEmail(): ?string;
 
     /**
      * A function that sets phone.
      *
-     * @param string $phone
+     * @param string|null $phone
      *
      * @return CompanyInterface
      */
-    public function setPhone(string $phone): self;
+    public function setPhone(string $phone = null): self;
 
     /**
      * A function that gets phone.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPhone(): string;
+    public function getPhone(): ?string;
 
     /**
      * A function that sets status.
      *
-     * @param string $status
+     * @param string|null $status
      *
      * @return CompanyInterface
      */
-    public function setStatus(string $status): self;
+    public function setStatus(string $status = null): self;
 
     /**
      * A function that gets status.
      *
-     * @return string
+     * @return string|null
      */
-    public function getStatus(): string;
+    public function getStatus(): ?string;
 
     /**
      * A function that set account type.
      *
-     * @param string $accountsType
+     * @param string|null $accountsType
      *
      * @return CompanyInterface
      */
-    public function setAccountsType(string $accountsType): self;
+    public function setAccountsType(string $accountsType = null): self;
 
     /**
      * A function that gets account type.
      *
-     * @return string
+     * @return string|null
      */
-    public function getAccountsType(): string;
+    public function getAccountsType(): ?string;
 
     /**
      * A function that sets confidence.
      *
-     * @param string $confidence
+     * @param string|null $confidence
      *
      * @return CompanyInterface
      */
-    public function setConfidence(string $confidence): self;
+    public function setConfidence(string $confidence = null): self;
 
     /**
      * A function that gets confidence.
      *
-     * @return string
+     * @return string|null
      */
-    public function getConfidence(): string;
+    public function getConfidence(): ?string;
 }

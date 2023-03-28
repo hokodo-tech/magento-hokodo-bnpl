@@ -42,28 +42,28 @@ class Result implements ResultInterface
     private array $list = [];
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $field;
+    private ?string $field;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $dataInterface;
+    private ?string $dataInterface;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param DataObjectHelper       $dataObjectHelper
-     * @param string                 $field
-     * @param string                 $dataInterface
      * @param array                  $result
+     * @param string|null            $dataInterface
+     * @param string|null            $field
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         DataObjectHelper $dataObjectHelper,
-        string $field,
-        string $dataInterface,
-        array $result = []
+        array $result = [],
+        string $dataInterface = null,
+        string $field = null
     ) {
         $this->objectManager = $objectManager;
         $this->dataObjectHelper = $dataObjectHelper;
@@ -115,14 +115,16 @@ class Result implements ResultInterface
      */
     private function populateDataModel(): void
     {
-        $this->dataModel = $this->objectManager->create($this->dataInterface);
-        $data = $this->get();
-        if (isset($data[$this->field])) {
-            $this->dataObjectHelper->populateWithArray(
-                $this->dataModel,
-                $data,
-                $this->dataInterface
-            );
+        if ($this->field && $this->dataInterface) {
+            $this->dataModel = $this->objectManager->create($this->dataInterface);
+            $data = $this->get();
+            if (isset($data[$this->field])) {
+                $this->dataObjectHelper->populateWithArray(
+                    $this->dataModel,
+                    $data,
+                    $this->dataInterface
+                );
+            }
         }
     }
 
@@ -133,19 +135,21 @@ class Result implements ResultInterface
      */
     private function populateListResult(): void
     {
-        $data = $this->get();
-        $this->list = [];
+        if ($this->field && $this->dataInterface) {
+            $data = $this->get();
+            $this->list = [];
 
-        if (isset($data['results']) && is_array($data['results'])) {
-            foreach ($data['results'] as $userData) {
-                $user = $this->objectManager->create($this->dataInterface);
-                $this->dataObjectHelper->populateWithArray(
-                    $user,
-                    $userData,
-                    $this->dataInterface
-                );
+            if (isset($data['results']) && is_array($data['results'])) {
+                foreach ($data['results'] as $userData) {
+                    $user = $this->objectManager->create($this->dataInterface);
+                    $this->dataObjectHelper->populateWithArray(
+                        $user,
+                        $userData,
+                        $this->dataInterface
+                    );
 
-                $this->list[] = $user;
+                    $this->list[] = $user;
+                }
             }
         }
     }

@@ -24,7 +24,7 @@ class PostSale extends AbstractService
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function capture(DeferredPaymentsPostSaleActionInterface $postSaleAction): PostSaleEventResultInterface
+    public function capture(DeferredPaymentsPostSaleActionInterface $postSaleAction)
     {
         $postSaleAction->setType(DeferredPaymentsPostSaleActionInterface::TYPE_CAPTURE);
         return $this->commandPool->get('hokodo_post_sale')->execute($postSaleAction->__toArray());
@@ -40,9 +40,8 @@ class PostSale extends AbstractService
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function captureRemaining(
-        DeferredPaymentsPostSaleActionInterface $postSaleAction
-    ): PostSaleEventResultInterface {
+    public function captureRemaining(DeferredPaymentsPostSaleActionInterface $postSaleAction)
+    {
         $postSaleAction->setType(DeferredPaymentsPostSaleActionInterface::TYPE_CAPTURE_REMAINING);
         return $this->commandPool->get('hokodo_post_sale')->execute($postSaleAction->__toArray());
     }
@@ -57,7 +56,7 @@ class PostSale extends AbstractService
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function refund(DeferredPaymentsPostSaleActionInterface $postSaleAction): PostSaleEventResultInterface
+    public function refund(DeferredPaymentsPostSaleActionInterface $postSaleAction)
     {
         $postSaleAction->setType(DeferredPaymentsPostSaleActionInterface::TYPE_REFUND);
         return $this->commandPool->get('hokodo_post_sale')->execute($postSaleAction->__toArray());
@@ -73,7 +72,7 @@ class PostSale extends AbstractService
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function void(DeferredPaymentsPostSaleActionInterface $postSaleAction): PostSaleEventResultInterface
+    public function void(DeferredPaymentsPostSaleActionInterface $postSaleAction)
     {
         $postSaleAction->setType(DeferredPaymentsPostSaleActionInterface::TYPE_VOID);
         return $this->commandPool->get('hokodo_post_sale')->execute($postSaleAction->__toArray());
@@ -89,7 +88,7 @@ class PostSale extends AbstractService
      * @throws CommandException
      * @throws NotFoundException
      */
-    public function voidRemaining(DeferredPaymentsPostSaleActionInterface $postSaleAction): PostSaleEventResultInterface
+    public function voidRemaining(DeferredPaymentsPostSaleActionInterface $postSaleAction)
     {
         $postSaleAction->setType(DeferredPaymentsPostSaleActionInterface::TYPE_VOID_REMAINING);
         return $this->commandPool->get('hokodo_post_sale')->execute($postSaleAction->__toArray());
