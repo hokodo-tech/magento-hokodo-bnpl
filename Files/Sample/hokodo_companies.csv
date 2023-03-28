@@ -1,3 +1,3 @@
-email,regnumber,countrycode
-john.doe@example.com,11210000,GB
-mike.smith@example.com,11210001,GB
+email,regnumber,countrycode,website
+john.doe@example.com,11210000,GB,default
+mike.smith@example.com,11210001,GB,default
