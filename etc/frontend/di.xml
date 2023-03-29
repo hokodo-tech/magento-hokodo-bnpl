@@ -40,7 +40,6 @@
         </arguments>
     </type>
 
-    <!-- Sections invalidate -->
     <type name="Magento\Customer\CustomerData\SectionPoolInterface">
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">

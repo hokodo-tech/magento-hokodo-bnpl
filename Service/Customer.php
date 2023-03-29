@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Service;
 
 use Hokodo\BNPL\Gateway\Config\Config;
+use Hokodo\BNPL\Model\HokodoCompanyProvider;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class CustomersGroup
+class Customer
 {
     /**
      * @var Config
@@ -25,15 +26,23 @@ class CustomersGroup
     private Session $customerSession;
 
     /**
-     * @param Config  $config
-     * @param Session $customerSession
+     * @var \Hokodo\BNPL\Model\HokodoCompanyProvider
+     */
+    private HokodoCompanyProvider $hokodoCompanyProvider;
+
+    /**
+     * @param Config                                   $config
+     * @param Session                                  $customerSession
+     * @param \Hokodo\BNPL\Model\HokodoCompanyProvider $hokodoCompanyProvider
      */
     public function __construct(
         Config $config,
-        Session $customerSession
+        Session $customerSession,
+        HokodoCompanyProvider $hokodoCompanyProvider
     ) {
         $this->config = $config;
         $this->customerSession = $customerSession;
+        $this->hokodoCompanyProvider = $hokodoCompanyProvider;
     }
 
     /**
@@ -66,5 +75,23 @@ class CustomersGroup
             $this->config->getCustomerGroups(),
             true
         );
+    }
+
+    /**
+     * Get credit limit available amount for customer.
+     *
+     * @return int|null
+     */
+    public function getCustomerAmountAvailable(): ?int
+    {
+        $amountAvailable = null;
+        if ($customerId = $this->customerSession->getCustomerId()) {
+            $hokodoEntity = $this->hokodoCompanyProvider->getEntityRepository()->getByCustomerId((int) $customerId);
+            if ($creditLimit = $hokodoEntity->getCreditLimit()) {
+                $amountAvailable = $creditLimit->getAmountAvailable() / 100;
+            }
+        }
+
+        return $amountAvailable;
     }
 }

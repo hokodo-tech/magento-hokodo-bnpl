@@ -32,7 +32,7 @@ class PaymentMethodBehaviour implements OptionSourceInterface
             ],
             [
                 'value' => self::IF_ORDER_ELIGIBLE,
-                'label' => __('if Order is eligible'),
+                'label' => __('if Available amount is above basket total amount'),
             ],
         ];
     }

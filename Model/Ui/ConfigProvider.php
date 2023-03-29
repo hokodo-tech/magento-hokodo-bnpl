@@ -10,7 +10,7 @@ namespace Hokodo\BNPL\Model\Ui;
 
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos;
-use Hokodo\BNPL\Service\CustomersGroup;
+use Hokodo\BNPL\Service\Customer;
 use Magento\Checkout\Model\ConfigProviderInterface;
 
 /**
@@ -24,20 +24,20 @@ class ConfigProvider implements ConfigProviderInterface
     private Config $config;
 
     /**
-     * @var CustomersGroup
+     * @var Customer
      */
-    private CustomersGroup $customersGroupService;
+    private Customer $customerService;
 
     /**
-     * @param Config         $config
-     * @param CustomersGroup $customersGroupService
+     * @param Config   $config
+     * @param Customer $customerService
      */
     public function __construct(
         Config $config,
-        CustomersGroup $customersGroupService
+        Customer $customerService
     ) {
         $this->config = $config;
-        $this->customersGroupService = $customersGroupService;
+        $this->customerService = $customerService;
     }
 
     /**
@@ -57,7 +57,7 @@ class ConfigProvider implements ConfigProviderInterface
                 Config::CODE => [
                     'paymentMethodCode' => Config::CODE,
                     'isActive' => $this->config->isActive() &&
-                        $this->customersGroupService->isEnabledForCustomerGroup(),
+                        $this->customerService->isEnabledForCustomerGroup(),
                     'isDefault' => $this->isDefault(),
                     'title' => $this->config->getValue(Config::PAYMENT_TITLE),
                     'subtitle' => $this->config->getValue(Config::PAYMENT_SUBTITLE),
@@ -68,6 +68,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'searchConfig' => [
                         'countryOptions' => $this->config->getSdkCountries(),
                     ],
+                    'creditLimitThreshold' => $this->customerService->getCustomerAmountAvailable(),
                 ],
             ],
         ];

@@ -2,7 +2,12 @@
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
-define(['Magento_Checkout/js/model/payment-service', 'Magento_Checkout/js/checkout-data', 'Magento_Checkout/js/action/select-payment-method', 'Hokodo_BNPL/js/sdk/hokodo-data-persistor'], function (paymentService, checkoutData, selectPaymentMethodAction, hokodoData) {
+define([
+    'Magento_Checkout/js/model/payment-service',
+    'Magento_Checkout/js/checkout-data',
+    'Magento_Checkout/js/action/select-payment-method',
+    'Magento_Checkout/js/model/totals'
+], function (paymentService, checkoutData, selectPaymentMethodAction, totals) {
     'use strict';
     let hokodoConfig = window.checkoutConfig.payment.hokodo_bnpl;
 
@@ -12,8 +17,8 @@ define(['Magento_Checkout/js/model/payment-service', 'Magento_Checkout/js/checko
             if (hokodoConfig.isActive &&
                 (hokodoConfig.isDefault === '1' ||
                     (hokodoConfig.isDefault === '2' &&
-                        hokodoData.getOffer() !== undefined &&
-                        hokodoData.getOffer().is_eligible
+                        hokodoConfig.creditLimitThreshold &&
+                        hokodoConfig.creditLimitThreshold > parseFloat(totals.getSegment('grand_total').value)
                     )
                 )
             ) {
