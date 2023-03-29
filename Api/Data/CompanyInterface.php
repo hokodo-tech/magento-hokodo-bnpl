@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Interface Hokodo\BNPL\Api\Data\CompanyInterface.
  */
-interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface CompanyInterface extends ExtensibleDataInterface
 {
     public const URL = 'url';
     public const ID = 'id';

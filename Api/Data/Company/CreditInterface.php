@@ -2,7 +2,9 @@
 
 namespace Hokodo\BNPL\Api\Data\Company;
 
-interface CreditInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface CreditInterface extends ExtensibleDataInterface
 {
     public const COMPANY = 'company';
     public const STATUS = 'status';
@@ -12,34 +14,34 @@ interface CreditInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Company getter.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCompany(): string;
+    public function getCompany(): ?string;
 
     /**
      * Company setter.
      *
-     * @param string $company
+     * @param string|null $company
      *
      * @return $this
      */
-    public function setCompany(string $company): self;
+    public function setCompany(string $company = null): self;
 
     /**
      * Status getter.
      *
-     * @return string
+     * @return string|null
      */
-    public function getStatus(): string;
+    public function getStatus(): ?string;
 
     /**
      * Status setter.
      *
-     * @param string $status
+     * @param string|null $status
      *
      * @return $this
      */
-    public function setStatus(string $status): self;
+    public function setStatus(string $status = null): self;
 
     /**
      * Rejection Reason getter.
@@ -55,7 +57,7 @@ interface CreditInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setRejectionReason($rejectionReason): self;
+    public function setRejectionReason(array $rejectionReason = null): self;
 
     /**
      * Credit Limit getter.

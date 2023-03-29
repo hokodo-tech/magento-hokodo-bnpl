@@ -6,23 +6,22 @@ namespace Hokodo\BNPL\Model\Data\Company;
 
 use Hokodo\BNPL\Api\Data\Company\CreditInterface;
 use Hokodo\BNPL\Api\Data\Company\CreditLimitInterface;
-use Magento\Framework\DataObject;
+use Magento\Framework\Api\AbstractSimpleObject;
 
-class Credit extends DataObject implements CreditInterface
+class Credit extends AbstractSimpleObject implements CreditInterface
 {
-    /** @todo add strict_types */
     /**
      * @inheritdoc
      */
-    public function getCompany(): string
+    public function getCompany(): ?string
     {
-        return $this->getData(self::COMPANY);
+        return $this->_get(self::COMPANY);
     }
 
     /**
      * @inheritdoc
      */
-    public function setCompany(string $company): self
+    public function setCompany(string $company = null): self
     {
         $this->setData(self::COMPANY, $company);
         return $this;
@@ -31,15 +30,15 @@ class Credit extends DataObject implements CreditInterface
     /**
      * @inheritdoc
      */
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
-        return $this->getData(self::STATUS);
+        return $this->_get(self::STATUS);
     }
 
     /**
      * @inheritdoc
      */
-    public function setStatus(string $status): self
+    public function setStatus(string $status = null): self
     {
         $this->setData(self::STATUS, $status);
         return $this;
@@ -50,13 +49,13 @@ class Credit extends DataObject implements CreditInterface
      */
     public function getRejectionReason(): ?array
     {
-        return $this->getData(self::REJECTION_REASON);
+        return $this->_get(self::REJECTION_REASON);
     }
 
     /**
      * @inheritdoc
      */
-    public function setRejectionReason($rejectionReason): self
+    public function setRejectionReason(array $rejectionReason = null): self
     {
         $this->setData(self::REJECTION_REASON, $rejectionReason);
         return $this;
@@ -67,7 +66,7 @@ class Credit extends DataObject implements CreditInterface
      */
     public function getCreditLimit(): CreditLimitInterface
     {
-        return $this->getData(self::CREDIT_LIMIT);
+        return $this->_get(self::CREDIT_LIMIT);
     }
 
     /**
