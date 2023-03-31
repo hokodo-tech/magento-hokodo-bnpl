@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\ViewModel\Checkout;
 
 use Magento\Checkout\Model\Session;
+use Magento\Customer\CustomerData\Customer as CustomerData;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class OnepageSuccess implements ArgumentInterface
@@ -16,17 +17,25 @@ class OnepageSuccess implements ArgumentInterface
     /**
      * @var Session
      */
-    private $session;
+    private Session $session;
+
+    /**
+     * @var CustomerData
+     */
+    private CustomerData $customerData;
 
     /**
      * OnepageSuccess constructor.
      *
-     * @param Session $session
+     * @param Session      $session
+     * @param CustomerData $customerData
      */
     public function __construct(
-        Session $session
+        Session $session,
+        CustomerData $customerData
     ) {
         $this->session = $session;
+        $this->customerData = $customerData;
     }
 
     /**
@@ -47,5 +56,20 @@ class OnepageSuccess implements ArgumentInterface
     public function getOrder()
     {
         return $this->session->getLastRealOrder();
+    }
+
+    /**
+     * Check can push Analytics or not.
+     *
+     * @return bool
+     */
+    public function canPushAnalytics(): bool
+    {
+        $canPush = true;
+        $customerSectionData = $this->customerData->getSectionData();
+        if (isset($customerSectionData['canPushAnalytics'])) {
+            $canPush = $customerSectionData['canPushAnalytics'];
+        }
+        return $canPush;
     }
 }

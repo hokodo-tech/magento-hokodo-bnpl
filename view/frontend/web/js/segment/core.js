@@ -37,7 +37,7 @@ define([
             return typeof analytics !== 'undefined' && analytics.VERSION !== undefined;
         },
 
-        trackLanding(amount, currency, position) {
+        trackLanding(amount, currency, position, quote_id) {
             const logos = window.checkoutConfig.payment.hokodo_bnpl.logos;
             this.track(
                 'Initiation',
@@ -50,27 +50,31 @@ define([
                     Payment_method_subtitle: window.checkoutConfig.payment.hokodo_bnpl.subtitle,
                     Directdebit_logo: logos.includes('direct_eu') || logos.includes('direct_uk'),
                     Creditcard_logo: logos.includes('visa'),
+                    Cart_ID: quote_id,
                     Hokodo_logo: window.checkoutConfig.payment.hokodo_bnpl.hokodoLogo
                 }
             );
             this.initialized = true;
         },
 
-        trackSelected() {
+        trackSelected(quote_id) {
             this.track(
                 'Hokodo Selected',
-                {}
+                {
+                    Cart_ID: quote_id
+                }
             )
         },
 
-        trackOrderPlaced(method, id, amount, currencyCode) {
-            this.track(
+        trackOrderPlaced(method, id, amount, currencyCode, quote_id) {
+            analytics.track(
                 'Order Placed',
                 {
                     currency: currencyCode,
                     total_amount: amount,
                     OrderId: id,
-                    PaymentMethod: method
+                    PaymentMethod: method,
+                    Cart_ID: quote_id
                 }
             )
         }
