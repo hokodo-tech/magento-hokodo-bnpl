@@ -25,6 +25,7 @@ use Hokodo\BNPL\Gateway\Service\Offer as OfferGatewayService;
 use Hokodo\BNPL\Gateway\Service\Order as OrderGatewayService;
 use Hokodo\BNPL\Gateway\Service\Organisation as OrganisationService;
 use Hokodo\BNPL\Gateway\Service\User as UserService;
+use Hokodo\BNPL\Model\CompanyCreditService;
 use Hokodo\BNPL\Model\RequestBuilder\OfferBuilder;
 use Hokodo\BNPL\Model\RequestBuilder\OrderBuilder;
 use Hokodo\BNPL\Model\RequestBuilder\OrganisationBuilder;
@@ -36,7 +37,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Webapi\Exception;
 use Magento\Payment\Gateway\Command\CommandException;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -56,11 +56,6 @@ class Offer implements OfferInterface
      * @var OfferResponseInterfaceFactory
      */
     private OfferResponseInterfaceFactory $responseInterfaceFactory;
-
-    /**
-     * @var CartRepositoryInterface
-     */
-    private CartRepositoryInterface $cartRepository;
 
     /**
      * @var OrderGatewayService
@@ -133,26 +128,30 @@ class Offer implements OfferInterface
     private CartTotalRepositoryInterface $cartTotalRepository;
 
     /**
-     * @param OfferResponseInterfaceFactory     $responseInterfaceFactory
-     * @param CartRepositoryInterface           $cartRepository
-     * @param OrderGatewayService               $orderGatewayService
-     * @param OfferGatewayService               $offerGatewayService
-     * @param Session                           $checkoutSession
-     * @param HokodoQuoteRepositoryInterface    $hokodoQuoteRepository
-     * @param OrderBuilder                      $orderBuilder
-     * @param LoggerInterface                   $logger
-     * @param OrganisationBuilder               $organisationBuilder
-     * @param OrganisationService               $organisationService
-     * @param UserBuilder                       $userBuilder
-     * @param UserService                       $userService
-     * @param OfferBuilder                      $offerBuilder
-     * @param HokodoCustomerRepositoryInterface $hokodoCustomerRepository
-     * @param Config                            $config
-     * @param CartTotalRepositoryInterface      $cartTotalRepository
+     * @var \Hokodo\BNPL\Model\CompanyCreditService
+     */
+    private CompanyCreditService $companyCredit;
+
+    /**
+     * @param OfferResponseInterfaceFactory           $responseInterfaceFactory
+     * @param OrderGatewayService                     $orderGatewayService
+     * @param OfferGatewayService                     $offerGatewayService
+     * @param Session                                 $checkoutSession
+     * @param HokodoQuoteRepositoryInterface          $hokodoQuoteRepository
+     * @param OrderBuilder                            $orderBuilder
+     * @param LoggerInterface                         $logger
+     * @param OrganisationBuilder                     $organisationBuilder
+     * @param OrganisationService                     $organisationService
+     * @param UserBuilder                             $userBuilder
+     * @param UserService                             $userService
+     * @param OfferBuilder                            $offerBuilder
+     * @param HokodoCustomerRepositoryInterface       $hokodoCustomerRepository
+     * @param Config                                  $config
+     * @param CartTotalRepositoryInterface            $cartTotalRepository
+     * @param \Hokodo\BNPL\Model\CompanyCreditService $companyCredit
      */
     public function __construct(
         OfferResponseInterfaceFactory $responseInterfaceFactory,
-        CartRepositoryInterface $cartRepository,
         OrderGatewayService $orderGatewayService,
         OfferGatewayService $offerGatewayService,
         Session $checkoutSession,
@@ -166,10 +165,10 @@ class Offer implements OfferInterface
         OfferBuilder $offerBuilder,
         HokodoCustomerRepositoryInterface $hokodoCustomerRepository,
         Config $config,
-        CartTotalRepositoryInterface $cartTotalRepository
+        CartTotalRepositoryInterface $cartTotalRepository,
+        CompanyCreditService $companyCredit
     ) {
         $this->responseInterfaceFactory = $responseInterfaceFactory;
-        $this->cartRepository = $cartRepository;
         $this->orderGatewayService = $orderGatewayService;
         $this->offerGatewayService = $offerGatewayService;
         $this->checkoutSession = $checkoutSession;
@@ -185,6 +184,7 @@ class Offer implements OfferInterface
         $this->hokodoCustomer = null;
         $this->config = $config;
         $this->cartTotalRepository = $cartTotalRepository;
+        $this->companyCredit = $companyCredit;
     }
 
     /**
@@ -292,6 +292,7 @@ class Offer implements OfferInterface
             $this->hokodoCustomer
                 ->setCustomerId((int) $this->checkoutSession->getQuote()->getCustomerId())
                 ->setCompanyId($companyId)
+                ->setCreditLimit($this->companyCredit->getCreditLimit($companyId))
                 ->setOrganisationId('')
                 ->setUserId('');
             $this->hokodoQuote

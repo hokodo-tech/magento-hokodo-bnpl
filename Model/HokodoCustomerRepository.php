@@ -10,6 +10,7 @@ namespace Hokodo\BNPL\Model;
 
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterfaceFactory;
+use Hokodo\BNPL\Api\Data\HokodoEntityInterface;
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer as Resource;
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer\CollectionFactory as HokodoCustomerCollectionFactory;
@@ -218,5 +219,17 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
             $items[] = $this->populateDataObject($customerModel);
         }
         return $items;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
+    public function saveHokodoEntity(HokodoEntityInterface $hokodoEntity): void
+    {
+        if ($hokodoEntity instanceof HokodoCustomerInterface) {
+            $this->save($hokodoEntity);
+        }
     }
 }

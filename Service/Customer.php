@@ -82,7 +82,7 @@ class Customer
      *
      * @return int|null
      */
-    public function getCustomerAmountAvailable(): ?int
+    public function getCustomerAmountAvailable(): ?float
     {
         $amountAvailable = null;
         if ($customerId = $this->customerSession->getCustomerId()) {

@@ -28,4 +28,13 @@ interface HokodoEntityRepositoryInterface
      * @return HokodoEntityInterface
      */
     public function getByEntityId(int $entityId): HokodoEntityInterface;
+
+    /**
+     * Save hokodoEntity in database.
+     *
+     * @param \Hokodo\BNPL\Api\Data\HokodoEntityInterface $hokodoEntity
+     *
+     * @return mixed
+     */
+    public function saveHokodoEntity(HokodoEntityInterface $hokodoEntity): void;
 }

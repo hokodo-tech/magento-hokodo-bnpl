@@ -787,14 +787,16 @@
     </type>
 
 
-    <!--Order documents -->
+    <!-- Order documents -->
     <type name="Magento\Sales\Model\ResourceModel\Order\Invoice">
         <plugin name="hokodo_send_invoice"
                 type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice"/>
     </type>
     <preference for="Hokodo\BNPL\Api\Data\OrderDocumentInterface" type="Hokodo\BNPL\Model\Data\OrderDocument"/>
     <preference for="Hokodo\BNPL\Api\OrderDocumentsRepositoryInterface" type="Hokodo\BNPL\Model\OrderDocumentsRepository"/>
+    <!-- /Order documents -->
 
+    <!-- Hokodo Company Entity provider set up -->
     <preference for="Hokodo\BNPL\Api\HokodoEntityTypeResolverInterface" type="Hokodo\BNPL\Model\HokodoEntityTypeResolver"/>
     <type name="Hokodo\BNPL\Model\HokodoCompanyProvider">
         <arguments>
@@ -817,6 +819,7 @@
             </argument>
         </arguments>
     </type>
+    <!-- /Hokodo Company Entity provider set up -->
 
     <!-- Company Search -->
     <preference for="Hokodo\BNPL\Api\Data\Gateway\CompanySearchRequestInterface" type="\Hokodo\BNPL\Model\Data\Gateway\CompanySearchRequest" />
@@ -938,6 +941,21 @@
         </arguments>
     </virtualType>
     <!-- /Company Credit Limit -->
+
+    <!-- Update Credit limit section -->
+    <type name="Hokodo\BNPL\Gateway\Command\PostSale\CapturePayment">
+        <plugin name="update_hokodo_credit_limit_after_capture"
+            type="Hokodo\BNPL\Plugin\PostSale\UpdateCompanyCreditLimit"/>
+    </type>
+    <type name="Hokodo\BNPL\Gateway\Command\PostSale\RefundPayment">
+        <plugin name="update_hokodo_credit_limit_after_refund"
+            type="Hokodo\BNPL\Plugin\PostSale\UpdateCompanyCreditLimit"/>
+    </type>
+    <type name="Hokodo\BNPL\Gateway\Command\PostSale\VoidPayment">
+        <plugin name="update_hokodo_credit_limit_after_void"
+            type="Hokodo\BNPL\Plugin\PostSale\UpdateCompanyCreditLimit"/>
+    </type>
+    <!-- /Update Credit limit section -->
 
     <!-- Marketing -->
     <type name="\Hokodo\BNPL\Model\Marketing\TopBanner">
