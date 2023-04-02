@@ -11,6 +11,7 @@ namespace Hokodo\BNPL\ViewModel\Checkout;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\CustomerData\Customer as CustomerData;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask;
 
 class OnepageSuccess implements ArgumentInterface
 {
@@ -25,17 +26,25 @@ class OnepageSuccess implements ArgumentInterface
     private CustomerData $customerData;
 
     /**
+     * @var QuoteIdMask
+     */
+    private QuoteIdMask $quoteIdMaskResource;
+
+    /**
      * OnepageSuccess constructor.
      *
      * @param Session      $session
      * @param CustomerData $customerData
+     * @param QuoteIdMask  $quoteIdMaskResource
      */
     public function __construct(
         Session $session,
-        CustomerData $customerData
+        CustomerData $customerData,
+        QuoteIdMask $quoteIdMaskResource
     ) {
         $this->session = $session;
         $this->customerData = $customerData;
+        $this->quoteIdMaskResource = $quoteIdMaskResource;
     }
 
     /**
@@ -71,5 +80,22 @@ class OnepageSuccess implements ArgumentInterface
             $canPush = $customerSectionData['canPushAnalytics'];
         }
         return $canPush;
+    }
+
+    /**
+     * Get quote Id.
+     *
+     * @return string
+     */
+    public function getQuoteId(): string
+    {
+        $quoteId = $this->getOrder()->getQuoteId();
+        if (!$this->getOrder()->getCustomerId()) {
+            /*
+             * We need to use masked quote id for guests.
+             */
+            $quoteId = $this->quoteIdMaskResource->getMaskedQuoteId((int) $quoteId);
+        }
+        return (string) $quoteId;
     }
 }

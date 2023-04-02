@@ -30,7 +30,11 @@ define([
         },
 
         canPushAnalytics() {
-            return customerData.get('customer')().canPushAnalytics;
+            let canPush = true;
+            if (customerData.get('customer')().canPushAnalytics !== undefined) {
+                canPush = customerData.get('customer')().canPushAnalytics;
+            }
+            return canPush;
         },
 
         isAnalyticsLoaded() {
