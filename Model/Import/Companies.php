@@ -12,6 +12,7 @@ use Hokodo\BNPL\Api\Data\CompanyImportInterface;
 use Hokodo\BNPL\Api\Data\CompanyImportInterfaceFactory;
 use Hokodo\BNPL\Model\HokodoCompanyProvider;
 use Hokodo\BNPL\Model\Queue\Handler\CompanyImport as CompanyImportHandler;
+use Hokodo\BNPL\Service\Website;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Directory\Api\CountryInformationAcquirerInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -31,6 +32,7 @@ class Companies extends AbstractEntity
     public const EMAIL_COLUMN = 'email';
     public const REG_NUMBER_COLUMN = 'regnumber';
     public const COUNTRY_CODE_COLUMN = 'countrycode';
+    public const WEBSITE_CODE_COLUMN = 'website';
 
     /**
      * @var bool
@@ -49,6 +51,7 @@ class Companies extends AbstractEntity
         self::EMAIL_COLUMN,
         self::REG_NUMBER_COLUMN,
         self::COUNTRY_CODE_COLUMN,
+        self::WEBSITE_CODE_COLUMN,
     ];
 
     /**
@@ -58,6 +61,7 @@ class Companies extends AbstractEntity
         self::EMAIL_COLUMN,
         self::REG_NUMBER_COLUMN,
         self::COUNTRY_CODE_COLUMN,
+        self::WEBSITE_CODE_COLUMN,
     ];
 
     /**
@@ -91,6 +95,16 @@ class Companies extends AbstractEntity
     private CompanyImportInterfaceFactory $companyImportInterfaceFactory;
 
     /**
+     * @var Website
+     */
+    private Website $websiteService;
+
+    /**
+     * @var array
+     */
+    private array $websites = [];
+
+    /**
      * @param JsonHelper                          $jsonHelper
      * @param ImportHelper                        $importExportData
      * @param Data                                $importData
@@ -101,6 +115,7 @@ class Companies extends AbstractEntity
      * @param HokodoCompanyProvider               $hokodoCompanyProvider
      * @param PublisherInterface                  $publisher
      * @param CompanyImportInterfaceFactory       $companyImportInterfaceFactory
+     * @param Website                             $websiteService
      */
     public function __construct(
         JsonHelper $jsonHelper,
@@ -112,7 +127,8 @@ class Companies extends AbstractEntity
         CustomerRepositoryInterface $customerRepository,
         HokodoCompanyProvider $hokodoCompanyProvider,
         PublisherInterface $publisher,
-        CompanyImportInterfaceFactory $companyImportInterfaceFactory
+        CompanyImportInterfaceFactory $companyImportInterfaceFactory,
+        Website $websiteService
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
@@ -124,7 +140,27 @@ class Companies extends AbstractEntity
         $this->hokodoCompanyProvider = $hokodoCompanyProvider;
         $this->publisher = $publisher;
         $this->companyImportInterfaceFactory = $companyImportInterfaceFactory;
+        $this->websiteService = $websiteService;
         $this->initMessageTemplates();
+        $this->init();
+    }
+
+    /**
+     * Make website column non required.
+     *
+     * @return void
+     */
+    private function init(): void
+    {
+        $this->websites = $this->websiteService->getWebsites();
+        if (count($this->websites) == 1) {
+            foreach ($this->_permanentAttributes as $key => $val) {
+                if ($val == self::WEBSITE_CODE_COLUMN) {
+                    unset($this->_permanentAttributes[$key]);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -159,8 +195,11 @@ class Companies extends AbstractEntity
                     continue;
                 }
 
+                $email = $row[self::EMAIL_COLUMN];
+
                 try {
-                    $customer = $this->customerRepository->get($row[self::EMAIL_COLUMN]);
+                    $websiteId = $this->getWebsiteId($row);
+                    $customer = $this->customerRepository->get($email, $websiteId);
                 } catch (NoSuchEntityException|LocalizedException $e) {
                     $this->addRowError('CustomerNotFound', $rowNum);
                     $this->getErrorAggregator()->addRowToSkip($rowNum);
@@ -178,7 +217,8 @@ class Companies extends AbstractEntity
                 $companyImport = $this->companyImportInterfaceFactory->create();
                 $companyImport->setEmail($row[self::EMAIL_COLUMN])
                     ->setRegNumber($row[self::REG_NUMBER_COLUMN])
-                    ->setCountryCode($row[self::COUNTRY_CODE_COLUMN]);
+                    ->setCountryCode($row[self::COUNTRY_CODE_COLUMN])
+                    ->setWebsiteId($websiteId);
 
                 $this->publisher->publish(CompanyImportHandler::TOPIC_NAME, $companyImport);
 
@@ -214,7 +254,14 @@ class Companies extends AbstractEntity
         if (!$this->isValidEmail($rowData[self::EMAIL_COLUMN])) {
             $this->addRowError('EmailIsNotValid', $rowNum);
         }
-        if (!$this->isCustomerExists($rowData[self::EMAIL_COLUMN])) {
+
+        if (count($this->websites) > 1 && empty($rowData[self::WEBSITE_CODE_COLUMN])) {
+            $this->addRowError('WebsiteIsEmpty', $rowNum);
+        } elseif (count($this->websites) > 1 && !$this->isWebsiteCodeValid($rowData[self::WEBSITE_CODE_COLUMN])) {
+            $this->addRowError('WebsiteIsNotValid', $rowNum);
+        }
+
+        if (!$this->isCustomerExists($rowData)) {
             $this->addRowError('CustomerNotFound', $rowNum);
         }
         if (!$this->isCountryCodeValid($rowData[self::COUNTRY_CODE_COLUMN])) {
@@ -253,23 +300,51 @@ class Companies extends AbstractEntity
     /**
      * Check if customer exists.
      *
-     * @param string $email
+     * @param array $rowData
      *
      * @return bool
      */
-    public function isCustomerExists(string $email): bool
+    public function isCustomerExists(array $rowData): bool
     {
         $isExists = false;
+        $email = $rowData[self::EMAIL_COLUMN];
         // @codingStandardsIgnoreStart
         try {
-            $customer = $this->customerRepository->get($email);
+            $websiteId = $this->getWebsiteId($rowData);
+            $customer = $this->customerRepository->get($email, $websiteId);
             if ($customer->getId()) {
                 $isExists = true;
             }
-        } catch (NoSuchEntityException|LocalizedException $e) {
+        } catch (\Exception $e) {
         }
         // @codingStandardsIgnoreEnd
         return $isExists;
+    }
+
+    /**
+     * Get Website Id.
+     *
+     * @param array $rowData
+     *
+     * @return int|null
+     */
+    private function getWebsiteId(array $rowData): ?int
+    {
+        $websiteId = null;
+        /*
+         * We need to set website id = 0 because we can't use null.
+         * See get() method of Magento\Customer\Api\CustomerRepositoryInterface.
+         */
+        if (count($this->websites) > 1) {
+            $websiteId = 0;
+        }
+        if (count($this->websites) > 1
+            && isset($rowData[self::WEBSITE_CODE_COLUMN])
+            && isset($this->websites[$rowData[self::WEBSITE_CODE_COLUMN]])
+        ) {
+            $websiteId = (int) $this->websites[$rowData[self::WEBSITE_CODE_COLUMN]];
+        }
+        return $websiteId;
     }
 
     /**
@@ -283,6 +358,22 @@ class Companies extends AbstractEntity
     {
         $isValid = false;
         if (in_array($countryCode, $this->getCountryCodes())) {
+            $isValid = true;
+        }
+        return $isValid;
+    }
+
+    /**
+     * Check Website Code.
+     *
+     * @param string $websiteCode
+     *
+     * @return bool
+     */
+    public function isWebsiteCodeValid(string $websiteCode): bool
+    {
+        $isValid = false;
+        if (!empty($this->websites[$websiteCode])) {
             $isValid = true;
         }
         return $isValid;
@@ -323,6 +414,14 @@ class Companies extends AbstractEntity
         $this->addMessageTemplate(
             'RegNumberIsNotValid',
             __('The regnumber cannot be empty.')
+        );
+        $this->addMessageTemplate(
+            'WebsiteIsEmpty',
+            __('Absent or empty website column.')
+        );
+        $this->addMessageTemplate(
+            'WebsiteIsNotValid',
+            __('Incorrect or empty value in website column.')
         );
         $this->addMessageTemplate(
             'CustomerNotFound',

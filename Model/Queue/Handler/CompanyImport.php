@@ -106,7 +106,7 @@ class CompanyImport
             $this->initCompanyImportData($companyImport);
             $this->logger->info(__METHOD__, $this->companyImportData);
 
-            $customer = $this->customerRepository->get($companyImport->getEmail());
+            $customer = $this->customerRepository->get($companyImport->getEmail(), $companyImport->getWebsiteId());
 
             $hokodoCompany = $this->getCompanyFromHokodo(
                 $companyImport->getRegNumber(),
@@ -153,6 +153,7 @@ class CompanyImport
             CompanyImportInterface::EMAIL => $companyImport->getEmail(),
             CompanyImportInterface::REG_NUMBER => $companyImport->getRegNumber(),
             CompanyImportInterface::COUNTRY_CODE => $companyImport->getCountryCode(),
+            CompanyImportInterface::WEBSITE_ID => $companyImport->getWebsiteId(),
         ];
     }
 
