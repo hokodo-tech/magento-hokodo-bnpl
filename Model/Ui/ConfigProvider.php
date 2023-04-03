@@ -10,8 +10,7 @@ namespace Hokodo\BNPL\Model\Ui;
 
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos;
-use Hokodo\BNPL\Model\Config\Source\PaymentMethodBehaviour;
-use Hokodo\BNPL\Service\CustomersGroup;
+use Hokodo\BNPL\Service\Customer;
 use Magento\Checkout\Model\ConfigProviderInterface;
 
 /**
@@ -25,20 +24,20 @@ class ConfigProvider implements ConfigProviderInterface
     private Config $config;
 
     /**
-     * @var CustomersGroup
+     * @var Customer
      */
-    private CustomersGroup $customersGroupService;
+    private Customer $customerService;
 
     /**
-     * @param Config         $config
-     * @param CustomersGroup $customersGroupService
+     * @param Config   $config
+     * @param Customer $customerService
      */
     public function __construct(
         Config $config,
-        CustomersGroup $customersGroupService
+        Customer $customerService
     ) {
         $this->config = $config;
-        $this->customersGroupService = $customersGroupService;
+        $this->customerService = $customerService;
     }
 
     /**
@@ -58,7 +57,7 @@ class ConfigProvider implements ConfigProviderInterface
                 Config::CODE => [
                     'paymentMethodCode' => Config::CODE,
                     'isActive' => $this->config->isActive() &&
-                        $this->customersGroupService->isEnabledForCustomerGroup(),
+                        $this->customerService->isEnabledForCustomerGroup(),
                     'isDefault' => $this->isDefault(),
                     'title' => $this->config->getValue(Config::PAYMENT_TITLE),
                     'subtitle' => $this->config->getValue(Config::PAYMENT_SUBTITLE),
@@ -69,6 +68,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'searchConfig' => [
                         'countryOptions' => $this->config->getSdkCountries(),
                     ],
+                    'creditLimitThreshold' => $this->customerService->getCustomerAmountAvailable(),
                 ],
             ],
         ];
@@ -77,15 +77,10 @@ class ConfigProvider implements ConfigProviderInterface
     /**
      * Checks is payment method was set as default.
      *
-     * @return bool
+     * @return string
      */
-    private function isDefault(): bool
+    private function isDefault(): string
     {
-        $result = false;
-        $value = $this->config->getValue(Config::PAYMENT_DEFAULT);
-        if ($value == PaymentMethodBehaviour::IS_DEFAULT_YES) {
-            $result = true;
-        }
-        return $result;
+        return (string) $this->config->getValue(Config::PAYMENT_DEFAULT);
     }
 }

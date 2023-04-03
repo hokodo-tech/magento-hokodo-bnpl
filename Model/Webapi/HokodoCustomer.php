@@ -16,6 +16,7 @@ use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Hokodo\BNPL\Api\Webapi\HokodoCustomerInterface;
 use Hokodo\BNPL\Gateway\Service\Organisation;
 use Hokodo\BNPL\Gateway\Service\User;
+use Hokodo\BNPL\Model\CompanyCreditService;
 use Hokodo\BNPL\Model\HokodoCompanyProvider;
 use Hokodo\BNPL\Model\RequestBuilder\OrganisationBuilder;
 use Hokodo\BNPL\Model\RequestBuilder\UserBuilder;
@@ -71,15 +72,21 @@ class HokodoCustomer implements HokodoCustomerInterface
     private HokodoCompanyProvider $hokodoCompanyProvider;
 
     /**
-     * @param HokodoCustomerResponseInterfaceFactory $hokodoCustomerResponseFactory
-     * @param Session                                $customerSession
-     * @param HokodoCustomerRepositoryInterface      $hokodoCustomerRepository
-     * @param HokodoCompanyProvider                  $hokodoCompanyProvider
-     * @param OrganisationBuilder                    $organisationBuilder
-     * @param UserBuilder                            $userBuilder
-     * @param Organisation                           $organisationService
-     * @param User                                   $userService
-     * @param LoggerInterface                        $logger
+     * @var \Hokodo\BNPL\Model\CompanyCreditService
+     */
+    private CompanyCreditService $companyCreditService;
+
+    /**
+     * @param HokodoCustomerResponseInterfaceFactory  $hokodoCustomerResponseFactory
+     * @param Session                                 $customerSession
+     * @param HokodoCustomerRepositoryInterface       $hokodoCustomerRepository
+     * @param HokodoCompanyProvider                   $hokodoCompanyProvider
+     * @param OrganisationBuilder                     $organisationBuilder
+     * @param UserBuilder                             $userBuilder
+     * @param Organisation                            $organisationService
+     * @param User                                    $userService
+     * @param LoggerInterface                         $logger
+     * @param \Hokodo\BNPL\Model\CompanyCreditService $companyCreditService
      */
     public function __construct(
         HokodoCustomerResponseInterfaceFactory $hokodoCustomerResponseFactory,
@@ -90,7 +97,8 @@ class HokodoCustomer implements HokodoCustomerInterface
         UserBuilder $userBuilder,
         Organisation $organisationService,
         User $userService,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        CompanyCreditService $companyCreditService
     ) {
         $this->hokodoCustomerResponseFactory = $hokodoCustomerResponseFactory;
         $this->customerSession = $customerSession;
@@ -101,6 +109,7 @@ class HokodoCustomer implements HokodoCustomerInterface
         $this->organisationService = $organisationService;
         $this->userService = $userService;
         $this->logger = $logger;
+        $this->companyCreditService = $companyCreditService;
     }
 
     /**
@@ -119,6 +128,7 @@ class HokodoCustomer implements HokodoCustomerInterface
         if ($hokodoCustomer->getCompanyId() !== $payload->getCompanyId()) {
             $hokodoCustomer
                 ->setCompanyId($payload->getCompanyId())
+                ->setCreditLimit($this->companyCreditService->getCreditLimit($payload->getCompanyId()))
                 ->setOrganisationId('')
                 ->setUserId('');
         }
