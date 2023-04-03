@@ -41,7 +41,7 @@ test.describe("Post Sale Admin Actions", () => {
     // pay with Hokodo
     await paymentPage.hokodoCheckout.selectAPaymentPlan();
     await paymentPage.hokodoCheckout.selectPaymentMethod("invoice");
-    const mangentoOrderIncrementId = await paymentPage.hokodoCheckout.createDeferredPayment();
+    const mangentoOrderIncrementId = await paymentPage.hokodoCheckout.placeOrder();
     
     await adminLoginPage.navigate();
     await adminLoginPage.login();
@@ -92,7 +92,7 @@ test.describe("Post Sale Admin Actions", () => {
     // pay with Hokodo
     await paymentPage.hokodoCheckout.selectAPaymentPlan();
     await paymentPage.hokodoCheckout.selectPaymentMethod("invoice");
-    const magentoOrderId = await paymentPage.hokodoCheckout.createDeferredPayment();
+    const magentoOrderId = await paymentPage.hokodoCheckout.placeOrder();
     
     await adminLoginPage.navigate();
     await adminLoginPage.login();
