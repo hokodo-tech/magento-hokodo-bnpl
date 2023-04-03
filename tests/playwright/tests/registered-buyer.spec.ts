@@ -49,7 +49,6 @@ test.describe("Full end to end for Registered Buyers", () => {
     // pay with Hokodo
     await paymentPage.hokodoCheckout.selectAPaymentPlan();
     await paymentPage.hokodoCheckout.selectPaymentMethod("invoice");
-    await paymentPage.hokodoCheckout.acceptTermsAndConditions();
     const magentoOrderId = await paymentPage.hokodoCheckout.createDeferredPayment();
 
     const magentoOrder = await magentoApi.getOrder(magentoOrderId);
@@ -138,7 +137,6 @@ test.describe("Full end to end for Registered Buyers", () => {
     // pay with Hokodo
     await paymentPage.hokodoCheckout.selectAPaymentPlan();
     await paymentPage.hokodoCheckout.selectPaymentMethod("invoice");
-    await paymentPage.hokodoCheckout.acceptTermsAndConditions();
     const magentoOrderId = await paymentPage.hokodoCheckout.createDeferredPayment();
 
     const magentoOrder = await magentoApi.getOrder(magentoOrderId);
