@@ -10,6 +10,8 @@ namespace Hokodo\BNPL\ViewModel\Checkout;
 
 use Magento\Checkout\Model\Session;
 use Magento\Customer\CustomerData\Customer as CustomerData;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask;
 
@@ -31,20 +33,28 @@ class OnepageSuccess implements ArgumentInterface
     private QuoteIdMask $quoteIdMaskResource;
 
     /**
+     * @var ProductMetadataInterface
+     */
+    private ProductMetadataInterface $metadata;
+
+    /**
      * OnepageSuccess constructor.
      *
-     * @param Session      $session
-     * @param CustomerData $customerData
-     * @param QuoteIdMask  $quoteIdMaskResource
+     * @param Session                  $session
+     * @param CustomerData             $customerData
+     * @param QuoteIdMask              $quoteIdMaskResource
+     * @param ProductMetadataInterface $metadata
      */
     public function __construct(
         Session $session,
         CustomerData $customerData,
-        QuoteIdMask $quoteIdMaskResource
+        QuoteIdMask $quoteIdMaskResource,
+        ProductMetadataInterface $metadata
     ) {
         $this->session = $session;
         $this->customerData = $customerData;
         $this->quoteIdMaskResource = $quoteIdMaskResource;
+        $this->metadata = $metadata;
     }
 
     /**
@@ -93,9 +103,50 @@ class OnepageSuccess implements ArgumentInterface
         if (!$this->getOrder()->getCustomerId()) {
             /*
              * We need to use masked quote id for guests.
+             * @todo remove it when support of 2.3.7 ends
              */
-            $quoteId = $this->quoteIdMaskResource->getMaskedQuoteId((int) $quoteId);
+            if (!$this->isOldMagentoVersion()) {
+                $quoteId = $this->quoteIdMaskResource->getMaskedQuoteId((int) $quoteId);
+            } else {
+                $quoteId = $this->getMaskedQuoteId((int) $quoteId);
+            }
         }
         return (string) $quoteId;
+    }
+
+    /**
+     * Check if magento version older than 2.4.0.
+     *
+     * @return bool
+     */
+    public function isOldMagentoVersion(): bool
+    {
+        return (bool) version_compare($this->metadata->getVersion(), '2.4.0', '<');
+    }
+
+    /**
+     * Magento 2.3.7 compatibility because it has no getMaskedQuoteId($quoteId) in resource model.
+     *
+     * @param int $quoteId
+     *
+     * @return string|null
+     */
+    public function getMaskedQuoteId(int $quoteId): ?string
+    {
+        try {
+            $connection = $this->quoteIdMaskResource->getConnection();
+            $mainTable = $this->quoteIdMaskResource->getMainTable();
+            $field = $connection->quoteIdentifier(sprintf('%s.%s', $mainTable, 'quote_id'));
+
+            $select = $connection->select()
+                ->from($mainTable, ['masked_id'])
+                ->where($field . '=?', $quoteId);
+
+            $result = $connection->fetchOne($select);
+        } catch (LocalizedException $e) {
+            $result = null;
+        }
+
+        return $result ?: null;
     }
 }

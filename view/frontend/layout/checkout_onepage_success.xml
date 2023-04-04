@@ -18,7 +18,11 @@
                     <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\Checkout\OnepageSuccess</argument>
                 </arguments>
             </block>
-            <block name="hokodo_company_search_invalidate" class="Magento\Framework\View\Element\Template" template="Hokodo_BNPL::sdk/company-search-onepage-success-invalidation.phtml"  ifconfig="payment/hokodo_bnpl/active" />
+            <block name="hokodo_company_search_invalidate" class="Magento\Framework\View\Element\Template" template="Hokodo_BNPL::sdk/company-search-onepage-success-invalidation.phtml"  ifconfig="payment/hokodo_bnpl/active">
+                <arguments>
+                    <argument name="viewModel" xsi:type="object">Hokodo\BNPL\ViewModel\Checkout\OnepageSuccess</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>
