@@ -2,7 +2,7 @@ import { expect, Request } from "@playwright/test";
 import test from "../fixtures";
 import { CompanyType } from "../support/types/Buyer";
 
-test.describe.only("Credit Limits", () => {
+test.describe("Credit Limits", () => {
   test("First time registered buyer checking credit limits in the top banner", async ({
     homePage,
     generateOrderData,
