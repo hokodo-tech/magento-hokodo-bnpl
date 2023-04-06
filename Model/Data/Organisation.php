@@ -21,7 +21,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::setId()
      */
-    public function setId(string $id = null): OrganisationInterface
+    public function setId(?string $id): OrganisationInterface
     {
         return $this->setData(self::ID, $id);
     }
@@ -41,7 +41,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::setUniqueId()
      */
-    public function setUniqueId(string $uniqueId = null): OrganisationInterface
+    public function setUniqueId(?string $uniqueId): OrganisationInterface
     {
         return $this->setData(self::UNIQUE_ID, $uniqueId);
     }
@@ -61,7 +61,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::setRegistered()
      */
-    public function setRegistered(string $registered = null): OrganisationInterface
+    public function setRegistered(?string $registered): OrganisationInterface
     {
         return $this->setData(self::REGISTERED, $registered);
     }
@@ -81,7 +81,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::setCompany()
      */
-    public function setCompany(string $company = null): OrganisationInterface
+    public function setCompany(?string $company): OrganisationInterface
     {
         return $this->setData(self::COMPANY, $company);
     }
@@ -101,7 +101,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::setUsers()
      */
-    public function setUsers(array $users = []): OrganisationInterface
+    public function setUsers(?array $users): OrganisationInterface
     {
         return $this->setData(self::USERS, $users);
     }
@@ -111,7 +111,7 @@ class Organisation extends AbstractSimpleObject implements OrganisationInterface
      *
      * @see \Hokodo\BNPL\Api\Data\OrganisationInterface::getUsers()
      */
-    public function getUsers(): array
+    public function getUsers(): ?array
     {
         return $this->_get(self::USERS);
     }

@@ -21,7 +21,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setUrl()
      */
-    public function setUrl(string $url = null): CompanyInterface
+    public function setUrl(?string $url): CompanyInterface
     {
         return $this->setData(self::URL, $url);
     }
@@ -41,7 +41,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setId()
      */
-    public function setId(string $id = null): CompanyInterface
+    public function setId(?string $id): CompanyInterface
     {
         return $this->setData(self::ID, $id);
     }
@@ -61,7 +61,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setCountry()
      */
-    public function setCountry(string $country = null): CompanyInterface
+    public function setCountry(?string $country): CompanyInterface
     {
         return $this->setData(self::COUNTRY, $country);
     }
@@ -81,7 +81,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setName()
      */
-    public function setName(string $name = null): CompanyInterface
+    public function setName(?string $name): CompanyInterface
     {
         return $this->setData(self::NAME, $name);
     }
@@ -101,7 +101,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setAddress()
      */
-    public function setAddress(string $address = null): CompanyInterface
+    public function setAddress(?string $address): CompanyInterface
     {
         return $this->setData(self::ADDRESS, $address);
     }
@@ -121,7 +121,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setCity()
      */
-    public function setCity(string $city = null): CompanyInterface
+    public function setCity(?string $city): CompanyInterface
     {
         return $this->setData(self::CITY, $city);
     }
@@ -141,7 +141,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setPostcode()
      */
-    public function setPostcode(string $postcode = null): CompanyInterface
+    public function setPostcode(?string $postcode): CompanyInterface
     {
         return $this->setData(self::POSTCODE, $postcode);
     }
@@ -161,7 +161,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setLegalForm()
      */
-    public function setLegalForm(string $legalForm = null): CompanyInterface
+    public function setLegalForm(?string $legalForm): CompanyInterface
     {
         return $this->setData(self::LEGAL_FORM, $legalForm);
     }
@@ -181,7 +181,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setSectors()
      */
-    public function setSectors(array $sectors = []): CompanyInterface
+    public function setSectors(?array $sectors): CompanyInterface
     {
         return $this->setData(self::SECTORS, $sectors);
     }
@@ -191,7 +191,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::getSectors()
      */
-    public function getSectors(): array
+    public function getSectors(): ?array
     {
         return $this->_get(self::SECTORS);
     }
@@ -201,7 +201,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setCreationDate()
      */
-    public function setCreationDate(string $creationDate = null): CompanyInterface
+    public function setCreationDate(?string $creationDate): CompanyInterface
     {
         return $this->setData(self::CREATION_DATE, $creationDate);
     }
@@ -221,7 +221,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setIdentifiers()
      */
-    public function setIdentifiers(array $identifiers = []): CompanyInterface
+    public function setIdentifiers(?array $identifiers): CompanyInterface
     {
         return $this->setData(self::IDENTIFIERS, $identifiers);
     }
@@ -231,7 +231,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::getIdentifiers()
      */
-    public function getIdentifiers(): array
+    public function getIdentifiers(): ?array
     {
         return $this->_get(self::IDENTIFIERS);
     }
@@ -241,7 +241,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setEmail()
      */
-    public function setEmail(string $email = null): CompanyInterface
+    public function setEmail(?string $email): CompanyInterface
     {
         return $this->setData(self::EMAIL, $email);
     }
@@ -261,7 +261,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setPhone()
      */
-    public function setPhone(string $phone = null): CompanyInterface
+    public function setPhone(?string $phone): CompanyInterface
     {
         return $this->setData(self::PHONE, $phone);
     }
@@ -281,7 +281,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setStatus()
      */
-    public function setStatus(string $status = null): CompanyInterface
+    public function setStatus(?string $status): CompanyInterface
     {
         return $this->setData(self::STATUS, $status);
     }
@@ -301,7 +301,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setAccountsType()
      */
-    public function setAccountsType(string $accountsType = null): CompanyInterface
+    public function setAccountsType(?string $accountsType): CompanyInterface
     {
         return $this->setData(self::ACCOUNTS_TYPE, $accountsType);
     }
@@ -321,7 +321,7 @@ class Company extends AbstractSimpleObject implements CompanyInterface
      *
      * @see \Hokodo\BNPL\Api\Data\CompanyInterface::setConfidence()
      */
-    public function setConfidence(string $confidence = null): CompanyInterface
+    public function setConfidence(?string $confidence): CompanyInterface
     {
         return $this->setData(self::CONFIDENCE, $confidence);
     }

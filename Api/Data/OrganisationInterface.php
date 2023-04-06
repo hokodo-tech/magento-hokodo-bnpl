@@ -29,7 +29,7 @@ interface OrganisationInterface
      *
      * @return $this
      */
-    public function setId(string $id = null): self;
+    public function setId(?string $id): self;
 
     /**
      * A function that gets id.
@@ -45,7 +45,7 @@ interface OrganisationInterface
      *
      * @return $this
      */
-    public function setUniqueId(string $uniqueId = null): self;
+    public function setUniqueId(?string $uniqueId): self;
 
     /**
      * A function that gets unique id.
@@ -61,7 +61,7 @@ interface OrganisationInterface
      *
      * @return $this
      */
-    public function setRegistered(string $registered = null): self;
+    public function setRegistered(?string $registered): self;
 
     /**
      * A function that gets registered.
@@ -77,7 +77,7 @@ interface OrganisationInterface
      *
      * @return $this
      */
-    public function setCompany(string $company = null): self;
+    public function setCompany(?string $company): self;
 
     /**
      * A function that gets company.
@@ -89,16 +89,16 @@ interface OrganisationInterface
     /**
      * A function that sets users.
      *
-     * @param \Hokodo\BNPL\Api\Data\OrganisationUserInterface[] $users
+     * @param \Hokodo\BNPL\Api\Data\OrganisationUserInterface[]|null $users
      *
      * @return $this
      */
-    public function setUsers(array $users = []): self;
+    public function setUsers(?array $users): self;
 
     /**
      * A function that gets users.
      *
-     * @return \Hokodo\BNPL\Api\Data\OrganisationUserInterface[]
+     * @return \Hokodo\BNPL\Api\Data\OrganisationUserInterface[]|null
      */
-    public function getUsers(): array;
+    public function getUsers(): ?array;
 }

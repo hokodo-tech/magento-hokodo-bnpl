@@ -21,7 +21,7 @@ class Credit extends AbstractSimpleObject implements CreditInterface
     /**
      * @inheritdoc
      */
-    public function setCompany(string $company = null): self
+    public function setCompany(?string $company): self
     {
         $this->setData(self::COMPANY, $company);
         return $this;
@@ -38,7 +38,7 @@ class Credit extends AbstractSimpleObject implements CreditInterface
     /**
      * @inheritdoc
      */
-    public function setStatus(string $status = null): self
+    public function setStatus(?string $status): self
     {
         $this->setData(self::STATUS, $status);
         return $this;
@@ -55,7 +55,7 @@ class Credit extends AbstractSimpleObject implements CreditInterface
     /**
      * @inheritdoc
      */
-    public function setRejectionReason(array $rejectionReason = null): self
+    public function setRejectionReason(?array $rejectionReason): self
     {
         $this->setData(self::REJECTION_REASON, $rejectionReason);
         return $this;

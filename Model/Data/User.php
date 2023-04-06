@@ -21,7 +21,7 @@ class User extends AbstractSimpleObject implements UserInterface
      *
      * @see \Hokodo\BNPL\Api\Data\UserInterface::setId()
      */
-    public function setId(string $id = null): UserInterface
+    public function setId(?string $id): UserInterface
     {
         return $this->setData(self::ID, $id);
     }
@@ -41,7 +41,7 @@ class User extends AbstractSimpleObject implements UserInterface
      *
      * @see \Hokodo\BNPL\Api\Data\UserInterface::setEmail()
      */
-    public function setEmail(string $email = null): UserInterface
+    public function setEmail(?string $email): UserInterface
     {
         return $this->setData(self::EMAIL, $email);
     }
@@ -61,7 +61,7 @@ class User extends AbstractSimpleObject implements UserInterface
      *
      * @see \Hokodo\BNPL\Api\Data\UserInterface::setEmailValidated()
      */
-    public function setEmailValidated(bool $emailValidated = null): UserInterface
+    public function setEmailValidated(?bool $emailValidated): UserInterface
     {
         return $this->setData(self::EMAIL_VALIDATED, $emailValidated);
     }
@@ -73,7 +73,7 @@ class User extends AbstractSimpleObject implements UserInterface
      */
     public function getEmailValidated(): bool
     {
-        return $this->_get(self::EMAIL_VALIDATED);
+        return (bool) $this->_get(self::EMAIL_VALIDATED);
     }
 
     /**
@@ -81,7 +81,7 @@ class User extends AbstractSimpleObject implements UserInterface
      *
      * @see \Hokodo\BNPL\Api\Data\UserInterface::setUniqueId()
      */
-    public function setUniqueId(string $uniqueId = null): UserInterface
+    public function setUniqueId(?string $uniqueId): UserInterface
     {
         return $this->setData(self::UNIQUE_ID, $uniqueId);
     }
@@ -101,7 +101,7 @@ class User extends AbstractSimpleObject implements UserInterface
      *
      * @see \Hokodo\BNPL\Api\Data\UserInterface::setName()
      */
-    public function setName(string $name = null): UserInterface
+    public function setName(?string $name): UserInterface
     {
         return $this->setData(self::NAME, $name);
     }
@@ -121,7 +121,7 @@ class User extends AbstractSimpleObject implements UserInterface
      *
      * @see \Hokodo\BNPL\Api\Data\UserInterface::setPhone()
      */
-    public function setPhone(string $phone = null): UserInterface
+    public function setPhone(?string $phone): UserInterface
     {
         return $this->setData(self::PHONE, $phone);
     }
@@ -141,7 +141,7 @@ class User extends AbstractSimpleObject implements UserInterface
      *
      * @see \Hokodo\BNPL\Api\Data\UserInterface::setRegistered()
      */
-    public function setRegistered(string $registered = null): UserInterface
+    public function setRegistered(?string $registered): UserInterface
     {
         return $this->setData(self::REGISTERED, $registered);
     }
@@ -161,7 +161,7 @@ class User extends AbstractSimpleObject implements UserInterface
      *
      * @see \Hokodo\BNPL\Api\Data\UserInterface::setOrganisations()
      */
-    public function setOrganisations(array $organisations = []): UserInterface
+    public function setOrganisations(?array $organisations): UserInterface
     {
         return $this->setData(self::ORGANISATIONS, $organisations);
     }
@@ -171,7 +171,7 @@ class User extends AbstractSimpleObject implements UserInterface
      *
      * @see \Hokodo\BNPL\Api\Data\UserInterface::getOrganisations()
      */
-    public function getOrganisations(): array
+    public function getOrganisations(): ?array
     {
         return $this->_get(self::ORGANISATIONS);
     }
@@ -181,7 +181,7 @@ class User extends AbstractSimpleObject implements UserInterface
      *
      * @see \Hokodo\BNPL\Api\Data\UserInterface::setType()
      */
-    public function setType(string $type = null): UserInterface
+    public function setType(?string $type): UserInterface
     {
         return $this->setData(self::TYPE, $type);
     }

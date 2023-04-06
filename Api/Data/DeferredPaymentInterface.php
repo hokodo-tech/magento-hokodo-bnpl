@@ -34,7 +34,7 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setUrl(string $url = null): self;
+    public function setUrl(?string $url): self;
 
     /**
      * A function that gets url.
@@ -50,7 +50,7 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setId(string $id = null): self;
+    public function setId(?string $id): self;
 
     /**
      * A function that gets id.
@@ -66,7 +66,7 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setNumber(string $number = null): self;
+    public function setNumber(?string $number): self;
 
     /**
      * A function that gets number.
@@ -82,7 +82,7 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setPaymentPlan(string $paymentPlan = null): self;
+    public function setPaymentPlan(?string $paymentPlan): self;
 
     /**
      * A function that gets payment plan.
@@ -98,7 +98,7 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setOrder(string $order = null): self;
+    public function setOrder(?string $order): self;
 
     /**
      * A function that gets order.
@@ -114,7 +114,7 @@ interface DeferredPaymentInterface
      *
      * @return $this
      */
-    public function setStatus(string $status = null): self;
+    public function setStatus(?string $status): self;
 
     /**
      * A function that gets status.

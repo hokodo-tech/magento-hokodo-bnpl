@@ -31,7 +31,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getOfferedPaymentPlans()
      */
-    public function getOfferedPaymentPlans(): array
+    public function getOfferedPaymentPlans(): ?array
     {
         return $this->_get(self::OFFERED_PAYMENT_PLANS);
     }
@@ -61,7 +61,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setId()
      */
-    public function setId(string $id = null): PaymentOffersInterface
+    public function setId(?string $id): PaymentOffersInterface
     {
         return $this->setData(self::ID, $id);
     }
@@ -71,7 +71,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setOfferedPaymentPlans()
      */
-    public function setOfferedPaymentPlans(array $offeredPaymentPlans = []): PaymentOffersInterface
+    public function setOfferedPaymentPlans(?array $offeredPaymentPlans): PaymentOffersInterface
     {
         return $this->setData(self::OFFERED_PAYMENT_PLANS, $offeredPaymentPlans);
     }
@@ -81,7 +81,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setUrl()
      */
-    public function setUrl(string $url = null): PaymentOffersInterface
+    public function setUrl(?string $url): PaymentOffersInterface
     {
         return $this->setData(self::URL, $url);
     }
@@ -91,7 +91,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setOrder()
      */
-    public function setOrder(string $order = null): PaymentOffersInterface
+    public function setOrder(?string $order): PaymentOffersInterface
     {
         return $this->setData(self::ORDER, $order);
     }
@@ -101,7 +101,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getLegals()
      */
-    public function getLegals(): array
+    public function getLegals(): ?array
     {
         return $this->_get(self::LEGALS);
     }
@@ -121,7 +121,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getMetadata()
      */
-    public function getMetadata(): array
+    public function getMetadata(): ?array
     {
         return $this->_get(self::METADATA);
     }
@@ -131,7 +131,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getUrls()
      */
-    public function getUrls(): array
+    public function getUrls(): ?array
     {
         return $this->_get(self::URLS);
     }
@@ -141,7 +141,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setLegals()
      */
-    public function setLegals(array $legals = []): PaymentOffersInterface
+    public function setLegals(?array $legals): PaymentOffersInterface
     {
         return $this->setData(self::LEGALS, $legals);
     }
@@ -151,7 +151,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setLocale()
      */
-    public function setLocale(string $locale = null): PaymentOffersInterface
+    public function setLocale(?string $locale): PaymentOffersInterface
     {
         return $this->setData(self::LOCALE, $locale);
     }
@@ -161,7 +161,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setMetadata()
      */
-    public function setMetadata(array $metadata = []): PaymentOffersInterface
+    public function setMetadata(?array $metadata): PaymentOffersInterface
     {
         return $this->setData(self::METADATA, $metadata);
     }
@@ -171,7 +171,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setUrls()
      */
-    public function setUrls(array $urls = []): PaymentOffersInterface
+    public function setUrls(?array $urls): PaymentOffersInterface
     {
         return $this->setData(self::URLS, $urls);
     }
@@ -191,7 +191,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setIsEligible()
      */
-    public function setIsEligible(bool $isEligible = null): PaymentOffersInterface
+    public function setIsEligible(?bool $isEligible): PaymentOffersInterface
     {
         return $this->setData(self::IS_ELIGIBLE, $isEligible);
     }

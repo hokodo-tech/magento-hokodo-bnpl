@@ -38,7 +38,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setUrl(string $url = null): self;
+    public function setUrl(?string $url): self;
 
     /**
      * A function that gets url.
@@ -54,7 +54,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setId(string $id = null): self;
+    public function setId(?string $id): self;
 
     /**
      * A function that gets id.
@@ -70,7 +70,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setCountry(string $country = null): self;
+    public function setCountry(?string $country): self;
 
     /**
      * A function that gets country.
@@ -86,7 +86,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setName(string $name = null): self;
+    public function setName(?string $name): self;
 
     /**
      * A function that gets name.
@@ -102,7 +102,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setAddress(string $address = null): self;
+    public function setAddress(?string $address): self;
 
     /**
      * A function that gets address.
@@ -118,7 +118,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setCity(string $city = null): self;
+    public function setCity(?string $city): self;
 
     /**
      * A function that gets city.
@@ -134,7 +134,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setPostcode(string $postcode = null): self;
+    public function setPostcode(?string $postcode): self;
 
     /**
      * A function that gets postcode.
@@ -150,7 +150,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setLegalForm(string $legalForm = null): self;
+    public function setLegalForm(?string $legalForm): self;
 
     /**
      * A function that gets legal form.
@@ -162,18 +162,18 @@ interface CompanyInterface extends ExtensibleDataInterface
     /**
      * A function that sets sectors.
      *
-     * @param string[] $sectors
+     * @param string[]|null $sectors
      *
      * @return CompanyInterface
      */
-    public function setSectors(array $sectors = []);
+    public function setSectors(?array $sectors): self;
 
     /**
      * A function that gets sectors.
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getSectors(): array;
+    public function getSectors(): ?array;
 
     /**
      * A function that sets creation date.
@@ -182,7 +182,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setCreationDate(string $creationDate = null): self;
+    public function setCreationDate(?string $creationDate): self;
 
     /**
      * A function that gets creation date.
@@ -194,18 +194,18 @@ interface CompanyInterface extends ExtensibleDataInterface
     /**
      * A function that sets identifiers.
      *
-     * @param string[] $identifiers
+     * @param string[]|null $identifiers
      *
      * @return CompanyInterface
      */
-    public function setIdentifiers(array $identifiers = []): self;
+    public function setIdentifiers(?array $identifiers): self;
 
     /**
      * A function that gets identifiers.
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getIdentifiers(): array;
+    public function getIdentifiers(): ?array;
 
     /**
      * A function that sets email.
@@ -214,7 +214,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setEmail(string $email = null): self;
+    public function setEmail(?string $email): self;
 
     /**
      * A function that gets email.
@@ -230,7 +230,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setPhone(string $phone = null): self;
+    public function setPhone(?string $phone): self;
 
     /**
      * A function that gets phone.
@@ -246,7 +246,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setStatus(string $status = null): self;
+    public function setStatus(?string $status): self;
 
     /**
      * A function that gets status.
@@ -262,7 +262,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setAccountsType(string $accountsType = null): self;
+    public function setAccountsType(?string $accountsType): self;
 
     /**
      * A function that gets account type.
@@ -278,7 +278,7 @@ interface CompanyInterface extends ExtensibleDataInterface
      *
      * @return CompanyInterface
      */
-    public function setConfidence(string $confidence = null): self;
+    public function setConfidence(?string $confidence): self;
 
     /**
      * A function that gets confidence.

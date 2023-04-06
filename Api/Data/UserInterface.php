@@ -30,7 +30,7 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setId(string $id = null): self;
+    public function setId(?string $id): self;
 
     /**
      * A function that id.
@@ -46,7 +46,7 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setEmail(string $email = null): self;
+    public function setEmail(?string $email): self;
 
     /**
      * A function that gets email.
@@ -58,11 +58,11 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * A function that sets email validated.
      *
-     * @param bool $emailValidated
+     * @param bool|null $emailValidated
      *
      * @return $this
      */
-    public function setEmailValidated(bool $emailValidated): self;
+    public function setEmailValidated(?bool $emailValidated): self;
 
     /**
      * A function that gets email validated.
@@ -78,7 +78,7 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setUniqueId(string $uniqueId = null): self;
+    public function setUniqueId(?string $uniqueId): self;
 
     /**
      * A function that gets unique id.
@@ -94,7 +94,7 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setName(string $name = null): self;
+    public function setName(?string $name): self;
 
     /**
      * A function that gets name.
@@ -110,7 +110,7 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setPhone(string $phone = null): self;
+    public function setPhone(?string $phone): self;
 
     /**
      * A function that gets phone.
@@ -126,7 +126,7 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setRegistered(string $registered = null): self;
+    public function setRegistered(?string $registered): self;
 
     /**
      * A function that gets registered.
@@ -138,18 +138,18 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * A function that sets organisations.
      *
-     * @param \Hokodo\BNPL\Api\Data\UserOrganisationInterface[] $organisations
+     * @param \Hokodo\BNPL\Api\Data\UserOrganisationInterface[]|null $organisations
      *
      * @return $this
      */
-    public function setOrganisations(array $organisations = []): self;
+    public function setOrganisations(?array $organisations): self;
 
     /**
      * A function that gets organisations.
      *
-     * @return \Hokodo\BNPL\Api\Data\UserOrganisationInterface[]
+     * @return \Hokodo\BNPL\Api\Data\UserOrganisationInterface[]|null
      */
-    public function getOrganisations(): array;
+    public function getOrganisations(): ?array;
 
     /**
      * A function that sets type.
@@ -158,7 +158,7 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setType(string $type = null): self;
+    public function setType(?string $type): self;
 
     /**
      * A function that gets type.

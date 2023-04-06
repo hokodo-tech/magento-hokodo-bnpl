@@ -25,7 +25,7 @@ interface CreditInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setCompany(string $company = null): self;
+    public function setCompany(?string $company): self;
 
     /**
      * Status getter.
@@ -41,7 +41,7 @@ interface CreditInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setStatus(string $status = null): self;
+    public function setStatus(?string $status): self;
 
     /**
      * Rejection Reason getter.
@@ -57,7 +57,7 @@ interface CreditInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setRejectionReason(array $rejectionReason = null): self;
+    public function setRejectionReason(?array $rejectionReason): self;
 
     /**
      * Credit Limit getter.
