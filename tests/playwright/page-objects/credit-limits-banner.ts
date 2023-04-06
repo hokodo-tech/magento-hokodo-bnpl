@@ -16,7 +16,7 @@ export default class CreditLimitsBanner {
         await this.page.locator("text='See your credit limit'").click();
         await this.page.locator("[aria-controls='companySearchListbox']").fill(companyName || "");
         await this.page.locator("#companySearchListbox").locator(`text="${companyName}"`).click();
-        await this.page.locator("[data-testid='marketing-element-credit-limit-modal'] button").click();
+        await this.page.locator("[data-testid='marketing-element-credit-limit-modal'] [data-testid='companySearch-submitButton']").click();
         await this.page.locator("text='Continue shopping'").click();
         await this.page.waitForSelector("text='Continue shopping'", { state: "detached" });
     }
