@@ -3,7 +3,15 @@
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
+
+/**
+ * @var $block \Magento\Framework\View\Element\Template
+ * @var $viewModel \Hokodo\BNPL\ViewModel\Checkout\OnepageSuccess
+ */
+
+$viewModel = $block->getData('viewModel');
 ?>
+<?php if (!$viewModel->isOldMagentoVersion()): ?>
 <script>
     require([
         'Magento_Customer/js/customer-data'
@@ -12,3 +20,13 @@
         customerData.invalidate(['hokodo-search', 'hokodo-checkout']);
     });
 </script>
+<?php else: ?>
+<script>
+    require([
+        'Magento_Customer/js/customer-data'
+    ], function (customerData) {
+        customerData.init();
+        customerData.invalidate(['hokodo-search', 'hokodo-checkout']);
+    });
+</script>
+<?php endif; ?>

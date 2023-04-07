@@ -11,16 +11,19 @@
 
 $viewModel = $block->getData('viewModel');
 ?>
+<?php if ($viewModel->canPushAnalytics()): ?>
 <script>
     require(['Hokodo_BNPL/js/segment/core'], function(segment) {
         segment.trackOrderPlaced(
-            '<?= $viewModel->getSelectedPaymentMethodCode() ?>',
-            '<?= $viewModel->getOrder()->getIncrementId() ?>',
+            '<?= $viewModel->getSelectedPaymentMethodCode(); ?>',
+            '<?= $viewModel->getOrder()->getIncrementId(); ?>',
             '<?= number_format(
                 (float) ($viewModel->getOrder()->getGrandTotal() - $viewModel->getOrder()->getShippingAmount()),
                 2
-            ) ?>',
-            '<?= $viewModel->getOrder()->getOrderCurrencyCode() ?>'
+            ); ?>',
+            '<?= $viewModel->getOrder()->getOrderCurrencyCode(); ?>',
+            '<?= $viewModel->getQuoteId(); ?>'
         );
     })
 </script>
+<?php endif; ?>

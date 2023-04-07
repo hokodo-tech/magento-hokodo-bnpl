@@ -44,7 +44,8 @@ define([
                     segment.trackLanding(
                         self.priceUtils.formatPrice(self.quote.getCalculatedTotal(), {pattern: '%s'}),
                         self.quote.totals().quote_currency_code,
-                        position
+                        position,
+                        self.quote.getQuoteId()
                     );
                     this.fired = true;
                 }
