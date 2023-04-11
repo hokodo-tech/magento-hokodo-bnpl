@@ -19,14 +19,14 @@
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="version" translate="label" type="Hokodo\BNPL\Service\Form\Element\Version" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="version" translate="label" type="Hokodo\BNPL\Service\Form\Element\Version" sortOrder="12" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Version</label>
                 </field>
-                <field id="enable_customer_groups" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="enable_customer_groups" translate="label" type="select" sortOrder="17" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enable Customer Groups</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="customer_groups" translate="label" type="multiselect" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="customer_groups" translate="label" type="multiselect" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Customer Groups</label>
                     <source_model>Hokodo\BNPL\Model\Config\Source\CustomerGroups</source_model>
                     <depends>
