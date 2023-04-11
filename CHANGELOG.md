@@ -1,3 +1,8 @@
+2.1.11 / April 2023
+==================
+* Added auto assign company to users registered after first checkout
+* Changed the way Payment method 'By Default' selection
+
 2.1.10 / March 2023
 ==================
 * Change currency source for Hokodo Order create request

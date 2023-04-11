@@ -97,7 +97,7 @@ class AssignCompanyAfterRegistration implements ObserverInterface
                 $this->hokodoEntityTypeResolver->resolve() === EntityLevelForSave::CUSTOMER) {
                 $hokodoCustomer = $this->customerInterfaceFactory->create();
                 $hokodoCustomer
-                    ->setCustomerId($customer->getId())
+                    ->setCustomerId((int) $customer->getId())
                     ->setCompanyId($hokodoQuote->getCompanyId())
                     ->setOrganisationId($hokodoQuote->getOrganisationId());
 
