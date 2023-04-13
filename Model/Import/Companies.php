@@ -10,6 +10,8 @@ namespace Hokodo\BNPL\Model\Import;
 
 use Hokodo\BNPL\Api\Data\CompanyImportInterface;
 use Hokodo\BNPL\Api\Data\CompanyImportInterfaceFactory;
+use Hokodo\BNPL\Gateway\Config\Config;
+use Hokodo\BNPL\Model\Config\Source\SdkCountries;
 use Hokodo\BNPL\Model\HokodoCompanyProvider;
 use Hokodo\BNPL\Model\Queue\Handler\CompanyImport as CompanyImportHandler;
 use Hokodo\BNPL\Service\Website;
@@ -100,6 +102,21 @@ class Companies extends AbstractEntity
     private Website $websiteService;
 
     /**
+     * @var Config
+     */
+    private Config $config;
+
+    /**
+     * @var SdkCountries
+     */
+    private SdkCountries $sdkCountries;
+
+    /**
+     * @var CompanyImportHandler
+     */
+    private CompanyImportHandler $companyImportHandler;
+
+    /**
      * @var array
      */
     private array $websites = [];
@@ -113,9 +130,12 @@ class Companies extends AbstractEntity
      * @param CountryInformationAcquirerInterface $countryInformationAcquirer
      * @param CustomerRepositoryInterface         $customerRepository
      * @param HokodoCompanyProvider               $hokodoCompanyProvider
+     * @param Config                              $config
      * @param PublisherInterface                  $publisher
      * @param CompanyImportInterfaceFactory       $companyImportInterfaceFactory
      * @param Website                             $websiteService
+     * @param SdkCountries                        $sdkCountries
+     * @param CompanyImportHandler                $companyImportHandler
      */
     public function __construct(
         JsonHelper $jsonHelper,
@@ -126,9 +146,12 @@ class Companies extends AbstractEntity
         CountryInformationAcquirerInterface $countryInformationAcquirer,
         CustomerRepositoryInterface $customerRepository,
         HokodoCompanyProvider $hokodoCompanyProvider,
+        Config $config,
         PublisherInterface $publisher,
         CompanyImportInterfaceFactory $companyImportInterfaceFactory,
-        Website $websiteService
+        Website $websiteService,
+        SdkCountries $sdkCountries,
+        CompanyImportHandler $companyImportHandler
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
@@ -138,9 +161,12 @@ class Companies extends AbstractEntity
         $this->countryInformationAcquirer = $countryInformationAcquirer;
         $this->customerRepository = $customerRepository;
         $this->hokodoCompanyProvider = $hokodoCompanyProvider;
+        $this->config = $config;
         $this->publisher = $publisher;
         $this->companyImportInterfaceFactory = $companyImportInterfaceFactory;
         $this->websiteService = $websiteService;
+        $this->sdkCountries = $sdkCountries;
+        $this->companyImportHandler = $companyImportHandler;
         $this->initMessageTemplates();
         $this->init();
     }
@@ -357,7 +383,13 @@ class Companies extends AbstractEntity
     public function isCountryCodeValid(string $countryCode): bool
     {
         $isValid = false;
-        if (in_array($countryCode, $this->getCountryCodes())) {
+        $countryCodes = $this->config->getSdkCountries();
+        if (in_array($countryCode, $countryCodes)) {
+            $isValid = true;
+        }
+        if ((empty($countryCodes) || trim(array_shift($countryCodes)) == '')
+            && in_array($countryCode, $this->sdkCountries->getCountries())
+        ) {
             $isValid = true;
         }
         return $isValid;
@@ -377,25 +409,6 @@ class Companies extends AbstractEntity
             $isValid = true;
         }
         return $isValid;
-    }
-
-    /**
-     * Get countries codes.
-     *
-     * @return array
-     */
-    public function getCountryCodes(): array
-    {
-        if (!empty($this->countryCodes)) {
-            return $this->countryCodes;
-        }
-        $countryCodes = [];
-
-        $countries = $this->countryInformationAcquirer->getCountriesInfo();
-        foreach ($countries as $country) {
-            $countryCodes[] = $country->getTwoLetterAbbreviation();
-        }
-        return $this->countryCodes = $countryCodes;
     }
 
     /**

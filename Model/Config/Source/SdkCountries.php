@@ -29,4 +29,14 @@ class SdkCountries implements \Magento\Framework\Data\OptionSourceInterface
 
         return $options;
     }
+
+    /**
+     * Get default countries.
+     *
+     * @return string[]
+     */
+    public function getCountries(): array
+    {
+        return $this->countries;
+    }
 }
