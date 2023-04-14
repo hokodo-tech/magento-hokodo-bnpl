@@ -243,6 +243,11 @@
                         <comment><![CDATA[Restrict company search component to the countries selected.]]></comment>
                         <source_model>Hokodo\BNPL\Model\Config\Source\SdkCountries</source_model>
                     </field>
+                    <field id="import_engine" translate="label comment" type="select" sortOrder="400"
+                           showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                        <label>Import Engine</label>
+                        <source_model>Hokodo\BNPL\Model\Config\Source\ImportEngine</source_model>
+                    </field>
                 </group>
             </group>
         </section>

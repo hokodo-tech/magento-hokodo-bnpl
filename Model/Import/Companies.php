@@ -11,12 +11,12 @@ namespace Hokodo\BNPL\Model\Import;
 use Hokodo\BNPL\Api\Data\CompanyImportInterface;
 use Hokodo\BNPL\Api\Data\CompanyImportInterfaceFactory;
 use Hokodo\BNPL\Gateway\Config\Config;
+use Hokodo\BNPL\Model\Config\Source\ImportEngine;
 use Hokodo\BNPL\Model\Config\Source\SdkCountries;
 use Hokodo\BNPL\Model\HokodoCompanyProvider;
 use Hokodo\BNPL\Model\Queue\Handler\CompanyImport as CompanyImportHandler;
 use Hokodo\BNPL\Service\Website;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Directory\Api\CountryInformationAcquirerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
@@ -35,6 +35,8 @@ class Companies extends AbstractEntity
     public const REG_NUMBER_COLUMN = 'regnumber';
     public const COUNTRY_CODE_COLUMN = 'countrycode';
     public const WEBSITE_CODE_COLUMN = 'website';
+    public const COMPANY_ID = 'company_id';
+    public const ORGANISATION_ID = 'organisation_id';
 
     /**
      * @var bool
@@ -64,12 +66,9 @@ class Companies extends AbstractEntity
         self::REG_NUMBER_COLUMN,
         self::COUNTRY_CODE_COLUMN,
         self::WEBSITE_CODE_COLUMN,
+        self::COMPANY_ID,
+        self::ORGANISATION_ID,
     ];
-
-    /**
-     * @var CountryInformationAcquirerInterface
-     */
-    private CountryInformationAcquirerInterface $countryInformationAcquirer;
 
     /**
      * @var array
@@ -122,20 +121,19 @@ class Companies extends AbstractEntity
     private array $websites = [];
 
     /**
-     * @param JsonHelper                          $jsonHelper
-     * @param ImportHelper                        $importExportData
-     * @param Data                                $importData
-     * @param Helper                              $resourceHelper
-     * @param ProcessingErrorAggregatorInterface  $errorAggregator
-     * @param CountryInformationAcquirerInterface $countryInformationAcquirer
-     * @param CustomerRepositoryInterface         $customerRepository
-     * @param HokodoCompanyProvider               $hokodoCompanyProvider
-     * @param Config                              $config
-     * @param PublisherInterface                  $publisher
-     * @param CompanyImportInterfaceFactory       $companyImportInterfaceFactory
-     * @param Website                             $websiteService
-     * @param SdkCountries                        $sdkCountries
-     * @param CompanyImportHandler                $companyImportHandler
+     * @param JsonHelper                         $jsonHelper
+     * @param ImportHelper                       $importExportData
+     * @param Data                               $importData
+     * @param Helper                             $resourceHelper
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param CustomerRepositoryInterface        $customerRepository
+     * @param HokodoCompanyProvider              $hokodoCompanyProvider
+     * @param Config                             $config
+     * @param PublisherInterface                 $publisher
+     * @param CompanyImportInterfaceFactory      $companyImportInterfaceFactory
+     * @param Website                            $websiteService
+     * @param SdkCountries                       $sdkCountries
+     * @param CompanyImportHandler               $companyImportHandler
      */
     public function __construct(
         JsonHelper $jsonHelper,
@@ -143,7 +141,6 @@ class Companies extends AbstractEntity
         Data $importData,
         Helper $resourceHelper,
         ProcessingErrorAggregatorInterface $errorAggregator,
-        CountryInformationAcquirerInterface $countryInformationAcquirer,
         CustomerRepositoryInterface $customerRepository,
         HokodoCompanyProvider $hokodoCompanyProvider,
         Config $config,
@@ -158,7 +155,6 @@ class Companies extends AbstractEntity
         $this->_resourceHelper = $resourceHelper;
         $this->_dataSourceModel = $importData;
         $this->errorAggregator = $errorAggregator;
-        $this->countryInformationAcquirer = $countryInformationAcquirer;
         $this->customerRepository = $customerRepository;
         $this->hokodoCompanyProvider = $hokodoCompanyProvider;
         $this->config = $config;
@@ -212,6 +208,8 @@ class Companies extends AbstractEntity
         $behavior = $this->getBehavior();
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             foreach ($bunch as $rowNum => $row) {
+                $companyId = null;
+                $organisationId = null;
                 if (!$this->validateRow($row, $rowNum)) {
                     continue;
                 }
@@ -222,6 +220,14 @@ class Companies extends AbstractEntity
                 }
 
                 $email = $row[self::EMAIL_COLUMN];
+
+                if ($row[self::COMPANY_ID]) {
+                    $companyId = $row[self::COMPANY_ID];
+                }
+
+                if ($row[self::ORGANISATION_ID]) {
+                    $organisationId = $row[self::ORGANISATION_ID];
+                }
 
                 try {
                     $websiteId = $this->getWebsiteId($row);
@@ -244,9 +250,17 @@ class Companies extends AbstractEntity
                 $companyImport->setEmail($row[self::EMAIL_COLUMN])
                     ->setRegNumber($row[self::REG_NUMBER_COLUMN])
                     ->setCountryCode($row[self::COUNTRY_CODE_COLUMN])
-                    ->setWebsiteId($websiteId);
+                    ->setWebsiteId($websiteId)
+                    ->setCompanyId($companyId)
+                    ->setOrganisationId($organisationId);
 
-                $this->publisher->publish(CompanyImportHandler::TOPIC_NAME, $companyImport);
+                switch ($this->config->getImportEngine()) {
+                    case ImportEngine::QUEUE:
+                        $this->publisher->publish(CompanyImportHandler::TOPIC_NAME, $companyImport);
+                        break;
+                    default:
+                        $this->companyImportHandler->execute($companyImport);
+                }
 
                 if ($hokodoEntity->getCompanyId()) {
                     ++$this->countItemsUpdated;
@@ -290,12 +304,14 @@ class Companies extends AbstractEntity
         if (!$this->isCustomerExists($rowData)) {
             $this->addRowError('CustomerNotFound', $rowNum);
         }
-        if (!$this->isCountryCodeValid($rowData[self::COUNTRY_CODE_COLUMN])) {
-            $this->addRowError('CountryCodeIsNotValid', $rowNum);
-        }
-        $regNumber = $rowData[self::COUNTRY_CODE_COLUMN] ?? null;
-        if (!$regNumber) {
-            $this->addRowError('RegNumberIsNotValid', $rowNum);
+        if (!$this->isDataForDirectImportProvided($rowData)) {
+            if (!$this->isCountryCodeValid($rowData[self::COUNTRY_CODE_COLUMN])) {
+                $this->addRowError('CountryCodeIsNotValid', $rowNum);
+            }
+            $regNumber = $rowData[self::REG_NUMBER_COLUMN] ?? null;
+            if (!$regNumber) {
+                $this->addRowError('RegNumberIsNotValid', $rowNum);
+            }
         }
 
         if (isset($this->_validatedRows[$rowNum])) {
@@ -305,6 +321,18 @@ class Companies extends AbstractEntity
         $this->_validatedRows[$rowNum] = true;
 
         return !$this->getErrorAggregator()->isRowInvalid($rowNum);
+    }
+
+    /**
+     * Check is Data For Direct Import Provided.
+     *
+     * @param array $rowData
+     *
+     * @return bool
+     */
+    public function isDataForDirectImportProvided(array $rowData): bool
+    {
+        return !empty($rowData[self::COMPANY_ID]) && !empty($rowData[self::ORGANISATION_ID]);
     }
 
     /**

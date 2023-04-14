@@ -135,22 +135,19 @@ class CompanyImport
 
             $customer = $this->customerRepository->get($companyImport->getEmail(), $companyImport->getWebsiteId());
 
-            $hokodoCompany = $this->getCompanyFromHokodo(
-                $companyImport->getRegNumber(),
-                $companyImport->getCountryCode()
-            );
+            $hokodoCompanyId = $this->getHokodoCompanyId($companyImport);
 
             $hokodoEntity = $this->hokodoCompanyProvider
                 ->getEntityRepository()->getByCustomerId((int) $customer->getId());
 
-            if ($hokodoEntity->getCompanyId() != $hokodoCompany->getId()) {
-                $organisation = $this->getOrganisation($hokodoCompany->getId(), $companyImport->getEmail());
-                $creditLimit = $this->companyCreditService->getCreditLimit($hokodoCompany->getId());
+            if ($hokodoEntity->getCompanyId() != $hokodoCompanyId) {
+                $organisationId = $this->getOrganisationId($hokodoCompanyId, $companyImport);
+                $creditLimit = $this->companyCreditService->getCreditLimit($hokodoCompanyId);
 
-                $hokodoEntity->setCompanyId($hokodoCompany->getId());
-                $hokodoEntity->setOrganisationId($organisation->getId());
+                $hokodoEntity->setCompanyId($hokodoCompanyId);
+                $hokodoEntity->setOrganisationId($organisationId);
                 $hokodoEntity->setCreditLimit($creditLimit);
-                $this->updateHokodoEntity($hokodoEntity, (int) $customer->getId(), $hokodoCompany->getId());
+                $this->updateHokodoEntity($hokodoEntity, (int) $customer->getId());
             }
         } catch (NotFoundException|CommandException $e) {
             $this->companyImportData['message'] = 'Can not find company.';
@@ -174,25 +171,53 @@ class CompanyImport
     }
 
     /**
+     * Get Hokodo Company Id.
+     *
+     * @param CompanyImportInterface $companyImport
+     *
+     * @return string|null
+     *
+     * @throws CommandException
+     * @throws NotFoundException
+     */
+    private function getHokodoCompanyId(CompanyImportInterface $companyImport): ?string
+    {
+        $companyId = $companyImport->getCompanyId();
+        if (!$companyId) {
+            $hokodoCompany = $this->getCompanyFromHokodo(
+                $companyImport->getRegNumber(),
+                $companyImport->getCountryCode()
+            );
+            $companyId = $hokodoCompany->getId();
+        }
+        return $companyId;
+    }
+
+    /**
      * Get Organisation.
      *
-     * @param string $companyId
-     * @param string $email
+     * @param string                 $companyId
+     * @param CompanyImportInterface $companyImport
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws CommandException
      * @throws NoSuchEntityException
      * @throws NotFoundException
      */
-    private function getOrganisation(string $companyId, string $email)
+    private function getOrganisationId(string $companyId, CompanyImportInterface $companyImport): ?string
     {
-        return $this->organisationService->createOrganisation(
-            $this->organisationBuilder->build(
-                $companyId,
-                $email
-            )
-        )->getDataModel();
+        $organisationId = $companyImport->getOrganisationId();
+        if (!$organisationId) {
+            $organisation = $this->organisationService->createOrganisation(
+                $this->organisationBuilder->build(
+                    $companyId,
+                    $companyImport->getEmail()
+                )
+            )->getDataModel();
+            $organisationId = $organisation->getId();
+        }
+        return $organisationId;
     }
 
     /**
@@ -209,6 +234,8 @@ class CompanyImport
             CompanyImportInterface::REG_NUMBER => $companyImport->getRegNumber(),
             CompanyImportInterface::COUNTRY_CODE => $companyImport->getCountryCode(),
             CompanyImportInterface::WEBSITE_ID => $companyImport->getWebsiteId(),
+            CompanyImportInterface::COMPANY_ID => $companyImport->getCompanyId(),
+            CompanyImportInterface::ORGANISATION_ID => $companyImport->getOrganisationId(),
         ];
     }
 
