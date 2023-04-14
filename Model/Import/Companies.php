@@ -249,9 +249,9 @@ class Companies extends AbstractEntity
                 $this->publisher->publish(CompanyImportHandler::TOPIC_NAME, $companyImport);
 
                 if ($hokodoEntity->getCompanyId()) {
-                    $this->countItemsUpdated += (int) isset($row[self::EMAIL_COLUMN]);
+                    $this->countItemsUpdated++;
                 } else {
-                    $this->countItemsCreated += (int) !isset($row[self::EMAIL_COLUMN]);
+                    $this->countItemsCreated++;
                 }
             }
         }
