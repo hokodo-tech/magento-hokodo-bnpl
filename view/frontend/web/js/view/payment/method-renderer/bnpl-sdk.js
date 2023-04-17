@@ -40,7 +40,7 @@ define([
             isValidated: false
         },
         getLogos: ko.observableArray(paymentConfig.logos),
-        hokodoElements: window.hokodoSdk.elements(),
+        hokodoElements: null,
 
         initObservable() {
             this._super().observe({
@@ -51,12 +51,27 @@ define([
             return this;
         },
 
+        initHokodoElements: function () {
+            if (window.hokodoSdk) {
+                this.hokodoElements = window.hokodoSdk.elements();
+            } else {
+                jQuery('body').on('hokodoSdkResolved', () => {
+                    this.hokodoElements = window.hokodoSdk.elements();
+                })
+            }
+        },
+
         /**
          * Init component
          */
         initialize: function () {
             this._super();
             const self = this;
+
+           if (this.hokodoElements === null) {
+               this.initHokodoElements();
+           }
+
             this.searchConfig = paymentConfig.searchConfig
 
             this.hokodoCheckout().isLoading.subscribe((value) => {
