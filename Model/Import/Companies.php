@@ -221,11 +221,11 @@ class Companies extends AbstractEntity
 
                 $email = $row[self::EMAIL_COLUMN];
 
-                if ($row[self::COMPANY_ID]) {
+                if (!empty($row[self::COMPANY_ID])) {
                     $companyId = $row[self::COMPANY_ID];
                 }
 
-                if ($row[self::ORGANISATION_ID]) {
+                if (!empty($row[self::ORGANISATION_ID])) {
                     $organisationId = $row[self::ORGANISATION_ID];
                 }
 
@@ -332,7 +332,7 @@ class Companies extends AbstractEntity
      */
     public function isDataForDirectImportProvided(array $rowData): bool
     {
-        return !empty($rowData[self::COMPANY_ID]) && !empty($rowData[self::ORGANISATION_ID]);
+        return !empty($rowData[self::COMPANY_ID]);
     }
 
     /**
