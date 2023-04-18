@@ -50,13 +50,16 @@ define([
 
             return this;
         },
-
-        initHokodoElements: function () {
+        /**
+         * Initialize
+         */
+        initialize: function () {
+            this._super();
             if (window.hokodoSdk) {
-                this.hokodoElements = window.hokodoSdk.elements();
+                this.initComponent();
             } else {
                 jQuery('body').on('hokodoSdkResolved', () => {
-                    this.hokodoElements = window.hokodoSdk.elements();
+                    this.initComponent();
                 })
             }
         },
@@ -64,14 +67,9 @@ define([
         /**
          * Init component
          */
-        initialize: function () {
-            this._super();
+        initComponent: function () {
             const self = this;
-
-           if (this.hokodoElements === null) {
-               this.initHokodoElements();
-           }
-
+            this.hokodoElements = window.hokodoSdk.elements();
             this.searchConfig = paymentConfig.searchConfig
 
             this.hokodoCheckout().isLoading.subscribe((value) => {

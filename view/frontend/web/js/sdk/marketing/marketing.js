@@ -17,9 +17,13 @@ define([
 
         initialize() {
             this._super();
-            window.hokodoSdk.marketing();
-            this.companyId = hokodoData.getCompanyId();
-            this.initListener();
+            if (window.hokodoSdk) {
+                this.initListener();
+            } else {
+                jQuery('body').on('hokodoSdkResolved', () => {
+                    this.initListener();
+                })
+            }
         },
 
         getHokodoCustomer(customer) {
@@ -39,6 +43,8 @@ define([
         },
 
         initListener() {
+            window.hokodoSdk.marketing();
+            this.companyId = hokodoData.getCompanyId();
             customerData.get('hokodo-search').subscribe((data) => {
                 if (data.companyId !== undefined && this.companyId !== data.companyId) {
                     this.companyId = data.companyId;
