@@ -1,3 +1,8 @@
+2.1.12 / April 2023
+==================
+* Import to support Company id
+* Fix SDK issue
+
 2.1.11 / April 2023
 ==================
 * Added auto assign company to users registered after first checkout
