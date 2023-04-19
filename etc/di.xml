@@ -158,6 +158,11 @@
 
     <!-- Logger -->
     <!-- inject HokodoLogger where you need -->
+    <type name="Hokodo\BNPL\Service\Form\Element\Version">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
     <type name="Hokodo\BNPL\Gateway\Request\CreateOrderDocumentsBuilder">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
