@@ -16,6 +16,8 @@ interface CompanyImportInterface
     public const REG_NUMBER = 'reg_number';
     public const COUNTRY_CODE = 'country_code';
     public const WEBSITE_ID = 'website_id';
+    public const COMPANY_ID = 'company_id';
+    public const ORGANISATION_ID = 'organisation_id';
 
     /**
      * Getter for Email.
@@ -80,4 +82,36 @@ interface CompanyImportInterface
      * @return self
      */
     public function setWebsiteId(?int $websiteId): self;
+
+    /**
+     * Getter for CompanyId.
+     *
+     * @return string|null
+     */
+    public function getCompanyId(): ?string;
+
+    /**
+     * Setter for OrganisationId.
+     *
+     * @param string|null $companyId
+     *
+     * @return self
+     */
+    public function setCompanyId(?string $companyId): self;
+
+    /**
+     * Getter for OrganisationId.
+     *
+     * @return string|null
+     */
+    public function getOrganisationId(): ?string;
+
+    /**
+     * Setter for OrganisationId.
+     *
+     * @param string|null $organisationId
+     *
+     * @return self
+     */
+    public function setOrganisationId(?string $organisationId): self;
 }

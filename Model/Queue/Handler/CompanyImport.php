@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Queue\Handler;
 
+use Hokodo\BNPL\Api\CompanyCreditServiceInterface;
 use Hokodo\BNPL\Api\Data\CompanyImportInterface;
 use Hokodo\BNPL\Api\Data\CompanyInterface as ApiCompany;
 use Hokodo\BNPL\Api\Data\Gateway\CompanySearchRequestInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CompanySearchRequestInterfaceFactory;
 use Hokodo\BNPL\Gateway\Service\CompanySearch as Gateway;
+use Hokodo\BNPL\Gateway\Service\Organisation;
 use Hokodo\BNPL\Model\HokodoCompanyProvider;
+use Hokodo\BNPL\Model\RequestBuilder\OrganisationBuilder;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -67,10 +70,28 @@ class CompanyImport
     private array $companyImportData = [];
 
     /**
+     * @var Organisation
+     */
+    private Organisation $organisationService;
+
+    /**
+     * @var OrganisationBuilder
+     */
+    private OrganisationBuilder $organisationBuilder;
+
+    /**
+     * @var CompanyCreditServiceInterface
+     */
+    private CompanyCreditServiceInterface $companyCreditService;
+
+    /**
      * @param CustomerRepositoryInterface          $customerRepository
      * @param HokodoCompanyProvider                $hokodoCompanyProvider
      * @param CompanySearchRequestInterfaceFactory $companySearchRequestFactory
      * @param Gateway                              $gateway
+     * @param Organisation                         $organisationService
+     * @param OrganisationBuilder                  $organisationBuilder
+     * @param CompanyCreditServiceInterface        $companyCreditService
      * @param SessionCleanerInterface              $sessionCleanerInterface
      * @param NotifierInterface                    $notifierPool
      * @param LoggerInterface                      $logger
@@ -80,6 +101,9 @@ class CompanyImport
         HokodoCompanyProvider $hokodoCompanyProvider,
         CompanySearchRequestInterfaceFactory $companySearchRequestFactory,
         Gateway $gateway,
+        Organisation $organisationService,
+        OrganisationBuilder $organisationBuilder,
+        CompanyCreditServiceInterface $companyCreditService,
         SessionCleanerInterface $sessionCleanerInterface,
         NotifierInterface $notifierPool,
         LoggerInterface $logger
@@ -88,6 +112,9 @@ class CompanyImport
         $this->hokodoCompanyProvider = $hokodoCompanyProvider;
         $this->companySearchRequestFactory = $companySearchRequestFactory;
         $this->gateway = $gateway;
+        $this->organisationService = $organisationService;
+        $this->organisationBuilder = $organisationBuilder;
+        $this->companyCreditService = $companyCreditService;
         $this->sessionCleanerInterface = $sessionCleanerInterface;
         $this->notifierPool = $notifierPool;
         $this->logger = $logger;
@@ -108,16 +135,19 @@ class CompanyImport
 
             $customer = $this->customerRepository->get($companyImport->getEmail(), $companyImport->getWebsiteId());
 
-            $hokodoCompany = $this->getCompanyFromHokodo(
-                $companyImport->getRegNumber(),
-                $companyImport->getCountryCode()
-            );
+            $hokodoCompanyId = $this->getHokodoCompanyId($companyImport);
 
             $hokodoEntity = $this->hokodoCompanyProvider
                 ->getEntityRepository()->getByCustomerId((int) $customer->getId());
 
-            if ($hokodoEntity->getCompanyId() != $hokodoCompany->getId()) {
-                $this->updateHokodoEntity($hokodoEntity, (int) $customer->getId(), $hokodoCompany->getId());
+            if ($hokodoEntity->getCompanyId() != $hokodoCompanyId) {
+                $organisationId = $this->getOrganisationId($hokodoCompanyId, $companyImport);
+                $creditLimit = $this->companyCreditService->getCreditLimit($hokodoCompanyId);
+
+                $hokodoEntity->setCompanyId($hokodoCompanyId);
+                $hokodoEntity->setOrganisationId($organisationId);
+                $hokodoEntity->setCreditLimit($creditLimit);
+                $this->updateHokodoEntity($hokodoEntity, (int) $customer->getId());
             }
         } catch (NotFoundException|CommandException $e) {
             $this->companyImportData['message'] = 'Can not find company.';
@@ -141,6 +171,56 @@ class CompanyImport
     }
 
     /**
+     * Get Hokodo Company Id.
+     *
+     * @param CompanyImportInterface $companyImport
+     *
+     * @return string|null
+     *
+     * @throws CommandException
+     * @throws NotFoundException
+     */
+    private function getHokodoCompanyId(CompanyImportInterface $companyImport): ?string
+    {
+        $companyId = $companyImport->getCompanyId();
+        if (!$companyId) {
+            $hokodoCompany = $this->getCompanyFromHokodo(
+                $companyImport->getRegNumber(),
+                $companyImport->getCountryCode()
+            );
+            $companyId = $hokodoCompany->getId();
+        }
+        return $companyId;
+    }
+
+    /**
+     * Get Organisation.
+     *
+     * @param string                 $companyId
+     * @param CompanyImportInterface $companyImport
+     *
+     * @return string|null
+     *
+     * @throws CommandException
+     * @throws NoSuchEntityException
+     * @throws NotFoundException
+     */
+    private function getOrganisationId(string $companyId, CompanyImportInterface $companyImport): ?string
+    {
+        $organisationId = $companyImport->getOrganisationId();
+        if (!$organisationId) {
+            $organisation = $this->organisationService->createOrganisation(
+                $this->organisationBuilder->build(
+                    $companyId,
+                    $companyImport->getEmail()
+                )
+            )->getDataModel();
+            $organisationId = $organisation->getId();
+        }
+        return $organisationId;
+    }
+
+    /**
      * Init Data.
      *
      * @param CompanyImportInterface $companyImport
@@ -154,6 +234,8 @@ class CompanyImport
             CompanyImportInterface::REG_NUMBER => $companyImport->getRegNumber(),
             CompanyImportInterface::COUNTRY_CODE => $companyImport->getCountryCode(),
             CompanyImportInterface::WEBSITE_ID => $companyImport->getWebsiteId(),
+            CompanyImportInterface::COMPANY_ID => $companyImport->getCompanyId(),
+            CompanyImportInterface::ORGANISATION_ID => $companyImport->getOrganisationId(),
         ];
     }
 
@@ -187,21 +269,18 @@ class CompanyImport
     /**
      * Update Hokodo Entity.
      *
-     * @param mixed  $hokodoEntity
-     * @param int    $customerId
-     * @param string $hokodoCompanyId
+     * @param mixed $hokodoEntity
+     * @param int   $customerId
      *
      * @return void
      */
-    public function updateHokodoEntity($hokodoEntity, int $customerId, string $hokodoCompanyId): void
+    public function updateHokodoEntity($hokodoEntity, int $customerId): void
     {
-        $hokodoEntity
-            ->setCustomerId($customerId)
-            ->setCompanyId($hokodoCompanyId);
+        $hokodoEntity->setCustomerId($customerId);
         $this->hokodoCompanyProvider->getEntityRepository()->save($hokodoEntity);
         $this->sessionCleanerInterface->clearFor($customerId);
         $this->companyImportData['message'] = sprintf('Company was updated for customer %s.', $customerId);
-        $this->companyImportData['hokodo_company_id'] = $hokodoCompanyId;
+        $this->companyImportData['hokodo_company_id'] = $hokodoEntity->getCompanyId();
         $this->logger->info(__METHOD__, $this->companyImportData);
     }
 

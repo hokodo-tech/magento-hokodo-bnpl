@@ -61,6 +61,7 @@ class Config extends DefaultPaymentConfig
     public const HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL = 'advanced/entity_level';
     public const SEND_PURCHASE_HISTORY = 'advanced/send_customer_purchase_history';
     public const SDK_COUNTRIES = 'advanced/sdk_countries';
+    public const IMPORT_ENGINE = 'advanced/import_engine';
 
     /**
      * @var ScopeConfigInterface
@@ -415,8 +416,6 @@ class Config extends DefaultPaymentConfig
     /**
      * Returns the current data source for company id.
      *
-     * @param int $storeId
-     *
      * @return string
      */
     public function getEntityLevel(): string
@@ -434,5 +433,17 @@ class Config extends DefaultPaymentConfig
     public function getSdkCountries(): array
     {
         return explode(',', $this->getValue(self::SDK_COUNTRIES) ?? '');
+    }
+
+    /**
+     * Returns the import engine.
+     *
+     * @return string
+     */
+    public function getImportEngine(): string
+    {
+        return (string) $this->getValue(
+            self::IMPORT_ENGINE
+        );
     }
 }

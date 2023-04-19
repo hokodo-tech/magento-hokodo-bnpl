@@ -77,6 +77,7 @@
                     <allow_customer_to_change_company>1</allow_customer_to_change_company>
                     <debug>0</debug>
                     <send_customer_purchase_history>1</send_customer_purchase_history>
+                    <import_engine>queue</import_engine>
                 </advanced>
             </hokodo_bnpl>
         </payment>
