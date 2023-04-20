@@ -376,12 +376,11 @@
             <argument name="endpoint" xsi:type="string">payment/orders/:order_id/documents</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Hokodo\BNPL\Gateway\Request\ViewOrderDocumentsEndpointBuilder" type="Hokodo\BNPL\Gateway\Request\OrderEndpointBuilder">
+    <virtualType name="Hokodo\BNPL\Gateway\Request\OrderDocumentsEndpoint" type="Hokodo\BNPL\Gateway\Request\EndpointBuilder">
         <arguments>
-            <argument name="endpoint" xsi:type="string">payment/orders/:order_id/documents/:document_id</argument>
+            <argument name="subjectReader" xsi:type="object">Hokodo\BNPL\Gateway\OrderDocumentsSubjectReader</argument>
             <argument name="params" xsi:type="array">
                 <item name=":order_id" xsi:type="string">order_id</item>
-                <item name=":document_id" xsi:type="string">document_id</item>
             </argument>
         </arguments>
     </virtualType>
