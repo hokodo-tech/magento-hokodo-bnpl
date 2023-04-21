@@ -1,3 +1,7 @@
+2.1.13 / April 2023
+==================
+* Fix order documents endpoint
+
 2.1.12 / April 2023
 ==================
 * Import to support Company id
