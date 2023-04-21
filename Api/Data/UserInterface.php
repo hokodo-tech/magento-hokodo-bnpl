@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Api\Data;
 
 /**
@@ -24,144 +26,144 @@ interface UserInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * A function that sets id.
      *
-     * @param string $id
+     * @param string|null $id
      *
      * @return $this
      */
-    public function setId($id);
+    public function setId(?string $id): self;
 
     /**
      * A function that id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId();
+    public function getId(): ?string;
 
     /**
      * A function that sets email.
      *
-     * @param string $email
+     * @param string|null $email
      *
      * @return $this
      */
-    public function setEmail($email);
+    public function setEmail(?string $email): self;
 
     /**
      * A function that gets email.
      *
-     * @return string
+     * @return string|null
      */
-    public function getEmail();
+    public function getEmail(): ?string;
 
     /**
      * A function that sets email validated.
      *
-     * @param bool $emailValidated
+     * @param bool|null $emailValidated
      *
      * @return $this
      */
-    public function setEmailValidated($emailValidated);
+    public function setEmailValidated(?bool $emailValidated): self;
 
     /**
      * A function that gets email validated.
      *
      * @return bool
      */
-    public function getEmailValidated();
+    public function getEmailValidated(): bool;
 
     /**
      * A function that sets unique id.
      *
-     * @param string $uniqueId
+     * @param string|null $uniqueId
      *
      * @return $this
      */
-    public function setUniqueId($uniqueId);
+    public function setUniqueId(?string $uniqueId): self;
 
     /**
      * A function that gets unique id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUniqueId();
+    public function getUniqueId(): ?string;
 
     /**
      * A function that sets name.
      *
-     * @param string $name
+     * @param string|null $name
      *
      * @return $this
      */
-    public function setName($name);
+    public function setName(?string $name): self;
 
     /**
      * A function that gets name.
      *
-     * @return string
+     * @return string|null
      */
-    public function getName();
+    public function getName(): ?string;
 
     /**
      * A function that sets phone.
      *
-     * @param string $phone
+     * @param string|null $phone
      *
      * @return $this
      */
-    public function setPhone($phone);
+    public function setPhone(?string $phone): self;
 
     /**
      * A function that gets phone.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPhone();
+    public function getPhone(): ?string;
 
     /**
      * A function that sets registered.
      *
-     * @param string $registered
+     * @param string|null $registered
      *
      * @return $this
      */
-    public function setRegistered($registered);
+    public function setRegistered(?string $registered): self;
 
     /**
      * A function that gets registered.
      *
-     * @return string
+     * @return string|null
      */
-    public function getRegistered();
+    public function getRegistered(): ?string;
 
     /**
      * A function that sets organisations.
      *
-     * @param \Hokodo\BNPL\Api\Data\UserOrganisationInterface[] $organisations
+     * @param \Hokodo\BNPL\Api\Data\UserOrganisationInterface[]|null $organisations
      *
      * @return $this
      */
-    public function setOrganisations(array $organisations);
+    public function setOrganisations(?array $organisations): self;
 
     /**
      * A function that gets organisations.
      *
-     * @return \Hokodo\BNPL\Api\Data\UserOrganisationInterface[]
+     * @return \Hokodo\BNPL\Api\Data\UserOrganisationInterface[]|null
      */
-    public function getOrganisations();
+    public function getOrganisations(): ?array;
 
     /**
      * A function that sets type.
      *
-     * @param string $type
+     * @param string|null $type
      *
      * @return $this
      */
-    public function setType($type);
+    public function setType(?string $type): self;
 
     /**
      * A function that gets type.
      *
-     * @return string
+     * @return string|null
      */
-    public function getType();
+    public function getType(): ?string;
 }

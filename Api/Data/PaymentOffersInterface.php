@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -23,130 +25,130 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
     /**
      * A function that sets url.
      *
-     * @param string $url
+     * @param string|null $url
      *
      * @return $this
      */
-    public function setUrl($url);
+    public function setUrl(?string $url): self;
 
     /**
      * A function that gets url.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUrl();
+    public function getUrl(): ?string;
 
     /**
      * A function that sets id.
      *
-     * @param string $id
+     * @param string|null $id
      *
      * @return $this
      */
-    public function setId($id);
+    public function setId(?string $id): self;
 
     /**
      * A function that gets id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId();
+    public function getId(): ?string;
 
     /**
      * A function that sets order.
      *
-     * @param string $order
+     * @param string|null $order
      *
      * @return $this
      */
-    public function setOrder($order);
+    public function setOrder(?string $order): self;
 
     /**
      * A function that gets order.
      *
-     * @return string
+     * @return string|null
      */
-    public function getOrder();
+    public function getOrder(): ?string;
 
     /**
      * A function that sets offered payment plans.
      *
-     * @param \Hokodo\BNPL\Api\Data\PaymentPlanInterface[] $offeredPaymentPlans
+     * @param \Hokodo\BNPL\Api\Data\PaymentPlanInterface[]|null $offeredPaymentPlans
      *
      * @return $this
      */
-    public function setOfferedPaymentPlans(array $offeredPaymentPlans);
+    public function setOfferedPaymentPlans(?array $offeredPaymentPlans): self;
 
     /**
      * A function that gets offered payment plans.
      *
-     * @return \Hokodo\BNPL\Api\Data\PaymentPlanInterface[]
+     * @return \Hokodo\BNPL\Api\Data\PaymentPlanInterface[]|null
      */
-    public function getOfferedPaymentPlans();
+    public function getOfferedPaymentPlans(): ?array;
 
     /**
      * A function that sets legals.
      *
-     * @param string[] $legals
+     * @param string[]|null $legals
      *
      * @return $this
      */
-    public function setLegals(array $legals);
+    public function setLegals(?array $legals): self;
 
     /**
      * A function that gets legals.
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getLegals();
+    public function getLegals(): ?array;
 
     /**
      * A function that sets urls.
      *
-     * @param string[] $urls
+     * @param string[]|null $urls
      *
      * @return $this
      */
-    public function setUrls(array $urls);
+    public function setUrls(?array $urls): self;
 
     /**
      * A function that gets urls.
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getUrls();
+    public function getUrls(): ?array;
 
     /**
      * A function that sets locale.
      *
-     * @param string $locale
+     * @param string|null $locale
      *
      * @return $this
      */
-    public function setLocale($locale);
+    public function setLocale(?string $locale): self;
 
     /**
      * A function that gets locale.
      *
-     * @return string
+     * @return string|null
      */
-    public function getLocale();
+    public function getLocale(): ?string;
 
     /**
      * A function that sets metadata.
      *
-     * @param string $metadata
+     * @param string[]|null $metadata
      *
      * @return $this
      */
-    public function setMetadata($metadata);
+    public function setMetadata(?array $metadata): self;
 
     /**
      * A function that gets metadata.
      *
-     * @return string
+     * @return string[]|null
      */
-    public function getMetadata();
+    public function getMetadata(): ?array;
 
     /**
      * A function that sets is_eligible flag.
@@ -155,7 +157,7 @@ interface PaymentOffersInterface extends ExtensibleDataInterface
      *
      * @return $this
      */
-    public function setIsEligible(bool $isEligible = null): self;
+    public function setIsEligible(?bool $isEligible): self;
 
     /**
      * A function that gets is_eligible flag.

@@ -71,7 +71,6 @@ class CompanyCreditService implements CompanyCreditServiceInterface
             ->setCompanyId($companyId);
 
         try {
-            /** @var CreditInterface $companyCredit */
             $companyCredit = $this->gateway->getCredit($searchRequest)->getDataModel();
             if ($companyCredit->getRejectionReason()) {
                 $companyCredit->setCreditLimit(

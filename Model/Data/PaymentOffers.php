@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Model\Data;
 
 use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
@@ -19,7 +21,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getId()
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->_get(self::ID);
     }
@@ -29,7 +31,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getOfferedPaymentPlans()
      */
-    public function getOfferedPaymentPlans()
+    public function getOfferedPaymentPlans(): ?array
     {
         return $this->_get(self::OFFERED_PAYMENT_PLANS);
     }
@@ -39,7 +41,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getUrl()
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->_get(self::URL);
     }
@@ -49,7 +51,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getOrder()
      */
-    public function getOrder()
+    public function getOrder(): ?string
     {
         return $this->_get(self::ORDER);
     }
@@ -59,7 +61,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setId()
      */
-    public function setId($id)
+    public function setId(?string $id): PaymentOffersInterface
     {
         return $this->setData(self::ID, $id);
     }
@@ -69,7 +71,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setOfferedPaymentPlans()
      */
-    public function setOfferedPaymentPlans(array $offeredPaymentPlans)
+    public function setOfferedPaymentPlans(?array $offeredPaymentPlans): PaymentOffersInterface
     {
         return $this->setData(self::OFFERED_PAYMENT_PLANS, $offeredPaymentPlans);
     }
@@ -79,7 +81,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setUrl()
      */
-    public function setUrl($url)
+    public function setUrl(?string $url): PaymentOffersInterface
     {
         return $this->setData(self::URL, $url);
     }
@@ -89,7 +91,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setOrder()
      */
-    public function setOrder($order)
+    public function setOrder(?string $order): PaymentOffersInterface
     {
         return $this->setData(self::ORDER, $order);
     }
@@ -99,7 +101,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getLegals()
      */
-    public function getLegals()
+    public function getLegals(): ?array
     {
         return $this->_get(self::LEGALS);
     }
@@ -109,7 +111,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getLocale()
      */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->_get(self::LOCALE);
     }
@@ -119,7 +121,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getMetadata()
      */
-    public function getMetadata()
+    public function getMetadata(): ?array
     {
         return $this->_get(self::METADATA);
     }
@@ -129,7 +131,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::getUrls()
      */
-    public function getUrls()
+    public function getUrls(): ?array
     {
         return $this->_get(self::URLS);
     }
@@ -139,7 +141,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setLegals()
      */
-    public function setLegals(array $legals)
+    public function setLegals(?array $legals): PaymentOffersInterface
     {
         return $this->setData(self::LEGALS, $legals);
     }
@@ -149,7 +151,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setLocale()
      */
-    public function setLocale($locale)
+    public function setLocale(?string $locale): PaymentOffersInterface
     {
         return $this->setData(self::LOCALE, $locale);
     }
@@ -159,7 +161,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setMetadata()
      */
-    public function setMetadata($metadata)
+    public function setMetadata(?array $metadata): PaymentOffersInterface
     {
         return $this->setData(self::METADATA, $metadata);
     }
@@ -169,7 +171,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setUrls()
      */
-    public function setUrls(array $urls)
+    public function setUrls(?array $urls): PaymentOffersInterface
     {
         return $this->setData(self::URLS, $urls);
     }
@@ -189,7 +191,7 @@ class PaymentOffers extends AbstractSimpleObject implements PaymentOffersInterfa
      *
      * @see \Hokodo\BNPL\Api\Data\PaymentOffersInterface::setIsEligible()
      */
-    public function setIsEligible(bool $isEligible = null): self
+    public function setIsEligible(?bool $isEligible): PaymentOffersInterface
     {
         return $this->setData(self::IS_ELIGIBLE, $isEligible);
     }

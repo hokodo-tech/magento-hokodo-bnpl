@@ -3,13 +3,16 @@
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
+declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data;
+
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Interface Hokodo\BNPL\Api\Data\CompanyInterface.
  */
-interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface CompanyInterface extends ExtensibleDataInterface
 {
     public const URL = 'url';
     public const ID = 'id';
@@ -31,256 +34,256 @@ interface CompanyInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * A function that sets url.
      *
-     * @param string $url
+     * @param string|null $url
      *
      * @return CompanyInterface
      */
-    public function setUrl($url);
+    public function setUrl(?string $url): self;
 
     /**
      * A function that gets url.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUrl();
+    public function getUrl(): ?string;
 
     /**
      * A function that sets id.
      *
-     * @param string $id
+     * @param string|null $id
      *
      * @return CompanyInterface
      */
-    public function setId($id);
+    public function setId(?string $id): self;
 
     /**
      * A function that gets id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId();
+    public function getId(): ?string;
 
     /**
      * A function that sets country.
      *
-     * @param string $country
+     * @param string|null $country
      *
      * @return CompanyInterface
      */
-    public function setCountry($country);
+    public function setCountry(?string $country): self;
 
     /**
      * A function that gets country.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCountry();
+    public function getCountry(): ?string;
 
     /**
      * A function that sets name.
      *
-     * @param string $name
+     * @param string|null $name
      *
      * @return CompanyInterface
      */
-    public function setName($name);
+    public function setName(?string $name): self;
 
     /**
      * A function that gets name.
      *
-     * @return string
+     * @return string|null
      */
-    public function getName();
+    public function getName(): ?string;
 
     /**
      * A function that sets address.
      *
-     * @param string $address
+     * @param string|null $address
      *
      * @return CompanyInterface
      */
-    public function setAddress($address);
+    public function setAddress(?string $address): self;
 
     /**
      * A function that gets address.
      *
-     * @return string
+     * @return string|null
      */
-    public function getAddress();
+    public function getAddress(): ?string;
 
     /**
      * A function that sets city.
      *
-     * @param string $city
+     * @param string|null $city
      *
      * @return CompanyInterface
      */
-    public function setCity($city);
+    public function setCity(?string $city): self;
 
     /**
      * A function that gets city.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCity();
+    public function getCity(): ?string;
 
     /**
      * A function that sets postcode.
      *
-     * @param string $postcode
+     * @param string|null $postcode
      *
      * @return CompanyInterface
      */
-    public function setPostcode($postcode);
+    public function setPostcode(?string $postcode): self;
 
     /**
      * A function that gets postcode.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPostcode();
+    public function getPostcode(): ?string;
 
     /**
      * A function that sets legal form.
      *
-     * @param string $legalForm
+     * @param string|null $legalForm
      *
      * @return CompanyInterface
      */
-    public function setLegalForm($legalForm);
+    public function setLegalForm(?string $legalForm): self;
 
     /**
      * A function that gets legal form.
      *
-     * @return string
+     * @return string|null
      */
-    public function getLegalForm();
+    public function getLegalForm(): ?string;
 
     /**
      * A function that sets sectors.
      *
-     * @param string[] $sectors
+     * @param string[]|null $sectors
      *
      * @return CompanyInterface
      */
-    public function setSectors(array $sectors);
+    public function setSectors(?array $sectors): self;
 
     /**
      * A function that gets sectors.
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getSectors();
+    public function getSectors(): ?array;
 
     /**
      * A function that sets creation date.
      *
-     * @param string $creationDate
+     * @param string|null $creationDate
      *
      * @return CompanyInterface
      */
-    public function setCreationDate($creationDate);
+    public function setCreationDate(?string $creationDate): self;
 
     /**
      * A function that gets creation date.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCreationDate();
+    public function getCreationDate(): ?string;
 
     /**
      * A function that sets identifiers.
      *
-     * @param string[] $identifiers
+     * @param string[]|null $identifiers
      *
      * @return CompanyInterface
      */
-    public function setIdentifiers(array $identifiers);
+    public function setIdentifiers(?array $identifiers): self;
 
     /**
      * A function that gets identifiers.
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getIdentifiers();
+    public function getIdentifiers(): ?array;
 
     /**
      * A function that sets email.
      *
-     * @param string $email
+     * @param string|null $email
      *
      * @return CompanyInterface
      */
-    public function setEmail($email);
+    public function setEmail(?string $email): self;
 
     /**
      * A function that gets email.
      *
-     * @return string
+     * @return string|null
      */
-    public function getEmail();
+    public function getEmail(): ?string;
 
     /**
      * A function that sets phone.
      *
-     * @param string $phone
+     * @param string|null $phone
      *
      * @return CompanyInterface
      */
-    public function setPhone($phone);
+    public function setPhone(?string $phone): self;
 
     /**
      * A function that gets phone.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPhone();
+    public function getPhone(): ?string;
 
     /**
      * A function that sets status.
      *
-     * @param string $status
+     * @param string|null $status
      *
      * @return CompanyInterface
      */
-    public function setStatus($status);
+    public function setStatus(?string $status): self;
 
     /**
      * A function that gets status.
      *
-     * @return string
+     * @return string|null
      */
-    public function getStatus();
+    public function getStatus(): ?string;
 
     /**
      * A function that set account type.
      *
-     * @param string $accountsType
+     * @param string|null $accountsType
      *
      * @return CompanyInterface
      */
-    public function setAccountsType($accountsType);
+    public function setAccountsType(?string $accountsType): self;
 
     /**
      * A function that gets account type.
      *
-     * @return string
+     * @return string|null
      */
-    public function getAccountsType();
+    public function getAccountsType(): ?string;
 
     /**
      * A function that sets confidence.
      *
-     * @param string $confidence
+     * @param string|null $confidence
      *
      * @return CompanyInterface
      */
-    public function setConfidence($confidence);
+    public function setConfidence(?string $confidence): self;
 
     /**
      * A function that gets confidence.
      *
-     * @return string
+     * @return string|null
      */
-    public function getConfidence();
+    public function getConfidence(): ?string;
 }

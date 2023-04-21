@@ -9,23 +9,24 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Gateway\Service;
 
 use Hokodo\BNPL\Api\Data\Gateway\CompanySearchRequestInterface;
+use Hokodo\BNPL\Gateway\Command\Result\CompanyResultInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\Command\CommandException;
-use Magento\Payment\Gateway\Command\ResultInterface;
 
 class CompanySearch extends AbstractService
 {
+    /** @todo join Company and CompanySearch */
     /**
      * API search payment gateway command.
      *
      * @param CompanySearchRequestInterface $request
      *
-     * @return ResultInterface
+     * @return CompanyResultInterface
      *
      * @throws NotFoundException
      * @throws CommandException
      */
-    public function search(CompanySearchRequestInterface $request): ResultInterface
+    public function search(CompanySearchRequestInterface $request)
     {
         return $this->commandPool->get('hokodo_company_search')->execute($request->__toArray());
     }

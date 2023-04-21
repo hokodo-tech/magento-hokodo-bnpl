@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Api\Data;
 
 /**
@@ -28,96 +30,96 @@ interface DeferredPaymentInterface
     /**
      * A function that sets url.
      *
-     * @param string $url
+     * @param string|null $url
      *
      * @return $this
      */
-    public function setUrl($url);
+    public function setUrl(?string $url): self;
 
     /**
      * A function that gets url.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUrl();
+    public function getUrl(): ?string;
 
     /**
      * A function that sets id.
      *
-     * @param string $id
+     * @param string|null $id
      *
      * @return $this
      */
-    public function setId($id);
+    public function setId(?string $id): self;
 
     /**
      * A function that gets id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId();
+    public function getId(): ?string;
 
     /**
      * A function that sets number.
      *
-     * @param string $number
+     * @param string|null $number
      *
      * @return $this
      */
-    public function setNumber($number);
+    public function setNumber(?string $number): self;
 
     /**
      * A function that gets number.
      *
-     * @return string
+     * @return string|null
      */
-    public function getNumber();
+    public function getNumber(): ?string;
 
     /**
      * A function that sets payment plan.
      *
-     * @param string $paymentPlan
+     * @param string|null $paymentPlan
      *
      * @return $this
      */
-    public function setPaymentPlan($paymentPlan);
+    public function setPaymentPlan(?string $paymentPlan): self;
 
     /**
      * A function that gets payment plan.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPaymentPlan();
+    public function getPaymentPlan(): ?string;
 
     /**
      * A function that sets order.
      *
-     * @param string $order
+     * @param string|null $order
      *
      * @return $this
      */
-    public function setOrder($order);
+    public function setOrder(?string $order): self;
 
     /**
      * A function that gets order.
      *
-     * @return string
+     * @return string|null
      */
-    public function getOrder();
+    public function getOrder(): ?string;
 
     /**
      * A function that sets status.
      *
-     * @param string $status
+     * @param string|null $status
      *
      * @return $this
      */
-    public function setStatus($status);
+    public function setStatus(?string $status): self;
 
     /**
      * A function that gets status.
      *
-     * @return string
+     * @return string|null
      */
-    public function getStatus();
+    public function getStatus(): ?string;
 }

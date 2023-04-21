@@ -10,23 +10,25 @@ namespace Hokodo\BNPL\Gateway\Service;
 
 use Hokodo\BNPL\Api\Data\Gateway\CompanyCreditRequestInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CompanySearchRequestInterface;
+use Hokodo\BNPL\Gateway\Command\Result\CompanyCreditResultInterface;
+use Hokodo\BNPL\Gateway\Command\Result\CompanyResultInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\Command\CommandException;
-use Magento\Payment\Gateway\Command\ResultInterface;
 
 class Company extends AbstractService
 {
+    /** @todo join Company and CompanySearch */
     /**
      * API search payment gateway command.
      *
      * @param CompanySearchRequestInterface $request
      *
-     * @return ResultInterface
+     * @return CompanyResultInterface
      *
      * @throws NotFoundException
      * @throws CommandException
      */
-    public function search(CompanySearchRequestInterface $request): ResultInterface
+    public function search(CompanySearchRequestInterface $request)
     {
         return $this->commandPool->get('hokodo_company_search')->execute($request->__toArray());
     }
@@ -36,12 +38,12 @@ class Company extends AbstractService
      *
      * @param CompanyCreditRequestInterface $request
      *
-     * @return ResultInterface
+     * @return CompanyCreditResultInterface
      *
      * @throws NotFoundException
      * @throws CommandException
      */
-    public function getCredit(CompanyCreditRequestInterface $request): ResultInterface
+    public function getCredit(CompanyCreditRequestInterface $request)
     {
         return $this->commandPool->get('hokodo_company_credit')->execute($request->__toArray());
     }

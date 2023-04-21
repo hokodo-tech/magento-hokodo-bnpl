@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Api\Data;
 
 /**
@@ -33,50 +35,50 @@ interface OrderInformationInterface
     /**
      * A function that sets id.
      *
-     * @param string $id
+     * @param string|null $id
      *
      * @return $this
      */
-    public function setId($id);
+    public function setId(?string $id): self;
 
     /**
      * A function that gets id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId();
+    public function getId(): ?string;
 
     /**
      * A function that sets unique id.
      *
-     * @param string $uniqueId
+     * @param string|null $uniqueId
      *
      * @return $this
      */
-    public function setUniqueId($uniqueId);
+    public function setUniqueId(?string $uniqueId): self;
 
     /**
      * A function that gets unique id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUniqueId();
+    public function getUniqueId(): ?string;
 
     /**
      * A function that sets po number.
      *
-     * @param string $poNumber
+     * @param string|null $poNumber
      *
      * @return $this
      */
-    public function setPoNumber($poNumber);
+    public function setPoNumber(?string $poNumber): self;
 
     /**
      * A function that gets po number.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPoNumber();
+    public function getPoNumber(): ?string;
 
     /**
      * A function that sets customer.
@@ -85,236 +87,236 @@ interface OrderInformationInterface
      *
      * @return $this
      */
-    public function setCustomer(OrderCustomerInterface $customer);
+    public function setCustomer(OrderCustomerInterface $customer): self;
 
     /**
      * A function that gets customer.
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderCustomerInterface
+     * @return \Hokodo\BNPL\Api\Data\OrderCustomerInterface|null
      */
-    public function getCustomer();
+    public function getCustomer(): ?OrderCustomerInterface;
 
     /**
      * A function that sets created.
      *
-     * @param string $created
+     * @param string|null $created
      *
      * @return $this
      */
-    public function setCreated($created);
+    public function setCreated(?string $created): self;
 
     /**
      * A function that gets created.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCreated();
+    public function getCreated(): ?string;
 
     /**
      * A function that sets currency.
      *
-     * @param string $currency
+     * @param string|null $currency
      *
      * @return $this
      */
-    public function setCurrency($currency);
+    public function setCurrency(?string $currency): self;
 
     /**
      * A function that gets currency.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCurrency();
+    public function getCurrency(): ?string;
 
     /**
      * A function that sets order date.
      *
-     * @param string $orderDate
+     * @param string|null $orderDate
      *
      * @return $this
      */
-    public function setOrderDate($orderDate);
+    public function setOrderDate(?string $orderDate): self;
 
     /**
      * A function that gets order date.
      *
-     * @return string
+     * @return string|null
      */
-    public function getOrderDate();
+    public function getOrderDate(): ?string;
 
     /**
      * A function that sets invoice date.
      *
-     * @param string $invoiceDate
+     * @param string|null $invoiceDate
      *
      * @return $this
      */
-    public function setInvoiceDate($invoiceDate);
+    public function setInvoiceDate(?string $invoiceDate): self;
 
     /**
      * A function that gets invoice date.
      *
-     * @return string
+     * @return string|null
      */
-    public function getInvoiceDate();
+    public function getInvoiceDate(): ?string;
 
     /**
      * A function that sets due date.
      *
-     * @param string $dueDate
+     * @param string|null $dueDate
      *
      * @return $this
      */
-    public function setDueDate($dueDate);
+    public function setDueDate(?string $dueDate): self;
 
     /**
      * A function that gets due date.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDueDate();
+    public function getDueDate(): ?string;
 
     /**
      * A function that sets paid date.
      *
-     * @param string $paidDate
+     * @param string|null $paidDate
      *
      * @return $this
      */
-    public function setPaidDate($paidDate);
+    public function setPaidDate(?string $paidDate): self;
 
     /**
      * A function that gets paid date.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPaidDate();
+    public function getPaidDate(): ?string;
 
     /**
      * A function that sets total amount.
      *
-     * @param string $totalAmount
+     * @param string|null $totalAmount
      *
      * @return $this
      */
-    public function setTotalAmount($totalAmount);
+    public function setTotalAmount(?string $totalAmount): self;
 
     /**
      * A function that gets total amount.
      *
-     * @return string
+     * @return string|null
      */
-    public function getTotalAmount();
+    public function getTotalAmount(): ?string;
 
     /**
      * A function that sets amount.
      *
-     * @param string $taxAmount
+     * @param string|null $taxAmount
      *
      * @return $this
      */
-    public function setTaxAmount($taxAmount);
+    public function setTaxAmount(?string $taxAmount): self;
 
     /**
      * A function that gets tax amount.
      *
-     * @return string
+     * @return string|null
      */
-    public function getTaxAmount();
+    public function getTaxAmount(): ?string;
 
     /**
      * A function that sets metadata.
      *
-     * @param string[] $metadata
+     * @param string[]|null $metadata
      *
      * @return $this
      */
-    public function setMetadata(array $metadata);
+    public function setMetadata(?array $metadata): self;
 
     /**
      * A function that gets metadata.
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getMetadata();
+    public function getMetadata(): ?array;
 
     /**
      * A function that sets items.
      *
-     * @param \Hokodo\BNPL\Api\Data\OrderItemInterface[] $items
+     * @param \Hokodo\BNPL\Api\Data\OrderItemInterface[]|null $items
      *
      * @return $this
      */
-    public function setItems(array $items);
+    public function setItems(?array $items): self;
 
     /**
      * A function that gets items.
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderItemInterface[]
+     * @return \Hokodo\BNPL\Api\Data\OrderItemInterface[]|null
      */
-    public function getItems();
+    public function getItems(): ?array;
 
     /**
      * A function that sets payment offer.
      *
-     * @param string $paymentOffer
+     * @param string|null $paymentOffer
      *
      * @return $this
      */
-    public function setPaymentOffer($paymentOffer);
+    public function setPaymentOffer(?string $paymentOffer): self;
 
     /**
      * A function that gets payment offer.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPaymentOffer();
+    public function getPaymentOffer(): ?string;
 
     /**
      * A function that sets status.
      *
-     * @param string $status
+     * @param string|null $status
      *
      * @return $this
      */
-    public function setStatus($status);
+    public function setStatus(?string $status): self;
 
     /**
      * A function that gets status.
      *
-     * @return string
+     * @return string|null
      */
-    public function getStatus();
+    public function getStatus(): ?string;
 
     /**
      * A function that sets pay method.
      *
-     * @param string $payMethod
+     * @param string|null $payMethod
      *
      * @return $this
      */
-    public function setPayMethod($payMethod);
+    public function setPayMethod(?string $payMethod): self;
 
     /**
      * A function that gets pay method.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPayMethod();
+    public function getPayMethod(): ?string;
 
     /**
      * A function that sets deferred payment.
      *
-     * @param string $deferredPayment
+     * @param string|null $deferredPayment
      *
      * @return $this
      */
-    public function setDeferredPayment($deferredPayment);
+    public function setDeferredPayment(?string $deferredPayment): self;
 
     /**
      * A function that gets deferred payment.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDeferredPayment();
+    public function getDeferredPayment(): ?string;
 }

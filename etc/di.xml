@@ -178,11 +178,6 @@
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-    <type name="Hokodo\BNPL\Model\Data\User">
-        <arguments>
-            <argument name="logger" xsi:type="object">HokodoLogger</argument>
-        </arguments>
-    </type>
     <type name="Hokodo\BNPL\Observer\OrderPlaceSuccessObserver">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
@@ -394,6 +389,13 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="Hokodo\BNPL\Gateway\Command\Result\User" type="Hokodo\BNPL\Gateway\Command\Result\Result">
+        <arguments>
+            <argument name="field" xsi:type="string">id</argument>
+            <argument name="dataInterface" xsi:type="string">Hokodo\BNPL\Api\Data\UserInterface</argument>
+        </arguments>
+    </virtualType>
+
     <!-- Organisation Result -->
     <virtualType name="Hokodo\BNPL\Gateway\Command\Organisation\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
         <arguments>
@@ -401,10 +403,24 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="Hokodo\BNPL\Gateway\Command\Result\Organisation" type="Hokodo\BNPL\Gateway\Command\Result\Result">
+        <arguments>
+            <argument name="field" xsi:type="string">id</argument>
+            <argument name="dataInterface" xsi:type="string">Hokodo\BNPL\Api\Data\OrganisationInterface</argument>
+        </arguments>
+    </virtualType>
+
     <!-- Order Result -->
     <virtualType name="Hokodo\BNPL\Gateway\Command\Order\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Hokodo\BNPL\Gateway\Command\Result\Order</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Hokodo\BNPL\Gateway\Command\Result\Order" type="Hokodo\BNPL\Gateway\Command\Result\Result">
+        <arguments>
+            <argument name="field" xsi:type="string">id</argument>
+            <argument name="dataInterface" xsi:type="string">Hokodo\BNPL\Api\Data\OrderInformationInterface</argument>
         </arguments>
     </virtualType>
 
@@ -472,6 +488,13 @@
     <virtualType name="Hokodo\BNPL\Gateway\Command\PaymentOffer\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Hokodo\BNPL\Gateway\Command\Result\PaymentOffer</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Hokodo\BNPL\Gateway\Command\Result\PaymentOffer" type="Hokodo\BNPL\Gateway\Command\Result\Result">
+        <arguments>
+            <argument name="field" xsi:type="string">id</argument>
+            <argument name="dataInterface" xsi:type="string">Hokodo\BNPL\Api\Data\PaymentOffersInterface</argument>
         </arguments>
     </virtualType>
 
@@ -780,6 +803,13 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="Hokodo\BNPL\Gateway\Command\Result\PostSaleEvent" type="Hokodo\BNPL\Gateway\Command\Result\Result">
+        <arguments>
+            <argument name="field" xsi:type="string">created</argument>
+            <argument name="dataInterface" xsi:type="string">Hokodo\BNPL\Api\Data\PostSaleEventInterface</argument>
+        </arguments>
+    </virtualType>
+
     <!-- Invoice automatic creation -->
     <type name="Hokodo\BNPL\Gateway\Response\DeferredPaymentFetchStatusHandler">
         <plugin name="hokodo_create_invoice"
@@ -858,6 +888,13 @@
             <argument name="instanceName" xsi:type="string">\Hokodo\BNPL\Gateway\Command\Result\Company</argument>
         </arguments>
     </virtualType>
+
+    <virtualType name="Hokodo\BNPL\Gateway\Command\Result\Company" type="Hokodo\BNPL\Gateway\Command\Result\Result">
+        <arguments>
+            <argument name="field" xsi:type="string">id</argument>
+            <argument name="dataInterface" xsi:type="string">Hokodo\BNPL\Api\Data\CompanyInterface</argument>
+        </arguments>
+    </virtualType>
     <!-- /Company Search -->
 
     <!-- Deferred Payment Service -->
@@ -893,6 +930,13 @@
     <virtualType name="Hokodo\BNPL\Gateway\Command\DeferredPayment\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">\Hokodo\BNPL\Gateway\Command\Result\DeferredPayment</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Hokodo\BNPL\Gateway\Command\Result\DeferredPayment" type="Hokodo\BNPL\Gateway\Command\Result\Result">
+        <arguments>
+            <argument name="field" xsi:type="string">id</argument>
+            <argument name="dataInterface" xsi:type="string">Hokodo\BNPL\Api\Data\DeferredPaymentInterface</argument>
         </arguments>
     </virtualType>
     <!-- Deferred Payment Service -->
@@ -942,6 +986,13 @@
     <virtualType name="Hokodo\BNPL\Gateway\Command\CompanyCredit\ResultInterfaceFactory" type="Magento\Payment\Gateway\Command\ResultInterfaceFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">\Hokodo\BNPL\Gateway\Command\Result\CompanyCredit</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Hokodo\BNPL\Gateway\Command\Result\CompanyCredit" type="Hokodo\BNPL\Gateway\Command\Result\Result">
+        <arguments>
+            <argument name="field" xsi:type="string">company</argument>
+            <argument name="dataInterface" xsi:type="string">\Hokodo\BNPL\Api\Data\Company\CreditInterface</argument>
         </arguments>
     </virtualType>
     <!-- /Company Credit Limit -->

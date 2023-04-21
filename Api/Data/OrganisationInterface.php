@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Api\Data;
 
 /**
@@ -23,80 +25,80 @@ interface OrganisationInterface
     /**
      * A function that sets id.
      *
-     * @param string $id
+     * @param string|null $id
      *
      * @return $this
      */
-    public function setId($id);
+    public function setId(?string $id): self;
 
     /**
      * A function that gets id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId();
+    public function getId(): ?string;
 
     /**
      * A function that sets unique id.
      *
-     * @param string $uniqueId
+     * @param string|null $uniqueId
      *
      * @return $this
      */
-    public function setUniqueId($uniqueId);
+    public function setUniqueId(?string $uniqueId): self;
 
     /**
      * A function that gets unique id.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUniqueId();
+    public function getUniqueId(): ?string;
 
     /**
      * A function that sets registered.
      *
-     * @param string $registered
+     * @param string|null $registered
      *
      * @return $this
      */
-    public function setRegistered($registered);
+    public function setRegistered(?string $registered): self;
 
     /**
      * A function that gets registered.
      *
-     * @return string
+     * @return string|null
      */
-    public function getRegistered();
+    public function getRegistered(): ?string;
 
     /**
      * A function that sets company.
      *
-     * @param string $company
+     * @param string|null $company
      *
      * @return $this
      */
-    public function setCompany($company);
+    public function setCompany(?string $company): self;
 
     /**
      * A function that gets company.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCompany();
+    public function getCompany(): ?string;
 
     /**
      * A function that sets users.
      *
-     * @param \Hokodo\BNPL\Api\Data\OrganisationUserInterface[] $users
+     * @param \Hokodo\BNPL\Api\Data\OrganisationUserInterface[]|null $users
      *
      * @return $this
      */
-    public function setUsers(array $users);
+    public function setUsers(?array $users): self;
 
     /**
      * A function that gets users.
      *
-     * @return \Hokodo\BNPL\Api\Data\OrganisationUserInterface[]
+     * @return \Hokodo\BNPL\Api\Data\OrganisationUserInterface[]|null
      */
-    public function getUsers();
+    public function getUsers(): ?array;
 }

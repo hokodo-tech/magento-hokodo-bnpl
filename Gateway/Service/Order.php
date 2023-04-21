@@ -9,7 +9,7 @@ namespace Hokodo\BNPL\Gateway\Service;
 
 use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterface;
 use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface;
-use Magento\Payment\Gateway\Command\ResultInterface;
+use Hokodo\BNPL\Gateway\Command\Result\OrderResultInterface;
 
 class Order extends AbstractService
 {
@@ -18,12 +18,12 @@ class Order extends AbstractService
      *
      * @param CreateOrderRequestInterface $createOrderRequest
      *
-     * @return ResultInterface|null
+     * @return OrderResultInterface|null
      *
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Payment\Gateway\Command\CommandException
      */
-    public function createOrder(CreateOrderRequestInterface $createOrderRequest): ?ResultInterface
+    public function createOrder(CreateOrderRequestInterface $createOrderRequest)
     {
         return $this->commandPool->get('sdk_order_create')->execute($createOrderRequest->__toArray());
     }
@@ -33,12 +33,12 @@ class Order extends AbstractService
      *
      * @param PatchOrderRequestInterface $createOrderRequest
      *
-     * @return ResultInterface|null
+     * @return OrderResultInterface|null
      *
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Payment\Gateway\Command\CommandException
      */
-    public function patchOrder(PatchOrderRequestInterface $createOrderRequest): ?ResultInterface
+    public function patchOrder(PatchOrderRequestInterface $createOrderRequest)
     {
         return $this->commandPool->get('sdk_order_patch')->execute($createOrderRequest->__toArray());
     }
@@ -48,12 +48,12 @@ class Order extends AbstractService
      *
      * @param array $getOrderRequest
      *
-     * @return ResultInterface|null
+     * @return OrderResultInterface|null
      *
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Payment\Gateway\Command\CommandException
      */
-    public function getOrder($getOrderRequest): ?ResultInterface
+    public function getOrder($getOrderRequest)
     {
         return $this->commandPool->get('sdk_order_get')->execute($getOrderRequest);
     }
