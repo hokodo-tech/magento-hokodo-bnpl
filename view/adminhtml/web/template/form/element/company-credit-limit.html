@@ -1,3 +1,12 @@
+<!-- ko if: prices().rejection_reason -->
+<div class="rejection-reason-wrap">
+    <p class="rejection-reason-label" data-bind="i18n: 'Rejection Reason'"></p>
+    <span class="rejection-reason-details">
+        <!-- ko text: prices().rejection_reason -->
+        <!-- /ko -->
+    </span>
+</div>
+<!-- /ko -->
 <!-- ko if: prices().is_eligible -->
 <ul class="credit-balance-list" data-role="credit-balance">
     <li class="credit-balance-item">

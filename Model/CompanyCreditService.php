@@ -73,12 +73,20 @@ class CompanyCreditService implements CompanyCreditServiceInterface
         try {
             $companyCredit = $this->gateway->getCredit($searchRequest)->getDataModel();
             if ($companyCredit->getRejectionReason()) {
+                $rejectionReasonDetails = $this->getRejectionReasonDetails($companyCredit->getRejectionReason());
                 $companyCredit->setCreditLimit(
                     $companyCredit
                         ->getCreditLimit()
                         ->setAmount(0)
                         ->setAmountAvailable(0)
                         ->setAmountInUse(0)
+                        ->setRejectionReason($rejectionReasonDetails)
+                );
+            } elseif ($companyCredit) {
+                $companyCredit->setCreditLimit(
+                    $companyCredit
+                        ->getCreditLimit()
+                        ->setRejectionReason(null)
                 );
             }
             return $companyCredit;
@@ -100,5 +108,27 @@ class CompanyCreditService implements CompanyCreditServiceInterface
     {
         $creditLimit = $this->getCredit($companyId);
         return $creditLimit ? $creditLimit->getCreditLimit() : null;
+    }
+
+    /**
+     * Get Rejection Reason Details As String.
+     *
+     * @param array $rejectionReason
+     *
+     * @return string|null
+     */
+    public function getRejectionReasonDetails(array $rejectionReason): ?string
+    {
+        $detail = null;
+        if (!empty($rejectionReason['detail'])) {
+            $detail = $rejectionReason['detail'];
+        }
+
+        if (!empty($rejectionReason['params']) && $detail) {
+            foreach ($rejectionReason['params'] as $search => $replace) {
+                $detail = str_replace('{' . $search . '}', $replace, $detail);
+            }
+        }
+        return $detail;
     }
 }

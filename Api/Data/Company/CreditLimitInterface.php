@@ -8,6 +8,7 @@ interface CreditLimitInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public const AMOUNT_AVAILABLE = 'amount_available';
     public const AMOUNT_IN_USE = 'amount_in_use';
     public const AMOUNT = 'amount';
+    public const REJECTION_REASON = 'rejection_reason';
 
     /**
      * Currency getter.
@@ -67,9 +68,25 @@ interface CreditLimitInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Amount setter.
      *
-     * @param int $amount
+     * @param int|null $amount
      *
      * @return $this
      */
     public function setAmount(?int $amount): self;
+
+    /**
+     * Rejection Reason getter.
+     *
+     * @return string|null
+     */
+    public function getRejectionReason(): ?string;
+
+    /**
+     * Rejection Reason setter.
+     *
+     * @param string|null $rejectionReason
+     *
+     * @return $this
+     */
+    public function setRejectionReason(?string $rejectionReason): self;
 }
