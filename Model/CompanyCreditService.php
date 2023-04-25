@@ -82,12 +82,6 @@ class CompanyCreditService implements CompanyCreditServiceInterface
                         ->setAmountInUse(0)
                         ->setRejectionReason($rejectionReasonDetails)
                 );
-            } elseif ($companyCredit) {
-                $companyCredit->setCreditLimit(
-                    $companyCredit
-                        ->getCreditLimit()
-                        ->setRejectionReason(null)
-                );
             }
             return $companyCredit;
         } catch (\Exception $e) {
