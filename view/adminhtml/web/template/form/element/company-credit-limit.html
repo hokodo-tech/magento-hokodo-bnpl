@@ -1,10 +1,12 @@
 <!-- ko if: prices().rejection_reason -->
 <div class="rejection-reason-wrap">
-    <p class="rejection-reason-label" data-bind="i18n: 'Rejection Reason'"></p>
-    <span class="rejection-reason-details">
-        <!-- ko text: prices().rejection_reason -->
-        <!-- /ko -->
-    </span>
+    <p class="rejection-reason">
+        <span class="rejection-reason-label" data-bind="i18n: 'Rejection Reason:'"></span>
+        <span class="rejection-reason-details">
+            <!-- ko text: prices().rejection_reason -->
+            <!-- /ko -->
+        </span>
+    </p>
 </div>
 <!-- /ko -->
 <!-- ko if: prices().is_eligible -->
