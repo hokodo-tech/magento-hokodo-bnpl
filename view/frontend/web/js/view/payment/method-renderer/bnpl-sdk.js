@@ -37,7 +37,8 @@ define([
             //temp SDK search event fix
             searchInitialized: false,
             isCompanyIdAssignedByComponent: false,
-            isValidated: false
+            isValidated: false,
+            isCheckoutMounted: false
         },
         getLogos: ko.observableArray(paymentConfig.logos),
         hokodoElements: null,
@@ -158,42 +159,43 @@ define([
         },
 
         mountCheckout: function () {
-            if (this.hokodoCheckout().offer()) {
-                if (!this.isValidated) {
-                    this.isVisible(visibilityValidator.validate());
-                    this.isValidated = true;
+            if (!this.isCheckoutMounted) {
+                if (this.hokodoCheckout().offer()) {
+                    if (!this.isValidated) {
+                        this.isVisible(visibilityValidator.validate());
+                        this.isValidated = true;
+                    }
+                    this._mountCheckout()
+                } else {
+                    this.hokodoCheckout().createOfferAction();
                 }
-                this._mountCheckout()
-            } else {
-                this.hokodoCheckout().createOfferAction();
             }
         },
 
         _mountCheckout: function () {
             var self = this;
-            if (!this.userCheckout && this.hokodoCheckout().offer()) {
-                this.userCheckout = this.hokodoElements.create("checkout", {
-                    paymentOffer: this.hokodoCheckout().offer()
-                });
+            if ($("#hokodoCheckout").length === 1) {
+                if (!this.userCheckout && this.hokodoCheckout().offer() && !this.isCheckoutMounted) {
+                    this.userCheckout = this.hokodoElements.create("checkout", {
+                        paymentOffer: this.hokodoCheckout().offer()
+                    });
 
-                this.userCheckout.on("failure", () => {
-                    hokodoData.setOffer(null);
-                    self.hokodoCheckout().offer(null);
-                });
+                    this.userCheckout.on("failure", () => {
+                        hokodoData.setOffer(null);
+                        self.hokodoCheckout().offer(null);
+                    });
 
-                this.userCheckout.on('success', () => {
-                    self.additionalData.hokodo_payment_offer_id = this.hokodoCheckout().offer().id;
-                    self.additionalData.hokodo_order_id = this.hokodoCheckout().offer().order;
-                    self.placeOrder()
-                });
+                    this.userCheckout.on('success', () => {
+                        self.additionalData.hokodo_payment_offer_id = this.hokodoCheckout().offer().id;
+                        self.additionalData.hokodo_order_id = this.hokodoCheckout().offer().order;
+                        self.placeOrder()
+                    });
 
-                this.userCheckout.mount("#hokodoCheckout");
-            } else {
-                if (this.userCheckout) {
-                    this.userCheckout.destroy();
-                    this.userCheckout = null;
+                    this.userCheckout.mount("#hokodoCheckout");
+                    this.isCheckoutMounted = true;
                 }
-                this._mountCheckout();
+            } else {
+                setTimeout(this._mountCheckout.bind(this), 1000);
             }
         },
 
@@ -218,15 +220,20 @@ define([
 
         selectPaymentMethod: function () {
             this._super();
+            this.destroyCheckout();
             this.mountCheckout();
 
             return true;
         },
 
         destroyCheckout() {
-            if (this.userCheckout) {
+            if ($("#hokodoCheckout").length === 1 && this.isCheckoutMounted) {
                 this.userCheckout.destroy();
             }
+            if (this.userCheckout) {
+                this.userCheckout = null;
+            }
+            this.isCheckoutMounted = false;
         },
 
         openModal: function () {
