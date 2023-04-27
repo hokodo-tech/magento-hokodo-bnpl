@@ -1,3 +1,8 @@
+2.1.14 / April 2023
+==================
+* Remove SDK notifications in browser's console
+* Refactored SDK rendering process
+
 2.1.13 / April 2023
 ==================
 * Fix order documents endpoint
