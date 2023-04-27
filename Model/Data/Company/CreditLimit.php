@@ -76,4 +76,21 @@ class CreditLimit extends DataObject implements CreditLimitInterface
         $this->setData(self::AMOUNT, $amount);
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRejectionReason(): ?string
+    {
+        return $this->getData(self::REJECTION_REASON);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setRejectionReason(?string $rejectionReason): self
+    {
+        $this->setData(self::REJECTION_REASON, $rejectionReason);
+        return $this;
+    }
 }

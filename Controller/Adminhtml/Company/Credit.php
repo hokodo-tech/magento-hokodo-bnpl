@@ -90,6 +90,7 @@ class Credit implements HttpPostActionInterface
                     'amount' => $this->getAmount(),
                     'amount_in_use' => $this->getAmountInUse(),
                     'amount_available' => $this->getAmountAvailable(),
+                    'rejection_reason' => $this->getRejectionReason(),
                 ];
             }
         } catch (\Exception $e) {
@@ -144,6 +145,16 @@ class Credit implements HttpPostActionInterface
     public function getAmountAvailable(): string
     {
         return $this->getFormattedPrice($this->getCredit()->getAmountAvailable() / 100);
+    }
+
+    /**
+     * Get Reject Reason.
+     *
+     * @return string|null
+     */
+    public function getRejectionReason(): ?string
+    {
+        return $this->getCredit()->getRejectionReason();
     }
 
     /**
