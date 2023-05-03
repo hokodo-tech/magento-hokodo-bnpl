@@ -1,3 +1,9 @@
+2.1.14 / April 2023
+==================
+* Remove SDK notifications in browser's console
+* Refactored SDK rendering process
+* Added credit limit rejection reason to the admin
+
 2.1.13 / April 2023
 ==================
 * Fix order documents endpoint
