@@ -17,6 +17,7 @@ use Hokodo\BNPL\Api\Data\Gateway\OrderItemInterface;
 use Hokodo\BNPL\Api\Data\Gateway\OrderItemInterfaceFactory;
 use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface;
 use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterfaceFactory;
+use Hokodo\BNPL\Exception\AddressValidationException;
 use Hokodo\BNPL\Gateway\Config\Config;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -216,11 +217,19 @@ class OrderBuilder
      * @param CartInterface $quote
      *
      * @return OrderCustomerInterface
+     *
+     * @throws \Hokodo\BNPL\Exception\AddressValidationException
      */
     public function buildCustomer(CartInterface $quote): OrderCustomerInterface
     {
         $customer = $quote->getCustomer();
         $customerRequest = $this->orderCustomerFactory->create();
+        if (!$quote->getBillingAddress() || !$quote->getShippingAddress()) {
+            throw new AddressValidationException(__('Billing or Shipping address is missing for customer.'));
+        }
+        if (!$quote->getBillingAddress()->getPostcode()) {
+            throw new AddressValidationException(__('Postcode field is mandatory.'));
+        }
         return $customerRequest
             ->setType($customer->getId() ? 'registered' : 'guest')
             ->setDeliveryAddress($this->buildCustomerAddress($quote->getShippingAddress()))
