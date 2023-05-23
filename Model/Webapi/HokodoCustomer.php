@@ -146,7 +146,10 @@ class HokodoCustomer implements HokodoCustomerInterface
 
             if (!$hokodoCustomer->getUserId()) {
                 $user = $this->userService->createUser(
-                    $this->userBuilder->build($this->customerSession->getCustomer(), $organisation->getId())
+                    $this->userBuilder->build(
+                        $this->customerSession->getCustomer(),
+                        $hokodoCustomer->getOrganisationId()
+                    )
                 )->getDataModel();
                 $hokodoCustomer->setUserId($user->getId());
                 $this->hokodoCustomerRepository->save($hokodoCustomer);
