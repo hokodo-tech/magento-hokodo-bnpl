@@ -10,6 +10,7 @@ namespace Hokodo\BNPL\Model;
 use Hokodo\BNPL\Api\Data\OrderDocumentInterface;
 use Hokodo\BNPL\Api\Data\OrderDocumentsInterfaceFactory;
 use Hokodo\BNPL\Api\OrderDocumentsManagementInterface;
+use Hokodo\BNPL\Model\Pdf\Creditmemo as PdfCreditmemo;
 use Hokodo\BNPL\Model\Pdf\Invoice as PdfInvoice;
 use Hokodo\BNPL\Service\OrderDocumentsService;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -58,14 +59,20 @@ class OrderDocumentsManagement implements OrderDocumentsManagementInterface
     private PdfInvoice $pdfInvoice;
 
     /**
+     * @var PdfCreditmemo
+     */
+    private PdfCreditmemo $pdfCreditmemo;
+
+    /**
      * @param OrderDocumentsInterfaceFactory $orderDocumentsInterfaceFactory
      * @param OrderDocumentsService          $orderDocumentService
      * @param DirectoryList                  $dir
      * @param Filesystem                     $fileSystem
      * @param DateTime                       $dateTime
      * @param PdfInvoice                     $pdfInvoice
+     * @param PdfCreditmemo                  $pdfCreditmemo
      *
-     * @throws FileSystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         OrderDocumentsInterfaceFactory $orderDocumentsInterfaceFactory,
@@ -73,7 +80,8 @@ class OrderDocumentsManagement implements OrderDocumentsManagementInterface
         DirectoryList $dir,
         Filesystem $fileSystem,
         DateTime $dateTime,
-        PdfInvoice $pdfInvoice
+        PdfInvoice $pdfInvoice,
+        PdfCreditmemo $pdfCreditmemo
     ) {
         $this->orderDocumentsInterfaceFactory = $orderDocumentsInterfaceFactory;
         $this->orderDocumentService = $orderDocumentService;
@@ -81,6 +89,7 @@ class OrderDocumentsManagement implements OrderDocumentsManagementInterface
         $this->outputDirectory = $fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->dateTime = $dateTime;
         $this->pdfInvoice = $pdfInvoice;
+        $this->pdfCreditmemo = $pdfCreditmemo;
     }
 
     /**
@@ -106,9 +115,6 @@ class OrderDocumentsManagement implements OrderDocumentsManagementInterface
         switch ($doctype) {
             case OrderDocumentInterface::TYPE_INVOICE:
                 $pdf = $this->pdfInvoice->getPdf([$document]);
-                break;
-            case OrderDocumentInterface::TYPE_SHIPMENT:
-                $pdf = $this->pdfShipment->getPdf([$document]);
                 break;
             case OrderDocumentInterface::TYPE_CREDIT_MEMO:
                 $pdf = $this->pdfCreditmemo->getPdf([$document]);
