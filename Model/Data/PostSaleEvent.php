@@ -9,16 +9,16 @@ namespace Hokodo\BNPL\Model\Data;
 
 use Hokodo\BNPL\Api\Data\PostSaleEventChangesInterface;
 use Hokodo\BNPL\Api\Data\PostSaleEventInterface;
-use Magento\Framework\DataObject;
+use Magento\Framework\Api\AbstractSimpleObject;
 
-class PostSaleEvent extends DataObject implements PostSaleEventInterface
+class PostSaleEvent extends AbstractSimpleObject implements PostSaleEventInterface
 {
     /**
      * @inheritdoc
      */
     public function getCreated(): string
     {
-        return $this->getData(self::CREATED);
+        return $this->_get(self::CREATED);
     }
 
     /**
@@ -35,7 +35,7 @@ class PostSaleEvent extends DataObject implements PostSaleEventInterface
      */
     public function getType(): string
     {
-        return $this->getData(self::TYPE);
+        return $this->_get(self::TYPE);
     }
 
     /**
@@ -52,7 +52,7 @@ class PostSaleEvent extends DataObject implements PostSaleEventInterface
      */
     public function getAmount(): int
     {
-        return $this->getData(self::AMOUNT);
+        return $this->_get(self::AMOUNT);
     }
 
     /**
@@ -69,7 +69,7 @@ class PostSaleEvent extends DataObject implements PostSaleEventInterface
      */
     public function getMetadata(): array
     {
-        return $this->getData(self::METADATA);
+        return $this->_get(self::METADATA);
     }
 
     /**
@@ -86,7 +86,7 @@ class PostSaleEvent extends DataObject implements PostSaleEventInterface
      */
     public function getChanges(): PostSaleEventChangesInterface
     {
-        return $this->getData(self::CHANGES);
+        return $this->_get(self::CHANGES);
     }
 
     /**

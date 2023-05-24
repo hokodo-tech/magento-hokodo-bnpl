@@ -8,16 +8,16 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Model\Data;
 
 use Hokodo\BNPL\Api\Data\PostSaleEventChangesInterface;
-use Magento\Framework\DataObject;
+use Magento\Framework\Api\AbstractSimpleObject;
 
-class PostSaleEventChanges extends DataObject implements PostSaleEventChangesInterface
+class PostSaleEventChanges extends AbstractSimpleObject implements PostSaleEventChangesInterface
 {
     /**
      * @inheritdoc
      */
     public function getAuthorisation(): int
     {
-        return $this->getData(self::AUTHORISATION);
+        return $this->_get(self::AUTHORISATION);
     }
 
     /**
@@ -34,7 +34,7 @@ class PostSaleEventChanges extends DataObject implements PostSaleEventChangesInt
      */
     public function getProtectedCaptures(): int
     {
-        return $this->getData(self::PROTECTED_CAPTURES);
+        return $this->_get(self::PROTECTED_CAPTURES);
     }
 
     /**
@@ -51,7 +51,7 @@ class PostSaleEventChanges extends DataObject implements PostSaleEventChangesInt
      */
     public function getUnprotectedCaptures(): int
     {
-        return $this->getData(self::UNPROTECTED_CAPTURES);
+        return $this->_get(self::UNPROTECTED_CAPTURES);
     }
 
     /**
@@ -68,7 +68,7 @@ class PostSaleEventChanges extends DataObject implements PostSaleEventChangesInt
      */
     public function getRefunds(): int
     {
-        return $this->getData(self::REFUNDS);
+        return $this->_get(self::REFUNDS);
     }
 
     /**
@@ -85,7 +85,7 @@ class PostSaleEventChanges extends DataObject implements PostSaleEventChangesInt
      */
     public function getVoidedAuthorisation(): int
     {
-        return $this->getData(self::VOIDED_AUTHORISATION);
+        return $this->_get(self::VOIDED_AUTHORISATION);
     }
 
     /**
@@ -102,7 +102,7 @@ class PostSaleEventChanges extends DataObject implements PostSaleEventChangesInt
      */
     public function getExpiredAuthorisation(): int
     {
-        return $this->getData(self::EXPIRED_AUTHORISATION);
+        return $this->_get(self::EXPIRED_AUTHORISATION);
     }
 
     /**

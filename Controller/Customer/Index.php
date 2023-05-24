@@ -31,6 +31,21 @@ class Index implements HttpGetActionInterface
     private ResultFactory $resultFactory;
 
     /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    private UrlInterface $urlBuilder;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private StoreManagerInterface $storeManager;
+
+    /**
+     * @var \Hokodo\BNPL\Gateway\Config\Config
+     */
+    private Config $config;
+
+    /**
      * @param ResultFactory         $resultFactory
      * @param UrlInterface          $urlBuilder
      * @param StoreManagerInterface $storeManager
