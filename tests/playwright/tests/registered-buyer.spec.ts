@@ -12,7 +12,7 @@ import { CompanyType, DeferredPaymentStatus } from "../support/types/Buyer";
 import { MagentoOrderCaptureStatus } from "../support/types/MagentoOrder";
 
 test.describe("Full end to end for Registered Buyers", () => {
-  test.only("Placing and fulfilling a Registered Company's first Order", async ({
+  test("Placing and fulfilling a Registered Company's first Order", async ({
     homePage,
     productDetailsPage,
     shippingAddressPage,
