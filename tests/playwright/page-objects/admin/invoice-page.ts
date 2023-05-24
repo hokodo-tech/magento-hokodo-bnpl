@@ -17,5 +17,8 @@ export default class InvoicePage {
       .selectOption("online");
     await this.page.locator('text="Submit Invoice"').click();
     await this.page.waitForSelector("text='The invoice has been created.'");
+    await this.page.waitForRequest((r) =>
+      r.url().includes("notification_area")
+    );
   }
 }
