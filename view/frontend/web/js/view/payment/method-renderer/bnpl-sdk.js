@@ -87,7 +87,7 @@ define([
                 this.searchConfig.companyId = this.hokodoCheckout().companyId();
                 this.isCompanyIdAssignedByComponent = true;
             }
-            if (quote && quote.billingAddress().countryId) {
+            if (quote && quote.billingAddress() && quote.billingAddress().countryId) {
                 this.searchConfig.country = quote.billingAddress().countryId;
             }
             this.companySearch = this.hokodoElements.create("companySearch", this.searchConfig);
