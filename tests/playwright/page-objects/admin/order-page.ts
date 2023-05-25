@@ -55,6 +55,7 @@ export default class OrderPage {
   }
 
   async navigateToShipOrderPage() {
+    await this.page.waitForTimeout(5000);
     await this.page.waitForLoadState("networkidle");
     await this.page.locator("#order_ship").click();
   }
