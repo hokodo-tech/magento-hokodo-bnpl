@@ -474,7 +474,7 @@ class Offer implements OfferInterface
             ];
             $this->logger->error(__METHOD__, $data);
             throw new Exception(
-                __('There was an error during payment method set up. Please reload the page or try again later.')
+                __($e->getMessage())
             );
         }
     }
@@ -578,7 +578,7 @@ class Offer implements OfferInterface
                 ->setOfferId('');
             $this->hokodoQuoteRepository->save($this->hokodoQuote);
             throw new Exception(
-                __('There was an error during payment method set up. Please reload the page or try again later.')
+                $e->getMessage()
             );
         }
     }
