@@ -1,3 +1,8 @@
+2.1.15 / May 2023
+==================
+* Fix backend issues
+* Added notification when postcode is empty or address is missing
+
 2.1.14 / April 2023
 ==================
 * Remove SDK notifications in browser's console
