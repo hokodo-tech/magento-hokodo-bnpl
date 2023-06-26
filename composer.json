@@ -1,7 +1,7 @@
 {
     "name": "hokodo/magento-bnpl",
     "description": "Hokodo BNPL module for Magento2",
-    "version": "2.1.15",
+    "version": "2.1.16",
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
@@ -32,6 +32,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": "@stable",
         "friendsofphp/php-cs-fixer": "@stable",
         "magento/magento-coding-standard": "@stable",
+        "magento/magento2-functional-testing-framework": "^3.10",
         "phpunit/phpunit": ">=9.5.20 <10.0"
     },
     "config": {
