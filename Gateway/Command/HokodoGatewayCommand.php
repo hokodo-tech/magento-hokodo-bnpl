@@ -7,10 +7,10 @@
 
 namespace Hokodo\BNPL\Gateway\Command;
 
+use Hokodo\BNPL\Gateway\Command\Result\ResultFactory;
 use Hokodo\BNPL\Service\ArrayToStringService;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Command\CommandException;
-use Magento\Payment\Gateway\Command\ResultInterfaceFactory;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapperInterface;
 use Magento\Payment\Gateway\Http\ClientInterface;
@@ -52,9 +52,9 @@ class HokodoGatewayCommand implements CommandInterface
     private Logger $logger;
 
     /**
-     * @var ResultInterfaceFactory
+     * @var ResultFactory
      */
-    private ResultInterfaceFactory $resultFactory;
+    private ResultFactory $resultFactory;
 
     /**
      * @var HandlerInterface
@@ -77,7 +77,7 @@ class HokodoGatewayCommand implements CommandInterface
      * @param TransferFactoryInterface    $transferFactory
      * @param ClientInterface             $client
      * @param Logger                      $logger
-     * @param ResultInterfaceFactory      $resultFactory
+     * @param ResultFactory               $resultFactory
      * @param HandlerInterface            $handler
      * @param ValidatorInterface          $validator
      * @param ErrorMessageMapperInterface $errorMessageMapper
@@ -88,7 +88,7 @@ class HokodoGatewayCommand implements CommandInterface
         TransferFactoryInterface $transferFactory,
         ClientInterface $client,
         Logger $logger,
-        ResultInterfaceFactory $resultFactory,
+        ResultFactory $resultFactory,
         HandlerInterface $handler = null,
         ValidatorInterface $validator = null,
         ErrorMessageMapperInterface $errorMessageMapper = null

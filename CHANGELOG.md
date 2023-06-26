@@ -1,3 +1,8 @@
+2.1.16 / June 2023
+==================
+* API compatibility update
+* Code refactoring
+
 2.1.15 / May 2023
 ==================
 * Fix backend issues

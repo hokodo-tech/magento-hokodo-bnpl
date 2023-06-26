@@ -17,6 +17,15 @@ use Magento\Payment\Gateway\Command\ResultInterface;
 class Result implements ResultInterface
 {
     /**
+     * @var string
+     */
+    private string $itemFieldId = 'id';
+
+    /**
+     * @var string
+     */
+    private string $listFieldId = 'results';
+    /**
      * @var DataObjectHelper
      */
     private DataObjectHelper $dataObjectHelper;
@@ -44,11 +53,6 @@ class Result implements ResultInterface
     /**
      * @var string|null
      */
-    private ?string $field;
-
-    /**
-     * @var string|null
-     */
     private ?string $dataInterface;
 
     /**
@@ -56,20 +60,27 @@ class Result implements ResultInterface
      * @param DataObjectHelper       $dataObjectHelper
      * @param array                  $result
      * @param string|null            $dataInterface
-     * @param string|null            $field
+     * @param string|null            $itemFieldId
+     * @param string|null            $listFieldId
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         DataObjectHelper $dataObjectHelper,
         array $result = [],
         string $dataInterface = null,
-        string $field = null
+        string $itemFieldId = null,
+        string $listFieldId = null
     ) {
         $this->objectManager = $objectManager;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->field = $field;
         $this->dataInterface = $dataInterface;
         $this->result = $result;
+        if ($itemFieldId) {
+            $this->itemFieldId = $itemFieldId;
+        }
+        if ($listFieldId) {
+            $this->listFieldId = $listFieldId;
+        }
     }
 
     /**
@@ -115,10 +126,10 @@ class Result implements ResultInterface
      */
     private function populateDataModel(): void
     {
-        if ($this->field && $this->dataInterface) {
+        if ($this->itemFieldId && $this->dataInterface) {
             $this->dataModel = $this->objectManager->create($this->dataInterface);
             $data = $this->get();
-            if (isset($data[$this->field])) {
+            if (isset($data[$this->itemFieldId])) {
                 $this->dataObjectHelper->populateWithArray(
                     $this->dataModel,
                     $data,
@@ -135,12 +146,12 @@ class Result implements ResultInterface
      */
     private function populateListResult(): void
     {
-        if ($this->field && $this->dataInterface) {
+        if ($this->itemFieldId && $this->dataInterface) {
             $data = $this->get();
             $this->list = [];
 
-            if (isset($data['results']) && is_array($data['results'])) {
-                foreach ($data['results'] as $userData) {
+            if (isset($data[$this->listFieldId]) && is_array($data[$this->listFieldId])) {
+                foreach ($data[$this->listFieldId] as $userData) {
                     $user = $this->objectManager->create($this->dataInterface);
                     $this->dataObjectHelper->populateWithArray(
                         $user,
