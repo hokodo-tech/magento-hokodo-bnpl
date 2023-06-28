@@ -62,9 +62,9 @@ interface CreditInterface extends ExtensibleDataInterface
     /**
      * Credit Limit getter.
      *
-     * @return \Hokodo\BNPL\Api\Data\Company\CreditLimitInterface
+     * @return \Hokodo\BNPL\Api\Data\Company\CreditLimitInterface|null
      */
-    public function getCreditLimit(): CreditLimitInterface;
+    public function getCreditLimit(): ?CreditLimitInterface;
 
     /**
      * Credit Limit setter.

@@ -104,9 +104,9 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
     {
         /* @var HokodoCustomer $customerModel */
         $customerModel = $this->hokodoCustomerModelFactory->create();
-        if ($id = $hokodoCustomer->getId()) {
-            $this->resource->load($customerModel, $id);
-        }
+//        if ($id = $hokodoCustomer->getId()) {
+//            $this->resource->load($customerModel, $id);
+//        }
         $customerModel->setData($hokodoCustomer->getData());
         if ($creditLimit = $hokodoCustomer->getCreditLimit()) {
             $customerModel->setData(HokodoCustomerInterface::CREDIT_LIMIT, $creditLimit->toJson());
