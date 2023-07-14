@@ -16,11 +16,11 @@ interface HokodoCustomerRepositoryInterface extends HokodoEntityRepositoryInterf
     /**
      * Save entity.
      *
-     * @param HokodoCustomerInterface $hokodoCustomer
+     * @param HokodoCustomerInterface $hokodoApiCustomer
      *
      * @return HokodoCustomerInterface
      */
-    public function save(HokodoCustomerInterface $hokodoCustomer): HokodoCustomerInterface;
+    public function save(HokodoCustomerInterface $hokodoApiCustomer): HokodoCustomerInterface;
 
     /**
      * Delete entity.

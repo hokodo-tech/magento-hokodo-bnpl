@@ -100,24 +100,21 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
      *
      * @throws CouldNotSaveException
      */
-    public function save(HokodoCustomerInterface $hokodoCustomer): HokodoCustomerInterface
+    public function save(HokodoCustomerInterface $hokodoApiCustomer): HokodoCustomerInterface
     {
         /* @var HokodoCustomer $customerModel */
-        $customerModel = $this->hokodoCustomerModelFactory->create();
-//        if ($id = $hokodoCustomer->getId()) {
-//            $this->resource->load($customerModel, $id);
-//        }
-        $customerModel->setData($hokodoCustomer->getData());
-        if ($creditLimit = $hokodoCustomer->getCreditLimit()) {
+        $customerModel = $this->hokodoCustomerModelFactory->create(['data' => $hokodoApiCustomer->getData()]);
+        if ($creditLimit = $hokodoApiCustomer->getCreditLimit()) {
             $customerModel->setData(HokodoCustomerInterface::CREDIT_LIMIT, $creditLimit->toJson());
         }
         try {
             $this->resource->save($customerModel);
+            $savedCustomer = $this->getByCustomerId($hokodoApiCustomer->getCustomerId());
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__($exception->getMessage()));
         }
 
-        return $hokodoCustomer;
+        return $savedCustomer;
     }
 
     /**
