@@ -20,7 +20,7 @@ $viewModel = $block->getData('viewModel');
             '<?= number_format(
                 (float) ($viewModel->getOrder()->getGrandTotal() - $viewModel->getOrder()->getShippingAmount()),
                 2
-             ); ?>',
+            ); ?>',
             '<?= $viewModel->getOrder()->getOrderCurrencyCode(); ?>',
             '<?= $viewModel->getQuoteId(); ?>'
         );

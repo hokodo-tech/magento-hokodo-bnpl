@@ -1,3 +1,8 @@
+2.1.17 / July 2023
+* Analytics compatibility update
+* Added Api Integration tests
+* Code refactoring
+
 2.1.16 / June 2023
 ==================
 * API compatibility update
