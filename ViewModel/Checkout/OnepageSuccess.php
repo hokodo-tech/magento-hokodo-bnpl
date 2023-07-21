@@ -121,7 +121,7 @@ class OnepageSuccess implements ArgumentInterface
      */
     public function isOldMagentoVersion(): bool
     {
-        return (bool) version_compare($this->metadata->getVersion(), '2.4.0', '<');
+        return (bool) version_compare($this->metadata->getVersion(), '2.4.4', '<');
     }
 
     /**

@@ -103,7 +103,8 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "HOKODO_CUSTOMER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+            "HOKODO_CUSTOMER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "HOKODO_CUSTOMER_CUSTOMER_ID": true
         }
     },
     "hokodo_order_documents": {

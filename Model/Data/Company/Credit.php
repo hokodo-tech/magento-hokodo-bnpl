@@ -64,7 +64,7 @@ class Credit extends AbstractSimpleObject implements CreditInterface
     /**
      * @inheritdoc
      */
-    public function getCreditLimit(): CreditLimitInterface
+    public function getCreditLimit(): ?CreditLimitInterface
     {
         return $this->_get(self::CREDIT_LIMIT);
     }
