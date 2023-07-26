@@ -6,18 +6,18 @@
 
 namespace Hokodo\BNPL\Model\Data;
 
-use Hokodo\BNPL\Api\Data\DeferredPaymentIpnPayloadInterface;
+use Hokodo\BNPL\Api\Data\DeferredPaymentPayloadInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
- * Class Hokodo\BNPL\Model\Data\DeferredPaymentIpnPayload.
+ * Class Hokodo\BNPL\Model\Data\DeferredPaymentPayload.
  */
-class DeferredPaymentIpnPayload extends AbstractSimpleObject implements DeferredPaymentIpnPayloadInterface
+class DeferredPaymentPayload extends AbstractSimpleObject implements DeferredPaymentPayloadInterface
 {
     /**
      * @inheritDoc
      *
-     * @see \Hokodo\BNPL\Api\Data\DeferredPaymentIpnPayloadInterface::setOrder()
+     * @see \Hokodo\BNPL\Api\Data\DeferredPaymentPayloadInterface::setOrder()
      */
     public function setOrder(array $order)
     {
@@ -27,7 +27,7 @@ class DeferredPaymentIpnPayload extends AbstractSimpleObject implements Deferred
     /**
      * @inheritDoc
      *
-     * @see \Hokodo\BNPL\Api\Data\DeferredPaymentIpnPayloadInterface::getOrder()
+     * @see \Hokodo\BNPL\Api\Data\DeferredPaymentPayloadInterface::getOrder()
      */
     public function getOrder()
     {

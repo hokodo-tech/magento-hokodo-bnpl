@@ -10,18 +10,14 @@
     <preference for="Hokodo\BNPL\Api\Data\CompanyInterface" type="Hokodo\BNPL\Model\Data\Company" />
     <preference for="Hokodo\BNPL\Api\Data\CompanyImportInterface" type="Hokodo\BNPL\Model\Data\CompanyImport" />
     <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentInterface" type="Hokodo\BNPL\Model\Data\DeferredPayment" />
-    <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentIpnInterface" type="Hokodo\BNPL\Model\Data\DeferredPaymentIpn" />
-    <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentIpnPayloadInterface" type="Hokodo\BNPL\Model\Data\DeferredPaymentIpnPayload" />
+    <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentPayloadInterface" type="Hokodo\BNPL\Model\Data\DeferredPaymentPayload" />
     <preference for="Hokodo\BNPL\Api\Data\FulfillmentInfoInterface" type="Hokodo\BNPL\Model\Data\FulfillmentInfo" />
     <preference for="Hokodo\BNPL\Api\Data\OrderDocumentsInterface" type="Hokodo\BNPL\Model\Data\OrderDocumentsInfo" />
     <preference for="Hokodo\BNPL\Api\Data\OrderCustomerAddressInterface" type="Hokodo\BNPL\Model\Data\OrderCustomerAddress" />
     <preference for="Hokodo\BNPL\Api\Data\OrderCustomerInterface" type="Hokodo\BNPL\Model\Data\OrderCustomer" />
-    <preference for="Hokodo\BNPL\Api\Data\OrderCustomerIpnInterface" type="Hokodo\BNPL\Model\Data\OrderCustomerIpn" />
-    <preference for="Hokodo\BNPL\Api\Data\OrderInformationInterface" type="Hokodo\BNPL\Model\Data\OrderInformation" />
-    <preference for="Hokodo\BNPL\Api\Data\OrderIpnInterface" type="Hokodo\BNPL\Model\Data\OrderIpn" />
+    <preference for="Hokodo\BNPL\Api\Data\OrderInterface" type="Hokodo\BNPL\Model\Data\Order" />
     <preference for="Hokodo\BNPL\Api\Data\OrderItemInterface" type="Hokodo\BNPL\Model\Data\OrderItem" />
     <preference for="Hokodo\BNPL\Api\Data\OrganisationInterface" type="Hokodo\BNPL\Model\Data\Organisation" />
-    <preference for="Hokodo\BNPL\Api\Data\OrganisationIpnInterface" type="Hokodo\BNPL\Model\Data\OrganisationIpn" />
     <preference for="Hokodo\BNPL\Api\Data\OrganisationUserInterface" type="Hokodo\BNPL\Model\Data\OrganisationUser" />
     <preference for="Hokodo\BNPL\Api\Data\PaymentOffersInterface" type="Hokodo\BNPL\Model\Data\PaymentOffers" />
     <preference for="Hokodo\BNPL\Api\Data\PaymentPlanInterface" type="Hokodo\BNPL\Model\Data\PaymentPlan" />
@@ -29,7 +25,7 @@
     <preference for="Hokodo\BNPL\Api\Data\ScheduledPaymentsInterface" type="Hokodo\BNPL\Model\Data\ScheduledPayments" />
     <preference for="Hokodo\BNPL\Api\Data\UserInterface" type="Hokodo\BNPL\Model\Data\User" />
     <preference for="Hokodo\BNPL\Api\Data\UserOrganisationInterface" type="Hokodo\BNPL\Model\Data\UserOrganisation" />
-    <preference for="Hokodo\BNPL\Api\DeferredPaymentIpnProcessorInterface" type="Hokodo\BNPL\Model\DeferredPaymentIpnProcessor" />
+    <preference for="Hokodo\BNPL\Api\DeferredPaymentProcessorInterface" type="Hokodo\BNPL\Model\DeferredPaymentProcessor" />
     <preference for="Hokodo\BNPL\Api\OrderDocumentsManagementInterface" type="Hokodo\BNPL\Model\OrderDocumentsManagement" />
     <preference for="Hokodo\BNPL\Gateway\SubjectReaderInterface" type="Hokodo\BNPL\Gateway\SubjectReader" />
 
@@ -208,7 +204,7 @@
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-    <type name="Hokodo\BNPL\Model\DeferredPaymentIpnProcessor">
+    <type name="Hokodo\BNPL\Model\DeferredPaymentProcessor">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
@@ -373,7 +369,7 @@
     </virtualType>
     <virtualType name="Hokodo\BNPL\Gateway\Request\OrderDocumentsEndpoint" type="Hokodo\BNPL\Gateway\Request\EndpointBuilder">
         <arguments>
-            <argument name="subjectReader" xsi:type="object">Hokodo\BNPL\Gateway\OrderDocumentsSubjectReader</argument>
+            <argument name="subjectReader" xsi:type="object">Hokodo\BNPL\Gateway\SubjectReader</argument>
             <argument name="params" xsi:type="array">
                 <item name=":order_id" xsi:type="string">order_id</item>
             </argument>
@@ -420,7 +416,7 @@
     <virtualType name="Hokodo\BNPL\Gateway\Command\Result\Order" type="Hokodo\BNPL\Gateway\Command\Result\Result">
         <arguments>
             <argument name="itemFieldId" xsi:type="string">id</argument>
-            <argument name="dataInterface" xsi:type="string">Hokodo\BNPL\Api\Data\OrderInformationInterface</argument>
+            <argument name="dataInterface" xsi:type="string">Hokodo\BNPL\Api\Data\OrderInterface</argument>
         </arguments>
     </virtualType>
 

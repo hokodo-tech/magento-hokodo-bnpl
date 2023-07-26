@@ -78,7 +78,7 @@ class OfferBuilder
             ->setCancelUrl($this->url->getUrl())
             ->setFailureUrl($this->url->getUrl())
             ->setMerchantTermsUrl($this->url->getUrl())
-            ->setNotificationUrl($this->serviceUrl->getUrl('deferredpayment/ipn'));
+            ->setNotificationUrl($this->serviceUrl->getUrl('deferredpayment/update'));
 
         $offerRequest = $this->createOfferRequestFactory->create();
         /* @var $offerRequest CreateOfferRequestInterface */

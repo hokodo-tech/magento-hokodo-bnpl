@@ -8,7 +8,7 @@ namespace Hokodo\BNPL\Gateway\Request;
 
 use GuzzleHttp\Psr7;
 use Hokodo\BNPL\Api\Data\OrderDocumentsInterface;
-use Hokodo\BNPL\Gateway\OrderDocumentsSubjectReader;
+use Hokodo\BNPL\Gateway\SubjectReader;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
@@ -18,9 +18,9 @@ use Psr\Log\LoggerInterface as Logger;
 class CreateOrderDocumentsBuilder implements BuilderInterface
 {
     /**
-     * @var OrderDocumentsSubjectReader
+     * @var SubjectReader
      */
-    private OrderDocumentsSubjectReader $orderDocumentsSubjectReader;
+    private SubjectReader $subjectReader;
 
     /**
      * @var ProductMetadataInterface
@@ -38,18 +38,18 @@ class CreateOrderDocumentsBuilder implements BuilderInterface
     private ReadFactory $readFactory;
 
     /**
-     * @param OrderDocumentsSubjectReader $orderDocumentsSubjectReader
-     * @param ProductMetadataInterface    $productMetadata
-     * @param Logger                      $logger
-     * @param ReadFactory                 $readFactory
+     * @param SubjectReader            $subjectReader
+     * @param ProductMetadataInterface $productMetadata
+     * @param Logger                   $logger
+     * @param ReadFactory              $readFactory
      */
     public function __construct(
-        OrderDocumentsSubjectReader $orderDocumentsSubjectReader,
+        SubjectReader $subjectReader,
         ProductMetadataInterface $productMetadata,
         Logger $logger,
         ReadFactory $readFactory
     ) {
-        $this->orderDocumentsSubjectReader = $orderDocumentsSubjectReader;
+        $this->subjectReader = $subjectReader;
         $this->productMetadata = $productMetadata;
         $this->logger = $logger;
         $this->readFactory = $readFactory;
@@ -124,12 +124,10 @@ class CreateOrderDocumentsBuilder implements BuilderInterface
      *
      * @param array $buildSubject
      *
-     * @throws \InvalidArgumentException
-     *
-     * @return CartInterface
+     * @return OrderDocumentsInterface
      */
-    private function readDocument(array $buildSubject)
+    private function readDocument(array $buildSubject): OrderDocumentsInterface
     {
-        return $this->orderDocumentsSubjectReader->readDocument($buildSubject);
+        return $this->subjectReader->readFieldValue('document', $buildSubject);
     }
 }
