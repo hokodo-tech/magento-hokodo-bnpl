@@ -6,15 +6,13 @@
 
 namespace Hokodo\BNPL\Model\Data;
 
-use Hokodo\BNPL\Api\Data\DeferredPaymentIpnInterface;
-use Hokodo\BNPL\Api\Data\OrderIpnInterface;
-use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
+use Hokodo\BNPL\Api\Data\OrderInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
- * Class Hokodo\BNPL\Model\Data\OrderIpn.
+ * Class Hokodo\BNPL\Model\Data\Order.
  */
-class OrderIpn extends AbstractSimpleObject implements OrderIpnInterface
+class Order extends AbstractSimpleObject implements OrderInterface
 {
     /**
      * @inheritDoc
@@ -79,9 +77,9 @@ class OrderIpn extends AbstractSimpleObject implements OrderIpnInterface
     /**
      * @inheritDoc
      *
-     * @see \Hokodo\BNPL\Api\Data\OrderIpnInterface::setCustomer()
+     * @see \Hokodo\BNPL\Api\Data\OrderInterface::setCustomer()
      */
-    public function setCustomer(\Hokodo\BNPL\Api\Data\OrderCustomerIpnInterface $customer)
+    public function setCustomer(\Hokodo\BNPL\Api\Data\OrderCustomerInterface $customer)
     {
         return $this->setData(self::CUSTOMER, $customer);
     }
@@ -299,9 +297,9 @@ class OrderIpn extends AbstractSimpleObject implements OrderIpnInterface
     /**
      * @inheritDoc
      *
-     * @see \Hokodo\BNPL\Api\Data\OrderIpnInterface::setPaymentOffer()
+     * @see \Hokodo\BNPL\Api\Data\OrderInterface::setPaymentOffer()
      */
-    public function setPaymentOffer(?PaymentOffersInterface $paymentOffer)
+    public function setPaymentOffer(?string $paymentOffer)
     {
         return $this->setData(self::PAYMENT_OFFER, $paymentOffer);
     }
@@ -359,9 +357,9 @@ class OrderIpn extends AbstractSimpleObject implements OrderIpnInterface
     /**
      * @inheritDoc
      *
-     * @see \Hokodo\BNPL\Api\Data\OrderIpnInterface::setDeferredPayment()
+     * @see \Hokodo\BNPL\Api\Data\OrderInterface::setDeferredPayment()
      */
-    public function setDeferredPayment(?DeferredPaymentIpnInterface $deferredPayment)
+    public function setDeferredPayment(?string $deferredPayment)
     {
         return $this->setData(self::DEFERRED_PAYMENT, $deferredPayment);
     }

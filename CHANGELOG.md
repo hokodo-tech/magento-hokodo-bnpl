@@ -1,4 +1,10 @@
+2.2 / July 2023
+==================
+* Code refactoring
+* Removed unnecessary marketing API calls
+
 2.1.17 / July 2023
+==================
 * Analytics compatibility update
 * Added Api Integration tests
 * Code refactoring

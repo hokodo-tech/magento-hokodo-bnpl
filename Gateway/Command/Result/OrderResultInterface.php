@@ -6,7 +6,7 @@
 
 namespace Hokodo\BNPL\Gateway\Command\Result;
 
-use Hokodo\BNPL\Api\Data\OrderInformationInterface;
+use Hokodo\BNPL\Api\Data\OrderInterface;
 use Magento\Payment\Gateway\Command\ResultInterface;
 
 interface OrderResultInterface extends ResultInterface
@@ -14,14 +14,14 @@ interface OrderResultInterface extends ResultInterface
     /**
      * A function that returns data model.
      *
-     * @return OrderInformationInterface
+     * @return OrderInterface
      */
-    public function getDataModel(): OrderInformationInterface;
+    public function getDataModel(): OrderInterface;
 
     /**
      * A function that returns list of result.
      *
-     * @return OrderInformationInterface[]
+     * @return OrderInterface[]
      */
     public function getList(): array;
 }

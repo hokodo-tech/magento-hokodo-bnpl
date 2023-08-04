@@ -27,7 +27,8 @@ define([
         },
 
         getHokodoCustomer(customer) {
-            if (customer && customer.fullname && this.companyId) {
+            if (!this.updating && customer && customer.fullname && this.companyId) {
+                this.updating = true;
                 getHokodoCustomerAction(hokodoData.getCompanyId())
                     .done((result) => {
                         window.hokodoSdk.update({
@@ -36,9 +37,13 @@ define([
                             "userId": result.user_id
                         })
                         $('body').trigger('hokodo-marketing-updated');
-                    }).fail((result) => {
-                    console.log(result);
-                })
+                    })
+                    .fail((result) => {
+                        console.log(result);
+                    })
+                    .always(() => {
+                        this.updating = false;
+                    });
             }
         },
 

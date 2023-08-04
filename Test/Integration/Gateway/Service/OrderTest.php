@@ -9,7 +9,7 @@ namespace Hokodo\BNPL\Test\Integration\Gateway\Service;
 
 use Hokodo\BNPL\Api\Data\Gateway\CreateOrderRequestInterface;
 use Hokodo\BNPL\Api\Data\Gateway\PatchOrderRequestInterface;
-use Hokodo\BNPL\Api\Data\OrderInformationInterface;
+use Hokodo\BNPL\Api\Data\OrderInterface;
 use Hokodo\BNPL\Gateway\Service\Order;
 
 class OrderTest extends AbstractService
@@ -133,7 +133,7 @@ class OrderTest extends AbstractService
         $result = $this->orderService->createOrder($orderCreateRequest);
 
         $order = $result->getDataModel();
-        $this->assertInstanceOf(OrderInformationInterface::class, $order);
+        $this->assertInstanceOf(OrderInterface::class, $order);
         $this->assertCount(count($this->httpResponse['items']), $order->getItems());
         $this->assertEquals($this->httpResponse['deferred_payment'], $order->getDeferredPayment());
         $this->assertEquals(
@@ -155,7 +155,7 @@ class OrderTest extends AbstractService
         $result = $this->orderService->patchOrder($orderPatchRequest);
 
         $order = $result->getDataModel();
-        $this->assertInstanceOf(OrderInformationInterface::class, $order);
+        $this->assertInstanceOf(OrderInterface::class, $order);
         $this->assertCount(count($this->httpResponse['items']), $order->getItems());
         $this->assertEquals($this->httpResponse['deferred_payment'], $order->getDeferredPayment());
         $this->assertEquals(
@@ -175,7 +175,7 @@ class OrderTest extends AbstractService
         $result = $this->orderService->getOrder(['id' => '1']);
 
         $order = $result->getDataModel();
-        $this->assertInstanceOf(OrderInformationInterface::class, $order);
+        $this->assertInstanceOf(OrderInterface::class, $order);
         $this->assertCount(count($this->httpResponse['items']), $order->getItems());
         $this->assertEquals($this->httpResponse['deferred_payment'], $order->getDeferredPayment());
         $this->assertEquals(

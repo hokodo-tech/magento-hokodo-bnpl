@@ -7,9 +7,9 @@
 namespace Hokodo\BNPL\Api\Data;
 
 /**
- * Interface Hokodo\BNPL\Api\Data\DeferredPaymentIpnPayloadInterface.
+ * Interface Hokodo\BNPL\Api\Data\DeferredPaymentPayloadInterface.
  */
-interface DeferredPaymentIpnPayloadInterface
+interface DeferredPaymentPayloadInterface
 {
     public const ORDER = 'order';
 

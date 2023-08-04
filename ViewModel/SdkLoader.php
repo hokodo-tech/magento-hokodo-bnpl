@@ -92,6 +92,8 @@ class SdkLoader implements ArgumentInterface
                 'locale' => $this->getCurrentLocaleCode(),
                 'currency' => $this->store->getStore()->getCurrentCurrencyCode(),
             ],
+            'isMarketingEnabled' => $this->paymentConfig->isMarketingProductBannerEnabled() ||
+                $this->paymentConfig->isMarketingTopBannerEnabled(),
         ];
         if ($faqUrl = $this->paymentConfig->getValue(Config::MARKETING_FAQ_LINK)) {
             $config['sdkConfig']['faqLink'] = $faqUrl;
