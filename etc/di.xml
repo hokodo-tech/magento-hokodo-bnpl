@@ -219,12 +219,17 @@
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-    <type name="Hokodo\BNPL\Plugin\Model\CheckoutAgreements\AgreementsProvider">
+    <type name="Hokodo\BNPL\Plugin\CheckoutAgreements\Model\AgreementsProvider">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
     </type>
-    <type name="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice">
+    <type name="Hokodo\BNPL\Plugin\Sales\Model\ResourceModel\Order\Invoice">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
+    <type name="Hokodo\BNPL\Plugin\Sales\Model\ResourceModel\Order\CreditMemo">
         <arguments>
             <argument name="logger" xsi:type="object">HokodoLogger</argument>
         </arguments>
@@ -517,9 +522,9 @@
         </arguments>
     </type>
     <type name="Magento\Checkout\Model\ShippingInformationManagement">
-        <plugin name="after_shipping_address_saved" type="Hokodo\BNPL\Plugin\Model\Checkout\ShippingInformation" sortOrder="10"/>
+        <plugin name="after_shipping_address_saved" type="Hokodo\BNPL\Plugin\Checkout\Model\ShippingInformation" sortOrder="10"/>
     </type>
-    <type name="Hokodo\BNPL\Plugin\Model\Checkout\ShippingInformation">
+    <type name="Hokodo\BNPL\Plugin\Checkout\Model\ShippingInformation">
         <arguments>
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
         </arguments>
@@ -740,10 +745,10 @@
     </virtualType>
     <type name="Magento\CheckoutAgreements\Model\AgreementsProvider">
         <plugin name="hokodo_checkout_agreements_agreements_provider"
-                type="Hokodo\BNPL\Plugin\Model\CheckoutAgreements\AgreementsProvider"
+                type="Hokodo\BNPL\Plugin\CheckoutAgreements\Model\AgreementsProvider"
                 sortOrder="1" disabled="false"/>
     </type>
-    <type name="Hokodo\BNPL\Plugin\Model\CheckoutAgreements\AgreementsProvider">
+    <type name="Hokodo\BNPL\Plugin\CheckoutAgreements\Model\AgreementsProvider">
         <arguments>
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
         </arguments>
@@ -820,7 +825,11 @@
     <!-- Order documents -->
     <type name="Magento\Sales\Model\ResourceModel\Order\Invoice">
         <plugin name="hokodo_send_invoice"
-                type="Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order\Invoice"/>
+                type="Hokodo\BNPL\Plugin\Sales\Model\ResourceModel\Order\Invoice"/>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Creditmemo">
+        <plugin name="hokodo_send_invoice"
+                type="Hokodo\BNPL\Plugin\Sales\Model\ResourceModel\Order\CreditMemo"/>
     </type>
     <preference for="Hokodo\BNPL\Api\Data\OrderDocumentInterface" type="Hokodo\BNPL\Model\Data\OrderDocument"/>
     <preference for="Hokodo\BNPL\Api\OrderDocumentsRepositoryInterface" type="Hokodo\BNPL\Model\OrderDocumentsRepository"/>

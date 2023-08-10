@@ -72,7 +72,7 @@ class OrderDocumentsManagement implements OrderDocumentsManagementInterface
      * @param PdfInvoice                     $pdfInvoice
      * @param PdfCreditmemo                  $pdfCreditmemo
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function __construct(
         OrderDocumentsInterfaceFactory $orderDocumentsInterfaceFactory,

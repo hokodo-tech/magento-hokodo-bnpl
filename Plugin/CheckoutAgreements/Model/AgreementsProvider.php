@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Hokodo\BNPL\Plugin\Model\CheckoutAgreements;
+namespace Hokodo\BNPL\Plugin\CheckoutAgreements\Model;
 
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\CheckoutAgreements\Model\AgreementsProvider as OriginalAgreementsProvider;

@@ -19,7 +19,7 @@ interface OrderDocumentInterface
 
     public const TYPE_INVOICE = 'invoice';
     public const TYPE_SHIPMENT = 'shipment';
-    public const TYPE_CREDIT_MEMO = 'credit_memo';
+    public const TYPE_CREDIT_MEMO = 'credit_note';
 
     /**
      * Getter for Id.
