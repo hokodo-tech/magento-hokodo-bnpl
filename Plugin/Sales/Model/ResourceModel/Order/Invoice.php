@@ -6,7 +6,7 @@ declare(strict_types=1);
  * See LICENSE for license details.
  */
 
-namespace Hokodo\BNPL\Plugin\Model\Sales\ResourceModel\Order;
+namespace Hokodo\BNPL\Plugin\Sales\Model\ResourceModel\Order;
 
 use Hokodo\BNPL\Api\Data\OrderDocumentInterface;
 use Hokodo\BNPL\Api\Data\OrderDocumentInterfaceFactory;
@@ -69,13 +69,14 @@ class Invoice
         if (!empty($invoice->getId())) {
             /* @var Order\Invoice $invoice */
             $order = $invoice->getOrder();
-            if ($order->getPayment()->getMethod() === Config::CODE) {
+            if ($invoice->getRequestedCaptureCase() === 'online' &&
+                $order->getPayment()->getMethod() === Config::CODE) {
                 try {
                     /** @var OrderDocumentInterface $orderDocument */
                     $orderDocument = $this->orderDocumentInterfaceFactory->create();
                     $orderDocument
                         ->setOrderId((int) $order->getEntityId())
-                        ->setDocumentType('invoice')
+                        ->setDocumentType(OrderDocumentInterface::TYPE_INVOICE)
                         ->setDocumentId($invoice->getEntityId());
                     $this->publisher->publish(Documents::TOPIC_NAME, $orderDocument);
                 } catch (\Exception $e) {

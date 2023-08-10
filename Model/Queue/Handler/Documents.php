@@ -25,15 +25,6 @@ class Documents
     public const TOPIC_NAME = 'hokodo.order.documents';
 
     /**
-     * @var string[]
-     */
-    private $doctypeMap = [
-        OrderDocumentInterface::TYPE_INVOICE => 'invoice',
-        OrderDocumentInterface::TYPE_SHIPMENT => 'shipping',
-        OrderDocumentInterface::TYPE_CREDIT_MEMO => 'credit_note',
-    ];
-
-    /**
      * @var OrderRepositoryInterface
      */
     private OrderRepositoryInterface $orderRepository;
@@ -122,7 +113,7 @@ class Documents
                 $order = $this->orderRepository->get($orderDocument->getOrderId());
                 $this->orderDocumentsManagement->setDocument(
                     $document,
-                    $this->doctypeMap[$orderDocument->getDocumentType()],
+                    $orderDocument->getDocumentType(),
                     $order->getPayment()->getAdditionalInformation()['hokodo_order_id']
                 );
                 $this->orderDocumentsRepository->save($orderDocument);
@@ -143,20 +134,20 @@ class Documents
     /**
      * Get document entity by entity type and id provided.
      *
-     * @param int    $entityId
-     * @param string $entityType
+     * @param int    $documentId
+     * @param string $documentType
      *
      * @return CreditmemoInterface|InvoiceInterface|ShipmentInterface|null
      */
-    private function getDocumentEntity(int $entityId, string $entityType)
+    private function getDocumentEntity(int $documentId, string $documentType)
     {
-        switch ($entityType) {
+        switch ($documentType) {
             case OrderDocumentInterface::TYPE_INVOICE:
-                return $this->invoiceRepository->get($entityId);
+                return $this->invoiceRepository->get($documentId);
             case OrderDocumentInterface::TYPE_SHIPMENT:
-                return $this->shipmentRepository->get($entityId);
+                return $this->shipmentRepository->get($documentId);
             case OrderDocumentInterface::TYPE_CREDIT_MEMO:
-                return $this->creditmemoRepository->get($entityId);
+                return $this->creditmemoRepository->get($documentId);
             default:
                 return null;
         }

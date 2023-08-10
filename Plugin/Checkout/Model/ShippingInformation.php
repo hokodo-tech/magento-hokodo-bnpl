@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Hokodo\BNPL\Plugin\Model\Checkout;
+namespace Hokodo\BNPL\Plugin\Checkout\Model;
 
 use Hokodo\BNPL\Api\Data\HokodoQuoteInterface;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
