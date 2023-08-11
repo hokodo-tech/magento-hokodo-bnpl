@@ -147,7 +147,7 @@ review:detach:
 review:create [2.3.7]:
   extends: review:create
   variables:
-    MAGENTO_VERSION: "2.3.7"
+    MAGENTO_VERSION: "2.4.4-p4"
     COMPOSER_VERSION: "1"
     PHP_VERSION: "7.4"
     REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m237
