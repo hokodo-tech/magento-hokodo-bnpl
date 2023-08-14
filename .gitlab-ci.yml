@@ -85,7 +85,7 @@ review:create:
     - ssh "ubuntu@$SSH_HOST" "rvhost=\$(sudo $RABBITMQ_CTL list_vhosts | grep -w $REVIEW_INSTANCE'$') && [ \$rvhost ] && echo 'The vhost is already set up' || (sudo $RABBITMQ_CTL add_vhost $REVIEW_INSTANCE && sudo $RABBITMQ_CTL set_permissions -p $REVIEW_INSTANCE guest '.*' '.*' '.*')"
     - ssh "magento@$SSH_HOST"
       "cd $SSH_PATH;
-      [ ! -n \$(cat $SSH_PATH/app/etc/env.php | grep -A 1 install | grep -wc date) ] && {
+      [ ! -f '$SSH_PATH/app/etc/env.php' ] && {
         $PHP_CLI bin/magento setup:install --no-interaction
           --use-rewrites=1
           --base-url='$CI_ENVIRONMENT_URL'
