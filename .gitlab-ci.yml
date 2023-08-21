@@ -171,7 +171,7 @@ review:detach [2.3.7]:
 review:create [2.4.6]:
   extends: review:create
   variables:
-    PHP_VERSION: "8.1"
+    PHP_VERSION: "8.2"
     MAGENTO_VERSION: "2.4.6"
     REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m246
   environment:
