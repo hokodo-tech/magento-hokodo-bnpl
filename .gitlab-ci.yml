@@ -37,7 +37,7 @@ php:compat:
     PHP_CS_FIXER_IGNORE_ENV: 1
   parallel:
     matrix:
-      - PHP_VERSION: ["7.4", "8.1"]
+      - PHP_VERSION: ["7.4", "8.1", "8.2"]
   script:
     - phpcs -s -p --colors --extensions=php --standard=PHPCompatibility --runtime-set testVersion $PHP_VERSION .
 
