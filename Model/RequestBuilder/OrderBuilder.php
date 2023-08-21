@@ -191,8 +191,12 @@ class OrderBuilder
         $orderRequest = $this->createOrderRequestInterfaceFactory->create();
         return $orderRequest
             ->setUniqueId(
-                'magento-temp-' . hash('md5', $this->storeManager->getStore()->getCode() .
-                    $this->storeManager->getStore()->getName() . $quote->getId())
+                sprintf(
+                    'magento-temp-%s-%s',
+                    hash('md5', $this->storeManager->getStore()->getCode() .
+                        $this->storeManager->getStore()->getName() . $quote->getId()),
+                    $quote->getReservedOrderId() ?: ''
+                )
             )
             ->setStatus('draft')
             ->setCurrency($quote->getStoreCurrencyCode())

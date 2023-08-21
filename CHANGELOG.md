@@ -1,3 +1,8 @@
+2.2.1 / August 2023
+==================
+* Changed temp order id pattern
+* Updated php compatibility
+
 2.2 / July 2023
 ==================
 * Code refactoring
