@@ -74,7 +74,7 @@ review:create:
     on_stop: review:detach
   script:
     - ssh "magento@$SSH_HOST"
-      "[ ! -n \$(cat $SSH_PATH/app/etc/env.php | grep -A 1 install | grep -wc date) ] && {
+      "[ ! -f '$SSH_PATH/app/etc/config.php' ] && {
       rm -rf $SSH_PATH && mkdir $SSH_PATH &&
       $PHP_CLI /usr/local/bin/$COMPOSER_CLI global config http-basic.repo.magento.com '$MAGENTO_REPOSITORY_USER' '$MAGENTO_REPOSITORY_PASSWORD' &&
       $PHP_CLI /usr/local/bin/$COMPOSER_CLI create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=$MAGENTO_VERSION $SSH_PATH &&
@@ -85,7 +85,7 @@ review:create:
     - ssh "ubuntu@$SSH_HOST" "rvhost=\$(sudo $RABBITMQ_CTL list_vhosts | grep -w $REVIEW_INSTANCE'$') && [ \$rvhost ] && echo 'The vhost is already set up' || (sudo $RABBITMQ_CTL add_vhost $REVIEW_INSTANCE && sudo $RABBITMQ_CTL set_permissions -p $REVIEW_INSTANCE guest '.*' '.*' '.*')"
     - ssh "magento@$SSH_HOST"
       "cd $SSH_PATH;
-      [ ! -n \$(cat $SSH_PATH/app/etc/env.php | grep -A 1 install | grep -wc date) ] && {
+      [ ! -f '$SSH_PATH/app/etc/env.php' ] && {
         $PHP_CLI bin/magento setup:install --no-interaction
           --use-rewrites=1
           --base-url='$CI_ENVIRONMENT_URL'
@@ -147,7 +147,7 @@ review:detach:
 review:create [2.3.7]:
   extends: review:create
   variables:
-    MAGENTO_VERSION: "2.3.7"
+    MAGENTO_VERSION: "2.4.4-p4"
     COMPOSER_VERSION: "1"
     PHP_VERSION: "7.4"
     REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m237
