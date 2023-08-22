@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data;
 
+use Hokodo\BNPL\Api\Data\DeferredPayment\RepaymentInfoInterface;
+
 /**
  * Interface Hokodo\BNPL\Api\Data\DeferredPaymentInterface.
  */
@@ -19,6 +21,7 @@ interface DeferredPaymentInterface
     public const PAYMENT_PLAN = 'payment_plan';
     public const ORDER = 'order';
     public const STATUS = 'status';
+    public const REPAYMENT = 'repayment_info';
 
     public const STATUS_ACCEPTED = 'accepted';
     public const STATUS_PENDING = 'pending_review';
@@ -122,4 +125,20 @@ interface DeferredPaymentInterface
      * @return string|null
      */
     public function getStatus(): ?string;
+
+    /**
+     * Repayment Info getter.
+     *
+     * @return \Hokodo\BNPL\Api\Data\DeferredPayment\RepaymentInfoInterface|null
+     */
+    public function getRepaymentInfo(): ?RepaymentInfoInterface;
+
+    /**
+     * Repayment Info setter.
+     *
+     * @param \Hokodo\BNPL\Api\Data\DeferredPayment\RepaymentInfoInterface|null $repaymentInfo
+     *
+     * @return $this
+     */
+    public function setRepaymentInfo(?RepaymentInfoInterface $repaymentInfo): self;
 }

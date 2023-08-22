@@ -10,6 +10,7 @@
     <preference for="Hokodo\BNPL\Api\Data\CompanyInterface" type="Hokodo\BNPL\Model\Data\Company" />
     <preference for="Hokodo\BNPL\Api\Data\CompanyImportInterface" type="Hokodo\BNPL\Model\Data\CompanyImport" />
     <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentInterface" type="Hokodo\BNPL\Model\Data\DeferredPayment" />
+    <preference for="Hokodo\BNPL\Api\Data\DeferredPayment\RepaymentInfoInterface" type="Hokodo\BNPL\Model\Data\DeferredPayment\RepaymentInfo" />
     <preference for="Hokodo\BNPL\Api\Data\DeferredPaymentPayloadInterface" type="Hokodo\BNPL\Model\Data\DeferredPaymentPayload" />
     <preference for="Hokodo\BNPL\Api\Data\FulfillmentInfoInterface" type="Hokodo\BNPL\Model\Data\FulfillmentInfo" />
     <preference for="Hokodo\BNPL\Api\Data\OrderDocumentsInterface" type="Hokodo\BNPL\Model\Data\OrderDocumentsInfo" />

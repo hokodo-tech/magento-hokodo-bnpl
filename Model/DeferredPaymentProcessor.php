@@ -66,12 +66,11 @@ class DeferredPaymentProcessor implements DeferredPaymentProcessorInterface
      */
     public function process($created, DeferredPaymentPayloadInterface $data)
     {
+        $result = false;
         try {
-            $result = false;
             if ($data->getOrder() && isset($data->getOrder()[OrderInterface::DEFERRED_PAYMENT])) {
                 $result = $this->processOrder($data->getOrder());
             }
-            return $result;
         } catch (\Exception $e) {
             $data = [
                 'message' => 'Hokodo_BNPL: Webhook error with order - ' . $data->getOrder()[OrderInterface::ID],
@@ -79,6 +78,7 @@ class DeferredPaymentProcessor implements DeferredPaymentProcessorInterface
             ];
             $this->logger->error(__METHOD__, $data);
         }
+        return $result;
     }
 
     /**
