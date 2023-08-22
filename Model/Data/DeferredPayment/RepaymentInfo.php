@@ -32,7 +32,7 @@ class RepaymentInfo extends DataObject implements RepaymentInfoInterface
     /**
      * @inheritdoc
      */
-    public function getOutstandingAmount(): string
+    public function getOutstandingAmount(): int
     {
         return $this->getData(self::OUTSTANDING_AMOUNT);
     }
@@ -40,7 +40,7 @@ class RepaymentInfo extends DataObject implements RepaymentInfoInterface
     /**
      * @inheritdoc
      */
-    public function setOutstandingAmount(string $outstandingAmount): self
+    public function setOutstandingAmount(int $outstandingAmount): self
     {
         $this->setData(self::OUTSTANDING_AMOUNT, $outstandingAmount);
         return $this;

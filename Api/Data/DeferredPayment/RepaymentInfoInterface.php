@@ -37,16 +37,16 @@ interface RepaymentInfoInterface extends ExtensibleDataInterface
     /**
      * Outstanding Amount getter.
      *
-     * @return string
+     * @return int
      */
-    public function getOutstandingAmount(): string;
+    public function getOutstandingAmount(): int;
 
     /**
      * Outstanding Amount setter.
      *
-     * @param string $outstandingAmount
+     * @param int $outstandingAmount
      *
      * @return $this
      */
-    public function setOutstandingAmount(string $outstandingAmount): self;
+    public function setOutstandingAmount(int $outstandingAmount): self;
 }
