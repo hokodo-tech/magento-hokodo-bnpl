@@ -14,6 +14,10 @@ interface RepaymentInfoInterface extends ExtensibleDataInterface
     public const STATUS = 'status';
     public const OUTSTANDING_AMOUNT = 'outstanding_amount';
 
+    public const STATUS_PAID = 'paid';
+    public const STATUS_PARTIAL = 'partially_paid';
+    public const STATUS_UNPAID = 'unpaid';
+
     /**
      * Status getter.
      *

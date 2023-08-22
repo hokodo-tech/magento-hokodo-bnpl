@@ -8,8 +8,9 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Model\Data\DeferredPayment;
 
 use Hokodo\BNPL\Api\Data\DeferredPayment\RepaymentInfoInterface;
+use Magento\Framework\DataObject;
 
-class RepaymentInfo implements RepaymentInfoInterface
+class RepaymentInfo extends DataObject implements RepaymentInfoInterface
 {
     /**
      * @inheritdoc
