@@ -28,6 +28,11 @@ class DeferredPaymentTest extends AbstractService
         'refunds' => 10000,
         'voided_authorisation' => 15000,
         'expired_authorisation' => 5000,
+        'repayment_info' => [
+            'status' => 'paid',
+            'outstanding_amount' => 10000,
+            'currency' => 'GBP',
+        ],
     ];
 
     public function testDeferredPaymentService(): void

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Model\Data;
 
+use Hokodo\BNPL\Api\Data\DeferredPayment\RepaymentInfoInterface;
 use Hokodo\BNPL\Api\Data\DeferredPaymentInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
@@ -134,5 +135,22 @@ class DeferredPayment extends AbstractSimpleObject implements DeferredPaymentInt
     public function getStatus(): ?string
     {
         return $this->_get(self::STATUS);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRepaymentInfo(): ?RepaymentInfoInterface
+    {
+        return $this->getData(self::REPAYMENT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setRepaymentInfo(?RepaymentInfoInterface $repayment): self
+    {
+        $this->setData(self::REPAYMENT, $repayment);
+        return $this;
     }
 }
