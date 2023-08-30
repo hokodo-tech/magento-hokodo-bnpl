@@ -35,6 +35,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception;
 use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
@@ -578,7 +579,7 @@ class Offer implements OfferInterface
                 ->setOfferId('');
             $this->hokodoQuoteRepository->save($this->hokodoQuote);
             throw new Exception(
-                $e->getMessage()
+                new Phrase($e->getMessage())
             );
         }
     }
