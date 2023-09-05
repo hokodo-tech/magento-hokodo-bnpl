@@ -17,11 +17,21 @@ class OrganisationTest extends AbstractService
      * @var array
      */
     protected $httpResponse = [
-        'id' => 'org-pHr6VCyzQJALUsePkatPBo',
+        'id' => 'org-9RxFsXTgnWqwjK4apxBAn8',
         'unique_id' => 'c105b862-f1ba-4197-9d97-57db63196b00',
         'registered' => '2017-06-01T14:37:12Z',
-        'company' => 'co-bqRyKAGaFrEEN8JMjWJiqk',
-        'users' => [],
+        'name' => '',
+        'company' => null,
+        'company_name' => '',
+        'company_regnum' => '',
+        'company_address' => '',
+        'company_postcode' => '',
+        'company_city' => '',
+        'company_state' => '',
+        'company_country' => '',
+        'has_purchased_policy' => false,
+        'users' => [
+        ],
     ];
 
     /**

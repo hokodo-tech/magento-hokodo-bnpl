@@ -27,6 +27,6 @@ class User extends AbstractService
      */
     public function createUser(CreateUserRequestInterface $createUserRequest)
     {
-        return $this->executeCommand('sdk_user_create', $createUserRequest);
+        return $this->executeCommand('user_create', $createUserRequest);
     }
 }

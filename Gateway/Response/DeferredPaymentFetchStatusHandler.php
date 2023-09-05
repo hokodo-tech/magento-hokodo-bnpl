@@ -7,23 +7,16 @@
 namespace Hokodo\BNPL\Gateway\Response;
 
 use Hokodo\BNPL\Api\Data\DeferredPaymentInterface;
-use Hokodo\BNPL\Api\OrderAdapterReaderInterface;
-use Hokodo\BNPL\Gateway\DeferredPaymentOrderSubjectReader;
 use Hokodo\BNPL\Gateway\Service\DifferedPayment\OrderProcessor;
 use Hokodo\BNPL\Gateway\Service\DifferedPayment\PaymentProcessor;
-use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
-class DeferredPaymentFetchStatusHandler implements HandlerInterface, OrderAdapterReaderInterface
+class DeferredPaymentFetchStatusHandler implements HandlerInterface
 {
-    /**
-     * @var DeferredPaymentOrderSubjectReader
-     */
-    private DeferredPaymentOrderSubjectReader $subjectReader;
-
     /**
      * @var OrderRepositoryInterface
      */
@@ -45,20 +38,17 @@ class DeferredPaymentFetchStatusHandler implements HandlerInterface, OrderAdapte
     private LoggerInterface $logger;
 
     /**
-     * @param DeferredPaymentOrderSubjectReader $subjectReader
-     * @param OrderRepositoryInterface          $orderRepository
-     * @param OrderProcessor                    $orderProcessor
-     * @param PaymentProcessor                  $paymentProcessor
-     * @param LoggerInterface                   $logger
+     * @param OrderRepositoryInterface $orderRepository
+     * @param OrderProcessor           $orderProcessor
+     * @param PaymentProcessor         $paymentProcessor
+     * @param LoggerInterface          $logger
      */
     public function __construct(
-        DeferredPaymentOrderSubjectReader $subjectReader,
         OrderRepositoryInterface $orderRepository,
         OrderProcessor $orderProcessor,
         PaymentProcessor $paymentProcessor,
         LoggerInterface $logger
     ) {
-        $this->subjectReader = $subjectReader;
         $this->orderRepository = $orderRepository;
         $this->orderProcessor = $orderProcessor;
         $this->paymentProcessor = $paymentProcessor;
@@ -73,9 +63,11 @@ class DeferredPaymentFetchStatusHandler implements HandlerInterface, OrderAdapte
     public function handle(array $handlingSubject, array $response)
     {
         if (isset($response[DeferredPaymentInterface::STATUS])) {
+            /** @var PaymentDataObject $paymentData */
+            $paymentData = $handlingSubject['payment'];
             /** @var OrderPaymentInterface $payment */
-            $payment = $this->subjectReader->readPayment($handlingSubject);
-            $orderAdapter = $this->getOrderAdapter($handlingSubject);
+            $payment = $paymentData->getPayment();
+            $orderAdapter = $paymentData->getOrder();
             $status = $response[DeferredPaymentInterface::STATUS];
             $transactionId = $response[DeferredPaymentInterface::NUMBER];
             $order = $this->orderRepository->get($orderAdapter->getId());
@@ -92,17 +84,5 @@ class DeferredPaymentFetchStatusHandler implements HandlerInterface, OrderAdapte
                 $this->logger->error(__METHOD__, $data);
             }
         }
-    }
-
-    /**
-     * Get order adapter object.
-     *
-     * @param array $subject
-     *
-     * @return OrderAdapterInterface
-     */
-    public function getOrderAdapter(array $subject): OrderAdapterInterface
-    {
-        return $this->subjectReader->readOrder($subject);
     }
 }

@@ -27,6 +27,6 @@ class Organisation extends AbstractService
      */
     public function createOrganisation(CreateOrganisationRequestInterface $createOrganisationRequest)
     {
-        return $this->commandPool->get('sdk_organisation_create')->execute($createOrganisationRequest->__toArray());
+        return $this->commandPool->get('organisation_create')->execute($createOrganisationRequest->__toArray());
     }
 }

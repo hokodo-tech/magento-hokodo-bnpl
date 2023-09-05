@@ -26,7 +26,7 @@ class Offer extends AbstractService
      */
     public function createOffer(CreateOfferRequestInterface $createOfferRequest)
     {
-        return $this->commandPool->get('sdk_offer_create')->execute($createOfferRequest->__toArray());
+        return $this->commandPool->get('offer_create')->execute($createOfferRequest->__toArray());
     }
 
     /**
@@ -41,6 +41,6 @@ class Offer extends AbstractService
      */
     public function getOffer(array $getOfferRequest)
     {
-        return $this->commandPool->get('sdk_offer_get')->execute($getOfferRequest);
+        return $this->commandPool->get('offer_get')->execute($getOfferRequest);
     }
 }

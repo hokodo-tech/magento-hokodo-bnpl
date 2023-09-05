@@ -7,20 +7,15 @@
 namespace Hokodo\BNPL\Gateway\Response;
 
 use Hokodo\BNPL\Api\Data\DeferredPaymentInterface;
-use Hokodo\BNPL\Gateway\DeferredPaymentOrderSubjectReader;
 use Hokodo\BNPL\Gateway\Service\DifferedPayment\OrderProcessor;
 use Hokodo\BNPL\Gateway\Service\DifferedPayment\PaymentProcessor;
+use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Psr\Log\LoggerInterface;
 
 class DeferredPaymentOrderHandler implements HandlerInterface
 {
-    /**
-     * @var DeferredPaymentOrderSubjectReader
-     */
-    private DeferredPaymentOrderSubjectReader $subjectReader;
-
     /**
      * @var OrderProcessor
      */
@@ -37,18 +32,15 @@ class DeferredPaymentOrderHandler implements HandlerInterface
     private LoggerInterface $logger;
 
     /**
-     * @param DeferredPaymentOrderSubjectReader $subjectReader
-     * @param OrderProcessor                    $orderProcessor
-     * @param PaymentProcessor                  $paymentProcessor
-     * @param LoggerInterface                   $logger
+     * @param OrderProcessor   $orderProcessor
+     * @param PaymentProcessor $paymentProcessor
+     * @param LoggerInterface  $logger
      */
     public function __construct(
-        DeferredPaymentOrderSubjectReader $subjectReader,
         OrderProcessor $orderProcessor,
         PaymentProcessor $paymentProcessor,
         LoggerInterface $logger
     ) {
-        $this->subjectReader = $subjectReader;
         $this->orderProcessor = $orderProcessor;
         $this->paymentProcessor = $paymentProcessor;
         $this->logger = $logger;
@@ -62,8 +54,10 @@ class DeferredPaymentOrderHandler implements HandlerInterface
     public function handle(array $handlingSubject, array $response)
     {
         if (isset($response[DeferredPaymentInterface::STATUS])) {
+            /** @var PaymentDataObject $paymentData */
+            $paymentData = $handlingSubject['payment'];
             /** @var OrderPaymentInterface $payment */
-            $payment = $this->subjectReader->readPayment($handlingSubject);
+            $payment = $paymentData->getPayment();
             $status = $response[DeferredPaymentInterface::STATUS];
 
             $payment->setTransactionId($response[DeferredPaymentInterface::NUMBER]);
