@@ -44,8 +44,8 @@ class OrderProcessor
         switch ($status) {
             case DeferredPaymentInterface::STATUS_ACCEPTED:
                 if ($order->getState() === Order::STATE_PAYMENT_REVIEW) {
-                    $order->setState(Order::STATE_PROCESSING);
-                    $order->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
+                    $order->setState('pending');
+                    $order->setStatus($order->getConfig()->getStateDefaultStatus('pending'));
                     $this->orderRepository->save($order);
                 }
                 break;
@@ -60,7 +60,8 @@ class OrderProcessor
                 }
                 break;
             case DeferredPaymentInterface::STATUS_CAPTURED:
-                if ($order->getState() === Order::STATE_PENDING_PAYMENT) {
+                if ($order->getState() === Order::STATE_PENDING_PAYMENT ||
+                    $order->getState() === 'pending') {
                     $order->setState(Order::STATE_PROCESSING);
                     $order->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
                     $this->orderRepository->save($order);
