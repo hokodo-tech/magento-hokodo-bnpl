@@ -1,3 +1,7 @@
+2.2.2 / September 2023
+==================
+* Changed order status flow
+
 2.2.1 / August 2023
 ==================
 * Changed temp order id pattern
