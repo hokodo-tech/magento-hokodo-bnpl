@@ -1,3 +1,7 @@
+2.2.3 / September 2023
+==================
+* Fix the issue when some credit rejection messages were stored incorrectly in database
+
 2.2.2 / September 2023
 ==================
 * Changed order status flow
