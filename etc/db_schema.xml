@@ -31,7 +31,7 @@
         <column xsi:type="varchar" name="company_id" nullable="true" length="255" comment="Hokodo Company Id"/>
         <column xsi:type="varchar" name="organisation_id" nullable="true" length="255" comment="Hokodo Organisation Id"/>
         <column xsi:type="varchar" name="user_id" nullable="true" length="255" comment="Hokodo User Id"/>
-        <column xsi:type="varchar" name="credit_limit" nullable="true" length="255" comment="Hokodo credit limit"/>
+        <column xsi:type="text" name="credit_limit" nullable="true" comment="Hokodo credit limit"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
