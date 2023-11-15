@@ -12,8 +12,11 @@ use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterfaceFactory;
 use Hokodo\BNPL\Api\Data\HokodoEntityInterface;
 use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
+use Hokodo\BNPL\Gateway\Config\Config;
+use Hokodo\BNPL\Model\Config\Source\Env;
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer as Resource;
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer\CollectionFactory as HokodoCustomerCollectionFactory;
+use Hokodo\BNPL\Model\ResourceModel\HokodoCustomerDev as ResourceDev;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -66,6 +69,21 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
     private SearchResultsFactory $searchResultsFactory;
 
     /**
+     * @var ResourceDev
+     */
+    private ResourceDev $resourceDev;
+
+    /**
+     * @var Config
+     */
+    private Config $config;
+
+    /**
+     * @var Env
+     */
+    private Env $envSource;
+
+    /**
      * @param resource                        $resource
      * @param HokodoCustomerInterfaceFactory  $hokodoCustomerFactory
      * @param HokodoCustomerFactory           $hokodoCustomerModelFactory
@@ -74,6 +92,9 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
      * @param SearchResultsFactory            $searchResultsFactory
      * @param SerializerInterface             $serializer
      * @param DataObjectHelper                $dataObjectHelper
+     * @param ResourceDev                     $resourceDev
+     * @param Config                          $config
+     * @param Env                             $envSource
      */
     public function __construct(
         Resource $resource,
@@ -83,7 +104,10 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
         CollectionProcessorInterface $collectionProcessor,
         SearchResultsFactory $searchResultsFactory,
         SerializerInterface $serializer,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        ResourceDev $resourceDev,
+        Config $config,
+        Env $envSource
     ) {
         $this->resource = $resource;
         $this->hokodoCustomerFactory = $hokodoCustomerFactory;
@@ -93,6 +117,9 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
         $this->serializer = $serializer;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->hokodoCustomerModelFactory = $hokodoCustomerModelFactory;
+        $this->resourceDev = $resourceDev;
+        $this->config = $config;
+        $this->envSource = $envSource;
     }
 
     /**
@@ -108,7 +135,13 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
             $customerModel->setData(HokodoCustomerInterface::CREDIT_LIMIT, $creditLimit->toJson());
         }
         try {
-            $this->resource->save($customerModel);
+            if ($this->config->getEnvironment() !== Config::ENV_PRODUCTION) {
+                $this->resourceDev->save(
+                    $customerModel->setData('env', $this->envSource->getEnvId($this->config->getEnvironment()))
+                );
+            } else {
+                $this->resource->save($customerModel);
+            }
             $savedCustomer = $this->getByCustomerId($hokodoApiCustomer->getCustomerId());
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__($exception->getMessage()));
@@ -128,7 +161,13 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
         $customerModel = $this->hokodoCustomerModelFactory->create();
         $customerModel->setData($hokodoCustomer->getData());
         try {
-            $this->resource->delete($customerModel);
+            if ($this->config->getEnvironment() !== Config::ENV_PRODUCTION) {
+                $this->resourceDev->delete(
+                    $customerModel->setData('env', $this->envSource->getEnvId($this->config->getEnvironment()))
+                );
+            } else {
+                $this->resource->delete($customerModel);
+            }
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
@@ -143,7 +182,15 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
     {
         /* @var HokodoCustomer $customerModel */
         $customerModel = $this->hokodoCustomerModelFactory->create();
-        $this->resource->load($customerModel, $customerId, HokodoCustomerInterface::CUSTOMER_ID);
+        if ($this->config->getEnvironment() !== Config::ENV_PRODUCTION) {
+            $this->resourceDev->load(
+                $customerModel->setData('env', $this->envSource->getEnvId($this->config->getEnvironment())),
+                $customerId,
+                HokodoCustomerInterface::CUSTOMER_ID
+            );
+        } else {
+            $this->resource->load($customerModel, $customerId, HokodoCustomerInterface::CUSTOMER_ID);
+        }
 
         return $this->populateDataObject($customerModel);
     }
@@ -191,6 +238,9 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria): SearchResults
     {
         $collection = $this->hokodoCustomerCollectionFactory->create();
+        if ($this->config->getEnvironment() !== Config::ENV_PRODUCTION) {
+            $collection->addEnvFilter($this->envSource->getEnvId($this->config->getEnvironment()));
+        }
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
