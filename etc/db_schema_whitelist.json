@@ -119,5 +119,44 @@
             "HOKODO_ORDER_DOCUMENTS_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
             "HOKODO_ORDER_DOCUMENTS_ORDER_ID_DOCUMENT_ID_DOCUMENT_TYPE": true
         }
+    },
+    "hokodo_quote_dev": {
+        "column": {
+            "id": true,
+            "quote_id": true,
+            "company_id": true,
+            "user_id": true,
+            "organisation_id": true,
+            "order_id": true,
+            "offer_id": true,
+            "patch_type": true,
+            "env": true
+        },
+        "index": {
+            "HOKODO_QUOTE_DEV_QUOTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "HOKODO_QUOTE_DEV_QUOTE_ID_QUOTE_ENTITY_ID": true
+        }
+    },
+    "hokodo_customer_dev": {
+        "column": {
+            "id": true,
+            "customer_id": true,
+            "company_id": true,
+            "organisation_id": true,
+            "user_id": true,
+            "credit_limit": true,
+            "env": true
+        },
+        "index": {
+            "HOKODO_CUSTOMER_DEV_CUSTOMER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "HOKODO_CUSTOMER_DEV_CUSTOMER_ID": true,
+            "HOKODO_CUSTOMER_DEV_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
     }
 }

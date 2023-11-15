@@ -11,7 +11,10 @@ namespace Hokodo\BNPL\Model;
 use Hokodo\BNPL\Api\Data\HokodoQuoteInterface;
 use Hokodo\BNPL\Api\Data\HokodoQuoteInterfaceFactory;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
+use Hokodo\BNPL\Gateway\Config\Config;
+use Hokodo\BNPL\Model\Config\Source\Env;
 use Hokodo\BNPL\Model\ResourceModel\HokodoQuote as QuoteResource;
+use Hokodo\BNPL\Model\ResourceModel\HokodoQuoteDev as QuoteResourceDev;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -35,18 +38,42 @@ class HokodoQuoteRepository implements HokodoQuoteRepositoryInterface
     private $cartRepository;
 
     /**
+     * @var Config
+     */
+    private Config $config;
+
+    /**
+     * @var QuoteResourceDev
+     */
+    private QuoteResourceDev $resourceDev;
+
+    /**
+     * @var Env
+     */
+    private Env $envSource;
+
+    /**
      * @param QuoteResource               $resource
+     * @param QuoteResourceDev            $resourceDev
      * @param HokodoQuoteInterfaceFactory $quoteFactory
      * @param CartRepositoryInterface     $cartRepository
+     * @param Config                      $config
+     * @param Env                         $envSource
      */
     public function __construct(
         QuoteResource $resource,
+        QuoteResourceDev $resourceDev,
         HokodoQuoteInterfaceFactory $quoteFactory,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        Config $config,
+        Env $envSource
     ) {
         $this->resource = $resource;
+        $this->resourceDev = $resourceDev;
         $this->quoteFactory = $quoteFactory;
         $this->cartRepository = $cartRepository;
+        $this->config = $config;
+        $this->envSource = $envSource;
     }
 
     /**
@@ -57,7 +84,13 @@ class HokodoQuoteRepository implements HokodoQuoteRepositoryInterface
     public function save(HokodoQuoteInterface $hokodoQuote): HokodoQuoteInterface
     {
         try {
-            $this->resource->save($hokodoQuote);
+            if ($this->config->getEnvironment() !== Config::ENV_PRODUCTION) {
+                $this->resourceDev->save(
+                    $hokodoQuote->setData('env', $this->envSource->getEnvId($this->config->getEnvironment()))
+                );
+            } else {
+                $this->resource->save($hokodoQuote);
+            }
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__($exception->getMessage()));
         }
@@ -72,7 +105,13 @@ class HokodoQuoteRepository implements HokodoQuoteRepositoryInterface
     public function delete(HokodoQuoteInterface $hokodoQuote): bool
     {
         try {
-            $this->resource->delete($hokodoQuote);
+            if ($this->config->getEnvironment() !== Config::ENV_PRODUCTION) {
+                $this->resourceDev->delete(
+                    $hokodoQuote->setData('env', $this->envSource->getEnvId($this->config->getEnvironment()))
+                );
+            } else {
+                $this->resource->delete($hokodoQuote);
+            }
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
@@ -87,7 +126,15 @@ class HokodoQuoteRepository implements HokodoQuoteRepositoryInterface
     {
         /* @var HokodoQuoteInterface $hokodoQuote */
         $hokodoQuote = $this->quoteFactory->create();
-        $this->resource->load($hokodoQuote, (int) $quoteId, HokodoQuoteInterface::QUOTE_ID);
+        if ($this->config->getEnvironment() !== Config::ENV_PRODUCTION) {
+            $this->resourceDev->load(
+                $hokodoQuote->setData('env', $this->envSource->getEnvId($this->config->getEnvironment())),
+                (int) $quoteId,
+                HokodoQuoteInterface::QUOTE_ID
+            );
+        } else {
+            $this->resource->load($hokodoQuote, (int) $quoteId, HokodoQuoteInterface::QUOTE_ID);
+        }
 
         return $hokodoQuote;
     }

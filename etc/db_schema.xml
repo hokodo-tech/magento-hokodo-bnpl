@@ -62,4 +62,64 @@
             <column name="document_type"/>
         </constraint>
     </table>
+    <table name="hokodo_quote_dev" resource="default" engine="innodb" comment="Hokodo Quote for dev/sandbox">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Hokodo Quote Id"/>
+        <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" comment="Magento Quote ID"/>
+        <column xsi:type="varchar" name="company_id" nullable="true" length="255" comment="Selected Company Id"/>
+        <column xsi:type="varchar" name="user_id" nullable="true" length="255" comment="User Api Id"/>
+        <column xsi:type="varchar" name="organisation_id" nullable="true" length="255" comment="Organisation Api Id"/>
+        <column xsi:type="varchar" name="order_id" nullable="true" length="255" comment="Order Api Id"/>
+        <column xsi:type="varchar" name="offer_id" nullable="true" length="255" comment="Payment Offer Api Id"/>
+        <column xsi:type="tinyint" name="patch_type" default="null" nullable="true" unsigned="false" comment="Order patch type"/>
+        <column xsi:type="tinyint" name="env" default="null" nullable="true" unsigned="false" comment="Environment type"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="HOKODO_QUOTE_DEV_QUOTE_ID_MAGENTO_QUOTE_ENTITY_ID"
+                    table="hokodo_quote" column="quote_id" referenceTable="quote" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <index referenceId="HOKODO_BNPL_DEV_QUOTE_ID" indexType="btree">
+            <column name="quote_id"/>
+        </index>
+    </table>
+    <table name="hokodo_customer_dev" resource="default" engine="innodb" comment="Hokodo Customer for dev/sandbox">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Hokodo Customer Id"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" comment="Magento Customer Id"/>
+        <column xsi:type="varchar" name="company_id" nullable="true" length="255" comment="Hokodo Company Id"/>
+        <column xsi:type="varchar" name="organisation_id" nullable="true" length="255" comment="Hokodo Organisation Id"/>
+        <column xsi:type="varchar" name="user_id" nullable="true" length="255" comment="Hokodo User Id"/>
+        <column xsi:type="text" name="credit_limit" nullable="true" comment="Hokodo credit limit"/>
+        <column xsi:type="tinyint" name="env" default="null" nullable="true" unsigned="false" comment="Environment type"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="HOKODO_CUSTOMER_DEV_CUSTOMER_ID" indexType="btree" disabled="true">
+            <column name="customer_id"/>
+        </index>
+        <constraint xsi:type="unique" referenceId="HOKODO_CUSTOMER_DEV_CUSTOMER_ID">
+            <column name="customer_id"/>
+            <column name="env"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="HOKODO_CUSTOMER_DEV_CUSTOMER_ID_MAGENTO_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="hokodo_customer" column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+    </table>
+<!--    <table name="hokodo_order_documents_dev" resource="default" engine="innodb" comment="Hokodo Order Documents CL for dev/sandbox">-->
+<!--        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Record Id"/>-->
+<!--        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" comment="Magento Order Id"/>-->
+<!--        <column xsi:type="varchar" name="document_id" nullable="true" length="255" comment="Magento Order Unique Document Id"/>-->
+<!--        <column xsi:type="varchar" name="document_type" nullable="false" length="20" comment="Magento Order Document Type"/>-->
+<!--        <column xsi:type="tinyint" name="env" default="null" nullable="true" unsigned="false" comment="Environment type"/>-->
+<!--        <constraint xsi:type="primary" referenceId="PRIMARY">-->
+<!--            <column name="id"/>-->
+<!--        </constraint>-->
+<!--        <constraint xsi:type="foreign" referenceId="HOKODO_ORDER_DOCUMENTS_ORDER_ID_SALES_ORDER_ENTITY_ID"-->
+<!--                    table="hokodo_order_documents" column="order_id" referenceTable="sales_order" referenceColumn="entity_id"-->
+<!--                    onDelete="CASCADE"/>-->
+<!--        <constraint xsi:type="unique" referenceId="HOKODO_ORDER_DOCUMENTS_ORDER_ID_DOCUMENT_ID_DOCUMENT_TYPE">-->
+<!--            <column name="order_id"/>-->
+<!--            <column name="document_id"/>-->
+<!--            <column name="document_type"/>-->
+<!--        </constraint>-->
+<!--    </table>-->
 </schema>

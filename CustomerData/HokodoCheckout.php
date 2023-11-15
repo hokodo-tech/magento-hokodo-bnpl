@@ -75,23 +75,25 @@ class HokodoCheckout implements SectionSourceInterface
     {
         $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($this->checkoutSession->getQuoteId());
         $offer = '';
-        if ($hokodoQuote->getPatchType() !== null) {
-            $hokodoQuote->setOfferId('');
-        }
-        if ($hokodoQuote->getOfferId()) {
-            try {
-                $offer = $this->offerService->getOffer(['id' => $hokodoQuote->getOfferId()])->getDataModel();
-                $this->addIsEligibleFlag($offer);
-            } catch (\Exception $e) {
-                $data = [
-                    'message' => 'Hokodo_BNPL: getOffer call failed with error.',
-                    'error' => $e->getMessage(),
-                ];
-                $this->logger->error(__METHOD__, $data);
+        if ($hokodoQuote->getQuoteId()) {
+            if ($hokodoQuote->getPatchType() !== null) {
                 $hokodoQuote->setOfferId('');
             }
+            if ($hokodoQuote->getOfferId()) {
+                try {
+                    $offer = $this->offerService->getOffer(['id' => $hokodoQuote->getOfferId()])->getDataModel();
+                    $this->addIsEligibleFlag($offer);
+                } catch (\Exception $e) {
+                    $data = [
+                        'message' => 'Hokodo_BNPL: getOffer call failed with error.',
+                        'error' => $e->getMessage(),
+                    ];
+                    $this->logger->error(__METHOD__, $data);
+                    $hokodoQuote->setOfferId('');
+                }
+            }
+            $this->hokodoQuoteRepository->save($hokodoQuote);
         }
-        $this->hokodoQuoteRepository->save($hokodoQuote);
         return [
             self::OFFER => $offer ? $offer->__toArray() : '',
         ];
