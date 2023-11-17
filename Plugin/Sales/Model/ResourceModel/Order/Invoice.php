@@ -66,11 +66,10 @@ class Invoice
         InvoiceResource $result,
         AbstractModel $invoice
     ) {
-        if (!empty($invoice->getId())) {
+        if (!empty($invoice->getId()) && $invoice->getTransactionId()) {
             /* @var Order\Invoice $invoice */
             $order = $invoice->getOrder();
-            if ($invoice->getRequestedCaptureCase() === 'online' &&
-                $order->getPayment()->getMethod() === Config::CODE) {
+            if ($order->getPayment()->getMethod() === Config::CODE) {
                 try {
                     /** @var OrderDocumentInterface $orderDocument */
                     $orderDocument = $this->orderDocumentInterfaceFactory->create();
