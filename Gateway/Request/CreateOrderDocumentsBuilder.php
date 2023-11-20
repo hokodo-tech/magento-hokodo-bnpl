@@ -8,7 +8,6 @@ namespace Hokodo\BNPL\Gateway\Request;
 
 use GuzzleHttp\Psr7;
 use Hokodo\BNPL\Api\Data\OrderDocumentsInterface;
-use Hokodo\BNPL\Gateway\SubjectReader;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
@@ -17,11 +16,6 @@ use Psr\Log\LoggerInterface as Logger;
 
 class CreateOrderDocumentsBuilder implements BuilderInterface
 {
-    /**
-     * @var SubjectReader
-     */
-    private SubjectReader $subjectReader;
-
     /**
      * @var ProductMetadataInterface
      */
@@ -38,18 +32,15 @@ class CreateOrderDocumentsBuilder implements BuilderInterface
     private ReadFactory $readFactory;
 
     /**
-     * @param SubjectReader            $subjectReader
      * @param ProductMetadataInterface $productMetadata
      * @param Logger                   $logger
      * @param ReadFactory              $readFactory
      */
     public function __construct(
-        SubjectReader $subjectReader,
         ProductMetadataInterface $productMetadata,
         Logger $logger,
         ReadFactory $readFactory
     ) {
-        $this->subjectReader = $subjectReader;
         $this->productMetadata = $productMetadata;
         $this->logger = $logger;
         $this->readFactory = $readFactory;
@@ -128,6 +119,10 @@ class CreateOrderDocumentsBuilder implements BuilderInterface
      */
     private function readDocument(array $buildSubject): OrderDocumentsInterface
     {
-        return $this->subjectReader->readFieldValue('document', $buildSubject);
+        if (!isset($buildSubject['document'])) {
+            throw new \InvalidArgumentException(sprintf('Missing document field in subject'));
+        }
+
+        return $buildSubject['document'];
     }
 }

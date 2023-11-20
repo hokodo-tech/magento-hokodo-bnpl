@@ -4,9 +4,11 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Hokodo\BNPL\Gateway\Request;
 
-use Hokodo\BNPL\Gateway\SubjectReaderInterface;
+use Hokodo\BNPL\Gateway\Request\SubjectReader\SubjectReaderInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
@@ -14,11 +16,6 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
  */
 class EndpointBuilder implements BuilderInterface
 {
-    /**
-     * @var SubjectReaderInterface
-     */
-    private $subjectReader;
-
     /**
      * @var string
      */
@@ -30,16 +27,13 @@ class EndpointBuilder implements BuilderInterface
     private $params;
 
     /**
-     * @param SubjectReaderInterface $subjectReader
-     * @param string                 $endpoint
-     * @param array                  $params
+     * @param string $endpoint
+     * @param array  $params
      */
     public function __construct(
-        SubjectReaderInterface $subjectReader,
-        $endpoint,
+        string $endpoint,
         array $params = []
     ) {
-        $this->subjectReader = $subjectReader;
         $this->endpoint = $endpoint;
         $this->params = $params;
     }
@@ -63,26 +57,28 @@ class EndpointBuilder implements BuilderInterface
      *
      * @return string
      */
-    private function buildUri(array $buildSubject)
+    private function buildUri(array $buildSubject): string
     {
         $params = [];
-        foreach ($this->params as $key => $param) {
-            $params[$key] = $this->buildParam($param, $buildSubject);
+        foreach ($this->params as $key => $value) {
+            if ($value instanceof SubjectReaderInterface) {
+                $params[$key] = $value->readSubjectParam($buildSubject);
+            } else {
+                $params[$key] = $buildSubject[$value];
+                unset($buildSubject[$value]);
+            }
         }
 
         return str_replace(array_keys($params), array_values($params), $this->endpoint);
     }
 
     /**
-     * A function that build param.
+     * Get request params.
      *
-     * @param string $param
-     * @param array  $buildSubject
-     *
-     * @return string
+     * @return array
      */
-    private function buildParam($param, array $buildSubject)
+    public function getParams(): array
     {
-        return $this->subjectReader->readEndpointParam($param, $buildSubject);
+        return $this->params;
     }
 }

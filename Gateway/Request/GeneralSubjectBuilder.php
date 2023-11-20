@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Hokodo\BNPL\Gateway\Request\Sdk;
+namespace Hokodo\BNPL\Gateway\Request;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;

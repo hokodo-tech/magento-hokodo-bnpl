@@ -25,7 +25,7 @@ class Order extends AbstractService
      */
     public function createOrder(CreateOrderRequestInterface $createOrderRequest)
     {
-        return $this->commandPool->get('sdk_order_create')->execute($createOrderRequest->__toArray());
+        return $this->commandPool->get('order_create')->execute($createOrderRequest->__toArray());
     }
 
     /**
@@ -40,7 +40,7 @@ class Order extends AbstractService
      */
     public function patchOrder(PatchOrderRequestInterface $createOrderRequest)
     {
-        return $this->commandPool->get('sdk_order_patch')->execute($createOrderRequest->__toArray());
+        return $this->commandPool->get('order_patch')->execute($createOrderRequest->__toArray());
     }
 
     /**
@@ -55,6 +55,6 @@ class Order extends AbstractService
      */
     public function getOrder($getOrderRequest)
     {
-        return $this->commandPool->get('sdk_order_get')->execute($getOrderRequest);
+        return $this->commandPool->get('order_get')->execute($getOrderRequest);
     }
 }
