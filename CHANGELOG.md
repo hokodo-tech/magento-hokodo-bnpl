@@ -1,3 +1,8 @@
+2.2.4 / February 2024
+==================
+* Adapt metadata for better scoring
+* Added dynamic environment switch
+
 2.2.3 / September 2023
 ==================
 * Fix the issue when some credit rejection messages were stored incorrectly in database
