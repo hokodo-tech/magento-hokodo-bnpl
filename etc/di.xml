@@ -1048,4 +1048,28 @@
         <plugin name="hokodo_order_cancellation"
                 type="Hokodo\BNPL\Plugin\OrderCancellation"/>
     </type>
+
+    <!-- Order metadata extension -->
+    <virtualType name="Hokodo\BNPL\Model\PaymentToOrderJoinProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor">
+        <arguments>
+            <argument name="customJoins" xsi:type="array">
+                <item name="sales_order_payment_table.method" xsi:type="object">Hokodo\BNPL\Model\OrderPaymentMethod</item>
+            </argument>
+<!--            <argument name="fieldMapping" xsi:type="array">-->
+<!--                <item name="extension_attribute_sales_order_payment.method" xsi:type="string">method</item>-->
+<!--            </argument>-->
+        </arguments>
+    </virtualType>
+    <virtualType name="Hokodo\BNPL\Model\CollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="join" xsi:type="object">Hokodo\BNPL\Model\PaymentToOrderJoinProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sales\Model\OrderRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Hokodo\BNPL\Model\CollectionProcessor</argument>
+        </arguments>
+    </type>
 </config>

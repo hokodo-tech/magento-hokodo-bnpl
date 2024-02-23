@@ -1,17 +1,17 @@
-import { expect } from "@playwright/test";
-import test from "../fixtures";
+import { expect } from '@playwright/test';
+import test from '../fixtures';
 import {
   verifyAddressDetails,
   verifyHokodoOrder,
-} from "../support/playwright-assertion-helpers";
+} from '../support/playwright-assertion-helpers';
 import {
   getCaptureStatus,
   getHokodoIdsFromMagentoOrder,
-} from "../support/playwright-test-helpers";
-import { CompanyType, DeferredPaymentStatus } from "../support/types/Buyer";
-import { MagentoOrderCaptureStatus } from "../support/types/MagentoOrder";
+} from '../support/playwright-test-helpers';
+import { CompanyType, DeferredPaymentStatus } from '../support/types/Buyer';
+import { MagentoOrderCaptureStatus } from '../support/types/MagentoOrder';
 
-test.describe("Full end to end for Registered Buyers", () => {
+test.describe('Full end to end for Registered Buyers', () => {
   test("Placing and fulfilling a Registered Company's first Order", async ({
     homePage,
     productDetailsPage,
@@ -46,7 +46,7 @@ test.describe("Full end to end for Registered Buyers", () => {
     // enter shipping details
     await shippingAddressPage.setupNewShippingAddress(
       testOrderData,
-      "flatrate_flatrate"
+      'flatrate_flatrate'
     );
 
     // load payment page
@@ -59,7 +59,7 @@ test.describe("Full end to end for Registered Buyers", () => {
 
     // pay with Hokodo
     await paymentPage.hokodoCheckout.selectAPaymentPlan();
-    await paymentPage.hokodoCheckout.selectPaymentMethod("invoice");
+    await paymentPage.hokodoCheckout.selectPaymentMethod('bank_transfer');
     const magentoOrderId = await paymentPage.hokodoCheckout.placeOrder();
 
     const magentoOrder = await magentoApi.getOrder(magentoOrderId);
@@ -87,16 +87,16 @@ test.describe("Full end to end for Registered Buyers", () => {
 
     expect(
       organisation.users,
-      "Make sure that only one user is linked to the Organisation"
+      'Make sure that only one user is linked to the Organisation'
     ).toHaveLength(1);
     expect(
       organisation.users[0].email,
-      "Ensure the correct user is added to the Organisation"
+      'Ensure the correct user is added to the Organisation'
     ).toBe(testOrderData.buyer.email);
     expect(
       organisation.users[0].role,
-      "Ensure the user has the correct role"
-    ).toBe("member");
+      'Ensure the user has the correct role'
+    ).toBe('member');
 
     await adminLoginPage.navigate();
     await adminLoginPage.login();
@@ -122,24 +122,24 @@ test.describe("Full end to end for Registered Buyers", () => {
 
     expect(
       deferredPayment.authorisation,
-      "Deferred Payment authorisation"
+      'Deferred Payment authorisation'
     ).toBe(0);
     expect(
       deferredPayment.protected_captures,
-      "Deferred Payment protected_captures"
+      'Deferred Payment protected_captures'
     ).toBe(basketDetails.totals.grand_total * 100);
     expect(
       deferredPayment.unprotected_captures,
-      "Deferred Payment unprotected_captures"
+      'Deferred Payment unprotected_captures'
     ).toBe(0);
-    expect(deferredPayment.refunds, "Deferred Payment refunds").toBe(0);
+    expect(deferredPayment.refunds, 'Deferred Payment refunds').toBe(0);
     expect(
       deferredPayment.voided_authorisation,
-      "Deferred Payment voided_authorisation"
+      'Deferred Payment voided_authorisation'
     ).toBe(0);
     expect(
       deferredPayment.expired_authorisation,
-      "Deferred Payment expired_authorisation"
+      'Deferred Payment expired_authorisation'
     ).toBe(0);
 
     await orderPage.navigateToShipOrderPage();
@@ -178,7 +178,7 @@ test.describe("Full end to end for Registered Buyers", () => {
     // enter shipping details
     await shippingAddressPage.setupNewShippingAddress(
       testOrderData,
-      "flatrate_flatrate"
+      'flatrate_flatrate'
     );
 
     // load payment page
@@ -191,7 +191,7 @@ test.describe("Full end to end for Registered Buyers", () => {
 
     // pay with Hokodo
     await paymentPage.hokodoCheckout.selectAPaymentPlan();
-    await paymentPage.hokodoCheckout.selectPaymentMethod("invoice");
+    await paymentPage.hokodoCheckout.selectPaymentMethod('bank_transfer');
     const magentoOrderId = await paymentPage.hokodoCheckout.placeOrder();
 
     const magentoOrder = await magentoApi.getOrder(magentoOrderId);
@@ -219,16 +219,16 @@ test.describe("Full end to end for Registered Buyers", () => {
 
     expect(
       organisation.users,
-      "Make sure that only one user is linked to the Organisation"
+      'Make sure that only one user is linked to the Organisation'
     ).toHaveLength(1);
     expect(
       organisation.users[0].email,
-      "Ensure the correct user is added to the Organisation"
+      'Ensure the correct user is added to the Organisation'
     ).toBe(testOrderData.buyer.email);
     expect(
       organisation.users[0].role,
-      "Ensure the user has the correct role"
-    ).toBe("member");
+      'Ensure the user has the correct role'
+    ).toBe('member');
 
     // ship the order in Magento
     await adminLoginPage.navigate();
@@ -256,24 +256,24 @@ test.describe("Full end to end for Registered Buyers", () => {
     // expect(deferred_payment.status, "Deferred Payment Status").toBe("captured");
     expect(
       deferredPayment.authorisation,
-      "Deferred Payment authorisation"
+      'Deferred Payment authorisation'
     ).toBe(0);
     expect(
       deferredPayment.protected_captures,
-      "Deferred Payment protected_captures"
+      'Deferred Payment protected_captures'
     ).toBe(basketDetails.totals.grand_total * 100);
     expect(
       deferredPayment.unprotected_captures,
-      "Deferred Payment unprotected_captures"
+      'Deferred Payment unprotected_captures'
     ).toBe(0);
-    expect(deferredPayment.refunds, "Deferred Payment refunds").toBe(0);
+    expect(deferredPayment.refunds, 'Deferred Payment refunds').toBe(0);
     expect(
       deferredPayment.voided_authorisation,
-      "Deferred Payment voided_authorisation"
+      'Deferred Payment voided_authorisation'
     ).toBe(0);
     expect(
       deferredPayment.expired_authorisation,
-      "Deferred Payment expired_authorisation"
+      'Deferred Payment expired_authorisation'
     ).toBe(0);
 
     await orderPage.navigateToShipOrderPage();

@@ -35,6 +35,7 @@ use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -206,12 +207,14 @@ class OrderBuilder
             ->setTaxAmount(0)
             ->setOrderDate($this->dateTimeFactory->create()->gmtDate('Y-m-d', time()))
             ->setMetadata(
-                [
-                    'Magento Version: ' . $this->productMetadata->getVersion(),
-                    'Hokodo Module Version: ' . $this->getModuleVersion(),
-                    'PHP version: ' . PHP_VERSION,
-                    'Customer' => $this->getCustomerInformation($quote),
-                ]
+                array_merge(
+                    [
+                    'Magento Version' => $this->productMetadata->getVersion(),
+                    'Hokodo Module Version' => $this->getModuleVersion(),
+                    'PHP version' => PHP_VERSION,
+                    ],
+                    $this->getCustomerInformation($quote)
+                )
             );
     }
 
@@ -412,12 +415,8 @@ class OrderBuilder
         if ($this->gatewayConfig->getValue(Config::SEND_PURCHASE_HISTORY) && ($customer = $quote->getCustomer())) {
             $orders = $this->getCustomersOrders((int) $customer->getId());
             return [
-                'group_id' => $customer->getId()
-                    ? $this->groupRepository->getById($customer->getGroupId())->getCode()
-                    : 'Guest',
-                'orders_qty' => count($orders) ?: null,
-                'total_amount' => count($orders) ? $this->getOrdersTotalAmount($orders) : null,
-                'currency' => $quote->getCurrency()->getStoreCurrencyCode(),
+                'checkouts_count' => count($orders) ?: null,
+                'checkouts_value' => count($orders) ? $this->getOrdersTotalAmount($orders) : null,
             ];
         }
         return null;
@@ -433,7 +432,15 @@ class OrderBuilder
     private function getCustomersOrders(int $customerId): array
     {
         return $this->orderRepository->getList(
-            $this->searchCriteriaBuilder->addFilter(OrderInterface::CUSTOMER_ID, $customerId)->create()
+            $this->searchCriteriaBuilder
+                ->addFilter(OrderInterface::CUSTOMER_ID, $customerId)
+                ->addFilter(
+                    \Hokodo\BNPL\Model\OrderPaymentMethod::TABLE_ALIAS .
+                    '.' .
+                    OrderPaymentInterface::METHOD,
+                    Config::CODE
+                )
+                ->create()
         )->getItems();
     }
 
