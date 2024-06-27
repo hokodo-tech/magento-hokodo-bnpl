@@ -333,7 +333,8 @@ class Offer implements OfferInterface
             $organisation = $this->organisationService->createOrganisation(
                 $this->organisationBuilder->build(
                     $companyId,
-                    $this->getUserEmail()
+                    $this->getUserEmail(),
+                    !$this->checkoutSession->getQuote()->getCustomer()
                 )
             );
             if ($dataModel = $organisation->getDataModel()) {
