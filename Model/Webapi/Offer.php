@@ -334,7 +334,7 @@ class Offer implements OfferInterface
                 $this->organisationBuilder->build(
                     $companyId,
                     $this->getUserEmail(),
-                    !$this->checkoutSession->getQuote()->getCustomer()
+                    !$this->checkoutSession->getQuote()->getCustomer()->getId()
                 )
             );
             if ($dataModel = $organisation->getDataModel()) {

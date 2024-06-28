@@ -56,7 +56,7 @@ class OrganisationBuilder
         return $gatewayRequest
             ->setCompanyId($companyId)
             ->setUniqueId('mage-org-' . hash('md5', $this->storeManager->getStore()->getCode() .
-                $this->storeManager->getStore()->getName() . $userEmail . $companyId . $mustBeUnique ? time() : ''))
+                $this->storeManager->getStore()->getName() . $userEmail . $companyId . ($mustBeUnique ? time() : '')))
             ->setRegistered(date('Y-m-d\TH:i:s\Z'));
     }
 }
