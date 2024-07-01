@@ -1,6 +1,6 @@
-import { Page } from "@playwright/test";
-import { Buyer, CompanyType } from "../../support/types/Buyer";
-import CheckoutSuccessPage from "./checkout-success-page";
+import { Page } from '@playwright/test';
+import { Buyer, CompanyType } from '../../support/types/Buyer';
+import CheckoutSuccessPage from './checkout-success-page';
 
 export default class HokodoCheckout {
   readonly page: Page;
@@ -14,12 +14,12 @@ export default class HokodoCheckout {
   }
 
   getIframe() {
-    return this.page.frameLocator(".hokodo-content-wrapper iframe").first();
+    return this.page.frameLocator('.hokodo-content-wrapper iframe').first();
   }
 
   async findRegisteredCompany(buyer: Buyer) {
     if (buyer.companyCountry)
-      await this.page.locator("#country").selectOption(buyer.companyCountry);
+      await this.page.locator('#country').selectOption(buyer.companyCountry);
 
     await this.page
       .locator("input[data-testid='companyType-registeredCompany'] ~ label")
@@ -30,7 +30,7 @@ export default class HokodoCheckout {
         .locator("[aria-controls='companySearchListbox']")
         .fill(buyer.companyName);
       await this.page
-        .locator("#companySearchListbox")
+        .locator('#companySearchListbox')
         .locator(`text="${buyer.companyName}"`)
         .click();
     }
@@ -41,7 +41,7 @@ export default class HokodoCheckout {
   async selectAPaymentPlan() {
     const responseBody = await (
       await this.page.waitForResponse((r) =>
-        r.url().includes("hokodo-request-offer")
+        r.url().includes('hokodo-request-offer')
       )
     ).json();
 
@@ -70,35 +70,35 @@ export default class HokodoCheckout {
   }
 
   async populateSoleTraderFields(buyer: Buyer) {
-    await this.page.locator("#trading_name").fill(buyer.companyName || "");
+    await this.page.locator('#trading_name').fill(buyer.companyName || '');
     await this.page
-      .locator("#trading_address")
-      .fill(buyer.companyAddress?.address_line1 || "");
+      .locator('#trading_address')
+      .fill(buyer.companyAddress?.address_line1 || '');
     await this.page
-      .locator("#trading_address_city")
-      .fill(buyer.companyAddress?.city || "");
+      .locator('#trading_address_city')
+      .fill(buyer.companyAddress?.city || '');
     await this.page
-      .locator("#trading_address_postcode")
-      .fill(buyer.companyAddress?.postcode || "");
+      .locator('#trading_address_postcode')
+      .fill(buyer.companyAddress?.postcode || '');
     await this.page
-      .locator("#proprietor_name")
-      .fill(buyer.firstName + " " + buyer.lastName || "");
-    await this.page.locator("#date_of_birth").type(buyer.dateOfBirth || "");
+      .locator('#proprietor_name')
+      .fill(buyer.firstName + ' ' + buyer.lastName || '');
+    await this.page.locator('#date_of_birth').type(buyer.dateOfBirth || '');
     await this.page
-      .locator("#proprietor_address_line1")
-      .fill(buyer.ownerAddress?.address_line1 || "");
+      .locator('#proprietor_address_line1')
+      .fill(buyer.ownerAddress?.address_line1 || '');
     await this.page
-      .locator("#proprietor_address_city")
-      .fill(buyer.ownerAddress?.city || "");
+      .locator('#proprietor_address_city')
+      .fill(buyer.ownerAddress?.city || '');
     await this.page
-      .locator("#proprietor_address_postcode")
-      .fill(buyer.ownerAddress?.postcode || "");
+      .locator('#proprietor_address_postcode')
+      .fill(buyer.ownerAddress?.postcode || '');
   }
 
   async checkIfCreditIsDeclined() {
     await this.page
-      .frame(".hokodo-content-wrapper iframe")
-      ?.waitForSelector("text='Trade Credit Declined'", { state: "visible" });
+      .frame('.hokodo-content-wrapper iframe')
+      ?.waitForSelector("text='Trade Credit Declined'", { state: 'visible' });
   }
 
   async selectPaymentMethod(paymentMethod: string) {
@@ -111,7 +111,9 @@ export default class HokodoCheckout {
   }
 
   async placeOrder(): Promise<string> {
-    await this.getIframe().locator("text='Place Order'").click();
+    await this.getIframe()
+      .getByTestId('paymentConfirmation.submitButton')
+      .click();
     return await new CheckoutSuccessPage(this.page).extractOrderIncrementId();
   }
 }
