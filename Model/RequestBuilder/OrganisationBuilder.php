@@ -41,18 +41,22 @@ class OrganisationBuilder
      *
      * @param string $companyId
      * @param string $userEmail
+     * @param bool   $mustBeUnique
      *
      * @return CreateOrganisationRequestInterface
      *
      * @throws NoSuchEntityException
      */
-    public function build(string $companyId, string $userEmail = ''): CreateOrganisationRequestInterface
-    {
+    public function build(
+        string $companyId,
+        string $userEmail = '',
+        bool $mustBeUnique = false
+    ): CreateOrganisationRequestInterface {
         $gatewayRequest = $this->createOrganisationGatewayRequestFactory->create();
         return $gatewayRequest
             ->setCompanyId($companyId)
             ->setUniqueId('mage-org-' . hash('md5', $this->storeManager->getStore()->getCode() .
-                    $this->storeManager->getStore()->getName() . $userEmail . $companyId))
+                $this->storeManager->getStore()->getName() . $userEmail . $companyId . ($mustBeUnique ? time() : '')))
             ->setRegistered(date('Y-m-d\TH:i:s\Z'));
     }
 }
