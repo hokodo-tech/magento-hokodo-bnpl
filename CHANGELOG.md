@@ -1,3 +1,7 @@
+2.2.5 / February 2024
+==================
+* Updated organisation creation process
+
 2.2.4 / February 2024
 ==================
 * Adapt metadata for better scoring
