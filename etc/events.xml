@@ -20,4 +20,8 @@
         <observer name="hokodo_assign_company_after_regisration"
                   instance="Hokodo\BNPL\Observer\Customer\AssignCompanyAfterRegistration"/>
     </event>
+    <event name="customer_save_commit_after">
+        <observer name="hokodo_assign_company_on_save"
+                  instance="Hokodo\BNPL\Observer\Customer\AssignCompanyOnSave"/>
+    </event>
 </config>

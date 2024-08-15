@@ -62,6 +62,9 @@ class Config extends DefaultPaymentConfig
     public const SEND_PURCHASE_HISTORY = 'advanced/send_customer_purchase_history';
     public const SDK_COUNTRIES = 'advanced/sdk_countries';
     public const IMPORT_ENGINE = 'advanced/import_engine';
+    public const ASSIGN_COMPANY_BASED_ON = 'advanced/auto_assign_company_based_on';
+    public const ASSIGN_COMPANY_COUNTRY = 'advanced/auto_assign_company_country';
+    public const VAT_ATTRIBUTE_CODE = 'advanced/auto_assign_vat_attribute_code';
 
     /**
      * @var ScopeConfigInterface

@@ -1,3 +1,7 @@
+2.2.6 / September 2024
+==================
+* Added ability to assign Hokodo company to customer onSave based on Taxvat or other selected customer attribute.
+
 2.2.5 / February 2024
 ==================
 * Updated organisation creation process
