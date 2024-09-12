@@ -1072,4 +1072,10 @@
             <argument name="collectionProcessor" xsi:type="object">Hokodo\BNPL\Model\CollectionProcessor</argument>
         </arguments>
     </type>
+
+    <type name="Hokodo\BNPL\Observer\Customer\AssignCompanyOnSave">
+        <arguments>
+            <argument name="logger" xsi:type="object">HokodoLogger</argument>
+        </arguments>
+    </type>
 </config>

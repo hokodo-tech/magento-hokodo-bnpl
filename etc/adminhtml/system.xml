@@ -191,7 +191,7 @@
                         <source_model>Hokodo\BNPL\Model\Adminhtml\Source\PaymentMethodLogos</source_model>
                     </field>
                 </group>
-                <group id="advanced" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="0" translate="label">
+                <group id="advanced" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
                     <label>Advanced</label>
                     <field id="enable_thirdparty_totals_compatibility" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Enable thirdparty extensions compatibility fix</label>
@@ -249,6 +249,21 @@
                            showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
                         <label>Import Engine</label>
                         <source_model>Hokodo\BNPL\Model\Config\Source\ImportEngine</source_model>
+                    </field>
+                    <field id="auto_assign_company_based_on" translate="label comment" type="select" sortOrder="410"
+                           showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                        <label>Assign company based on</label>
+                        <comment><![CDATA[Assign Hokodo company and organisation to customer on save based on customer attribute contained VAT number.]]></comment>
+                        <source_model>Hokodo\BNPL\Model\Config\Source\CustomerVatAttribute</source_model>
+                    </field>
+                    <field id="auto_assign_vat_attribute_code" translate="label" type="text" sortOrder="412" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Attribute code containing VAT</label>
+                        <comment><![CDATA[Note: this field is required if custom attribute is being used. The default is customer TaxVat attribute]]></comment>
+                    </field>
+                    <field id="auto_assign_company_country" translate="label" type="select" sortOrder="411" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Assign company country</label>
+                        <comment><![CDATA[Country which is used for Hokodo company search.]]></comment>
+                        <source_model>\Hokodo\BNPL\Model\Config\Source\SdkCountries</source_model>
                     </field>
                 </group>
             </group>

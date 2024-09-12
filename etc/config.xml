@@ -78,6 +78,8 @@
                     <debug>0</debug>
                     <send_customer_purchase_history>1</send_customer_purchase_history>
                     <import_engine>queue</import_engine>
+                    <auto_assign_company_based_on>disabled</auto_assign_company_based_on>
+                    <auto_assign_company_country>GB</auto_assign_company_country>
                 </advanced>
             </hokodo_bnpl>
         </payment>

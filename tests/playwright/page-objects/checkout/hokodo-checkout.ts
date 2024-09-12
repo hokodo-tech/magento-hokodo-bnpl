@@ -105,7 +105,7 @@ export default class HokodoCheckout {
     const iframe = this.getIframe();
 
     await iframe
-      .locator(`[for="${paymentMethod}"] [data-testid='customRadio']`)
+      .locator(`[for="${paymentMethod}"] [data-testid*="paymentMethod"]`)
       .click();
     await iframe.locator("text='Continue'").click();
   }

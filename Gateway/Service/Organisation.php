@@ -18,9 +18,9 @@ class Organisation extends AbstractService
     /**
      * Create Organisation service command.
      *
-     * @param OrganisationResultInterface $createOrganisationRequest
+     * @param CreateOrganisationRequestInterface $createOrganisationRequest
      *
-     * @return ResultInterface|null
+     * @return OrganisationResultInterface|null
      *
      * @throws NotFoundException
      * @throws CommandException
