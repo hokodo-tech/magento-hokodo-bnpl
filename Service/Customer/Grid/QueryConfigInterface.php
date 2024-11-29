@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -13,9 +14,11 @@ interface QueryConfigInterface
     /**
      * Get query.
      *
+     * @param string $table
+     *
      * @return string
      */
-    public function getIsNullQuery(): string;
+    public function getIsNullQuery(string $table): string;
 
     /**
      * Get additional tables.
@@ -23,4 +26,22 @@ interface QueryConfigInterface
      * @return array
      */
     public function getAdditionalTables(): array;
+
+    /**
+     * Get column name based on env.
+     *
+     * @param string $env
+     *
+     * @return string
+     */
+    public function getColumnName(string $env): string;
+
+    /**
+     * Get table alias based on env.
+     *
+     * @param string $env
+     *
+     * @return string
+     */
+    public function getTableAlias(string $env): string;
 }

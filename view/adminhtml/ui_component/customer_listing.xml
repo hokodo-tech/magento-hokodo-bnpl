@@ -8,13 +8,16 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <columns name="customer_columns" sortOrder="300">
-        <column name="is_hokodo_company_assigned" component="Magento_Ui/js/grid/columns/select">
+        <column name="is_hokodo_company_assigned" class="\Hokodo\BNPL\Ui\Component\Listing\Column\IsCompanyAttached">
             <settings>
-                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <options class="\Hokodo\BNPL\Model\Config\Source\Env"/>
                 <filter>select</filter>
                 <dataType>select</dataType>
                 <sortable>false</sortable>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
                 <label translate="true">Hokodo Company Attached</label>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>120</resizeDefaultWidth>
             </settings>
         </column>
     </columns>

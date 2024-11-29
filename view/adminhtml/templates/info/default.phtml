@@ -13,17 +13,17 @@ $specificInfo = $block->getSpecificInformation();
 $paymentTitle = $block->getMethod()->getConfigData('title', $block->getInfo()->getOrder()->getStoreId());
 ?>
 <img class="hokodo-logo" width="80" height="30"
-     src="<?= $block->escapeUrl($block->getViewFileUrl('Hokodo_BNPL::images/hokodo-logo.png')); ?>"
-     alt="<?= $block->escapeHtml(__('Hokodo Logo')) ?>">
-<p><?= $block->escapeHtml($paymentTitle);?></p>
+     src="<?= $escaper->escapeUrl($block->getViewFileUrl('Hokodo_BNPL::images/hokodo-logo.png')); ?>"
+     alt="<?= $escaper->escapeHtml(__('Hokodo Logo')) ?>">
+<p><?= $escaper->escapeHtml($paymentTitle);?></p>
 
 <?php if ($specificInfo): ?>
     <table class="data-table admin__table-secondary">
     <?php foreach ($specificInfo as $label => $value): ?>
         <tr>
-            <th><?= $block->escapeHtml(__($label)) ?>:</th>
+            <th><?= $escaper->escapeHtml(__($label)) ?>:</th>
             <td>
-                <?= /* @noEscape */ nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray(__($value), true)))) ?>
+                <?= /* @noEscape */ nl2br($escaper->escapeHtml(implode("\n", $block->getValueAsArray(__($value), true)))) ?>
             </td>
         </tr>
     <?php endforeach; ?>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2021 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -6,8 +7,6 @@
 declare(strict_types=1);
 
 namespace Hokodo\BNPL\Test\Integration\Gateway\Service;
-
-use Hokodo\BNPL\Api\Data\DeferredPaymentInterface;
 
 class DeferredPaymentTest extends AbstractService
 {
@@ -45,7 +44,7 @@ class DeferredPaymentTest extends AbstractService
 
         $payment = $result->getDataModel();
 
-        $this->assertInstanceOf(DeferredPaymentInterface::class, $payment);
+        $this->assertInstanceOf(\Hokodo\BNPL\Api\Data\DeferredPaymentInterface::class, $payment);
         $this->assertEquals($this->httpResponse['status'], $payment->getStatus());
     }
 }

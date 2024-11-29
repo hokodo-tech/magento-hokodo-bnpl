@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -21,8 +22,8 @@ class Offer extends AbstractService
      *
      * @return PaymentOfferResultInterface
      *
-     * @throws \Magento\Framework\Exception\NotFoundException
-     * @throws \Magento\Payment\Gateway\Command\CommandException
+     * @throws NotFoundException
+     * @throws CommandException
      */
     public function createOffer(CreateOfferRequestInterface $createOfferRequest)
     {

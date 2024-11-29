@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -14,8 +15,8 @@ interface DeferredPaymentProcessorInterface
     /**
      * A function that makes process.
      *
-     * @param string                                                $created
-     * @param \Hokodo\BNPL\Api\Data\DeferredPaymentPayloadInterface $data
+     * @param string                               $created
+     * @param Data\DeferredPaymentPayloadInterface $data
      *
      * @return bool
      */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -15,9 +16,9 @@ interface HokodoCustomerInterface
     /**
      * Assign Hokodo(companyId, organisationId, userId) to a magento customer.
      *
-     * @param \Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerRequestInterface $payload
+     * @param HokodoCustomerRequestInterface $payload
      *
-     * @return \Hokodo\BNPL\Api\Data\Webapi\HokodoCustomerResponseInterface
+     * @return HokodoCustomerResponseInterface
      */
     public function assignCompany(HokodoCustomerRequestInterface $payload): HokodoCustomerResponseInterface;
 }

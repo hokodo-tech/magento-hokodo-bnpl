@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -33,7 +34,7 @@ interface CreateOrderRequestInterface
     /**
      * Customer setter.
      *
-     * @param OrderCustomerInterface $customer
+     * @param \Hokodo\BNPL\Api\Data\OrderCustomerInterface $customer
      *
      * @return $this
      */
@@ -88,7 +89,7 @@ interface CreateOrderRequestInterface
     /**
      * Items setter.
      *
-     * @param OrderItemInterface[] $items
+     * @param \Hokodo\BNPL\Api\Data\OrderItemInterface[] $items
      *
      * @return $this
      */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -42,7 +43,7 @@ class OrderDocumentsService extends AbstractService
      *
      * @param string $orderDocument
      *
-     * @return \Hokodo\BNPL\Api\Data\OrderDocumentsInterface
+     * @return OrderDocumentsInterface
      */
     public function get(OrderDocumentsInterface $orderDocument)
     {

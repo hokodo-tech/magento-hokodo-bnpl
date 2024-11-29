@@ -10,11 +10,11 @@
  */
 
 $specificInfo = $block->getSpecificInformation();
-$title = $block->escapeHtml($block->getMethod()->getTitle());
+$title = $escaper->escapeHtml($block->getMethod()->getTitle());
 ?>
 <img class="hokodo-logo" width="80" height="30"
-     src="<?= $block->escapeUrl($block->getViewFileUrl('Hokodo_BNPL::img/hokodo-logo.png')); ?>"
-     alt="<?= $block->escapeHtml(__('Hokodo Logo')) ?>">
+     src="<?= $escaper->escapeUrl($block->getViewFileUrl('Hokodo_BNPL::img/hokodo-logo.png')); ?>"
+     alt="<?= $escaper->escapeHtml(__('Hokodo Logo')) ?>">
 <dl class="payment-method">
     <dt class="title"><?= /* @noEscape */ $title ?></dt>
 <?php if ($specificInfo): ?>
@@ -23,9 +23,9 @@ $title = $block->escapeHtml($block->getMethod()->getTitle());
             <caption class="table-caption"><?= /* @noEscape */ $title ?></caption>
             <?php foreach ($specificInfo as $label => $value): ?>
                 <tr>
-                    <th><?= $block->escapeHtml(__($label)) ?>:</th>
+                    <th><?= $escaper->escapeHtml(__($label)) ?>:</th>
                     <td>
-                        <?= /* @noEscape */ nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray(__($value), true)))) ?>
+                        <?= /* @noEscape */ nl2br($escaper->escapeHtml(implode("\n", $block->getValueAsArray(__($value), true)))) ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

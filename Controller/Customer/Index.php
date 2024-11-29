@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -31,17 +32,17 @@ class Index implements HttpGetActionInterface
     private ResultFactory $resultFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private UrlInterface $urlBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private StoreManagerInterface $storeManager;
 
     /**
-     * @var \Hokodo\BNPL\Gateway\Config\Config
+     * @var Config
      */
     private Config $config;
 

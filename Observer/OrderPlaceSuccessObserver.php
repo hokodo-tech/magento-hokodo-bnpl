@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -59,7 +60,7 @@ class OrderPlaceSuccessObserver implements ObserverInterface
         $payment = $order->getPayment();
         if ($payment && $payment->getMethod() === \Hokodo\BNPL\Gateway\Config\Config::CODE) {
             $orderRequest = $this->orderBuilder->buildPatchOrderRequestBase(
-                $payment->getAdditionalInformation()[\Hokodo\BNPL\Observer\DataAssignObserver::HOKODO_ORDER_ID]
+                $payment->getAdditionalInformation()[DataAssignObserver::HOKODO_ORDER_ID]
             );
             $orderRequest->setUniqueId($order->getIncrementId());
             try {

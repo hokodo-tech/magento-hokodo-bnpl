@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -71,21 +72,21 @@ class HokodoCustomer implements HokodoCustomerInterface
     private HokodoCompanyProvider $hokodoCompanyProvider;
 
     /**
-     * @var \Hokodo\BNPL\Model\CompanyCreditService
+     * @var CompanyCreditService
      */
     private CompanyCreditService $companyCreditService;
 
     /**
-     * @param HokodoCustomerResponseInterfaceFactory  $hokodoCustomerResponseFactory
-     * @param Session                                 $customerSession
-     * @param HokodoCustomerRepositoryInterface       $hokodoCustomerRepository
-     * @param HokodoCompanyProvider                   $hokodoCompanyProvider
-     * @param OrganisationBuilder                     $organisationBuilder
-     * @param UserBuilder                             $userBuilder
-     * @param Organisation                            $organisationService
-     * @param User                                    $userService
-     * @param LoggerInterface                         $logger
-     * @param \Hokodo\BNPL\Model\CompanyCreditService $companyCreditService
+     * @param HokodoCustomerResponseInterfaceFactory $hokodoCustomerResponseFactory
+     * @param Session                                $customerSession
+     * @param HokodoCustomerRepositoryInterface      $hokodoCustomerRepository
+     * @param HokodoCompanyProvider                  $hokodoCompanyProvider
+     * @param OrganisationBuilder                    $organisationBuilder
+     * @param UserBuilder                            $userBuilder
+     * @param Organisation                           $organisationService
+     * @param User                                   $userService
+     * @param LoggerInterface                        $logger
+     * @param CompanyCreditService                   $companyCreditService
      */
     public function __construct(
         HokodoCustomerResponseInterfaceFactory $hokodoCustomerResponseFactory,

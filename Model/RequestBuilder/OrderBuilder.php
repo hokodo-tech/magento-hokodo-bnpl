@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -184,7 +185,7 @@ class OrderBuilder
      *
      * @return CreateOrderRequestInterface
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      * @throws LocalizedException
      */
     public function buildOrderRequestBase(CartInterface $quote): CreateOrderRequestInterface
@@ -225,7 +226,7 @@ class OrderBuilder
      *
      * @return OrderCustomerInterface
      *
-     * @throws \Hokodo\BNPL\Exception\AddressValidationException
+     * @throws AddressValidationException
      */
     public function buildCustomer(CartInterface $quote): OrderCustomerInterface
     {
