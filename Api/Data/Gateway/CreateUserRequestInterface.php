@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -38,7 +39,7 @@ interface CreateUserRequestInterface
     public function setRegistered(string $registered): self;
 
     /**
-     * @param UserOrganisationInterface[] $organisations
+     * @param \Hokodo\BNPL\Api\Data\UserOrganisationInterface[] $organisations
      *
      * @return $this
      */

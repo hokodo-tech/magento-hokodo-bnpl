@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2021 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -81,7 +82,7 @@ class Credit implements HttpPostActionInterface
      */
     public function execute()
     {
-        $result = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_JSON);
+        $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $creditLimit = ['is_eligible' => false];
         try {
             if ($this->isEligible()) {

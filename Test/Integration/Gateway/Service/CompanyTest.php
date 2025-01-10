@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2021 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -7,7 +8,6 @@ declare(strict_types=1);
 
 namespace Hokodo\BNPL\Test\Integration\Gateway\Service;
 
-use Hokodo\BNPL\Api\Data\Company\CreditInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CompanyCreditRequestInterface;
 use Hokodo\BNPL\Api\Data\Gateway\CompanySearchRequestInterface;
 use Magento\Framework\Exception\NotFoundException;
@@ -140,7 +140,7 @@ class CompanyTest extends AbstractService
         $result = $this->companyService->getCredit(
             $request->setCompanyId('1')->setCurrency('tt')
         );
-        $this->assertInstanceOf(CreditInterface::class, $result->getDataModel());
+        $this->assertInstanceOf(\Hokodo\BNPL\Api\Data\Company\CreditInterface::class, $result->getDataModel());
         $credit = $result->getDataModel();
         $this->assertEquals($this->httpResponse['status'], $credit->getStatus());
         $this->assertEquals(

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2021 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -23,42 +24,42 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 class AssignCompanyAfterRegistration implements ObserverInterface
 {
     /**
-     * @var \Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface
+     * @var HokodoQuoteRepositoryInterface
      */
     private HokodoQuoteRepositoryInterface $hokodoQuoteRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @var OrderRepositoryInterface
      */
     private OrderRepositoryInterface $orderRepository;
 
     /**
-     * @var \Hokodo\BNPL\Api\HokodoEntityTypeResolverInterface
+     * @var HokodoEntityTypeResolverInterface
      */
     private HokodoEntityTypeResolverInterface $hokodoEntityTypeResolver;
 
     /**
-     * @var \Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface
+     * @var HokodoCustomerRepositoryInterface
      */
     private HokodoCustomerRepositoryInterface $hokodoCustomerRepository;
 
     /**
-     * @var \Hokodo\BNPL\Api\Data\HokodoCustomerInterfaceFactory
+     * @var HokodoCustomerInterfaceFactory
      */
     private HokodoCustomerInterfaceFactory $customerInterfaceFactory;
 
     /**
-     * @param \Magento\Sales\Api\OrderRepositoryInterface          $orderRepository
-     * @param \Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface      $hokodoQuoteRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder         $searchCriteriaBuilder
-     * @param \Hokodo\BNPL\Api\HokodoEntityTypeResolverInterface   $hokodoEntityTypeResolver
-     * @param \Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface   $hokodoCustomerRepository
-     * @param \Hokodo\BNPL\Api\Data\HokodoCustomerInterfaceFactory $customerInterfaceFactory
+     * @param OrderRepositoryInterface          $orderRepository
+     * @param HokodoQuoteRepositoryInterface    $hokodoQuoteRepository
+     * @param SearchCriteriaBuilder             $searchCriteriaBuilder
+     * @param HokodoEntityTypeResolverInterface $hokodoEntityTypeResolver
+     * @param HokodoCustomerRepositoryInterface $hokodoCustomerRepository
+     * @param HokodoCustomerInterfaceFactory    $customerInterfaceFactory
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,

@@ -19,9 +19,12 @@ workflow:
 # ======= LINTERS [PHP] =======
 php:lint:
   stage: create
-  image: composer:latest
+  image: php:8.2-cli-alpine
   variables:
     PHP_CS_FIXER_IGNORE_ENV: 1
+  before_script:
+    - apk add --no-cache bash coreutils git make
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   script:
     - mkdir src && ls -A | grep -v src | xargs mv -t src
     - git clone https://github.com/magento/magento-coding-standard.git && cd magento-coding-standard
@@ -143,30 +146,6 @@ review:detach:
     - ssh "ubuntu@$SSH_HOST"
       "sudo rabbitmqctl delete_vhost $REVIEW_INSTANCE"
 
-# Magento 2.3.7
-review:create [2.3.7]:
-  extends: review:create
-  variables:
-    MAGENTO_VERSION: "2.3.7"
-    COMPOSER_VERSION: "1"
-    PHP_VERSION: "7.4"
-    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m237
-  environment:
-    name: review/$CI_MERGE_REQUEST_IID-m237
-    url: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
-    on_stop: review:detach [2.3.7]
-  resource_group: review-2.3.7
-
-review:detach [2.3.7]:
-  extends: review:detach
-  needs:
-    - review:create [2.3.7]
-  variables:
-    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m237
-  environment:
-    name: review/$CI_MERGE_REQUEST_IID-m237
-  resource_group: review-2.3.7
-
 ## Magento 2.4.6
 review:create [2.4.6]:
   extends: review:create
@@ -279,30 +258,6 @@ Playwright Smoke Test:
       MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER
       BASE_URL=$BASE_URL
       npx playwright test -g "Placing and fulfilling a Registered Company's first Order"
-      --config ./tests/playwright/playwright.config.ts
-
-All Playwright v2.3.7:
-  <<: *end-to-end-tests
-  needs:
-    - review:create [2.3.7]
-  when: manual
-  allow_failure: false
-  artifacts:
-    when: always
-    paths:
-      - playwright-report/
-    expire_in: 1 week
-  variables:
-    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m237.${DEPLOY_HOST_DEV}
-  script:
-    - npm install
-    - npx playwright install --with-deps
-    - >
-      HOKODO_API_KEY=$HOKODO_API_KEY_DEV
-      HOKODO_API_BASE_URL=https://api-dev.hokodo.co
-      MAGENTO_ADMIN_USER=$MAGENTO_ADMIN_USER
-      BASE_URL=$BASE_URL
-      npx playwright test
       --config ./tests/playwright/playwright.config.ts
 
 All Playwright v2.4.6:

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -26,14 +27,14 @@ class Customer
     private Session $customerSession;
 
     /**
-     * @var \Hokodo\BNPL\Model\HokodoCompanyProvider
+     * @var HokodoCompanyProvider
      */
     private HokodoCompanyProvider $hokodoCompanyProvider;
 
     /**
-     * @param Config                                   $config
-     * @param Session                                  $customerSession
-     * @param \Hokodo\BNPL\Model\HokodoCompanyProvider $hokodoCompanyProvider
+     * @param Config                $config
+     * @param Session               $customerSession
+     * @param HokodoCompanyProvider $hokodoCompanyProvider
      */
     public function __construct(
         Config $config,

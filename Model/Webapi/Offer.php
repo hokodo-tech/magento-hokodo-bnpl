@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -129,27 +130,27 @@ class Offer implements OfferInterface
     private CartTotalRepositoryInterface $cartTotalRepository;
 
     /**
-     * @var \Hokodo\BNPL\Model\CompanyCreditService
+     * @var CompanyCreditService
      */
     private CompanyCreditService $companyCredit;
 
     /**
-     * @param OfferResponseInterfaceFactory           $responseInterfaceFactory
-     * @param OrderGatewayService                     $orderGatewayService
-     * @param OfferGatewayService                     $offerGatewayService
-     * @param Session                                 $checkoutSession
-     * @param HokodoQuoteRepositoryInterface          $hokodoQuoteRepository
-     * @param OrderBuilder                            $orderBuilder
-     * @param LoggerInterface                         $logger
-     * @param OrganisationBuilder                     $organisationBuilder
-     * @param OrganisationService                     $organisationService
-     * @param UserBuilder                             $userBuilder
-     * @param UserService                             $userService
-     * @param OfferBuilder                            $offerBuilder
-     * @param HokodoCustomerRepositoryInterface       $hokodoCustomerRepository
-     * @param Config                                  $config
-     * @param CartTotalRepositoryInterface            $cartTotalRepository
-     * @param \Hokodo\BNPL\Model\CompanyCreditService $companyCredit
+     * @param OfferResponseInterfaceFactory     $responseInterfaceFactory
+     * @param OrderGatewayService               $orderGatewayService
+     * @param OfferGatewayService               $offerGatewayService
+     * @param Session                           $checkoutSession
+     * @param HokodoQuoteRepositoryInterface    $hokodoQuoteRepository
+     * @param OrderBuilder                      $orderBuilder
+     * @param LoggerInterface                   $logger
+     * @param OrganisationBuilder               $organisationBuilder
+     * @param OrganisationService               $organisationService
+     * @param UserBuilder                       $userBuilder
+     * @param UserService                       $userService
+     * @param OfferBuilder                      $offerBuilder
+     * @param HokodoCustomerRepositoryInterface $hokodoCustomerRepository
+     * @param Config                            $config
+     * @param CartTotalRepositoryInterface      $cartTotalRepository
+     * @param CompanyCreditService              $companyCredit
      */
     public function __construct(
         OfferResponseInterfaceFactory $responseInterfaceFactory,
@@ -546,7 +547,7 @@ class Offer implements OfferInterface
      * @throws CommandException
      * @throws NoSuchEntityException
      * @throws NotFoundException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getOffer(): PaymentOffersInterface
     {

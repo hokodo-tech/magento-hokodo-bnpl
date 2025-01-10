@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -86,7 +87,7 @@ class ServiceUrl
         $store = $this->storeRepository->getById($currentStore->getId());
         /* Get Current Store Code */
         $baseUrl = $currentStore->getBaseUrl(
-            \Magento\Framework\UrlInterface::URL_TYPE_LINK
+            UrlInterface::URL_TYPE_LINK
         );
         $baseUrl = str_replace($store->getCode() . '/', '', $baseUrl);
         $serviceUrl = $this->service . '/' . $store->getCode() . '/' . $this->version;

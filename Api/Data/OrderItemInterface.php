@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -258,7 +259,7 @@ interface OrderItemInterface
     /**
      * A function that sets fulfillment info.
      *
-     * @param \Hokodo\BNPL\Api\Data\FulfillmentInfoInterface[] $fulfillmentInfo
+     * @param FulfillmentInfoInterface[] $fulfillmentInfo
      *
      * @return $this
      */
@@ -267,7 +268,7 @@ interface OrderItemInterface
     /**
      * A function that gets fulfillment info.
      *
-     * @return \Hokodo\BNPL\Api\Data\FulfillmentInfoInterface[]
+     * @return FulfillmentInfoInterface[]
      */
     public function getFulfillmentInfo();
 
@@ -290,7 +291,7 @@ interface OrderItemInterface
     /**
      * A function that sets cancelled info.
      *
-     * @param \Hokodo\BNPL\Api\Data\FulfillmentInfoInterface[] $cancelledInfo
+     * @param FulfillmentInfoInterface[] $cancelledInfo
      *
      * @return $this
      */
@@ -299,7 +300,7 @@ interface OrderItemInterface
     /**
      * A function that gets cancelled info.
      *
-     * @return \Hokodo\BNPL\Api\Data\FulfillmentInfoInterface[]
+     * @return FulfillmentInfoInterface[]
      */
     public function getCancelledInfo();
 
@@ -322,7 +323,7 @@ interface OrderItemInterface
     /**
      * A function that sets returned information.
      *
-     * @param \Hokodo\BNPL\Api\Data\FulfillmentInfoInterface[] $returnedInfo
+     * @param FulfillmentInfoInterface[] $returnedInfo
      *
      * @return $this
      */
@@ -331,7 +332,7 @@ interface OrderItemInterface
     /**
      * A function that gets returned info.
      *
-     * @return \Hokodo\BNPL\Api\Data\FulfillmentInfoInterface[]
+     * @return FulfillmentInfoInterface[]
      */
     public function getReturnedInfo();
 }

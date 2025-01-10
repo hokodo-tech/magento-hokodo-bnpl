@@ -1,8 +1,11 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
  */
+// @codingStandardsIgnoreFile
+
 declare(strict_types=1);
 
 namespace Hokodo\BNPL\Api\Data\Gateway;
@@ -45,7 +48,7 @@ interface OrderCustomerInterface
     /**
      * Delivery Address setter.
      *
-     * @param CustomerAddressInterface $deliveryAddress
+     * @param \Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterface $deliveryAddress
      *
      * @return $this
      */
@@ -54,7 +57,7 @@ interface OrderCustomerInterface
     /**
      * Invoice Address setter.
      *
-     * @param CustomerAddressInterface $invoiceAddress
+     * @param \Hokodo\BNPL\Api\Data\Gateway\CustomerAddressInterface $invoiceAddress
      *
      * @return $this
      */

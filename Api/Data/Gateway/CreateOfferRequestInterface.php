@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -28,7 +29,7 @@ interface CreateOfferRequestInterface
     /**
      * Urls setter.
      *
-     * @param OfferUrlsInterface $urls
+     * @param \Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterface $urls
      *
      * @return $this
      */

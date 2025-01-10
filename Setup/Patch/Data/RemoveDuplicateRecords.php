@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -101,7 +102,7 @@ class RemoveDuplicateRecords implements DataPatchInterface
     /**
      * Get sql for selecting unique duplicate customers.
      *
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
     private function getDuplicateCustomersSql(): Select
     {

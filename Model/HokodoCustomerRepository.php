@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -271,7 +272,7 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
     /**
      * @inheritdoc
      *
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws CouldNotSaveException
      */
     public function saveHokodoEntity(HokodoEntityInterface $hokodoEntity): void
     {

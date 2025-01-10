@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -32,7 +33,7 @@ interface HokodoEntityRepositoryInterface
     /**
      * Save hokodoEntity in database.
      *
-     * @param \Hokodo\BNPL\Api\Data\HokodoEntityInterface $hokodoEntity
+     * @param HokodoEntityInterface $hokodoEntity
      *
      * @return mixed
      */

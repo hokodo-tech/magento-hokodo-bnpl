@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2021 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -8,7 +9,6 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Test\Integration\Gateway\Service;
 
 use Hokodo\BNPL\Api\Data\Gateway\CreateUserRequestInterface;
-use Hokodo\BNPL\Api\Data\UserInterface;
 use Hokodo\BNPL\Gateway\Service\User;
 
 class UserTest extends AbstractService
@@ -46,7 +46,7 @@ class UserTest extends AbstractService
 
         $user = $result->getDataModel();
 
-        $this->assertInstanceOf(UserInterface::class, $user);
+        $this->assertInstanceOf(\Hokodo\BNPL\Api\Data\UserInterface::class, $user);
         $this->assertEquals($this->httpResponse['id'], $user->getId());
     }
 }

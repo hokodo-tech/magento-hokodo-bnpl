@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2021 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -9,7 +10,6 @@ namespace Hokodo\BNPL\Test\Integration\Gateway\Service;
 
 use Hokodo\BNPL\Api\Data\Gateway\CreateOfferRequestInterface;
 use Hokodo\BNPL\Api\Data\Gateway\OfferUrlsInterface;
-use Hokodo\BNPL\Api\Data\PaymentOffersInterface;
 
 // @codingStandardsIgnoreFile
 class OfferTest extends AbstractService
@@ -205,7 +205,7 @@ class OfferTest extends AbstractService
             ->setUrls($offerUrls);
 
         $result = $offerService->createOffer($createRequest);
-        $this->assertInstanceOf(PaymentOffersInterface::class, $result->getDataModel());
+        $this->assertInstanceOf(\Hokodo\BNPL\Api\Data\PaymentOffersInterface::class, $result->getDataModel());
     }
 
     public function testGet(): void
@@ -214,7 +214,7 @@ class OfferTest extends AbstractService
 
         $result = $offerService->getOffer(['id' => 'test-offer']);
         $offer = $result->getDataModel();
-        $this->assertInstanceOf(PaymentOffersInterface::class, $offer);
+        $this->assertInstanceOf(\Hokodo\BNPL\Api\Data\PaymentOffersInterface::class, $offer);
         $this->assertCount(count($this->httpResponse['offered_payment_plans']), $offer->getOfferedPaymentPlans());
         $paymentPlan = $offer->getOfferedPaymentPlans()[1];
         $this->assertEquals(

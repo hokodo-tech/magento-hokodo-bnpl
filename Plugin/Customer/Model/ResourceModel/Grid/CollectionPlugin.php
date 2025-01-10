@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -44,11 +45,11 @@ class CollectionPlugin
         bool $printQuery = false,
         bool $logQuery = false
     ) {
-        foreach ($this->getAdditionalTables() as $tableName => $tableParam) {
+        foreach ($this->getAdditionalTables() as $tableAlias => $tableParam) {
             $this->joinAdditionalTable(
                 $collection->getSelect(),
-                $collection->getTable($tableName),
-                $tableParam['alias'],
+                $collection->getTable($tableParam['name']),
+                $tableAlias,
                 $tableParam['condition'],
                 $tableParam['columns']
             );
@@ -74,18 +75,11 @@ class CollectionPlugin
         $condition = null
     ): Collection {
         if ($field === self::FIELD_NAME) {
-            foreach ($this->getAdditionalTables() as $tableName => $tableParam) {
-                $this->joinAdditionalTable(
-                    $collection->getSelect(),
-                    $collection->getTable($tableName),
-                    $tableParam['alias'],
-                    $tableParam['condition'],
-                    $tableParam['columns']
-                );
-            }
-
-            $isNullQuery = $this->getIsNullQuery();
-            $conditionSql = $collection->getConnection()->prepareSqlCondition($isNullQuery, $condition);
+            $conditionParts = explode('_', $condition['eq']);
+            $conditionSql = $collection->getConnection()->prepareSqlCondition(
+                sprintf('%s.company_id', $this->queryConfig->getTableAlias($conditionParts[0])),
+                $conditionParts[1] ? ['notnull' => ''] : ['null' => '']
+            );
             $collection->getSelect()->where($conditionSql);
             return $collection;
         }
@@ -130,7 +124,7 @@ class CollectionPlugin
         string $condition,
         array $columns
     ) {
-        $usedTables = array_column($select->getPart(Select::FROM), 'tableName');
+        $usedTables = array_keys($select->getPart(Select::FROM));
         if (!\in_array($tableName, $usedTables, true)) {
             $select->joinLeft([$tableAlias => $tableName], $condition, $columns);
         }

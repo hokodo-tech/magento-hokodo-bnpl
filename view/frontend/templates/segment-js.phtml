@@ -7,6 +7,7 @@
 /**
  * @var $block \Magento\Framework\View\Element\Template
  * @var $viewModel \Hokodo\BNPL\ViewModel\Checkout\SegmentJs
+ * @var $escaper \Magento\Framework\Escaper
  */
 
 $viewModel = $block->getData('viewModel');
@@ -40,7 +41,7 @@ $viewModel = $block->getData('viewModel');
                 analytics._loadOptions = e
             };
             analytics._writeKey = "<?= $key ?>";
-            window.bnpl_version = "<?= $block->escapeHtml(__('v')) . $viewModel->getModuleVersion('Hokodo_BNPL') ?>";
+            window.bnpl_version = "<?= $escaper->escapeHtml(__('v')) . $viewModel->getModuleVersion('Hokodo_BNPL') ?>";
             analytics.load("<?= $key ?>");
         }
     }();

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -16,18 +17,18 @@ interface OfferInterface
     /**
      * Create order request webapi handler.
      *
-     * @param \Hokodo\BNPL\Api\Data\Webapi\OfferRequestInterface $payload
+     * @param OfferRequestInterface $payload
      *
-     * @return \Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterface
+     * @return OfferResponseInterface
      */
     public function requestNew(OfferRequestInterface $payload): OfferResponseInterface;
 
     /**
      * Request new offer method for guest user.
      *
-     * @param \Hokodo\BNPL\Api\Data\Webapi\OfferRequestInterface $payload
+     * @param OfferRequestInterface $payload
      *
-     * @return \Hokodo\BNPL\Api\Data\Webapi\OfferResponseInterface
+     * @return OfferResponseInterface
      */
     public function guestRequestNew(OfferRequestInterface $payload): OfferResponseInterface;
 }

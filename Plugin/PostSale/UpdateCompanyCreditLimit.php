@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -28,16 +29,16 @@ class UpdateCompanyCreditLimit
      */
     private CompanyCreditServiceInterface $companyCreditService;
     /**
-     * @var \Hokodo\BNPL\Model\HokodoCompanyProvider
+     * @var HokodoCompanyProvider
      */
     private HokodoCompanyProvider $hokodoCompanyProvider;
 
     /**
      * UpdateHokodoCompanyLimit constructor.
      *
-     * @param LoggerInterface                          $logger
-     * @param CompanyCreditServiceInterface            $companyCreditService
-     * @param \Hokodo\BNPL\Model\HokodoCompanyProvider $hokodoCompanyProvider
+     * @param LoggerInterface               $logger
+     * @param CompanyCreditServiceInterface $companyCreditService
+     * @param HokodoCompanyProvider         $hokodoCompanyProvider
      */
     public function __construct(
         LoggerInterface $logger,

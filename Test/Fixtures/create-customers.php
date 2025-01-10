@@ -12,13 +12,13 @@ use Magento\Framework\App\Bootstrap;
 
 try {
     require __DIR__ . '/../../../../../../app/bootstrap.php';
-} catch (\Exception $e) {
+} catch (Exception $e) {
     echo 'Bootstrap load failed';
     exit(1);
 }
 $bootstrap = Bootstrap::create(BP, $_SERVER);
 $om = $bootstrap->getObjectManager();
-$storeManager = $om->get(\Magento\Store\Model\StoreManagerInterface::class);
+$storeManager = $om->get(Magento\Store\Model\StoreManagerInterface::class);
 $url = $storeManager->getStore()->getBaseUrl();
 $qaPrefixMatch = null;
 preg_match('/qa(?<qa_id>[\d]+)/', $url, $qaPrefixMatch);
@@ -31,7 +31,7 @@ $customerEmails = [
     'Partly offered' => 'test+%sdp_fraud_accepted-paymentplan_partly_offered@hokodo.co',
 ];
 
-$customerFactory = $om->get(\Magento\Customer\Model\CustomerFactory::class);
+$customerFactory = $om->get(Magento\Customer\Model\CustomerFactory::class);
 foreach ($customerEmails as $type => $customerEmail) {
     try {
         $email = sprintf($customerEmail, $prefix);
@@ -56,7 +56,7 @@ foreach ($customerEmails as $type => $customerEmail) {
             $customer->setPassword($argv[1])->save();
             echo 'Customer Test ' . $type . ' is already exists.' . PHP_EOL;
         }
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
         echo 'There was an error during customer Test ' . $type . ' creation.' . $e->getMessage() . PHP_EOL;
     }
 }

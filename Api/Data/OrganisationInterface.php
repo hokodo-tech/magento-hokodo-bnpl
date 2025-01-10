@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2023 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -89,7 +90,7 @@ interface OrganisationInterface
     /**
      * A function that sets users.
      *
-     * @param \Hokodo\BNPL\Api\Data\OrganisationUserInterface[]|null $users
+     * @param OrganisationUserInterface[]|null $users
      *
      * @return $this
      */
@@ -98,7 +99,7 @@ interface OrganisationInterface
     /**
      * A function that gets users.
      *
-     * @return \Hokodo\BNPL\Api\Data\OrganisationUserInterface[]|null
+     * @return OrganisationUserInterface[]|null
      */
     public function getUsers(): ?array;
 }

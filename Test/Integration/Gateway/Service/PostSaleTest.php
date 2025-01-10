@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2018-2021 Hokodo. All Rights Reserved.
  * See LICENSE for license details.
@@ -8,7 +9,6 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Test\Integration\Gateway\Service;
 
 use Hokodo\BNPL\Api\Data\Gateway\DeferredPaymentsPostSaleActionInterface;
-use Hokodo\BNPL\Api\Data\PostSaleEventInterface;
 use Hokodo\BNPL\Gateway\Service\PostSale;
 
 class PostSaleTest extends AbstractService
@@ -63,7 +63,7 @@ class PostSaleTest extends AbstractService
     {
         $postSaleEvent = $result->getDataModel();
 
-        $this->assertInstanceOf(PostSaleEventInterface::class, $postSaleEvent);
+        $this->assertInstanceOf(\Hokodo\BNPL\Api\Data\PostSaleEventInterface::class, $postSaleEvent);
         $this->assertEquals($this->httpResponse['amount'], $postSaleEvent->getAmount());
     }
 }
