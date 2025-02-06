@@ -59,11 +59,11 @@ interface HokodoCustomerInterface extends HokodoEntityInterface
     /**
      * User Id setter.
      *
-     * @param string $userId
+     * @param null|string $userId
      *
      * @return $this
      */
-    public function setUserId(string $userId): self;
+    public function setUserId(?string $userId): self;
 
     /**
      * Organisation Id getter.
@@ -75,9 +75,9 @@ interface HokodoCustomerInterface extends HokodoEntityInterface
     /**
      * Organisation Id setter.
      *
-     * @param string $organisationId
+     * @param null|string $organisationId
      *
      * @return $this
      */
-    public function setOrganisationId(string $organisationId): self;
+    public function setOrganisationId(?string $organisationId): self;
 }
