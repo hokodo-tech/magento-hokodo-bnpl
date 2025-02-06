@@ -147,27 +147,27 @@ review:detach:
       "sudo rabbitmqctl delete_vhost $REVIEW_INSTANCE"
 
 ## Magento 2.4.6
-review:create [2.4.6]:
+review:create [2.4.7]:
   extends: review:create
   variables:
     PHP_VERSION: "8.1"
-    MAGENTO_VERSION: "2.4.6"
-    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m246
+    MAGENTO_VERSION: "2.4.7"
+    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m247
   environment:
-    name: review/$CI_MERGE_REQUEST_IID-m246
-    url: https://qa${CI_MERGE_REQUEST_IID}-m246.${DEPLOY_HOST_DEV}
-    on_stop: review:detach [2.4.6]
-  resource_group: review-2.4.6
+    name: review/$CI_MERGE_REQUEST_IID-m247
+    url: https://qa${CI_MERGE_REQUEST_IID}-m247.${DEPLOY_HOST_DEV}
+    on_stop: review:detach [2.4.7]
+  resource_group: review-2.4.7
 
-review:detach [2.4.6]:
+review:detach [2.4.7]:
   extends: review:detach
   needs:
-    - review:create [2.4.6]
+    - review:create [2.4.7]
   variables:
-    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m246
+    REVIEW_INSTANCE: magento_${CI_MERGE_REQUEST_IID}_m247
   environment:
-    name: review/$CI_MERGE_REQUEST_IID-m246
-  resource_group: review-2.4.6
+    name: review/$CI_MERGE_REQUEST_IID-m247
+  resource_group: review-2.4.7
 
 ## ======= Magento Integration Tests =====
 .integration-tests: &integration-tests
@@ -260,10 +260,10 @@ Playwright Smoke Test:
       npx playwright test -g "Placing and fulfilling a Registered Company's first Order"
       --config ./tests/playwright/playwright.config.ts
 
-All Playwright v2.4.6:
+All Playwright v2.4.7:
   <<: *end-to-end-tests
   needs:
-    - review:create [2.4.6]
+    - review:create [2.4.7]
   when: manual
   allow_failure: false
   artifacts:
@@ -272,7 +272,7 @@ All Playwright v2.4.6:
       - playwright-report/
     expire_in: 1 week
   variables:
-    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m246.${DEPLOY_HOST_DEV}
+    BASE_URL: https://qa${CI_MERGE_REQUEST_IID}-m247.${DEPLOY_HOST_DEV}
   script:
     - npm install
     - npx playwright install --with-deps
