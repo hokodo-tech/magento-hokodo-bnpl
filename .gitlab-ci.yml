@@ -125,7 +125,7 @@ review:create:
     - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up"
     - ssh "magento@$SSH_HOST" "cd $SSH_PATH && m2fa=\$(cat $SSH_PATH/app/etc/config.php | grep -wc Magento_AdminAdobeImsTwoFactorAuth) && [ \$m2fa ] && $PHP_CLI bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth || echo 'No 2fa_admin module was found'"
     - ssh "magento@$SSH_HOST" "cd $SSH_PATH && m2fa=\$(cat $SSH_PATH/app/etc/config.php | grep -wc Magento_TwoFactorAuth) && [ \$m2fa ] && $PHP_CLI bin/magento module:disable Magento_TwoFactorAuth || echo 'No 2fa module was found'"
-    - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up && $PHP_CLI bin/magento se:d:c && $PHP_CLI bin/magento c:f && $PHP_CLI app/code/Hokodo/BNPL/Test/Fixtures/create-customers.php '$HOKODO_TEST_CUSTOMER_PASSWORD'"
+    - ssh "magento@$SSH_HOST" "cd $SSH_PATH && $PHP_CLI bin/magento se:up && $PHP_CLI bin/magento se:d:c && $PHP_CLI bin/magento cache:flush && $PHP_CLI app/code/Hokodo/BNPL/Test/Fixtures/create-customers.php '$HOKODO_TEST_CUSTOMER_PASSWORD'"
     - ssh "magento@$SSH_HOST" "task=\$(cat /home/magento/magento_cron_script/queue.sh | grep -c /$REVIEW_INSTANCE/) && [ \$task ] && echo 'Cron task is already exists' || echo '$PHP_CLI $SSH_PATH/bin/magento cron:run --group=consumers' >> /home/magento/magento_cron_script/queue.sh"
 
 review:detach:
