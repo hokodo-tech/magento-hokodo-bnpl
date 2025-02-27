@@ -31,8 +31,7 @@ class HokodoCustomerDev extends AbstractDb
     protected function _getLoadSelect($field, $value, $object)
     {
         $select = parent::_getLoadSelect($field, $value, $object);
-        $envField = $this->getConnection()->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), 'env'));
-        $select->where($envField . '=?', $object->getData('env'));
+        $select->where('env=?', $object->getData('env'));
 
         return $select;
     }

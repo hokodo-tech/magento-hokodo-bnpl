@@ -1,3 +1,8 @@
+2.2.7 / March 2025
+==================
+* Added Hokodo company info by environment to the customers grid
+* Added API keys scope for Credit Limit update cron
+
 2.2.6 / September 2024
 ==================
 * Added ability to assign Hokodo company to customer onSave based on Taxvat or other selected customer attribute.

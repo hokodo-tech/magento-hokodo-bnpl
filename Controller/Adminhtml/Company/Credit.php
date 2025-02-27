@@ -11,11 +11,14 @@ namespace Hokodo\BNPL\Controller\Adminhtml\Company;
 use Hokodo\BNPL\Api\Data\Company\CreditLimitInterface;
 use Hokodo\BNPL\Api\Data\HokodoEntityInterface;
 use Hokodo\BNPL\Model\HokodoCompanyProvider;
+use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Psr\Log\LoggerInterface;
@@ -53,9 +56,15 @@ class Credit implements HttpPostActionInterface
     private LoggerInterface $logger;
 
     /**
+     * @var CurrencyFactory
+     */
+    private CurrencyFactory $currencyFactory;
+
+    /**
      * @param RequestInterface       $request
      * @param ResultFactory          $resultFactory
      * @param PriceCurrencyInterface $priceCurrency
+     * @param CurrencyFactory        $currencyFactory
      * @param HokodoCompanyProvider  $hokodoCompanyProvider
      * @param LoggerInterface        $logger
      */
@@ -63,6 +72,7 @@ class Credit implements HttpPostActionInterface
         RequestInterface $request,
         ResultFactory $resultFactory,
         PriceCurrencyInterface $priceCurrency,
+        CurrencyFactory $currencyFactory,
         HokodoCompanyProvider $hokodoCompanyProvider,
         LoggerInterface $logger
     ) {
@@ -71,6 +81,7 @@ class Credit implements HttpPostActionInterface
         $this->hokodoCompanyProvider = $hokodoCompanyProvider;
         $this->priceCurrency = $priceCurrency;
         $this->logger = $logger;
+        $this->currencyFactory = $currencyFactory;
     }
 
     /**
@@ -193,6 +204,10 @@ class Credit implements HttpPostActionInterface
      */
     private function getFormattedPrice(float $amount, int $precision = null): string
     {
+        if ($currency = $this->getCurrency($this->getCredit()->getCurrency())) {
+            return $currency->formatPrecision($amount, $precision ?? 2, [], false);
+        }
+
         return $this->priceCurrency->format(
             $amount,
             false,
@@ -200,5 +215,22 @@ class Credit implements HttpPostActionInterface
             null,
             $this->getCredit()->getCurrency()
         );
+    }
+
+    /**
+     * Get currency.
+     *
+     * @param string $code
+     *
+     * @return Currency|null
+     */
+    public function getCurrency(string $code): ?Currency
+    {
+        $currency = $this->currencyFactory->create();
+        try {
+            return $currency->load($code);
+        } catch (NoSuchEntityException $e) { // @codingStandardsIgnoreLine
+        }
+        return null;
     }
 }

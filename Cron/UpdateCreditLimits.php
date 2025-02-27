@@ -16,6 +16,7 @@ use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\HokodoCompanyProvider;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Store\Model\App\Emulation;
 use Psr\Log\LoggerInterface;
 
 class UpdateCreditLimits
@@ -46,10 +47,16 @@ class UpdateCreditLimits
     private LoggerInterface $logger;
 
     /**
+     * @var Emulation
+     */
+    private Emulation $appEmulation;
+
+    /**
      * @param HokodoCompanyProvider         $hokodoCompanyProvider
      * @param SearchCriteriaBuilderFactory  $criteriaBuilderFactory
      * @param CompanyCreditServiceInterface $companyCreditService
      * @param Config                        $config
+     * @param Emulation                     $appEmulation
      * @param LoggerInterface               $logger
      */
     public function __construct(
@@ -57,6 +64,7 @@ class UpdateCreditLimits
         SearchCriteriaBuilderFactory $criteriaBuilderFactory,
         CompanyCreditServiceInterface $companyCreditService,
         Config $config,
+        Emulation $appEmulation,
         LoggerInterface $logger
     ) {
         $this->hokodoCompanyProvider = $hokodoCompanyProvider;
@@ -64,6 +72,7 @@ class UpdateCreditLimits
         $this->companyCreditService = $companyCreditService;
         $this->config = $config;
         $this->logger = $logger;
+        $this->appEmulation = $appEmulation;
     }
 
     /**
@@ -84,6 +93,7 @@ class UpdateCreditLimits
         $this->logger->debug('hokodo_bnpl_update_credit_limits: total count:' . $result->getTotalCount());
         /** @var HokodoEntityInterface $hokodoEntity */
         foreach ($result->getItems() as $hokodoEntity) {
+            $this->appEmulation->startEnvironmentEmulation($hokodoEntity->getExtensionAttributes()->getStoreId());
             $creditLimit = $this->companyCreditService
                 ->getCreditLimit($hokodoEntity[HokodoCustomerInterface::COMPANY_ID]);
             if ($creditLimit) {
