@@ -77,7 +77,7 @@ class HokodoCustomer extends DataObject implements HokodoCustomerInterface
     /**
      * @inheritdoc
      */
-    public function setUserId(string $userId): self
+    public function setUserId(?string $userId): self
     {
         $this->setData(self::USER_ID, $userId);
         return $this;
@@ -94,7 +94,7 @@ class HokodoCustomer extends DataObject implements HokodoCustomerInterface
     /**
      * @inheritdoc
      */
-    public function setOrganisationId(string $organisationId): self
+    public function setOrganisationId(?string $organisationId): self
     {
         $this->setData(self::ORGANISATION_ID, $organisationId);
         return $this;
