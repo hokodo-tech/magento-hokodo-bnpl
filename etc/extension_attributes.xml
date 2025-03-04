@@ -9,4 +9,14 @@
     <extension_attributes for="Magento\Checkout\Api\Data\ShippingInformationInterface">
         <attribute code="email" type="string"/>
     </extension_attributes>
+    <extension_attributes for="Hokodo\BNPL\Api\Data\HokodoCustomerInterface">
+        <attribute code="store_id" type="int">
+            <join reference_table="customer_entity"
+                  reference_field="entity_id"
+                  join_on_field="customer_id"
+            >
+                <field>store_id</field>
+            </join>
+        </attribute>
+    </extension_attributes>
 </config>

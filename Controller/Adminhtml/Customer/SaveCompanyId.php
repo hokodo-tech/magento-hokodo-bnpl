@@ -181,7 +181,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
                     $customer->getEmail()
                 )
             )->getDataModel();
-            $this->emulation->stopEnvironmentEmulation();
+
             $hokodoCustomer->setOrganisationId($organisation->getId());
 
             $user = $this->userService->createUser(
@@ -190,7 +190,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
             $hokodoCustomer->setUserId($user->getId());
 
             $this->hokodoCustomerRepository->save($hokodoCustomer);
-
+            $this->emulation->stopEnvironmentEmulation();
             try {
                 $this->hokodoQuoteRepository->deleteByCustomerId($customerId);
             } catch (\Exception $exception) {
@@ -208,7 +208,7 @@ class SaveCompanyId extends Action implements HttpPostActionInterface
         } catch (\Exception $e) {
             $data = [
                 'message' => 'Hokodo_BNPL: set company to user failed with error.',
-                'error' => $exception->getMessage(),
+                'error' => $e->getMessage(),
             ];
             $this->logger->critical(__METHOD__, $data);
         }

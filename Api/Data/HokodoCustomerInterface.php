@@ -80,4 +80,20 @@ interface HokodoCustomerInterface extends HokodoEntityInterface
      * @return $this
      */
     public function setOrganisationId(?string $organisationId): self;
+
+    /**
+     * Extension Attributes getter.
+     *
+     * @return \Hokodo\BNPL\Api\Data\HokodoCustomerExtensionInterface
+     */
+    public function getExtensionAttributes(): HokodoCustomerExtensionInterface;
+
+    /**
+     * Extension Attributes setter.
+     *
+     * @param \Hokodo\BNPL\Api\Data\HokodoCustomerExtensionInterface $extensionAttributes
+     *
+     * @return $this
+     */
+    public function setExtensionAttributes($extensionAttributes): self;
 }

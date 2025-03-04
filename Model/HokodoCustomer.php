@@ -9,9 +9,8 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Model;
 
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer as ResourceModel;
-use Magento\Framework\Model\AbstractModel;
 
-class HokodoCustomer extends AbstractModel
+class HokodoCustomer extends \Magento\Framework\Model\AbstractExtensibleModel
 {
     /**
      * @var string

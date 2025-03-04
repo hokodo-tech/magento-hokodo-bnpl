@@ -36,8 +36,7 @@ class CollectionDev extends AbstractCollection
      */
     public function addEnvFilter(int $envId): self
     {
-        $envField = $this->getConnection()->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), 'env'));
-        $this->getSelect()->where($envField . '=?', $envId);
+        $this->getSelect()->where('env=?', $envId);
 
         return $this;
     }

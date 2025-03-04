@@ -16,9 +16,11 @@ use Hokodo\BNPL\Api\HokodoCustomerRepositoryInterface;
 use Hokodo\BNPL\Gateway\Config\Config;
 use Hokodo\BNPL\Model\Config\Source\Env;
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer as Resource;
+use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer\CollectionDevFactory as HokodoCustomerCollectionDevFactory;
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomer\CollectionFactory as HokodoCustomerCollectionFactory;
 use Hokodo\BNPL\Model\ResourceModel\HokodoCustomerDev as ResourceDev;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResults;
@@ -85,24 +87,38 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
     private Env $envSource;
 
     /**
-     * @param resource                        $resource
-     * @param HokodoCustomerInterfaceFactory  $hokodoCustomerFactory
-     * @param HokodoCustomerFactory           $hokodoCustomerModelFactory
-     * @param HokodoCustomerCollectionFactory $hokodoCustomerCollectionFactory
-     * @param CollectionProcessorInterface    $collectionProcessor
-     * @param SearchResultsFactory            $searchResultsFactory
-     * @param SerializerInterface             $serializer
-     * @param DataObjectHelper                $dataObjectHelper
-     * @param ResourceDev                     $resourceDev
-     * @param Config                          $config
-     * @param Env                             $envSource
+     * @var HokodoCustomerCollectionDevFactory
+     */
+    private HokodoCustomerCollectionDevFactory $hokodoCustomerCollectionDevFactory;
+
+    /**
+     * @var JoinProcessorInterface
+     */
+    private JoinProcessorInterface $extensionAttributesJoinProcessor;
+
+    /**
+     * @param resource                           $resource
+     * @param HokodoCustomerInterfaceFactory     $hokodoCustomerFactory
+     * @param HokodoCustomerFactory              $hokodoCustomerModelFactory
+     * @param HokodoCustomerCollectionFactory    $hokodoCustomerCollectionFactory
+     * @param HokodoCustomerCollectionDevFactory $hokodoCustomerCollectionDevFactory
+     * @param CollectionProcessorInterface       $collectionProcessor
+     * @param JoinProcessorInterface             $extensionAttributesJoinProcessor
+     * @param SearchResultsFactory               $searchResultsFactory
+     * @param SerializerInterface                $serializer
+     * @param DataObjectHelper                   $dataObjectHelper
+     * @param ResourceDev                        $resourceDev
+     * @param Config                             $config
+     * @param Env                                $envSource
      */
     public function __construct(
         Resource $resource,
         HokodoCustomerInterfaceFactory $hokodoCustomerFactory,
         HokodoCustomerFactory $hokodoCustomerModelFactory,
         HokodoCustomerCollectionFactory $hokodoCustomerCollectionFactory,
+        HokodoCustomerCollectionDevFactory $hokodoCustomerCollectionDevFactory,
         CollectionProcessorInterface $collectionProcessor,
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
         SearchResultsFactory $searchResultsFactory,
         SerializerInterface $serializer,
         DataObjectHelper $dataObjectHelper,
@@ -113,6 +129,7 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
         $this->resource = $resource;
         $this->hokodoCustomerFactory = $hokodoCustomerFactory;
         $this->hokodoCustomerCollectionFactory = $hokodoCustomerCollectionFactory;
+        $this->hokodoCustomerCollectionDevFactory = $hokodoCustomerCollectionDevFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->serializer = $serializer;
@@ -121,6 +138,8 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
         $this->resourceDev = $resourceDev;
         $this->config = $config;
         $this->envSource = $envSource;
+
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     /**
@@ -240,9 +259,11 @@ class HokodoCustomerRepository implements HokodoCustomerRepositoryInterface
     {
         $collection = $this->hokodoCustomerCollectionFactory->create();
         if ($this->config->getEnvironment() !== Config::ENV_PRODUCTION) {
+            $collection = $this->hokodoCustomerCollectionDevFactory->create();
             $collection->addEnvFilter($this->envSource->getEnvId($this->config->getEnvironment()));
         }
         $this->collectionProcessor->process($searchCriteria, $collection);
+        $this->extensionAttributesJoinProcessor->process($collection);
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($this->populateCollectionWithArray($collection->getItems()));
