@@ -86,7 +86,7 @@ interface HokodoCustomerInterface extends HokodoEntityInterface
      *
      * @return \Hokodo\BNPL\Api\Data\HokodoCustomerExtensionInterface
      */
-    public function getExtensionAttributes(): HokodoCustomerExtensionInterface;
+    public function getExtensionAttributes();
 
     /**
      * Extension Attributes setter.

@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Model\Data;
 
 use Hokodo\BNPL\Api\Data\Company\CreditLimitInterface;
-use Hokodo\BNPL\Api\Data\HokodoCustomerExtensionInterface;
 use Hokodo\BNPL\Api\Data\HokodoCustomerInterface;
 use Magento\Framework\DataObject;
 
@@ -121,7 +120,7 @@ class HokodoCustomer extends DataObject implements HokodoCustomerInterface
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes(): HokodoCustomerExtensionInterface
+    public function getExtensionAttributes()
     {
         return $this->getData(self::EXTENSION_ATTRIBUTES_KEY);
     }
