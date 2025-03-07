@@ -1,3 +1,8 @@
+2.2.8 / March 2025
+==================
+* Added check for incorrectly deleted customers.
+* Slow down credit limit cron to prevent hitting request rate limit
+
 2.2.7 / March 2025
 ==================
 * Added Hokodo company info by environment to the customers grid

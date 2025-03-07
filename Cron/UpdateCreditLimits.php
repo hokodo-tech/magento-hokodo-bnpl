@@ -93,7 +93,13 @@ class UpdateCreditLimits
         $this->logger->debug('hokodo_bnpl_update_credit_limits: total count:' . $result->getTotalCount());
         /** @var HokodoEntityInterface $hokodoEntity */
         foreach ($result->getItems() as $hokodoEntity) {
+            if (!$hokodoEntity->getExtensionAttributes()) {
+                $this->hokodoCompanyProvider->getEntityRepository()->delete($hokodoEntity);
+                continue;
+            }
             $this->appEmulation->startEnvironmentEmulation($hokodoEntity->getExtensionAttributes()->getStoreId());
+            //Adding pause to prevent rate limit hit
+            usleep(1000000);
             $creditLimit = $this->companyCreditService
                 ->getCreditLimit($hokodoEntity[HokodoCustomerInterface::COMPANY_ID]);
             if ($creditLimit) {
@@ -105,6 +111,7 @@ class UpdateCreditLimits
                     $this->logger->error($e->getMessage());
                 }
             }
+            $this->appEmulation->stopEnvironmentEmulation();
         }
         $this->logger->debug('hokodo_bnpl_update_credit_limits: end');
     }
