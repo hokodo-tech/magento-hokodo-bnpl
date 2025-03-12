@@ -50,7 +50,8 @@ class IsCompanyAttached extends Column
         );
 
         foreach ($queryConfig->getAdditionalTables() as $table) {
-            $this->columnNames[] = array_keys(array_reset($table['columns']))[0];
+            $columnNames = array_keys($table['columns']);
+            $this->columnNames[] = reset($columnNames);
         }
         $this->env = $env;
     }
