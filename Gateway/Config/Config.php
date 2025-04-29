@@ -58,6 +58,7 @@ class Config extends DefaultPaymentConfig
     public const ENABLE_CUSTOMER_GROUPS = 'enable_customer_groups';
     public const CUSTOMER_GROUPS = 'customer_groups';
     public const CAPTURE_ONLINE = 'advanced/capture_online';
+    public const ORDER_STATUS_REVIEW_COMPLETED = 'advanced/offer_accepted_order_status';
     public const TOTALS_FIX = 'advanced/enable_thirdparty_totals_compatibility';
     public const HOKODO_ENTITY_FOR_SAVE_COMPANY_LEVEL = 'advanced/entity_level';
     public const SEND_PURCHASE_HISTORY = 'advanced/send_customer_purchase_history';

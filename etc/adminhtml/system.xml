@@ -227,6 +227,11 @@
                             <field id="create_invoice_on_payment_accepted">1</field>
                         </depends>
                     </field>
+                    <field id="offer_accepted_order_status" translate="label comment" type="select" sortOrder="260" showInDefault="1" showInWebsite="1">
+                        <label>Offer Accepted Order Status</label>
+                        <comment><![CDATA[Set Order Status when Hokodo offer has been successfully reviewed to <...>]]></comment>
+                        <source_model>Hokodo\BNPL\Model\Config\Source\OrderStatuses</source_model>
+                    </field>
                     <field id="allow_customer_to_change_company" translate="label comment" type="select" sortOrder="270" showInDefault="1" showInWebsite="1">
                         <label>Allow User to change company</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

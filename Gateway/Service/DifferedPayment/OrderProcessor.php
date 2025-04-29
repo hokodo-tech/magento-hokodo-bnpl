@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Hokodo\BNPL\Gateway\Service\DifferedPayment;
 
 use Hokodo\BNPL\Api\Data\DeferredPaymentInterface;
+use Hokodo\BNPL\Gateway\Config\Config;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
@@ -22,12 +23,20 @@ class OrderProcessor
     private OrderRepositoryInterface $orderRepository;
 
     /**
+     * @var Config
+     */
+    private Config $config;
+
+    /**
      * @param OrderRepositoryInterface $orderRepository
+     * @param Config                   $config
      */
     public function __construct(
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        Config $config
     ) {
         $this->orderRepository = $orderRepository;
+        $this->config = $config;
     }
 
     /**
@@ -45,8 +54,9 @@ class OrderProcessor
         switch ($status) {
             case DeferredPaymentInterface::STATUS_ACCEPTED:
                 if ($order->getState() === Order::STATE_PAYMENT_REVIEW) {
-                    $order->setState('pending');
-                    $order->setStatus($order->getConfig()->getStateDefaultStatus('pending'));
+                    $state = $this->config->getValue(Config::ORDER_STATUS_REVIEW_COMPLETED);
+                    $order->setState($state);
+                    $order->setStatus($order->getConfig()->getStateDefaultStatus($state));
                     $this->orderRepository->save($order);
                 }
                 break;
