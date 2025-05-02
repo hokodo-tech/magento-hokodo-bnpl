@@ -80,6 +80,7 @@
                     <import_engine>queue</import_engine>
                     <auto_assign_company_based_on>disabled</auto_assign_company_based_on>
                     <auto_assign_company_country>GB</auto_assign_company_country>
+                    <offer_accepted_order_status>new</offer_accepted_order_status>
                 </advanced>
             </hokodo_bnpl>
         </payment>

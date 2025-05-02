@@ -1,3 +1,7 @@
+2.2.9 / May 2025
+==================
+* Added fallback order status update logic.
+
 2.2.8 / March 2025
 ==================
 * Added check for incorrectly deleted customers.
