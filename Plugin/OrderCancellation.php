@@ -11,7 +11,6 @@ namespace Hokodo\BNPL\Plugin;
 use Hokodo\BNPL\Api\Data\Gateway\DeferredPaymentsPostSaleActionInterfaceFactory;
 use Hokodo\BNPL\Api\HokodoQuoteRepositoryInterface;
 use Hokodo\BNPL\Gateway\Config\Config;
-use Hokodo\BNPL\Gateway\Service\Offer;
 use Hokodo\BNPL\Gateway\Service\Order;
 use Hokodo\BNPL\Gateway\Service\PostSale;
 use Magento\Quote\Api\CartManagementInterface;
@@ -37,11 +36,6 @@ class OrderCancellation
     private OrderFactory $orderFactory;
 
     /**
-     * @var Offer
-     */
-    private Offer $offerService;
-
-    /**
      * @var Order
      */
     private Order $orderService;
@@ -60,7 +54,6 @@ class OrderCancellation
      * @param HokodoQuoteRepositoryInterface                 $hokodoQuoteRepository
      * @param CartRepositoryInterface                        $cartRepository
      * @param OrderFactory                                   $orderFactory
-     * @param Offer                                          $offerService
      * @param Order                                          $orderService
      * @param PostSale                                       $postSaleService
      * @param DeferredPaymentsPostSaleActionInterfaceFactory $postSaleActionInterfaceFactory
@@ -69,7 +62,6 @@ class OrderCancellation
         HokodoQuoteRepositoryInterface $hokodoQuoteRepository,
         CartRepositoryInterface $cartRepository,
         OrderFactory $orderFactory,
-        Offer $offerService,
         Order $orderService,
         PostSale $postSaleService,
         DeferredPaymentsPostSaleActionInterfaceFactory $postSaleActionInterfaceFactory
@@ -77,7 +69,6 @@ class OrderCancellation
         $this->hokodoQuoteRepository = $hokodoQuoteRepository;
         $this->cartRepository = $cartRepository;
         $this->orderFactory = $orderFactory;
-        $this->offerService = $offerService;
         $this->orderService = $orderService;
         $this->postSaleService = $postSaleService;
         $this->postSaleActionInterfaceFactory = $postSaleActionInterfaceFactory;
@@ -105,25 +96,48 @@ class OrderCancellation
             return $proceed($cartId, $paymentMethod);
         } catch (\Exception $e) {
             if (!$paymentMethod || $paymentMethod->getMethod() === Config::CODE) {
-                $cart = $this->cartRepository->get((int) $cartId);
-                $order = $this->orderFactory->create()->loadByIncrementId($cart->getReservedOrderId());
-                if (!$order->getId()) {
-                    $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId((int) $cartId);
-                    $hokodoOrder = $this->orderService->getOrder(['id' => $hokodoQuote->getOrderId()])->getDataModel();
-                    if ($deferredPaymentId = $hokodoOrder->getDeferredPayment()) {
-                        $this->postSaleService->voidRemaining(
-                            $this->postSaleActionInterfaceFactory->create()
-                                ->setPaymentId($deferredPaymentId)
-                        );
-                    }
-                    $hokodoQuote
-                        ->setOrderId('')
-                        ->setOfferId('');
-                    $this->hokodoQuoteRepository->save($hokodoQuote);
-                }
+                $this->tryVoidDp((int) $cartId);
             }
 
             throw $e;
+        }
+    }
+
+    /**
+     * Try void authorized amount.
+     *
+     * @param int $cartId
+     *
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws \Magento\Payment\Gateway\Command\CommandException
+     */
+    private function tryVoidDp(int $cartId): void
+    {
+        $cart = $this->cartRepository->get(($cartId));
+        $hokodoQuote = $this->hokodoQuoteRepository->getByQuoteId($cartId);
+        if (!$hokodoQuote->getQuoteId() || !$hokodoQuote->getOrderId()) {
+            return;
+        }
+
+        $order = $this->orderFactory->create()->loadByIncrementId($cart->getReservedOrderId());
+        if (!$order->getId()) {
+            $hokodoOrder = $this->orderService->getOrder(['id' => $hokodoQuote->getOrderId()])->getDataModel();
+            if ($deferredPaymentId = $hokodoOrder->getDeferredPayment()) {
+                try {
+                    $this->postSaleService->voidRemaining(
+                        $this->postSaleActionInterfaceFactory->create()
+                            ->setPaymentId($deferredPaymentId)
+                    );
+                } catch (\Exception $e) { // @codingStandardsIgnoreLine
+                }
+            }
+            $hokodoQuote
+                ->setOrderId('')
+                ->setOfferId('');
+            $this->hokodoQuoteRepository->save($hokodoQuote);
         }
     }
 }
